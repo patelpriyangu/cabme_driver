@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/controller/parcel_details_controller.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/controller/parcel_details_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';

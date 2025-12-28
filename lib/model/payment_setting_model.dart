@@ -1,4 +1,4 @@
-import 'package:cabme_driver/constant/constant.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
 
 class PaymentSettingModel {
   String? success;
@@ -41,16 +41,28 @@ class PaymentSettingModel {
     message = json['message'].toString();
     strip = json['Strip'] != null ? Strip.fromJson(json['Strip']) : null;
     cash = json['Cash'] != null ? Cash.fromJson(json['Cash']) : null;
-    payFast = json['PayFast'] != null ? PayFast.fromJson(json['PayFast']) : null;
-    myWallet = json['My Wallet'] != null ? Cash.fromJson(json['My Wallet']) : null;
-    payStack = json['PayStack'] != null ? PayStack.fromJson(json['PayStack']) : null;
-    flutterWave = json['FlutterWave'] != null ? FlutterWave.fromJson(json['FlutterWave']) : null;
-    razorpay = json['Razorpay'] != null ? RazorpayModel.fromJson(json['Razorpay']) : null;
-    mercadopago = json['Mercadopago'] != null ? Mercadopago.fromJson(json['Mercadopago']) : null;
+    payFast =
+        json['PayFast'] != null ? PayFast.fromJson(json['PayFast']) : null;
+    myWallet =
+        json['My Wallet'] != null ? Cash.fromJson(json['My Wallet']) : null;
+    payStack =
+        json['PayStack'] != null ? PayStack.fromJson(json['PayStack']) : null;
+    flutterWave = json['FlutterWave'] != null
+        ? FlutterWave.fromJson(json['FlutterWave'])
+        : null;
+    razorpay = json['Razorpay'] != null
+        ? RazorpayModel.fromJson(json['Razorpay'])
+        : null;
+    mercadopago = json['Mercadopago'] != null
+        ? Mercadopago.fromJson(json['Mercadopago'])
+        : null;
     payPal = json['PayPal'] != null ? PayPal.fromJson(json['PayPal']) : null;
     xendit = json['Xendit'] != null ? Xendit.fromJson(json['Xendit']) : null;
-    orangePay = json['OrangePay'] != null ? OrangePay.fromJson(json['OrangePay']) : null;
-    midtrans = json['Midtrans'] != null ? Midtrans.fromJson(json['Midtrans']) : null;
+    orangePay = json['OrangePay'] != null
+        ? OrangePay.fromJson(json['OrangePay'])
+        : null;
+    midtrans =
+        json['Midtrans'] != null ? Midtrans.fromJson(json['Midtrans']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -99,7 +111,7 @@ class PaymentSettingModel {
   }
 }
 
-class Strip implements PaymentGatewayConfig{
+class Strip implements PaymentGatewayConfig {
   String? id;
   String? key;
   String? clientpublishableKey;
@@ -109,7 +121,15 @@ class Strip implements PaymentGatewayConfig{
   String? idPaymentMethod;
   String? libelle;
 
-  Strip({this.id, this.key, this.clientpublishableKey, this.secretKey, this.isEnabled, this.isSandboxEnabled, this.idPaymentMethod, this.libelle});
+  Strip(
+      {this.id,
+      this.key,
+      this.clientpublishableKey,
+      this.secretKey,
+      this.isEnabled,
+      this.isSandboxEnabled,
+      this.idPaymentMethod,
+      this.libelle});
 
   Strip.fromJson(Map<String, dynamic> json) {
     id = json['id'].toString();
@@ -137,7 +157,7 @@ class Strip implements PaymentGatewayConfig{
   }
 }
 
-class Cash implements PaymentGatewayConfig{
+class Cash implements PaymentGatewayConfig {
   String? id;
   String? isEnabled;
   String? libelle;
@@ -163,7 +183,7 @@ class Cash implements PaymentGatewayConfig{
   }
 }
 
-class PayFast implements PaymentGatewayConfig{
+class PayFast implements PaymentGatewayConfig {
   String? id;
   String? merchantId;
   String? merchantKey;
@@ -175,7 +195,17 @@ class PayFast implements PaymentGatewayConfig{
   String? idPaymentMethod;
   String? libelle;
 
-  PayFast({this.id, this.merchantId, this.merchantKey, this.cancelUrl, this.notifyUrl, this.returnUrl, this.isEnabled, this.isSandboxEnabled, this.idPaymentMethod, this.libelle});
+  PayFast(
+      {this.id,
+      this.merchantId,
+      this.merchantKey,
+      this.cancelUrl,
+      this.notifyUrl,
+      this.returnUrl,
+      this.isEnabled,
+      this.isSandboxEnabled,
+      this.idPaymentMethod,
+      this.libelle});
 
   PayFast.fromJson(Map<String, dynamic> json) {
     id = json['id'].toString();
@@ -207,7 +237,7 @@ class PayFast implements PaymentGatewayConfig{
   }
 }
 
-class PayStack implements PaymentGatewayConfig{
+class PayStack implements PaymentGatewayConfig {
   String? id;
   String? secretKey;
   String? publicKey;
@@ -217,7 +247,15 @@ class PayStack implements PaymentGatewayConfig{
   String? idPaymentMethod;
   String? libelle;
 
-  PayStack({this.id, this.secretKey, this.publicKey, this.callbackUrl, this.isEnabled, this.isSandboxEnabled, this.idPaymentMethod, this.libelle});
+  PayStack(
+      {this.id,
+      this.secretKey,
+      this.publicKey,
+      this.callbackUrl,
+      this.isEnabled,
+      this.isSandboxEnabled,
+      this.idPaymentMethod,
+      this.libelle});
 
   PayStack.fromJson(Map<String, dynamic> json) {
     id = json['id'].toString();
@@ -245,7 +283,7 @@ class PayStack implements PaymentGatewayConfig{
   }
 }
 
-class FlutterWave implements PaymentGatewayConfig{
+class FlutterWave implements PaymentGatewayConfig {
   String? id;
   String? secretKey;
   String? publicKey;
@@ -255,7 +293,15 @@ class FlutterWave implements PaymentGatewayConfig{
   String? idPaymentMethod;
   String? libelle;
 
-  FlutterWave({this.id, this.secretKey, this.publicKey, this.encryptionKey, this.isEnabled, this.isSandboxEnabled, this.idPaymentMethod, this.libelle});
+  FlutterWave(
+      {this.id,
+      this.secretKey,
+      this.publicKey,
+      this.encryptionKey,
+      this.isEnabled,
+      this.isSandboxEnabled,
+      this.idPaymentMethod,
+      this.libelle});
 
   FlutterWave.fromJson(Map<String, dynamic> json) {
     id = json['id'].toString();
@@ -283,7 +329,7 @@ class FlutterWave implements PaymentGatewayConfig{
   }
 }
 
-class RazorpayModel implements PaymentGatewayConfig{
+class RazorpayModel implements PaymentGatewayConfig {
   String? id;
   String? key;
   String? secretKey;
@@ -292,7 +338,14 @@ class RazorpayModel implements PaymentGatewayConfig{
   String? idPaymentMethod;
   String? libelle;
 
-  RazorpayModel({this.id, this.key, this.secretKey, this.isEnabled, this.isSandboxEnabled, this.idPaymentMethod, this.libelle});
+  RazorpayModel(
+      {this.id,
+      this.key,
+      this.secretKey,
+      this.isEnabled,
+      this.isSandboxEnabled,
+      this.idPaymentMethod,
+      this.libelle});
 
   RazorpayModel.fromJson(Map<String, dynamic> json) {
     id = json['id'].toString();
@@ -318,7 +371,7 @@ class RazorpayModel implements PaymentGatewayConfig{
   }
 }
 
-class Mercadopago implements PaymentGatewayConfig{
+class Mercadopago implements PaymentGatewayConfig {
   String? id;
   String? libelle;
   String? publicKey;
@@ -327,11 +380,18 @@ class Mercadopago implements PaymentGatewayConfig{
   String? isSandboxEnabled;
   String? idPaymentMethod;
 
-  Mercadopago({this.id, this.publicKey,this.libelle, this.accesstoken, this.isEnabled, this.isSandboxEnabled, this.idPaymentMethod});
+  Mercadopago(
+      {this.id,
+      this.publicKey,
+      this.libelle,
+      this.accesstoken,
+      this.isEnabled,
+      this.isSandboxEnabled,
+      this.idPaymentMethod});
 
   Mercadopago.fromJson(Map<String, dynamic> json) {
     id = json['id'].toString();
-    libelle = json['libelle']??"Mercado Pago";
+    libelle = json['libelle'] ?? "Mercado Pago";
     publicKey = json['public_key'].toString();
     accesstoken = json['accesstoken'].toString();
     isEnabled = json['isEnabled'].toString();
@@ -352,8 +412,7 @@ class Mercadopago implements PaymentGatewayConfig{
   }
 }
 
-
-class PayPal implements PaymentGatewayConfig{
+class PayPal implements PaymentGatewayConfig {
   String? id;
   String? appId;
   String? secretKey;
@@ -419,7 +478,7 @@ class PayPal implements PaymentGatewayConfig{
   }
 }
 
-class Xendit implements PaymentGatewayConfig{
+class Xendit implements PaymentGatewayConfig {
   String? isEnabled;
   String? libelle;
   String? isSandboxEnabled;
@@ -460,7 +519,7 @@ class Xendit implements PaymentGatewayConfig{
   }
 }
 
-class Midtrans implements PaymentGatewayConfig{
+class Midtrans implements PaymentGatewayConfig {
   String? isEnabled;
   String? libelle;
   String? isSandboxEnabled;
@@ -503,7 +562,7 @@ class Midtrans implements PaymentGatewayConfig{
   }
 }
 
-class OrangePay implements PaymentGatewayConfig{
+class OrangePay implements PaymentGatewayConfig {
   String? clientpublishableKey;
   String? clientSecret;
   String? merchantKey;
@@ -566,4 +625,3 @@ class OrangePay implements PaymentGatewayConfig{
     return data;
   }
 }
-

@@ -1,9 +1,9 @@
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/controller/subscription_history_controller.dart';
-import 'package:cabme_driver/model/subscription_history_model.dart';
-import 'package:cabme_driver/themes/app_them_data.dart';
-import 'package:cabme_driver/utils/dark_theme_provider.dart';
-import 'package:cabme_driver/utils/network_image_widget.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/controller/subscription_history_controller.dart';
+import 'package:uniqcars_driver/model/subscription_history_model.dart';
+import 'package:uniqcars_driver/themes/app_them_data.dart';
+import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
+import 'package:uniqcars_driver/utils/network_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -21,8 +21,10 @@ class SubscriptionHistoryScreen extends StatelessWidget {
         builder: (controller) {
           return Scaffold(
             appBar: AppBar(
-              backgroundColor: themeChange.getThem() ? Colors.black : Colors.white,
-              iconTheme: IconThemeData(color: themeChange.getThem() ? Colors.white : Colors.black),
+              backgroundColor:
+                  themeChange.getThem() ? Colors.black : Colors.white,
+              iconTheme: IconThemeData(
+                  color: themeChange.getThem() ? Colors.white : Colors.black),
             ),
             body: controller.isLoading.value
                 ? Center(child: CircularProgressIndicator())
@@ -36,28 +38,39 @@ class SubscriptionHistoryScreen extends StatelessWidget {
                             'Subscription Purchase History'.tr,
                             textAlign: TextAlign.start,
                             style: AppThemeData.boldTextStyle(
-                                fontSize: 22, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                fontSize: 22,
+                                color: themeChange.getThem()
+                                    ? AppThemeData.neutralDark900
+                                    : AppThemeData.neutral900),
                           ),
                           SizedBox(height: 5),
                           Text(
-                            'View your previously purchased business plans and their billing cycles.'.tr,
+                            'View your previously purchased business plans and their billing cycles.'
+                                .tr,
                             textAlign: TextAlign.start,
                             style: AppThemeData.mediumTextStyle(
-                                fontSize: 14, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                fontSize: 14,
+                                color: themeChange.getThem()
+                                    ? AppThemeData.neutralDark900
+                                    : AppThemeData.neutral900),
                           ),
                           SizedBox(height: 20),
                           ListView.builder(
-                            itemCount: controller.subscriptionHistoryList.length,
+                            itemCount:
+                                controller.subscriptionHistoryList.length,
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
-                              SubscriptionData subscription = controller.subscriptionHistoryList[index];
+                              SubscriptionData subscription =
+                                  controller.subscriptionHistoryList[index];
                               return Padding(
                                 padding: const EdgeInsets.only(bottom: 10),
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
-                                    color: themeChange.getThem() ? AppThemeData.neutralDark200 : AppThemeData.neutral200,
+                                    color: themeChange.getThem()
+                                        ? AppThemeData.neutralDark200
+                                        : AppThemeData.neutral200,
                                   ),
                                   child: Padding(
                                     padding: const EdgeInsets.all(20),
@@ -66,7 +79,9 @@ class SubscriptionHistoryScreen extends StatelessWidget {
                                         Row(
                                           children: [
                                             NetworkImageWidget(
-                                              imageUrl: subscription.subscriptionPlan!.image.toString(),
+                                              imageUrl: subscription
+                                                  .subscriptionPlan!.image
+                                                  .toString(),
                                               height: 50,
                                               width: 50,
                                             ),
@@ -75,34 +90,57 @@ class SubscriptionHistoryScreen extends StatelessWidget {
                                             ),
                                             Expanded(
                                               child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    subscription.subscriptionPlan!.name.toString(),
+                                                    subscription
+                                                        .subscriptionPlan!.name
+                                                        .toString(),
                                                     textAlign: TextAlign.start,
-                                                    style: AppThemeData.boldTextStyle(
-                                                        fontSize: 18,
-                                                        color:
-                                                            themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                                    style: AppThemeData
+                                                        .boldTextStyle(
+                                                            fontSize: 18,
+                                                            color: themeChange
+                                                                    .getThem()
+                                                                ? AppThemeData
+                                                                    .neutralDark900
+                                                                : AppThemeData
+                                                                    .neutral900),
                                                   ),
                                                   Text(
-                                                    subscription.subscriptionPlan!.type == 'free'
+                                                    subscription.subscriptionPlan!
+                                                                .type ==
+                                                            'free'
                                                         ? "Free".tr
-                                                        : Constant().amountShow(amount: subscription.subscriptionPlan!.price.toString()),
+                                                        : Constant().amountShow(
+                                                            amount: subscription
+                                                                .subscriptionPlan!
+                                                                .price
+                                                                .toString()),
                                                     textAlign: TextAlign.start,
-                                                    style: AppThemeData.semiBoldTextStyle(
-                                                        fontSize: 18,
-                                                        color:
-                                                            themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                                    style: AppThemeData
+                                                        .semiBoldTextStyle(
+                                                            fontSize: 18,
+                                                            color: themeChange
+                                                                    .getThem()
+                                                                ? AppThemeData
+                                                                    .neutralDark900
+                                                                : AppThemeData
+                                                                    .neutral900),
                                                   ),
                                                 ],
                                               ),
                                             ),
                                             RoundedButtonFill(
-                                              title: subscription.status!.capitalizeString(),
+                                              title: subscription.status!
+                                                  .capitalizeString(),
                                               height: 4,
                                               width: 20,
-                                              color: subscription.status == "cancelled" || subscription.status == "expire"
+                                              color: subscription.status ==
+                                                          "cancelled" ||
+                                                      subscription.status ==
+                                                          "expire"
                                                   ? AppThemeData.errorDefault
                                                   : AppThemeData.successDark,
                                               textColor: AppThemeData.neutral50,
@@ -119,19 +157,33 @@ class SubscriptionHistoryScreen extends StatelessWidget {
                                               child: Text(
                                                 "Validity Period:",
                                                 textAlign: TextAlign.start,
-                                                style: AppThemeData.mediumTextStyle(
-                                                    fontSize: 14,
-                                                    color: themeChange.getThem() ? AppThemeData.neutralDark700 : AppThemeData.neutral700),
+                                                style: AppThemeData
+                                                    .mediumTextStyle(
+                                                        fontSize: 14,
+                                                        color: themeChange
+                                                                .getThem()
+                                                            ? AppThemeData
+                                                                .neutralDark700
+                                                            : AppThemeData
+                                                                .neutral700),
                                               ),
                                             ),
                                             Text(
-                                              subscription.subscriptionPlan!.expiryDay == "-1"
+                                              subscription.subscriptionPlan!
+                                                          .expiryDay ==
+                                                      "-1"
                                                   ? "Unlimited"
                                                   : "${subscription.subscriptionPlan!.expiryDay} ${'Days'.tr}",
                                               textAlign: TextAlign.start,
-                                              style: AppThemeData.semiBoldTextStyle(
-                                                  fontSize: 14,
-                                                  color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                              style: AppThemeData
+                                                  .semiBoldTextStyle(
+                                                      fontSize: 14,
+                                                      color: themeChange
+                                                              .getThem()
+                                                          ? AppThemeData
+                                                              .neutralDark900
+                                                          : AppThemeData
+                                                              .neutral900),
                                             ),
                                           ],
                                         ),
@@ -144,17 +196,29 @@ class SubscriptionHistoryScreen extends StatelessWidget {
                                               child: Text(
                                                 "Date Purchased:",
                                                 textAlign: TextAlign.start,
-                                                style: AppThemeData.mediumTextStyle(
-                                                    fontSize: 14,
-                                                    color: themeChange.getThem() ? AppThemeData.neutralDark700 : AppThemeData.neutral700),
+                                                style: AppThemeData
+                                                    .mediumTextStyle(
+                                                        fontSize: 14,
+                                                        color: themeChange
+                                                                .getThem()
+                                                            ? AppThemeData
+                                                                .neutralDark700
+                                                            : AppThemeData
+                                                                .neutral700),
                                               ),
                                             ),
                                             Text(
                                               subscription.createdAt.toString(),
                                               textAlign: TextAlign.start,
-                                              style: AppThemeData.semiBoldTextStyle(
-                                                  fontSize: 14,
-                                                  color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                              style: AppThemeData
+                                                  .semiBoldTextStyle(
+                                                      fontSize: 14,
+                                                      color: themeChange
+                                                              .getThem()
+                                                          ? AppThemeData
+                                                              .neutralDark900
+                                                          : AppThemeData
+                                                              .neutral900),
                                             ),
                                           ],
                                         ),
@@ -167,45 +231,71 @@ class SubscriptionHistoryScreen extends StatelessWidget {
                                               child: Text(
                                                 "Expired Date:",
                                                 textAlign: TextAlign.start,
-                                                style: AppThemeData.mediumTextStyle(
-                                                    fontSize: 14,
-                                                    color: themeChange.getThem() ? AppThemeData.neutralDark700 : AppThemeData.neutral700),
+                                                style: AppThemeData
+                                                    .mediumTextStyle(
+                                                        fontSize: 14,
+                                                        color: themeChange
+                                                                .getThem()
+                                                            ? AppThemeData
+                                                                .neutralDark700
+                                                            : AppThemeData
+                                                                .neutral700),
                                               ),
                                             ),
                                             Text(
-                                              subscription.expiryDate == null ? "Unlimited" : subscription.expiryDate.toString(),
+                                              subscription.expiryDate == null
+                                                  ? "Unlimited"
+                                                  : subscription.expiryDate
+                                                      .toString(),
                                               textAlign: TextAlign.start,
-                                              style: AppThemeData.semiBoldTextStyle(
-                                                  fontSize: 14,
-                                                  color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                              style: AppThemeData
+                                                  .semiBoldTextStyle(
+                                                      fontSize: 14,
+                                                      color: themeChange
+                                                              .getThem()
+                                                          ? AppThemeData
+                                                              .neutralDark900
+                                                          : AppThemeData
+                                                              .neutral900),
                                             ),
                                           ],
                                         ),
                                         SizedBox(
                                           height: 10,
                                         ),
-                                        subscription.subscriptionPlan!.type == 'free'
+                                        subscription.subscriptionPlan!.type ==
+                                                'free'
                                             ? SizedBox()
                                             : Row(
                                                 children: [
                                                   Expanded(
                                                     child: Text(
                                                       "Payment method:",
-                                                      textAlign: TextAlign.start,
+                                                      textAlign:
+                                                          TextAlign.start,
                                                       style: AppThemeData.mediumTextStyle(
                                                           fontSize: 14,
-                                                          color: themeChange.getThem()
-                                                              ? AppThemeData.neutralDark700
-                                                              : AppThemeData.neutral700),
+                                                          color: themeChange
+                                                                  .getThem()
+                                                              ? AppThemeData
+                                                                  .neutralDark700
+                                                              : AppThemeData
+                                                                  .neutral700),
                                                     ),
                                                   ),
                                                   Text(
-                                                    subscription.paymentMethod.toString(),
+                                                    subscription.paymentMethod
+                                                        .toString(),
                                                     textAlign: TextAlign.start,
-                                                    style: AppThemeData.semiBoldTextStyle(
-                                                        fontSize: 14,
-                                                        color:
-                                                            themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                                    style: AppThemeData
+                                                        .semiBoldTextStyle(
+                                                            fontSize: 14,
+                                                            color: themeChange
+                                                                    .getThem()
+                                                                ? AppThemeData
+                                                                    .neutralDark900
+                                                                : AppThemeData
+                                                                    .neutral900),
                                                   ),
                                                 ],
                                               )

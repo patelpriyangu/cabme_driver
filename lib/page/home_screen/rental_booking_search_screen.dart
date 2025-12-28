@@ -1,13 +1,13 @@
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/constant/ride_satatus.dart';
-import 'package:cabme_driver/controller/rental_booking_search_controller.dart';
-import 'package:cabme_driver/model/rental_booking_model.dart';
-import 'package:cabme_driver/page/chats_screen/conversation_screen.dart';
-import 'package:cabme_driver/themes/app_them_data.dart';
-import 'package:cabme_driver/themes/responsive.dart';
-import 'package:cabme_driver/utils/dark_theme_provider.dart';
-import 'package:cabme_driver/utils/network_image_widget.dart';
-import 'package:cabme_driver/widget/dotted_line.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/constant/ride_satatus.dart';
+import 'package:uniqcars_driver/controller/rental_booking_search_controller.dart';
+import 'package:uniqcars_driver/model/rental_booking_model.dart';
+import 'package:uniqcars_driver/page/chats_screen/conversation_screen.dart';
+import 'package:uniqcars_driver/themes/app_them_data.dart';
+import 'package:uniqcars_driver/themes/responsive.dart';
+import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
+import 'package:uniqcars_driver/utils/network_image_widget.dart';
+import 'package:uniqcars_driver/widget/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -35,12 +35,14 @@ class RentalBookingSearchScreen extends StatelessWidget {
                 : Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: controller.rentalBookingData.isEmpty
-                        ? Constant.showEmptyView(message: "No Rental booking available")
+                        ? Constant.showEmptyView(
+                            message: "No Rental booking available")
                         : ListView.builder(
                             shrinkWrap: true,
                             itemCount: controller.rentalBookingData.length,
                             itemBuilder: (context, index) {
-                              RentalBookingData rentalBookingData = controller.rentalBookingData[index];
+                              RentalBookingData rentalBookingData =
+                                  controller.rentalBookingData[index];
                               return InkWell(
                                 onTap: () {},
                                 child: Container(
@@ -48,13 +50,17 @@ class RentalBookingSearchScreen extends StatelessWidget {
                                   margin: const EdgeInsets.all(8),
                                   padding: const EdgeInsets.all(16),
                                   decoration: ShapeDecoration(
-                                    color: themeChange.getThem() ? AppThemeData.neutralDark50 : AppThemeData.neutral50,
+                                    color: themeChange.getThem()
+                                        ? AppThemeData.neutralDark50
+                                        : AppThemeData.neutral50,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     shadows: [
                                       BoxShadow(
-                                        color: themeChange.getThem() ? AppThemeData.neutralDark200 : Color(0x14000000),
+                                        color: themeChange.getThem()
+                                            ? AppThemeData.neutralDark200
+                                            : Color(0x14000000),
                                         blurRadius: 23,
                                         offset: Offset(0, 0),
                                         spreadRadius: 0,
@@ -62,13 +68,16 @@ class RentalBookingSearchScreen extends StatelessWidget {
                                     ],
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
                                           ClipOval(
                                             child: NetworkImageWidget(
-                                              imageUrl: rentalBookingData.user!.image.toString(),
+                                              imageUrl: rentalBookingData
+                                                  .user!.image
+                                                  .toString(),
                                               width: 52,
                                               height: 52,
                                               fit: BoxFit.cover,
@@ -79,14 +88,22 @@ class RentalBookingSearchScreen extends StatelessWidget {
                                           ),
                                           Expanded(
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  '${rentalBookingData.user!.prenom} ${rentalBookingData.user!.nom}'.tr,
+                                                  '${rentalBookingData.user!.prenom} ${rentalBookingData.user!.nom}'
+                                                      .tr,
                                                   textAlign: TextAlign.start,
-                                                  style: AppThemeData.boldTextStyle(
-                                                      fontSize: 16,
-                                                      color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                                  style: AppThemeData
+                                                      .boldTextStyle(
+                                                          fontSize: 16,
+                                                          color: themeChange
+                                                                  .getThem()
+                                                              ? AppThemeData
+                                                                  .neutralDark900
+                                                              : AppThemeData
+                                                                  .neutral900),
                                                 ),
                                                 SizedBox(
                                                   height: 5,
@@ -94,18 +111,31 @@ class RentalBookingSearchScreen extends StatelessWidget {
                                                 Container(
                                                   width: 75,
                                                   decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(30),
-                                                      color: themeChange.getThem() ? AppThemeData.successLight : AppThemeData.successLight),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              30),
+                                                      color: themeChange
+                                                              .getThem()
+                                                          ? AppThemeData
+                                                              .successLight
+                                                          : AppThemeData
+                                                              .successLight),
                                                   child: Padding(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 14,
+                                                        vertical: 4),
                                                     child: Row(
                                                       children: [
                                                         Icon(
                                                           Icons.star_half,
                                                           size: 14,
-                                                          color: themeChange.getThem()
-                                                              ? AppThemeData.successDefault
-                                                              : AppThemeData.successDefault,
+                                                          color: themeChange
+                                                                  .getThem()
+                                                              ? AppThemeData
+                                                                  .successDefault
+                                                              : AppThemeData
+                                                                  .successDefault,
                                                         ),
                                                         SizedBox(
                                                           width: 5,
@@ -115,8 +145,10 @@ class RentalBookingSearchScreen extends StatelessWidget {
                                                           style: AppThemeData.mediumTextStyle(
                                                               fontSize: 14,
                                                               color: themeChange.getThem()
-                                                                  ? AppThemeData.successDefault
-                                                                  : AppThemeData.successDefault),
+                                                                  ? AppThemeData
+                                                                      .successDefault
+                                                                  : AppThemeData
+                                                                      .successDefault),
                                                         ),
                                                       ],
                                                     ),
@@ -125,14 +157,21 @@ class RentalBookingSearchScreen extends StatelessWidget {
                                               ],
                                             ),
                                           ),
-                                          rentalBookingData.status == RideStatus.confirmed || rentalBookingData.status == RideStatus.onRide
+                                          rentalBookingData.status ==
+                                                      RideStatus.confirmed ||
+                                                  rentalBookingData.status ==
+                                                      RideStatus.onRide
                                               ? Row(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     InkWell(
                                                       onTap: () {
-                                                        Constant.makePhoneCall(rentalBookingData.user!.phone!);
+                                                        Constant.makePhoneCall(
+                                                            rentalBookingData
+                                                                .user!.phone!);
                                                       },
                                                       child: SvgPicture.asset(
                                                         "assets/icons/ic_phone_dial.svg",
@@ -144,13 +183,22 @@ class RentalBookingSearchScreen extends StatelessWidget {
                                                     ),
                                                     InkWell(
                                                       onTap: () {
-                                                        Get.to(ConversationScreen(), arguments: {
-                                                          "receiverId": rentalBookingData.user!.id,
-                                                          "orderId": rentalBookingData.id,
-                                                          "receiverName":
-                                                              "${rentalBookingData.user!.prenom} ${rentalBookingData.user!.nom}",
-                                                          "receiverPhoto": rentalBookingData.user!.image
-                                                        });
+                                                        Get.to(
+                                                            ConversationScreen(),
+                                                            arguments: {
+                                                              "receiverId":
+                                                                  rentalBookingData
+                                                                      .user!.id,
+                                                              "orderId":
+                                                                  rentalBookingData
+                                                                      .id,
+                                                              "receiverName":
+                                                                  "${rentalBookingData.user!.prenom} ${rentalBookingData.user!.nom}",
+                                                              "receiverPhoto":
+                                                                  rentalBookingData
+                                                                      .user!
+                                                                      .image
+                                                            });
                                                       },
                                                       child: SvgPicture.asset(
                                                         "assets/icons/ic_chat_details.svg",
@@ -165,42 +213,64 @@ class RentalBookingSearchScreen extends StatelessWidget {
                                       const SizedBox(height: 16),
                                       Container(
                                         decoration: BoxDecoration(
-                                          color: themeChange.getThem() ? AppThemeData.neutralDark100 : AppThemeData.neutral100,
-                                          borderRadius: BorderRadius.circular(10),
+                                          color: themeChange.getThem()
+                                              ? AppThemeData.neutralDark100
+                                              : AppThemeData.neutral100,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                         child: Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 10),
                                           child: Column(
                                             children: [
                                               Timeline.tileBuilder(
                                                 shrinkWrap: true,
                                                 padding: EdgeInsets.zero,
-                                                physics: const NeverScrollableScrollPhysics(),
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
                                                 theme: TimelineThemeData(
                                                   nodePosition: 0,
                                                   // indicatorPosition: 0,
                                                 ),
-                                                builder: TimelineTileBuilder.connected(
-                                                  contentsAlign: ContentsAlign.basic,
-                                                  indicatorBuilder: (context, index) {
-                                                    return SvgPicture.asset("assets/icons/ic_sender.svg");
+                                                builder: TimelineTileBuilder
+                                                    .connected(
+                                                  contentsAlign:
+                                                      ContentsAlign.basic,
+                                                  indicatorBuilder:
+                                                      (context, index) {
+                                                    return SvgPicture.asset(
+                                                        "assets/icons/ic_sender.svg");
                                                   },
-                                                  connectorBuilder: (context, index, connectorType) {
+                                                  connectorBuilder: (context,
+                                                      index, connectorType) {
                                                     return DashedLineConnector(
-                                                      color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
+                                                      color: themeChange
+                                                              .getThem()
+                                                          ? AppThemeData
+                                                              .neutralDark300
+                                                          : AppThemeData
+                                                              .neutral300,
                                                       gap: 4,
                                                     );
                                                   },
-                                                  contentsBuilder: (context, index) {
+                                                  contentsBuilder:
+                                                      (context, index) {
                                                     return Padding(
-                                                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 14,
+                                                          vertical: 10),
                                                       child: Text(
                                                         "${rentalBookingData.departName}",
                                                         style: AppThemeData.mediumTextStyle(
                                                             fontSize: 14,
-                                                            color: themeChange.getThem()
-                                                                ? AppThemeData.neutralDark900
-                                                                : AppThemeData.neutral900),
+                                                            color: themeChange
+                                                                    .getThem()
+                                                                ? AppThemeData
+                                                                    .neutralDark900
+                                                                : AppThemeData
+                                                                    .neutral900),
                                                       ),
                                                     );
                                                   },
@@ -225,20 +295,31 @@ class RentalBookingSearchScreen extends StatelessWidget {
                                                   Expanded(
                                                     child: Text(
                                                       "Package Details:".tr,
-                                                      textAlign: TextAlign.start,
+                                                      textAlign:
+                                                          TextAlign.start,
                                                       style: AppThemeData.mediumTextStyle(
                                                           fontSize: 16,
-                                                          color: themeChange.getThem()
-                                                              ? AppThemeData.neutralDark900
-                                                              : AppThemeData.neutral900),
+                                                          color: themeChange
+                                                                  .getThem()
+                                                              ? AppThemeData
+                                                                  .neutralDark900
+                                                              : AppThemeData
+                                                                  .neutral900),
                                                     ),
                                                   ),
                                                   Text(
-                                                    "${rentalBookingData.packageDetails!.title}".tr,
+                                                    "${rentalBookingData.packageDetails!.title}"
+                                                        .tr,
                                                     textAlign: TextAlign.start,
-                                                    style: AppThemeData.semiBoldTextStyle(
-                                                        fontSize: 16,
-                                                        color: themeChange.getThem() ? AppThemeData.primaryDark : AppThemeData.primaryDark),
+                                                    style: AppThemeData
+                                                        .semiBoldTextStyle(
+                                                            fontSize: 16,
+                                                            color: themeChange
+                                                                    .getThem()
+                                                                ? AppThemeData
+                                                                    .primaryDark
+                                                                : AppThemeData
+                                                                    .primaryDark),
                                                   ),
                                                 ],
                                               ),
@@ -250,22 +331,35 @@ class RentalBookingSearchScreen extends StatelessWidget {
                                                   Expanded(
                                                     child: Text(
                                                       'includingUnit'.trParams({
-                                                        'unit': 'unit_${Constant.distanceUnit}'.tr,
+                                                        'unit':
+                                                            'unit_${Constant.distanceUnit}'
+                                                                .tr,
                                                       }),
-                                                      textAlign: TextAlign.start,
+                                                      textAlign:
+                                                          TextAlign.start,
                                                       style: AppThemeData.mediumTextStyle(
                                                           fontSize: 16,
-                                                          color: themeChange.getThem()
-                                                              ? AppThemeData.neutralDark900
-                                                              : AppThemeData.neutral900),
+                                                          color: themeChange
+                                                                  .getThem()
+                                                              ? AppThemeData
+                                                                  .neutralDark900
+                                                              : AppThemeData
+                                                                  .neutral900),
                                                     ),
                                                   ),
                                                   Text(
-                                                    "${rentalBookingData.packageDetails!.includedDistance} ${Constant.distanceUnit}".tr,
+                                                    "${rentalBookingData.packageDetails!.includedDistance} ${Constant.distanceUnit}"
+                                                        .tr,
                                                     textAlign: TextAlign.start,
-                                                    style: AppThemeData.semiBoldTextStyle(
-                                                        fontSize: 16,
-                                                        color: themeChange.getThem() ? AppThemeData.primaryDark : AppThemeData.primaryDark),
+                                                    style: AppThemeData
+                                                        .semiBoldTextStyle(
+                                                            fontSize: 16,
+                                                            color: themeChange
+                                                                    .getThem()
+                                                                ? AppThemeData
+                                                                    .primaryDark
+                                                                : AppThemeData
+                                                                    .primaryDark),
                                                   ),
                                                 ],
                                               ),
@@ -277,20 +371,31 @@ class RentalBookingSearchScreen extends StatelessWidget {
                                                   Expanded(
                                                     child: Text(
                                                       "Including Duration:".tr,
-                                                      textAlign: TextAlign.start,
+                                                      textAlign:
+                                                          TextAlign.start,
                                                       style: AppThemeData.mediumTextStyle(
                                                           fontSize: 16,
-                                                          color: themeChange.getThem()
-                                                              ? AppThemeData.neutralDark900
-                                                              : AppThemeData.neutral900),
+                                                          color: themeChange
+                                                                  .getThem()
+                                                              ? AppThemeData
+                                                                  .neutralDark900
+                                                              : AppThemeData
+                                                                  .neutral900),
                                                     ),
                                                   ),
                                                   Text(
-                                                    "${rentalBookingData.packageDetails!.includedHours} Hr".tr,
+                                                    "${rentalBookingData.packageDetails!.includedHours} Hr"
+                                                        .tr,
                                                     textAlign: TextAlign.start,
-                                                    style: AppThemeData.semiBoldTextStyle(
-                                                        fontSize: 16,
-                                                        color: themeChange.getThem() ? AppThemeData.primaryDark : AppThemeData.primaryDark),
+                                                    style: AppThemeData
+                                                        .semiBoldTextStyle(
+                                                            fontSize: 16,
+                                                            color: themeChange
+                                                                    .getThem()
+                                                                ? AppThemeData
+                                                                    .primaryDark
+                                                                : AppThemeData
+                                                                    .primaryDark),
                                                   ),
                                                 ],
                                               )
@@ -306,16 +411,28 @@ class RentalBookingSearchScreen extends StatelessWidget {
                                           Expanded(
                                             child: Column(
                                               children: [
-                                                SvgPicture.asset("assets/icons/ic_amount.svg"),
+                                                SvgPicture.asset(
+                                                    "assets/icons/ic_amount.svg"),
                                                 SizedBox(
                                                   height: 5,
                                                 ),
                                                 Text(
-                                                  Constant().amountShow(amount: rentalBookingData.amount).tr,
+                                                  Constant()
+                                                      .amountShow(
+                                                          amount:
+                                                              rentalBookingData
+                                                                  .amount)
+                                                      .tr,
                                                   textAlign: TextAlign.start,
-                                                  style: AppThemeData.semiBoldTextStyle(
-                                                      fontSize: 14,
-                                                      color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                                  style: AppThemeData
+                                                      .semiBoldTextStyle(
+                                                          fontSize: 14,
+                                                          color: themeChange
+                                                                  .getThem()
+                                                              ? AppThemeData
+                                                                  .neutralDark900
+                                                              : AppThemeData
+                                                                  .neutral900),
                                                 )
                                               ],
                                             ),
@@ -323,16 +440,24 @@ class RentalBookingSearchScreen extends StatelessWidget {
                                           Expanded(
                                             child: Column(
                                               children: [
-                                                SvgPicture.asset("assets/icons/ic_date.svg"),
+                                                SvgPicture.asset(
+                                                    "assets/icons/ic_date.svg"),
                                                 SizedBox(
                                                   height: 5,
                                                 ),
                                                 Text(
-                                                  '${rentalBookingData.startDate} ${rentalBookingData.startTime}'.tr,
+                                                  '${rentalBookingData.startDate} ${rentalBookingData.startTime}'
+                                                      .tr,
                                                   textAlign: TextAlign.start,
-                                                  style: AppThemeData.semiBoldTextStyle(
-                                                      fontSize: 14,
-                                                      color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                                  style: AppThemeData
+                                                      .semiBoldTextStyle(
+                                                          fontSize: 14,
+                                                          color: themeChange
+                                                                  .getThem()
+                                                              ? AppThemeData
+                                                                  .neutralDark900
+                                                              : AppThemeData
+                                                                  .neutral900),
                                                 )
                                               ],
                                             ),
@@ -340,16 +465,25 @@ class RentalBookingSearchScreen extends StatelessWidget {
                                         ],
                                       ),
                                       const SizedBox(height: 16),
-                                      rentalBookingData.status == RideStatus.confirmed
+                                      rentalBookingData.status ==
+                                              RideStatus.confirmed
                                           ? Row(
                                               children: [
                                                 Expanded(
                                                   child: RoundedButtonFill(
-                                                    title: "Reached Location".tr,
+                                                    title:
+                                                        "Reached Location".tr,
                                                     height: 5.5,
-                                                    color:
-                                                        themeChange.getThem() ? AppThemeData.successDefault : AppThemeData.successDefault,
-                                                    textColor: themeChange.getThem() ? AppThemeData.neutral50 : AppThemeData.neutral50,
+                                                    color: themeChange.getThem()
+                                                        ? AppThemeData
+                                                            .successDefault
+                                                        : AppThemeData
+                                                            .successDefault,
+                                                    textColor: themeChange
+                                                            .getThem()
+                                                        ? AppThemeData.neutral50
+                                                        : AppThemeData
+                                                            .neutral50,
                                                     onPress: () async {
                                                       // showVerifyPassengerDialog(context, themeChange, controller);
                                                     },
@@ -367,12 +501,20 @@ class RentalBookingSearchScreen extends StatelessWidget {
                                                 ),
                                               ],
                                             )
-                                          : rentalBookingData.status == RideStatus.onRide
+                                          : rentalBookingData.status ==
+                                                  RideStatus.onRide
                                               ? RoundedButtonFill(
                                                   title: "Payment Pending".tr,
                                                   height: 5.5,
-                                                  color: themeChange.getThem() ? AppThemeData.errorDefault : AppThemeData.errorDefault,
-                                                  textColor: themeChange.getThem() ? AppThemeData.neutral50 : AppThemeData.neutral50,
+                                                  color: themeChange.getThem()
+                                                      ? AppThemeData
+                                                          .errorDefault
+                                                      : AppThemeData
+                                                          .errorDefault,
+                                                  textColor: themeChange
+                                                          .getThem()
+                                                      ? AppThemeData.neutral50
+                                                      : AppThemeData.neutral50,
                                                   onPress: () async {
                                                     // if (rentalBookingData.paymentMethod == "Cash") {
                                                     //   conformCashPayment(context, themeChange, controller);
@@ -388,12 +530,23 @@ class RentalBookingSearchScreen extends StatelessWidget {
                                                       child: RoundedButtonFill(
                                                         title: "Reject".tr,
                                                         height: 5.5,
-                                                        color:
-                                                            themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
-                                                        textColor:
-                                                            themeChange.getThem() ? AppThemeData.neutralDark500 : AppThemeData.neutral500,
+                                                        color: themeChange
+                                                                .getThem()
+                                                            ? AppThemeData
+                                                                .neutralDark300
+                                                            : AppThemeData
+                                                                .neutral300,
+                                                        textColor: themeChange
+                                                                .getThem()
+                                                            ? AppThemeData
+                                                                .neutralDark500
+                                                            : AppThemeData
+                                                                .neutral500,
                                                         onPress: () async {
-                                                          controller.rejectedRentalBooking(rentalBookingData.id.toString());
+                                                          controller.rejectedRentalBooking(
+                                                              rentalBookingData
+                                                                  .id
+                                                                  .toString());
                                                         },
                                                       ),
                                                     ),
@@ -404,10 +557,15 @@ class RentalBookingSearchScreen extends StatelessWidget {
                                                       child: RoundedButtonFill(
                                                         title: "Accept".tr,
                                                         height: 5.5,
-                                                        color: AppThemeData.successDefault,
-                                                        textColor: AppThemeData.neutral50,
+                                                        color: AppThemeData
+                                                            .successDefault,
+                                                        textColor: AppThemeData
+                                                            .neutral50,
                                                         onPress: () async {
-                                                          controller.acceptRentalBooking(rentalBookingData.id.toString());
+                                                          controller.acceptRentalBooking(
+                                                              rentalBookingData
+                                                                  .id
+                                                                  .toString());
                                                         },
                                                       ),
                                                     ),

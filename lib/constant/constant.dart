@@ -4,16 +4,16 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
 
-import 'package:cabme_driver/model/admin_commission.dart';
-import 'package:cabme_driver/model/language_model.dart';
-import 'package:cabme_driver/model/payment_setting_model.dart';
-import 'package:cabme_driver/model/settings_model.dart' as adminComm;
-import 'package:cabme_driver/model/tax_model.dart';
-import 'package:cabme_driver/model/user_model.dart';
-import 'package:cabme_driver/page/chats_screen/conversation_screen.dart';
-import 'package:cabme_driver/themes/app_them_data.dart';
-import 'package:cabme_driver/utils/Preferences.dart';
-import 'package:cabme_driver/utils/dark_theme_provider.dart';
+import 'package:uniqcars_driver/model/admin_commission.dart';
+import 'package:uniqcars_driver/model/language_model.dart';
+import 'package:uniqcars_driver/model/payment_setting_model.dart';
+import 'package:uniqcars_driver/model/settings_model.dart' as adminComm;
+import 'package:uniqcars_driver/model/tax_model.dart';
+import 'package:uniqcars_driver/model/user_model.dart';
+import 'package:uniqcars_driver/page/chats_screen/conversation_screen.dart';
+import 'package:uniqcars_driver/themes/app_them_data.dart';
+import 'package:uniqcars_driver/utils/Preferences.dart';
+import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +51,6 @@ class Constant {
   static adminComm.AdminCommission? adminCommission;
   static String globalUrl = "https://cabme.siswebapp.com/";
 
-
   static String? distanceUnit = "KM";
   static String? contactUsEmail = "";
   static String? minimumWithdrawalAmount = "0";
@@ -60,7 +59,8 @@ class Constant {
   static String? deliveryChargeParcel = "";
   static List<dynamic> activeServices = [];
   static String? parcelPerWeightCharge = "";
-  static CollectionReference conversation = FirebaseFirestore.instance.collection('conversation');
+  static CollectionReference conversation =
+      FirebaseFirestore.instance.collection('conversation');
 
   static geolocator.Position? currentLocation;
 
@@ -93,7 +93,9 @@ class Constant {
     double taxAmount = 0.0;
     if (taxModel != null && taxModel.statut == "yes") {
       if (taxModel.type == "Percentage") {
-        taxAmount = (double.parse(amount.toString()) * double.parse(taxModel.value!.toString())) / 100;
+        taxAmount = (double.parse(amount.toString()) *
+                double.parse(taxModel.value!.toString())) /
+            100;
       } else {
         taxAmount = double.parse(taxModel.value.toString());
       }
@@ -101,25 +103,25 @@ class Constant {
     return taxAmount;
   }
 
-  static double calculateAdminCommission({String? amount, AdminCommission? adminCommission}) {
+  static double calculateAdminCommission(
+      {String? amount, AdminCommission? adminCommission}) {
     double taxAmount = 0.0;
-      if (adminCommission!.type == "Percentage") {
-        taxAmount = (double.parse(amount.toString()) * double.parse(adminCommission.value!.toString())) / 100;
-      } else {
-        taxAmount = double.parse(adminCommission.value.toString());
-      }
+    if (adminCommission!.type == "Percentage") {
+      taxAmount = (double.parse(amount.toString()) *
+              double.parse(adminCommission.value!.toString())) /
+          100;
+    } else {
+      taxAmount = double.parse(adminCommission.value.toString());
+    }
 
     return taxAmount;
   }
-
 
   static LanguageData getLanguage() {
     final String user = Preferences.getString(Preferences.languageCodeKey);
     Map<String, dynamic> userMap = jsonDecode(user);
     return LanguageData.fromJson(userMap);
   }
-
-
 
   static bool isValidEmail(String email) {
     final emailRegex = RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
@@ -132,11 +134,14 @@ class Constant {
     return UserModel.fromJson(userMap);
   }
 
-  static double calculateDiscountOrder({String? amount, AdminCommission? offerModel}) {
+  static double calculateDiscountOrder(
+      {String? amount, AdminCommission? offerModel}) {
     double taxAmount = 0.0;
     if (offerModel != null) {
       if (offerModel.type == "Percentage" || offerModel.type == "percentage") {
-        taxAmount = (double.parse(amount.toString()) * double.parse(offerModel.value.toString())) / 100;
+        taxAmount = (double.parse(amount.toString()) *
+                double.parse(offerModel.value.toString())) /
+            100;
       } else {
         taxAmount = double.parse(offerModel.value.toString());
       }
@@ -172,7 +177,8 @@ class Constant {
   }
 
   String amountShow({required String? amount}) {
-    String amountdata = (amount == 'null' || amount == '' || amount == null) ? '0' : amount;
+    String amountdata =
+        (amount == 'null' || amount == '' || amount == null) ? '0' : amount;
     if (Constant.symbolAtRight == true) {
       return "${double.parse(amountdata.toString()).toStringAsFixed(int.parse(Constant.decimal!))}${Constant.currency.toString()}";
     } else {
@@ -189,11 +195,15 @@ class Constant {
         height: 40,
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: bgColor ?? (themeChange.getThem() ? AppThemeData.neutralDark50 : AppThemeData.neutral50),
+          color: bgColor ??
+              (themeChange.getThem()
+                  ? AppThemeData.neutralDark50
+                  : AppThemeData.neutral50),
           borderRadius: BorderRadius.circular(50),
         ),
         child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(loadingcolor ?? AppThemeData.primaryDefault),
+          valueColor: AlwaysStoppedAnimation<Color>(
+              loadingcolor ?? AppThemeData.primaryDefault),
           strokeWidth: 3,
         ),
       ),
@@ -208,9 +218,12 @@ class Constant {
     await launchUrl(launchUri);
   }
 
-  static Future<void> launchMapURl(String? latitude, String? longLatitude) async {
-    String appleUrl = 'https://maps.apple.com/?saddr=&daddr=$latitude,$longLatitude&directionsmode=driving';
-    String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longLatitude';
+  static Future<void> launchMapURl(
+      String? latitude, String? longLatitude) async {
+    String appleUrl =
+        'https://maps.apple.com/?saddr=&daddr=$latitude,$longLatitude&directionsmode=driving';
+    String googleUrl =
+        'https://www.google.com/maps/search/?api=1&query=$latitude,$longLatitude';
 
     if (Platform.isIOS) {
       if (await canLaunchUrl(Uri.parse(appleUrl))) {
@@ -233,11 +246,13 @@ class Constant {
   static Future<Url> uploadChatImageToFireStorage(File image) async {
     ShowToastDialog.showLoader('Uploading image...');
     var uniqueID = const Uuid().v4();
-    Reference upload = FirebaseStorage.instance.ref().child('images/$uniqueID.png');
+    Reference upload =
+        FirebaseStorage.instance.ref().child('images/$uniqueID.png');
     UploadTask uploadTask = upload.putFile(image);
 
     uploadTask.snapshotEvents.listen((event) {
-      ShowToastDialog.showLoader('Uploading image ${(event.bytesTransferred.toDouble() / 1000).toStringAsFixed(2)} /'
+      ShowToastDialog.showLoader(
+          'Uploading image ${(event.bytesTransferred.toDouble() / 1000).toStringAsFixed(2)} /'
           '${(event.totalBytes.toDouble() / 1000).toStringAsFixed(2)} '
           'KB');
     });
@@ -248,14 +263,17 @@ class Constant {
     var downloadUrl = await storageRef.getDownloadURL();
     var metaData = await storageRef.getMetadata();
     ShowToastDialog.closeLoader();
-    return Url(mime: metaData.contentType ?? 'image', url: downloadUrl.toString());
+    return Url(
+        mime: metaData.contentType ?? 'image', url: downloadUrl.toString());
   }
 
-  static Future<ChatVideoContainer?> uploadChatVideoToFireStorage(File video) async {
+  static Future<ChatVideoContainer?> uploadChatVideoToFireStorage(
+      File video) async {
     try {
       ShowToastDialog.showLoader("Uploading video...");
       final String uniqueID = const Uuid().v4();
-      final Reference videoRef = FirebaseStorage.instance.ref('videos/$uniqueID.mp4');
+      final Reference videoRef =
+          FirebaseStorage.instance.ref('videos/$uniqueID.mp4');
       final UploadTask uploadTask = videoRef.putFile(
         video,
         SettableMetadata(contentType: 'video/mp4'),
@@ -276,7 +294,8 @@ class Constant {
       }
 
       final String thumbnailID = const Uuid().v4();
-      final Reference thumbnailRef = FirebaseStorage.instance.ref('thumbnails/$thumbnailID.jpg');
+      final Reference thumbnailRef =
+          FirebaseStorage.instance.ref('thumbnails/$thumbnailID.jpg');
       final UploadTask thumbnailUploadTask = thumbnailRef.putData(
         thumbnailBytes,
         SettableMetadata(contentType: 'image/jpeg'),
@@ -286,7 +305,12 @@ class Constant {
       var metaData = await thumbnailRef.getMetadata();
       ShowToastDialog.closeLoader();
 
-      return ChatVideoContainer(videoUrl: Url(url: videoUrl.toString(), mime: metaData.contentType ?? 'video', videoThumbnail: thumbnailUrl), thumbnailUrl: thumbnailUrl);
+      return ChatVideoContainer(
+          videoUrl: Url(
+              url: videoUrl.toString(),
+              mime: metaData.contentType ?? 'video',
+              videoThumbnail: thumbnailUrl),
+          thumbnailUrl: thumbnailUrl);
     } catch (e) {
       ShowToastDialog.closeLoader();
       ShowToastDialog.showToast("Error: ${e.toString()}");
@@ -295,7 +319,11 @@ class Constant {
   }
 
   static Future<File> compressVideo(File file) async {
-    MediaInfo? info = await VideoCompress.compressVideo(file.path, quality: VideoQuality.DefaultQuality, deleteOrigin: false, includeAudio: true, frameRate: 24);
+    MediaInfo? info = await VideoCompress.compressVideo(file.path,
+        quality: VideoQuality.DefaultQuality,
+        deleteOrigin: false,
+        includeAudio: true,
+        frameRate: 24);
     if (info != null) {
       File compressedVideo = File(info.path!);
       return compressedVideo;
@@ -306,13 +334,18 @@ class Constant {
 
   static Future<String> uploadVideoThumbnailToFireStorage(File file) async {
     var uniqueID = const Uuid().v4();
-    Reference upload = FirebaseStorage.instance.ref().child('thumbnails/$uniqueID.png');
+    Reference upload =
+        FirebaseStorage.instance.ref().child('thumbnails/$uniqueID.png');
     UploadTask uploadTask = upload.putFile(file);
-    var downloadUrl = await (await uploadTask.whenComplete(() {})).ref.getDownloadURL();
+    var downloadUrl =
+        await (await uploadTask.whenComplete(() {})).ref.getDownloadURL();
     return downloadUrl.toString();
   }
 
-  static Future<void> redirectMap({required String name, required double latitude, required double longLatitude}) async {
+  static Future<void> redirectMap(
+      {required String name,
+      required double latitude,
+      required double longLatitude}) async {
     if (Constant.liveTrackingMapType == "google") {
       bool? isAvailable = await MapLauncher.isMapAvailable(MapType.google);
       if (isAvailable == true) {
@@ -435,7 +468,10 @@ class Constant {
     }
   }
 
-  static String? getGatewayValue({required String key, required String property, required PaymentSettingModel model}) {
+  static String? getGatewayValue(
+      {required String key,
+      required String property,
+      required PaymentSettingModel model}) {
     final map = {
       model.strip!.libelle: model.strip,
       model.cash!.libelle: model.cash,
@@ -463,7 +499,8 @@ class Constant {
   }
 
   bool hasValidUrl(String value) {
-    String pattern = r'(http|https)://[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?';
+    String pattern =
+        r'(http|https)://[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?';
     RegExp regExp = RegExp(pattern);
     if (value.isEmpty) {
       return false;
@@ -475,9 +512,12 @@ class Constant {
 
   static Future<Uint8List> getBytesFromAsset(String path, int width) async {
     ByteData data = await rootBundle.load(path);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
     ui.FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
   }
 }
 
@@ -491,7 +531,10 @@ class Url {
   Url({this.mime = '', this.url = '', this.videoThumbnail});
 
   factory Url.fromJson(Map<dynamic, dynamic> parsedJson) {
-    return Url(mime: parsedJson['mime'] ?? '', url: parsedJson['url'] ?? '', videoThumbnail: parsedJson['videoThumbnail'] ?? '');
+    return Url(
+        mime: parsedJson['mime'] ?? '',
+        url: parsedJson['url'] ?? '',
+        videoThumbnail: parsedJson['videoThumbnail'] ?? '');
   }
 
   Map<String, dynamic> toJson() {
@@ -504,6 +547,7 @@ extension StringExtension on String {
     return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
   }
 }
+
 abstract class PaymentGatewayConfig {
   Map<String, dynamic> toJson();
 }

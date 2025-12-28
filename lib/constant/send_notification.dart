@@ -2,9 +2,9 @@
 
 import 'dart:convert';
 
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/constant/logdata.dart';
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/constant/logdata.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:http/http.dart' as http;
@@ -17,7 +17,8 @@ class SendNotification {
   static Future<String?> getAccessToken() async {
     try {
       final value = await API.handleApiRequest(
-        request: () => http.get(Uri.parse(API.getServiceJson), headers: API.headers),
+        request: () =>
+            http.get(Uri.parse(API.getServiceJson), headers: API.headers),
         showLoader: false,
       );
       showLog("API :: Service Account Response :: ${value.toString()}");
@@ -28,8 +29,10 @@ class SendNotification {
         }
         // If the API returns a service account JSON, parse it
         try {
-          final serviceAccountCredentials = ServiceAccountCredentials.fromJson(value);
-          final client = await clientViaServiceAccount(serviceAccountCredentials, _scopes);
+          final serviceAccountCredentials =
+              ServiceAccountCredentials.fromJson(value);
+          final client =
+              await clientViaServiceAccount(serviceAccountCredentials, _scopes);
           return client.credentials.accessToken.data;
         } catch (e) {
           showLog("ServiceAccountCredentials parsing error: $e");
@@ -46,7 +49,10 @@ class SendNotification {
   }
 
   static Future<bool> sendOneNotification(
-      {required String token, required String title, required String body, required Map<String, dynamic> payload}) async {
+      {required String token,
+      required String title,
+      required String body,
+      required Map<String, dynamic> payload}) async {
     try {
       final String? accessToken = await getAccessToken();
       debugPrint("accessToken=======>");
@@ -64,7 +70,8 @@ class SendNotification {
         });
 
         final response = await http.post(
-          Uri.parse('https://fcm.googleapis.com/v1/projects/${Constant.senderId}/messages:send'),
+          Uri.parse(
+              'https://fcm.googleapis.com/v1/projects/${Constant.senderId}/messages:send'),
           headers: <String, String>{
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $accessToken',
@@ -80,7 +87,8 @@ class SendNotification {
           ),
         );
 
-        showLog("API :: URL :: ${'https://fcm.googleapis.com/v1/projects/${Constant.senderId}/messages:send'} ");
+        showLog(
+            "API :: URL :: ${'https://fcm.googleapis.com/v1/projects/${Constant.senderId}/messages:send'} ");
         showLog("API :: Request Body :: ${jsonEncode(
           <String, dynamic>{
             'message': {

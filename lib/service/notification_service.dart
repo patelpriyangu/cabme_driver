@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:cabme_driver/page/chats_screen/conversation_screen.dart';
+import 'package:uniqcars_driver/page/chats_screen/conversation_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
@@ -11,10 +11,12 @@ Future<void> firebaseMessageBackgroundHandle(RemoteMessage message) async {
 }
 
 class NotificationService {
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
   Future<void> initInfo() async {
-    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
       alert: true,
       badge: true,
       sound: true,
@@ -29,20 +31,27 @@ class NotificationService {
       sound: true,
     );
 
-    if (request.authorizationStatus == AuthorizationStatus.authorized || request.authorizationStatus == AuthorizationStatus.provisional) {
-      const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+    if (request.authorizationStatus == AuthorizationStatus.authorized ||
+        request.authorizationStatus == AuthorizationStatus.provisional) {
+      const AndroidInitializationSettings initializationSettingsAndroid =
+          AndroidInitializationSettings('@mipmap/ic_launcher');
       var iosInitializationSettings = const DarwinInitializationSettings();
       final InitializationSettings initializationSettings =
-          InitializationSettings(android: initializationSettingsAndroid, iOS: iosInitializationSettings);
-      await flutterLocalNotificationsPlugin.initialize(initializationSettings, onDidReceiveNotificationResponse: (payload) {});
+          InitializationSettings(
+              android: initializationSettingsAndroid,
+              iOS: iosInitializationSettings);
+      await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+          onDidReceiveNotificationResponse: (payload) {});
       setupInteractedMessage();
     }
   }
 
   Future<void> setupInteractedMessage() async {
-    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
-      FirebaseMessaging.onBackgroundMessage((message) => firebaseMessageBackgroundHandle(message));
+      FirebaseMessaging.onBackgroundMessage(
+          (message) => firebaseMessageBackgroundHandle(message));
     }
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -57,16 +66,20 @@ class NotificationService {
       if (message.notification != null) {
         if (message.data['status'] == "done") {
           await Get.to(ConversationScreen(), arguments: {
-            'receiverId': int.parse(json.decode(message.data['message'])['senderId'].toString()),
-            'orderId': int.parse(json.decode(message.data['message'])['orderId'].toString()),
-            'receiverName': json.decode(message.data['message'])['senderName'].toString(),
-            'receiverPhoto': json.decode(message.data['message'])['senderPhoto'].toString(),
+            'receiverId': int.parse(
+                json.decode(message.data['message'])['senderId'].toString()),
+            'orderId': int.parse(
+                json.decode(message.data['message'])['orderId'].toString()),
+            'receiverName':
+                json.decode(message.data['message'])['senderName'].toString(),
+            'receiverPhoto':
+                json.decode(message.data['message'])['senderPhoto'].toString(),
           });
         }
       }
     });
     log("::::::::::::Permission authorized:::::::::::::::::");
-    await FirebaseMessaging.instance.subscribeToTopic("cabme_driver");
+    await FirebaseMessaging.instance.subscribeToTopic("uniqcars_driver");
   }
 
   static Future<String?>? getToken() async {
@@ -84,11 +97,17 @@ class NotificationService {
         description: 'Show CabMe Notification',
         importance: Importance.max,
       );
-      AndroidNotificationDetails notificationDetails = AndroidNotificationDetails(channel.id, channel.name,
-          channelDescription: 'your channel Description', importance: Importance.high, priority: Priority.high, ticker: 'ticker');
+      AndroidNotificationDetails notificationDetails =
+          AndroidNotificationDetails(channel.id, channel.name,
+              channelDescription: 'your channel Description',
+              importance: Importance.high,
+              priority: Priority.high,
+              ticker: 'ticker');
       const DarwinNotificationDetails darwinNotificationDetails =
-          DarwinNotificationDetails(presentAlert: true, presentBadge: true, presentSound: true);
-      NotificationDetails notificationDetailsBoth = NotificationDetails(android: notificationDetails, iOS: darwinNotificationDetails);
+          DarwinNotificationDetails(
+              presentAlert: true, presentBadge: true, presentSound: true);
+      NotificationDetails notificationDetailsBoth = NotificationDetails(
+          android: notificationDetails, iOS: darwinNotificationDetails);
       await FlutterLocalNotificationsPlugin().show(
         0,
         message.notification!.title,

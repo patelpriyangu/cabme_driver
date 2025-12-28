@@ -1,17 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/controller/login_conroller.dart';
-import 'package:cabme_driver/model/user_model.dart';
-import 'package:cabme_driver/page/auth_screens/forgot_password.dart';
-import 'package:cabme_driver/page/auth_screens/mobile_number_screen.dart';
-import 'package:cabme_driver/page/dashboard_screen.dart';
-import 'package:cabme_driver/page/owner_dashboard_screen.dart';
-import 'package:cabme_driver/service/api.dart';
-import 'package:cabme_driver/utils/Preferences.dart';
-import 'package:cabme_driver/utils/dark_theme_provider.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/controller/login_conroller.dart';
+import 'package:uniqcars_driver/model/user_model.dart';
+import 'package:uniqcars_driver/page/auth_screens/forgot_password.dart';
+import 'package:uniqcars_driver/page/auth_screens/mobile_number_screen.dart';
+import 'package:uniqcars_driver/page/dashboard_screen.dart';
+import 'package:uniqcars_driver/page/owner_dashboard_screen.dart';
+import 'package:uniqcars_driver/service/api.dart';
+import 'package:uniqcars_driver/utils/Preferences.dart';
+import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -39,12 +39,15 @@ class LoginScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 50),
                     child: Image.asset(
-                      themeChange.getThem() ? "assets/images/login_image_2.png" : "assets/images/login_image.png",
+                      themeChange.getThem()
+                          ? "assets/images/login_image_2.png"
+                          : "assets/images/login_image.png",
                       height: 220,
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -54,7 +57,11 @@ class LoginScreen extends StatelessWidget {
                         Text(
                           'Let’s get you started'.tr,
                           textAlign: TextAlign.center,
-                          style: AppThemeData.boldTextStyle(fontSize: 22, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                          style: AppThemeData.boldTextStyle(
+                              fontSize: 22,
+                              color: themeChange.getThem()
+                                  ? AppThemeData.neutralDark900
+                                  : AppThemeData.neutral900),
                         ),
                         SizedBox(
                           height: 5,
@@ -62,7 +69,11 @@ class LoginScreen extends StatelessWidget {
                         Text(
                           'Use phone or social account'.tr,
                           textAlign: TextAlign.center,
-                          style: AppThemeData.mediumTextStyle(fontSize: 14, color: themeChange.getThem() ? AppThemeData.neutralDark500 : AppThemeData.neutral500),
+                          style: AppThemeData.mediumTextStyle(
+                              fontSize: 14,
+                              color: themeChange.getThem()
+                                  ? AppThemeData.neutralDark500
+                                  : AppThemeData.neutral500),
                         ),
                         SizedBox(
                           height: 20,
@@ -73,7 +84,8 @@ class LoginScreen extends StatelessWidget {
                           title: 'Email Address',
                           prefix: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 18),
-                            child: SvgPicture.asset("assets/icons/ic_email_login.svg"),
+                            child: SvgPicture.asset(
+                                "assets/icons/ic_email_login.svg"),
                           ),
                         ),
                         TextFieldWidget(
@@ -83,7 +95,8 @@ class LoginScreen extends StatelessWidget {
                           obscureText: controller.isPasswordShow.value,
                           prefix: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 18),
-                            child: SvgPicture.asset("assets/icons/ic_lock_login.svg"),
+                            child: SvgPicture.asset(
+                                "assets/icons/ic_lock_login.svg"),
                           ),
                           suffix: InkWell(
                             onTap: () {
@@ -94,9 +107,14 @@ class LoginScreen extends StatelessWidget {
                               }
                             },
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 18),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 18),
                               child: Obx(
-                                () => controller.isPasswordShow.value ? SvgPicture.asset("assets/icons/ic_hide.svg") : SvgPicture.asset("assets/icons/ic_show.svg"),
+                                () => controller.isPasswordShow.value
+                                    ? SvgPicture.asset(
+                                        "assets/icons/ic_hide.svg")
+                                    : SvgPicture.asset(
+                                        "assets/icons/ic_show.svg"),
                               ),
                             ),
                           ),
@@ -110,7 +128,11 @@ class LoginScreen extends StatelessWidget {
                             child: Text(
                               'Forgot Password'.tr,
                               textAlign: TextAlign.center,
-                              style: AppThemeData.semiBoldTextStyle(fontSize: 14, color: themeChange.getThem() ? AppThemeData.infoDarkDefault : AppThemeData.infoDefault),
+                              style: AppThemeData.semiBoldTextStyle(
+                                  fontSize: 14,
+                                  color: themeChange.getThem()
+                                      ? AppThemeData.infoDarkDefault
+                                      : AppThemeData.infoDefault),
                             ),
                           ),
                         ),
@@ -125,66 +147,99 @@ class LoginScreen extends StatelessWidget {
                           onPress: () async {
                             FocusScope.of(context).unfocus();
                             if (controller.emailController.value.text.isEmpty) {
-                              ShowToastDialog.showToast('Please enter the email address');
-                            } else if (controller.passwordController.value.text.isEmpty) {
-                              ShowToastDialog.showToast('Please enter the password');
+                              ShowToastDialog.showToast(
+                                  'Please enter the email address');
+                            } else if (controller
+                                .passwordController.value.text.isEmpty) {
+                              ShowToastDialog.showToast(
+                                  'Please enter the password');
                             } else {
                               FocusScope.of(context).unfocus();
                               Map<String, String> bodyParams = {
-                                'email': controller.emailController.value.text.trim(),
-                                'password': controller.passwordController.value.text,
+                                'email': controller.emailController.value.text
+                                    .trim(),
+                                'password':
+                                    controller.passwordController.value.text,
                                 'user_cat': "driver",
                               };
-                              await controller.loginAPI(bodyParams).then((value) async {
+                              await controller
+                                  .loginAPI(bodyParams)
+                                  .then((value) async {
                                 if (value != null) {
-                                  await Preferences.setString(Preferences.user, jsonEncode(value));
-                                  await Preferences.setBoolean(Preferences.isLogin, true);
-                                  Preferences.setString(Preferences.accesstoken, value.userData!.accesstoken.toString());
-                                  API.headers['accesstoken'] = value.userData!.accesstoken.toString();
+                                  await Preferences.setString(
+                                      Preferences.user, jsonEncode(value));
+                                  await Preferences.setBoolean(
+                                      Preferences.isLogin, true);
+                                  Preferences.setString(Preferences.accesstoken,
+                                      value.userData!.accesstoken.toString());
+                                  API.headers['accesstoken'] =
+                                      value.userData!.accesstoken.toString();
                                   UserData? userData = value.userData;
-                                  await Preferences.setInt(Preferences.userId, int.parse(userData!.id.toString()));
+                                  await Preferences.setInt(Preferences.userId,
+                                      int.parse(userData!.id.toString()));
                                   bool isPlanExpired = false;
 
                                   /// Case 1: Admin Commission = 'no' and Subscription model = false
-                                  if (Constant.adminCommission?.statut == "no" && Constant.subscriptionModel == false) {
+                                  if (Constant.adminCommission?.statut ==
+                                          "no" &&
+                                      Constant.subscriptionModel == false) {
                                     if (userData.isOwner == "true") {
-                                      Get.offAll(() => OwnerDashboardScreen(), transition: Transition.rightToLeft);
+                                      Get.offAll(() => OwnerDashboardScreen(),
+                                          transition: Transition.rightToLeft);
                                     } else {
-                                      Get.offAll(() => DashboardScreen(), transition: Transition.rightToLeft);
+                                      Get.offAll(() => DashboardScreen(),
+                                          transition: Transition.rightToLeft);
                                     }
                                     return;
                                   }
 
                                   /// Case 3: Owner’s Driver (driver under an owner)
-                                  bool isOwnerDriver = userData.isOwner == "false" && userData.ownerId != null && userData.ownerId!.isNotEmpty;
+                                  bool isOwnerDriver =
+                                      userData.isOwner == "false" &&
+                                          userData.ownerId != null &&
+                                          userData.ownerId!.isNotEmpty;
                                   if (isOwnerDriver) {
-                                    Get.offAll(() => DashboardScreen(), transition: Transition.rightToLeft);
+                                    Get.offAll(() => DashboardScreen(),
+                                        transition: Transition.rightToLeft);
                                     return;
                                   }
 
                                   /// Case 2: Individual Driver (no ownerId) → Check subscription
-                                  bool isIndividualDriver = userData.isOwner == "false" && (userData.ownerId == null || userData.ownerId!.isEmpty);
+                                  bool isIndividualDriver =
+                                      userData.isOwner == "false" &&
+                                          (userData.ownerId == null ||
+                                              userData.ownerId!.isEmpty);
 
-                                  if (isIndividualDriver || userData.isOwner == "true") {
+                                  if (isIndividualDriver ||
+                                      userData.isOwner == "true") {
                                     // Check subscription for Owner OR Individual Driver
                                     if (userData.subscriptionPlanId != null) {
-                                      if (userData.subscriptionExpiryDate == null) {
-                                        isPlanExpired = userData.subscriptionPlan?.expiryDay != '-1';
+                                      if (userData.subscriptionExpiryDate ==
+                                          null) {
+                                        isPlanExpired = userData
+                                                .subscriptionPlan?.expiryDay !=
+                                            '-1';
                                       } else {
-                                        final expiryDate = DateTime.tryParse(userData.subscriptionExpiryDate!);
-                                        isPlanExpired = expiryDate != null && expiryDate.isBefore(DateTime.now());
+                                        final expiryDate = DateTime.tryParse(
+                                            userData.subscriptionExpiryDate!);
+                                        isPlanExpired = expiryDate != null &&
+                                            expiryDate.isBefore(DateTime.now());
                                       }
                                     } else {
                                       isPlanExpired = true;
                                     }
 
-                                    if (userData.subscriptionPlanId == null || isPlanExpired) {
-                                      Get.to(() => SubscriptionPlanScreen(), arguments: {'isSplashScreen': true});
+                                    if (userData.subscriptionPlanId == null ||
+                                        isPlanExpired) {
+                                      Get.to(() => SubscriptionPlanScreen(),
+                                          arguments: {'isSplashScreen': true});
                                     } else {
                                       if (userData.isOwner == "true") {
-                                        Get.offAll(() => OwnerDashboardScreen(), transition: Transition.rightToLeft);
+                                        Get.offAll(() => OwnerDashboardScreen(),
+                                            transition: Transition.rightToLeft);
                                       } else {
-                                        Get.offAll(() => DashboardScreen(), transition: Transition.rightToLeft);
+                                        Get.offAll(() => DashboardScreen(),
+                                            transition: Transition.rightToLeft);
                                       }
                                     }
                                   }
@@ -194,24 +249,34 @@ class LoginScreen extends StatelessWidget {
                           },
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 30, horizontal: 30),
                           child: Row(
                             children: [
                               Expanded(
                                   child: Divider(
-                                color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
+                                color: themeChange.getThem()
+                                    ? AppThemeData.neutralDark300
+                                    : AppThemeData.neutral300,
                               )),
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
                                 child: Text(
                                   'OR CONTINUE WITH'.tr,
                                   textAlign: TextAlign.center,
-                                  style: AppThemeData.mediumTextStyle(fontSize: 12, color: themeChange.getThem() ? AppThemeData.neutralDark500 : AppThemeData.neutral500),
+                                  style: AppThemeData.mediumTextStyle(
+                                      fontSize: 12,
+                                      color: themeChange.getThem()
+                                          ? AppThemeData.neutralDark500
+                                          : AppThemeData.neutral500),
                                 ),
                               ),
                               Expanded(
                                   child: Divider(
-                                color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
+                                color: themeChange.getThem()
+                                    ? AppThemeData.neutralDark300
+                                    : AppThemeData.neutral300,
                               )),
                             ],
                           ),
@@ -227,17 +292,29 @@ class LoginScreen extends StatelessWidget {
                               child: Column(
                                 children: [
                                   Container(
-                                    decoration: BoxDecoration(color: themeChange.getThem() ? AppThemeData.neutralDark200 : AppThemeData.neutral200, borderRadius: BorderRadius.circular(60)),
+                                    decoration: BoxDecoration(
+                                        color: themeChange.getThem()
+                                            ? AppThemeData.neutralDark200
+                                            : AppThemeData.neutral200,
+                                        borderRadius:
+                                            BorderRadius.circular(60)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(18),
-                                      child: SvgPicture.asset("assets/icons/ic_phone_login.svg"),
+                                      child: SvgPicture.asset(
+                                          "assets/icons/ic_phone_login.svg"),
                                     ),
                                   ),
-                                  SizedBox(height: 5,),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
                                   Text(
                                     'Phone Number'.tr,
                                     textAlign: TextAlign.center,
-                                    style: AppThemeData.semiBoldTextStyle(fontSize: 14, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                    style: AppThemeData.semiBoldTextStyle(
+                                        fontSize: 14,
+                                        color: themeChange.getThem()
+                                            ? AppThemeData.neutralDark900
+                                            : AppThemeData.neutral900),
                                   ),
                                 ],
                               ),
@@ -253,17 +330,29 @@ class LoginScreen extends StatelessWidget {
                               child: Column(
                                 children: [
                                   Container(
-                                    decoration: BoxDecoration(color: themeChange.getThem() ? AppThemeData.neutralDark200 : AppThemeData.neutral200, borderRadius: BorderRadius.circular(60)),
+                                    decoration: BoxDecoration(
+                                        color: themeChange.getThem()
+                                            ? AppThemeData.neutralDark200
+                                            : AppThemeData.neutral200,
+                                        borderRadius:
+                                            BorderRadius.circular(60)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(18),
-                                      child: SvgPicture.asset("assets/icons/ic_google.svg"),
+                                      child: SvgPicture.asset(
+                                          "assets/icons/ic_google.svg"),
                                     ),
                                   ),
-                                  SizedBox(height: 5,),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
                                   Text(
                                     'Google'.tr,
                                     textAlign: TextAlign.center,
-                                    style: AppThemeData.semiBoldTextStyle(fontSize: 14, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                    style: AppThemeData.semiBoldTextStyle(
+                                        fontSize: 14,
+                                        color: themeChange.getThem()
+                                            ? AppThemeData.neutralDark900
+                                            : AppThemeData.neutral900),
                                   ),
                                 ],
                               ),
@@ -282,17 +371,36 @@ class LoginScreen extends StatelessWidget {
                                         child: Column(
                                           children: [
                                             Container(
-                                              decoration: BoxDecoration(color: themeChange.getThem() ? AppThemeData.neutralDark200 : AppThemeData.neutral200, borderRadius: BorderRadius.circular(60)),
+                                              decoration: BoxDecoration(
+                                                  color: themeChange.getThem()
+                                                      ? AppThemeData
+                                                          .neutralDark200
+                                                      : AppThemeData.neutral200,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          60)),
                                               child: Padding(
-                                                padding: const EdgeInsets.all(18),
-                                                child: SvgPicture.asset("assets/icons/ic_apple.svg"),
+                                                padding:
+                                                    const EdgeInsets.all(18),
+                                                child: SvgPicture.asset(
+                                                    "assets/icons/ic_apple.svg"),
                                               ),
                                             ),
-                                            SizedBox(height: 5,),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
                                             Text(
                                               'Google'.tr,
                                               textAlign: TextAlign.center,
-                                              style: AppThemeData.semiBoldTextStyle(fontSize: 14, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                              style: AppThemeData
+                                                  .semiBoldTextStyle(
+                                                      fontSize: 14,
+                                                      color: themeChange
+                                                              .getThem()
+                                                          ? AppThemeData
+                                                              .neutralDark900
+                                                          : AppThemeData
+                                                              .neutral900),
                                             ),
                                           ],
                                         ),

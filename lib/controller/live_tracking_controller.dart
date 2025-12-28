@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/constant/ride_satatus.dart';
-import 'package:cabme_driver/model/booking_mode.dart';
-import 'package:cabme_driver/model/user_model.dart';
-import 'package:cabme_driver/service/api.dart';
-import 'package:cabme_driver/service/pusher_service.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/constant/ride_satatus.dart';
+import 'package:uniqcars_driver/model/booking_mode.dart';
+import 'package:uniqcars_driver/model/user_model.dart';
+import 'package:uniqcars_driver/service/api.dart';
+import 'package:uniqcars_driver/service/pusher_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart' as flutterMap;
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -31,9 +31,12 @@ class LiveTrackingController extends GetxController {
   Rx<UserModel> driverUserModel = UserModel().obs;
   RxBool isLoading = true.obs;
 
-  Rx<latlong.LatLng> source = latlong.LatLng(21.1702, 72.8311).obs; // Start (e.g., Surat)
-  Rx<latlong.LatLng> current = latlong.LatLng(21.1800, 72.8400).obs; // Moving marker
-  Rx<latlong.LatLng> destination = latlong.LatLng(21.2000, 72.8600).obs; // Destination
+  Rx<latlong.LatLng> source =
+      latlong.LatLng(21.1702, 72.8311).obs; // Start (e.g., Surat)
+  Rx<latlong.LatLng> current =
+      latlong.LatLng(21.1800, 72.8400).obs; // Moving marker
+  Rx<latlong.LatLng> destination =
+      latlong.LatLng(21.2000, 72.8600).obs; // Destination
 
   Future<void> getArgument() async {
     dynamic argumentData = Get.arguments;
@@ -74,9 +77,11 @@ class LiveTrackingController extends GetxController {
 
     await API
         .handleApiRequest(
-        request: () => http.post(Uri.parse(API.getDriverDetails), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: false)
+            request: () => http.post(Uri.parse(API.getDriverDetails),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: false)
         .then(
-          (value) async {
+      (value) async {
         if (value != null) {
           if (value['success'] == "Failed" || value['success'] == "failed") {
             return null;
@@ -94,50 +99,74 @@ class LiveTrackingController extends GetxController {
     if (Constant.selectedMapType != 'osm') {
       if (orderModel.value.statut == RideStatus.confirmed) {
         getPolyline(
-            sourceLatitude: double.parse(driverUserModel.value.userData!.latitude.toString()),
-            sourceLongitude: double.parse(driverUserModel.value.userData!.longitude.toString()),
-            destinationLatitude: double.parse(orderModel.value.latitudeDepart.toString()),
-            destinationLongitude: double.parse(orderModel.value.longitudeDepart.toString()));
+            sourceLatitude: double.parse(
+                driverUserModel.value.userData!.latitude.toString()),
+            sourceLongitude: double.parse(
+                driverUserModel.value.userData!.longitude.toString()),
+            destinationLatitude:
+                double.parse(orderModel.value.latitudeDepart.toString()),
+            destinationLongitude:
+                double.parse(orderModel.value.longitudeDepart.toString()));
       } else if (orderModel.value.statut == RideStatus.onRide) {
         getPolyline(
-            sourceLatitude: double.parse(driverUserModel.value.userData!.latitude.toString()),
-            sourceLongitude: double.parse(driverUserModel.value.userData!.longitude.toString()),
-            destinationLatitude: double.parse(orderModel.value.latitudeArrivee.toString()),
-            destinationLongitude: double.parse(orderModel.value.longitudeArrivee.toString()));
-      }else{
+            sourceLatitude: double.parse(
+                driverUserModel.value.userData!.latitude.toString()),
+            sourceLongitude: double.parse(
+                driverUserModel.value.userData!.longitude.toString()),
+            destinationLatitude:
+                double.parse(orderModel.value.latitudeArrivee.toString()),
+            destinationLongitude:
+                double.parse(orderModel.value.longitudeArrivee.toString()));
+      } else {
         getPolyline(
-            sourceLatitude: double.parse(orderModel.value.latitudeDepart.toString()),
-            sourceLongitude: double.parse(orderModel.value.longitudeDepart.toString()),
-            destinationLatitude: double.parse(orderModel.value.latitudeArrivee.toString()),
-            destinationLongitude: double.parse(orderModel.value.longitudeArrivee.toString()));
+            sourceLatitude:
+                double.parse(orderModel.value.latitudeDepart.toString()),
+            sourceLongitude:
+                double.parse(orderModel.value.longitudeDepart.toString()),
+            destinationLatitude:
+                double.parse(orderModel.value.latitudeArrivee.toString()),
+            destinationLongitude:
+                double.parse(orderModel.value.longitudeArrivee.toString()));
       }
     } else {
       print("OSM Map Type");
       if (orderModel.value.statut == RideStatus.confirmed) {
-        current.value = location.LatLng(double.parse('${driverUserModel.value.userData!.latitude ?? 0.0}'),
-            double.parse('${driverUserModel.value.userData!.longitude ?? 0.0}'));
+        current.value = location.LatLng(
+            double.parse('${driverUserModel.value.userData!.latitude ?? 0.0}'),
+            double.parse(
+                '${driverUserModel.value.userData!.longitude ?? 0.0}'));
         source.value = location.LatLng(
-            double.parse(orderModel.value.latitudeDepart.toString()), double.parse(orderModel.value.longitudeDepart.toString()));
+            double.parse(orderModel.value.latitudeDepart.toString()),
+            double.parse(orderModel.value.longitudeDepart.toString()));
         destination.value = location.LatLng(
-            double.parse(orderModel.value.latitudeArrivee.toString()), double.parse(orderModel.value.longitudeArrivee.toString()));
+            double.parse(orderModel.value.latitudeArrivee.toString()),
+            double.parse(orderModel.value.longitudeArrivee.toString()));
         fetchRoute(current.value, source.value);
         animateToSource();
       } else if (orderModel.value.statut == RideStatus.onRide) {
-        current.value = location.LatLng(double.parse('${driverUserModel.value.userData?.latitude ?? 0.0}'),
-            double.parse('${driverUserModel.value.userData?.longitude ?? 0.0}'));
+        current.value = location.LatLng(
+            double.parse('${driverUserModel.value.userData?.latitude ?? 0.0}'),
+            double.parse(
+                '${driverUserModel.value.userData?.longitude ?? 0.0}'));
         source.value = location.LatLng(
-            double.parse(orderModel.value.latitudeDepart.toString()), double.parse(orderModel.value.longitudeDepart.toString()));
+            double.parse(orderModel.value.latitudeDepart.toString()),
+            double.parse(orderModel.value.longitudeDepart.toString()));
         destination.value = location.LatLng(
-            double.parse(orderModel.value.latitudeArrivee.toString()), double.parse(orderModel.value.longitudeArrivee.toString()));
+            double.parse(orderModel.value.latitudeArrivee.toString()),
+            double.parse(orderModel.value.longitudeArrivee.toString()));
         fetchRoute(current.value, destination.value);
         animateToSource();
       } else {
-        current.value = location.LatLng(double.parse('${driverUserModel.value.userData?.latitude ?? 0.0}'),
-            double.parse('${driverUserModel.value.userData?.longitude ?? 0.0}'));
+        current.value = location.LatLng(
+            double.parse('${driverUserModel.value.userData?.latitude ?? 0.0}'),
+            double.parse(
+                '${driverUserModel.value.userData?.longitude ?? 0.0}'));
         source.value = location.LatLng(
-            double.parse(orderModel.value.latitudeDepart.toString()), double.parse(orderModel.value.longitudeDepart.toString()));
+            double.parse(orderModel.value.latitudeDepart.toString()),
+            double.parse(orderModel.value.longitudeDepart.toString()));
         destination.value = location.LatLng(
-            double.parse(orderModel.value.latitudeArrivee.toString()), double.parse(orderModel.value.longitudeArrivee.toString()));
+            double.parse(orderModel.value.latitudeArrivee.toString()),
+            double.parse(orderModel.value.longitudeArrivee.toString()));
         fetchRoute(current.value, source.value);
         animateToSource();
       }
@@ -148,8 +177,11 @@ class LiveTrackingController extends GetxController {
   void animateToSource() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       mapOsmController.move(
-        location.LatLng(double.parse('${driverUserModel.value.userData?.latitude ?? Constant.currentLocation!.latitude}'),
-            double.parse('${driverUserModel.value.userData?.longitude ?? Constant.currentLocation!.latitude}')),
+        location.LatLng(
+            double.parse(
+                '${driverUserModel.value.userData?.latitude ?? Constant.currentLocation!.latitude}'),
+            double.parse(
+                '${driverUserModel.value.userData?.longitude ?? Constant.currentLocation!.latitude}')),
         16,
       );
     });
@@ -157,7 +189,8 @@ class LiveTrackingController extends GetxController {
 
   RxList<latlong.LatLng> routePoints = <latlong.LatLng>[].obs;
 
-  Future<void> fetchRoute(location.LatLng source, location.LatLng destination) async {
+  Future<void> fetchRoute(
+      location.LatLng source, location.LatLng destination) async {
     final url = Uri.parse(
       'https://router.project-osrm.org/route/v1/driving/${source.longitude},${source.latitude};${destination.longitude},${destination.latitude}?overview=full&geometries=geojson',
     );
@@ -185,10 +218,13 @@ class LiveTrackingController extends GetxController {
 
   void getPolyline(
       {required double? sourceLatitude,
-        required double? sourceLongitude,
-        required double? destinationLatitude,
-        required double? destinationLongitude}) async {
-    if (sourceLatitude != null && sourceLongitude != null && destinationLatitude != null && destinationLongitude != null) {
+      required double? sourceLongitude,
+      required double? destinationLatitude,
+      required double? destinationLongitude}) async {
+    if (sourceLatitude != null &&
+        sourceLongitude != null &&
+        destinationLatitude != null &&
+        destinationLongitude != null) {
       List<LatLng> polylineCoordinates = [];
       PolylineRequest polylineRequest = PolylineRequest(
         origin: PointLatLng(sourceLatitude, sourceLongitude),
@@ -208,8 +244,10 @@ class LiveTrackingController extends GetxController {
       }
       if (orderModel.value.statut == RideStatus.confirmed) {
         addMarker(
-            latitude: double.parse(driverUserModel.value.userData!.latitude.toString()),
-            longitude: double.parse(driverUserModel.value.userData!.longitude.toString()),
+            latitude: double.parse(
+                driverUserModel.value.userData!.latitude.toString()),
+            longitude: double.parse(
+                driverUserModel.value.userData!.longitude.toString()),
             id: "Driver",
             descriptor: driverIcon!,
             rotation: 0.0);
@@ -222,27 +260,32 @@ class LiveTrackingController extends GetxController {
         );
       } else if (orderModel.value.statut == RideStatus.onRide) {
         addMarker(
-            latitude: double.parse(driverUserModel.value.userData!.latitude.toString()),
-            longitude: double.parse(driverUserModel.value.userData!.longitude.toString()),
+            latitude: double.parse(
+                driverUserModel.value.userData!.latitude.toString()),
+            longitude: double.parse(
+                driverUserModel.value.userData!.longitude.toString()),
             id: "Driver",
             descriptor: driverIcon!,
             rotation: 0.0);
         addMarker(
             latitude: double.parse(orderModel.value.latitudeArrivee.toString()),
-            longitude: double.parse(orderModel.value.longitudeArrivee.toString()),
+            longitude:
+                double.parse(orderModel.value.longitudeArrivee.toString()),
             id: "Destination",
             descriptor: destinationIcon!,
             rotation: 0.0);
-      }else{
+      } else {
         addMarker(
             latitude: double.parse(orderModel.value.latitudeDepart.toString()),
-            longitude: double.parse(orderModel.value.longitudeDepart.toString()),
+            longitude:
+                double.parse(orderModel.value.longitudeDepart.toString()),
             id: "Departure",
             descriptor: departureIcon!,
             rotation: 0.0);
         addMarker(
             latitude: double.parse(orderModel.value.latitudeArrivee.toString()),
-            longitude: double.parse(orderModel.value.longitudeArrivee.toString()),
+            longitude:
+                double.parse(orderModel.value.longitudeArrivee.toString()),
             id: "Destination",
             descriptor: destinationIcon!,
             rotation: 0.0);
@@ -256,21 +299,27 @@ class LiveTrackingController extends GetxController {
 
   void addMarker(
       {required double? latitude,
-        required double? longitude,
-        required String id,
-        required BitmapDescriptor descriptor,
-        required double? rotation}) {
+      required double? longitude,
+      required String id,
+      required BitmapDescriptor descriptor,
+      required double? rotation}) {
     MarkerId markerId = MarkerId(id);
-    Marker marker =
-    Marker(markerId: markerId, icon: descriptor, position: LatLng(latitude ?? 0.0, longitude ?? 0.0), rotation: rotation ?? 0.0);
+    Marker marker = Marker(
+        markerId: markerId,
+        icon: descriptor,
+        position: LatLng(latitude ?? 0.0, longitude ?? 0.0),
+        rotation: rotation ?? 0.0);
     markers[markerId] = marker;
   }
 
   Future<void> addMarkerSetup() async {
     if (Constant.selectedMapType != 'osm') {
-      final Uint8List departure = await Constant.getBytesFromAsset('assets/icons/ic_souce.png', 100);
-      final Uint8List destination = await Constant.getBytesFromAsset('assets/icons/ic_destination.png', 100);
-      final Uint8List driver = await Constant.getBytesFromAsset('assets/icons/ic_taxi.png', 100);
+      final Uint8List departure =
+          await Constant.getBytesFromAsset('assets/icons/ic_souce.png', 100);
+      final Uint8List destination = await Constant.getBytesFromAsset(
+          'assets/icons/ic_destination.png', 100);
+      final Uint8List driver =
+          await Constant.getBytesFromAsset('assets/icons/ic_taxi.png', 100);
       departureIcon = BitmapDescriptor.fromBytes(departure);
       destinationIcon = BitmapDescriptor.fromBytes(destination);
       driverIcon = BitmapDescriptor.fromBytes(driver, size: Size(100.0, 100.0));
@@ -278,7 +327,8 @@ class LiveTrackingController extends GetxController {
   }
 
   RxMap<PolylineId, Polyline> polyLines = <PolylineId, Polyline>{}.obs;
-  PolylinePoints polylinePoints = PolylinePoints(apiKey: Constant.kGoogleApiKey.toString());
+  PolylinePoints polylinePoints =
+      PolylinePoints(apiKey: Constant.kGoogleApiKey.toString());
 
   void _addPolyLine(List<LatLng> polylineCoordinates) {
     PolylineId id = const PolylineId("poly");
@@ -291,26 +341,30 @@ class LiveTrackingController extends GetxController {
       width: 6,
     );
     polyLines[id] = polyline;
-    updateCameraLocation(polylineCoordinates.first, polylineCoordinates.last, mapController);
+    updateCameraLocation(
+        polylineCoordinates.first, polylineCoordinates.last, mapController);
   }
 
   Future<void> updateCameraLocation(
-      LatLng source,
-      LatLng destination,
-      GoogleMapController? mapController,
-      ) async {
+    LatLng source,
+    LatLng destination,
+    GoogleMapController? mapController,
+  ) async {
     if (mapController == null) return;
 
     LatLngBounds bounds;
 
-    if (source.latitude > destination.latitude && source.longitude > destination.longitude) {
+    if (source.latitude > destination.latitude &&
+        source.longitude > destination.longitude) {
       bounds = LatLngBounds(southwest: destination, northeast: source);
     } else if (source.longitude > destination.longitude) {
       bounds = LatLngBounds(
-          southwest: LatLng(source.latitude, destination.longitude), northeast: LatLng(destination.latitude, source.longitude));
+          southwest: LatLng(source.latitude, destination.longitude),
+          northeast: LatLng(destination.latitude, source.longitude));
     } else if (source.latitude > destination.latitude) {
       bounds = LatLngBounds(
-          southwest: LatLng(destination.latitude, source.longitude), northeast: LatLng(source.latitude, destination.longitude));
+          southwest: LatLng(destination.latitude, source.longitude),
+          northeast: LatLng(source.latitude, destination.longitude));
     } else {
       bounds = LatLngBounds(southwest: source, northeast: destination);
     }
@@ -320,7 +374,8 @@ class LiveTrackingController extends GetxController {
     return checkCameraLocation(cameraUpdate, mapController);
   }
 
-  Future<void> checkCameraLocation(CameraUpdate cameraUpdate, GoogleMapController mapController) async {
+  Future<void> checkCameraLocation(
+      CameraUpdate cameraUpdate, GoogleMapController mapController) async {
     mapController.animateCamera(cameraUpdate);
     LatLngBounds l1 = await mapController.getVisibleRegion();
     LatLngBounds l2 = await mapController.getVisibleRegion();
@@ -329,5 +384,4 @@ class LiveTrackingController extends GetxController {
       return checkCameraLocation(cameraUpdate, mapController);
     }
   }
-
 }

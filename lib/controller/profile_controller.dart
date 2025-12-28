@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/model/user_model.dart';
-import 'package:cabme_driver/page/auth_screens/login_screen.dart';
-import 'package:cabme_driver/service/api.dart';
-import 'package:cabme_driver/utils/Preferences.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/model/user_model.dart';
+import 'package:uniqcars_driver/page/auth_screens/login_screen.dart';
+import 'package:uniqcars_driver/service/api.dart';
+import 'package:uniqcars_driver/utils/Preferences.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:in_app_review/in_app_review.dart';
@@ -39,7 +39,8 @@ class ProfileController extends GetxController {
     };
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.getProfileByPhone), headers: API.headers, body: jsonEncode(bodyParams)),
+            request: () => http.post(Uri.parse(API.getProfileByPhone),
+                headers: API.headers, body: jsonEncode(bodyParams)),
             showLoader: false)
         .then(
       (value) {
@@ -70,7 +71,9 @@ class ProfileController extends GetxController {
     print("===>$bodyParams");
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.deleteUser), body: jsonEncode(bodyParams), headers: API.headers), showLoader: true)
+            request: () => http.post(Uri.parse(API.deleteUser),
+                body: jsonEncode(bodyParams), headers: API.headers),
+            showLoader: true)
         .then(
       (value) async {
         if (value != null) {
@@ -96,7 +99,9 @@ class ProfileController extends GetxController {
     };
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.logout), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true)
+            request: () => http.post(Uri.parse(API.logout),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
         .then(
       (value) {
         if (value != null) {

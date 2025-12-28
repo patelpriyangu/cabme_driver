@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/page/auth_screens/login_screen.dart';
-import 'package:cabme_driver/utils/Preferences.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/page/auth_screens/login_screen.dart';
+import 'package:uniqcars_driver/utils/Preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -14,7 +14,6 @@ import '../constant/logdata.dart';
 class API {
   static const baseUrl = "https://your-base-url.com/api/v1/"; // live
   static const apiKey = "your-api-key";
-
 
   static Map<String, String> authheader = {
     HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
@@ -114,7 +113,8 @@ class API {
   static const createOwnerDriver = "${baseUrl}add-owner-driver";
 
   //rental
-  static const getRecentDriverRentalOrder = "${baseUrl}get-recent-driver-rental-order";
+  static const getRecentDriverRentalOrder =
+      "${baseUrl}get-recent-driver-rental-order";
   static const searchDriverRentalOrder = "${baseUrl}search-driver-rental-order";
   static const rentalConfirm = "${baseUrl}rental-confirm";
   static const rentalOnRide = "${baseUrl}rental-onride";
@@ -127,11 +127,11 @@ class API {
   static const logout = "${baseUrl}logout";
   static const getServiceJson = "${baseUrl}get-service-json";
 
-
-
   static bool _isRedirectingToLogin = false; // Prevent multiple redirects
 
-  static Future<dynamic> handleApiRequest({required Future<http.Response> Function() request, bool showLoader = true}) async {
+  static Future<dynamic> handleApiRequest(
+      {required Future<http.Response> Function() request,
+      bool showLoader = true}) async {
     try {
       if (showLoader) {
         ShowToastDialog.showLoader("Please wait");
@@ -167,16 +167,19 @@ class API {
         Preferences.clearKeyData(Preferences.userId);
         Get.offAll(const LoginScreen());
         return null;
-      }else {
-        CustomDialog.showErrorDialog("Server Error", "Status Code: ${response.statusCode}");
+      } else {
+        CustomDialog.showErrorDialog(
+            "Server Error", "Status Code: ${response.statusCode}");
         return null;
       }
     } on TimeoutException {
       showLog("⏰ Timeout Exception");
-      CustomDialog.showErrorDialog("Server Timeout", "The server took too long to respond.");
+      CustomDialog.showErrorDialog(
+          "Server Timeout", "The server took too long to respond.");
     } on SocketException {
       showLog("🌐 No Internet / DNS Fail");
-      CustomDialog.showErrorDialog("No Internet", "Please check your connection.");
+      CustomDialog.showErrorDialog(
+          "No Internet", "Please check your connection.");
     } on FormatException {
       showLog("📦 JSON Decode Error");
       ShowToastDialog.showToast("Invalid response format.");
@@ -228,12 +231,17 @@ class API {
         ShowToastDialog.closeLoader();
       }
 
-      if (response.statusCode == 200 && (decodedResponse['success'] == 'success' || decodedResponse['success'] == 'Success')) {
+      if (response.statusCode == 200 &&
+          (decodedResponse['success'] == 'success' ||
+              decodedResponse['success'] == 'Success')) {
         return decodedResponse;
-      } else if (response.statusCode == 200 && (decodedResponse['success'] == 'Failed' || decodedResponse['success'] == 'failed')) {
+      } else if (response.statusCode == 200 &&
+          (decodedResponse['success'] == 'Failed' ||
+              decodedResponse['success'] == 'failed')) {
         return decodedResponse;
       } else {
-        ShowToastDialog.showToast(decodedResponse['error'] ?? "Something went wrong");
+        ShowToastDialog.showToast(
+            decodedResponse['error'] ?? "Something went wrong");
         return null;
       }
     } on TimeoutException catch (e) {

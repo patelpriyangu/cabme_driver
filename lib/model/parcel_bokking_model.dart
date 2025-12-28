@@ -1,6 +1,6 @@
-import 'package:cabme_driver/model/admin_commission.dart';
-import 'package:cabme_driver/model/booking_mode.dart';
-import 'package:cabme_driver/model/tax_model.dart';
+import 'package:uniqcars_driver/model/admin_commission.dart';
+import 'package:uniqcars_driver/model/booking_mode.dart';
+import 'package:uniqcars_driver/model/tax_model.dart';
 
 class ParcelBookingModel {
   String? success;
@@ -14,7 +14,8 @@ class ParcelBookingModel {
     success = json['success'];
     code = json['code'];
     message = json['message'];
-    data = json['data'] != null ? ParcelBookingData.fromJson(json['data']) : null;
+    data =
+        json['data'] != null ? ParcelBookingData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -163,7 +164,9 @@ class ParcelBookingData {
     distanceUnit = json['distance_unit'];
     amount = json['amount'];
     discount = json['discount'];
-    discountType = json['discount_type'] != null ? AdminCommission.fromJson(json['discount_type']) : null;
+    discountType = json['discount_type'] != null
+        ? AdminCommission.fromJson(json['discount_type'])
+        : null;
     if (json['tax'] != null) {
       tax = <TaxModel>[];
       json['tax'].forEach((v) {
@@ -172,7 +175,9 @@ class ParcelBookingData {
     }
     tip = json['tip'];
     adminCommission = json['admin_commission'];
-    adminCommissionType = json['admin_commission_type'] != null ? AdminCommission.fromJson(json['admin_commission_type']) : null;
+    adminCommissionType = json['admin_commission_type'] != null
+        ? AdminCommission.fromJson(json['admin_commission_type'])
+        : null;
     otp = json['otp'];
     assignedDriverId = json['assigned_driver_id'];
     rejectedDriverId = json['rejected_driver_id'];
@@ -184,7 +189,9 @@ class ParcelBookingData {
     parcelTypeImage = json['parcel_type_image'];
     driver = json['driver'] != null ? Driver.fromJson(json['driver']) : null;
     user = json['user'] != null ? User.fromJson(json['user']) : null;
-    complainDetails = json['complaint_detail'] != null ? ComplainDetails.fromJson(json['complaint_detail']) : null;
+    complainDetails = json['complaint_detail'] != null
+        ? ComplainDetails.fromJson(json['complaint_detail'])
+        : null;
     complaint = json['complaint'];
   }
 

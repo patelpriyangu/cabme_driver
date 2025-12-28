@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/model/rental_booking_model.dart';
-import 'package:cabme_driver/model/user_model.dart';
-import 'package:cabme_driver/service/api.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/model/rental_booking_model.dart';
+import 'package:uniqcars_driver/model/user_model.dart';
+import 'package:uniqcars_driver/service/api.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,7 +20,6 @@ class RentalDetailsController extends GetxController {
 
   @override
   void onInit() {
-
     getArguments();
     // TODO: implement onInit
     super.onInit();
@@ -31,8 +30,10 @@ class RentalDetailsController extends GetxController {
     dynamic argumentData = Get.arguments;
     if (argumentData != null) {
       rentalBookingData.value = argumentData['rentalBookingData'];
-      startDate.value = DateTime.parse('${rentalBookingData.value.startDate} ${rentalBookingData.value.startTime}');
-      endDate.value = DateTime.parse('${rentalBookingData.value.endDate} ${rentalBookingData.value.endTime}');
+      startDate.value = DateTime.parse(
+          '${rentalBookingData.value.startDate} ${rentalBookingData.value.startTime}');
+      endDate.value = DateTime.parse(
+          '${rentalBookingData.value.endDate} ${rentalBookingData.value.endTime}');
 
       setBookingData(rentalBookingData.value);
       await getParcelBookingData();
@@ -48,13 +49,15 @@ class RentalDetailsController extends GetxController {
 
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.getRentalBookingDetails), headers: API.headers, body: jsonEncode(bodyParams)),
+            request: () => http.post(Uri.parse(API.getRentalBookingDetails),
+                headers: API.headers, body: jsonEncode(bodyParams)),
             showLoader: false)
         .then(
       (value) async {
         if (value != null) {
           if (value['success'] == "Failed" || value['success'] == "failed") {
-            ShowToastDialog.showToast(value['error'] ?? "Booking data not found");
+            ShowToastDialog.showToast(
+                value['error'] ?? "Booking data not found");
             return null;
           } else {
             setBookingData(RentalBookingData.fromJson(value['data']));
@@ -78,17 +81,25 @@ class RentalDetailsController extends GetxController {
     taxAmount = "0.0".obs;
     subTotal.value = rentalBookingData.value.amount.toString();
     if (rentalBookingData.value.discountType != null) {
-      discount.value = Constant.calculateDiscountOrder(amount: subTotal.value, offerModel: rentalBookingData.value.discountType).toString();
+      discount.value = Constant.calculateDiscountOrder(
+              amount: subTotal.value,
+              offerModel: rentalBookingData.value.discountType)
+          .toString();
     }
     for (var element in rentalBookingData.value.tax!) {
       taxAmount.value = (double.parse(taxAmount.value) +
-              Constant()
-                  .calculateTax(amount: ((double.parse(subTotal.value)) - (double.parse(discount.value))).toString(), taxModel: element))
+              Constant().calculateTax(
+                  amount: ((double.parse(subTotal.value)) -
+                          (double.parse(discount.value)))
+                      .toString(),
+                  taxModel: element))
           .toStringAsFixed(int.tryParse(Constant.decimal.toString()) ?? 2);
     }
 
-    totalAmount.value = ((double.parse(subTotal.value) - (double.parse(discount.value))) + double.parse(taxAmount.value))
-        .toStringAsFixed(int.tryParse(Constant.decimal.toString()) ?? 2);
+    totalAmount.value =
+        ((double.parse(subTotal.value) - (double.parse(discount.value))) +
+                double.parse(taxAmount.value))
+            .toStringAsFixed(int.tryParse(Constant.decimal.toString()) ?? 2);
     update();
   }
 }

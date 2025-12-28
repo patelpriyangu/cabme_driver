@@ -1,12 +1,12 @@
 // ignore_for_file: deprecated_member_use, implicit_call_tearoffs
 
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/controller/on_boarding_controller.dart';
-import 'package:cabme_driver/themes/app_them_data.dart';
-import 'package:cabme_driver/themes/responsive.dart';
-import 'package:cabme_driver/utils/dark_theme_provider.dart';
-import 'package:cabme_driver/utils/network_image_widget.dart';
-import 'package:cabme_driver/widget/round_button_fill.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/controller/on_boarding_controller.dart';
+import 'package:uniqcars_driver/themes/app_them_data.dart';
+import 'package:uniqcars_driver/themes/responsive.dart';
+import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
+import 'package:uniqcars_driver/utils/network_image_widget.dart';
+import 'package:uniqcars_driver/widget/round_button_fill.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -34,10 +34,15 @@ class OnBoardingScreen extends StatelessWidget {
                         title: "Skip".tr,
                         width: 24,
                         height: 5,
-                        color: themeChange.getThem() ? AppThemeData.neutralDark100 : AppThemeData.neutral100,
-                        textColor: themeChange.getThem() ? AppThemeData.neutralDark500 : AppThemeData.neutral500,
+                        color: themeChange.getThem()
+                            ? AppThemeData.neutralDark100
+                            : AppThemeData.neutral100,
+                        textColor: themeChange.getThem()
+                            ? AppThemeData.neutralDark500
+                            : AppThemeData.neutral500,
                         onPress: () {
-                          Preferences.setBoolean(Preferences.isFinishOnBoardingKey, true);
+                          Preferences.setBoolean(
+                              Preferences.isFinishOnBoardingKey, true);
                           Get.offAll(const LoginScreen());
                         },
                       ),
@@ -56,49 +61,78 @@ class OnBoardingScreen extends StatelessWidget {
                           child: PageView.builder(
                               controller: controller.pageController,
                               onPageChanged: controller.selectedPageIndex.call,
-                              itemCount: controller.onboardingModel.value.data!.length,
+                              itemCount:
+                                  controller.onboardingModel.value.data!.length,
                               itemBuilder: (context, index) {
                                 return Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       NetworkImageWidget(
-                                        imageUrl: controller.onboardingModel.value.data![index].image.toString(),
+                                        imageUrl: controller.onboardingModel
+                                            .value.data![index].image
+                                            .toString(),
                                         width: Responsive.width(100, context),
                                         height: Responsive.height(30, context),
                                         fit: BoxFit.cover,
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 50),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16, vertical: 50),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: List.generate(
-                                            controller.onboardingModel.value.data!.length,
+                                            controller.onboardingModel.value
+                                                .data!.length,
                                             (index) => Container(
-                                              margin: const EdgeInsets.symmetric(horizontal: 4),
-                                              width: controller.selectedPageIndex.value == index ? 38 : 10,
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 4),
+                                              width: controller
+                                                          .selectedPageIndex
+                                                          .value ==
+                                                      index
+                                                  ? 38
+                                                  : 10,
                                               height: 10,
                                               decoration: BoxDecoration(
-                                                color: controller.selectedPageIndex.value == index
+                                                color: controller
+                                                            .selectedPageIndex
+                                                            .value ==
+                                                        index
                                                     ? themeChange.getThem()
-                                                        ? AppThemeData.primaryDefault
-                                                        : AppThemeData.primaryDefault
+                                                        ? AppThemeData
+                                                            .primaryDefault
+                                                        : AppThemeData
+                                                            .primaryDefault
                                                     : themeChange.getThem()
-                                                        ? AppThemeData.neutralDark200
-                                                        : AppThemeData.neutral200,
-                                                borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+                                                        ? AppThemeData
+                                                            .neutralDark200
+                                                        : AppThemeData
+                                                            .neutral200,
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(20.0)),
                                               ),
                                             ),
                                           ),
                                         ),
                                       ),
                                       Text(
-                                        controller.onboardingModel.value.data![index].title.toString().tr,
+                                        controller.onboardingModel.value
+                                            .data![index].title
+                                            .toString()
+                                            .tr,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
-                                          color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                          color: themeChange.getThem()
+                                              ? AppThemeData.neutralDark900
+                                              : AppThemeData.neutral900,
                                           fontSize: 24,
                                           fontFamily: AppThemeData.bold,
                                           fontWeight: FontWeight.w400,
@@ -108,10 +142,15 @@ class OnBoardingScreen extends StatelessWidget {
                                         height: 5,
                                       ),
                                       Text(
-                                        controller.onboardingModel.value.data![index].description.toString().tr,
+                                        controller.onboardingModel.value
+                                            .data![index].description
+                                            .toString()
+                                            .tr,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
-                                          color: themeChange.getThem() ? AppThemeData.neutralDark500 : AppThemeData.neutral500,
+                                          color: themeChange.getThem()
+                                              ? AppThemeData.neutralDark500
+                                              : AppThemeData.neutral500,
                                           fontSize: 14,
                                           fontFamily: AppThemeData.regular,
                                           fontWeight: FontWeight.w400,
@@ -123,17 +162,28 @@ class OnBoardingScreen extends StatelessWidget {
                               }),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 5),
                           child: RoundedButtonFill(
-                            title: controller.selectedPageIndex.value ==  controller.onboardingModel.value.data!.length - 1  ? "Lets Get Started".tr : "Continue".tr,
+                            title: controller.selectedPageIndex.value ==
+                                    controller.onboardingModel.value.data!
+                                            .length -
+                                        1
+                                ? "Lets Get Started".tr
+                                : "Continue".tr,
                             color: AppThemeData.primaryDefault,
                             textColor: AppThemeData.neutral50,
                             onPress: () {
-                              if (controller.selectedPageIndex.value ==  controller.onboardingModel.value.data!.length - 1) {
-                                Preferences.setBoolean(Preferences.isFinishOnBoardingKey, true);
+                              if (controller.selectedPageIndex.value ==
+                                  controller
+                                          .onboardingModel.value.data!.length -
+                                      1) {
+                                Preferences.setBoolean(
+                                    Preferences.isFinishOnBoardingKey, true);
                                 Get.offAll(const LoginScreen());
                               } else {
-                                controller.pageController.jumpToPage(controller.selectedPageIndex.value + 1);
+                                controller.pageController.jumpToPage(
+                                    controller.selectedPageIndex.value + 1);
                               }
                             },
                           ),

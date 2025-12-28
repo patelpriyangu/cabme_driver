@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/model/user_model.dart';
-import 'package:cabme_driver/service/api.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/model/user_model.dart';
+import 'package:uniqcars_driver/service/api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -12,10 +12,12 @@ class SignUpController extends GetxController {
   Rx<TextEditingController> firstNameController = TextEditingController().obs;
   Rx<TextEditingController> lastNameController = TextEditingController().obs;
   Rx<TextEditingController> phoneNumber = TextEditingController().obs;
-    Rx<TextEditingController> countryCodeController = TextEditingController(text: "+91").obs;
+  Rx<TextEditingController> countryCodeController =
+      TextEditingController(text: "+91").obs;
   Rx<TextEditingController> emailController = TextEditingController().obs;
   Rx<TextEditingController> passwordController = TextEditingController().obs;
-  Rx<TextEditingController> conformPasswordController = TextEditingController().obs;
+  Rx<TextEditingController> conformPasswordController =
+      TextEditingController().obs;
 
   RxBool isPasswordShow = true.obs;
   RxBool isConformPasswordShow = true.obs;
@@ -47,7 +49,9 @@ class SignUpController extends GetxController {
     UserModel? userModel;
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.userSignUP), headers: API.authheader, body: jsonEncode(bodyParams)), showLoader: true)
+            request: () => http.post(Uri.parse(API.userSignUP),
+                headers: API.authheader, body: jsonEncode(bodyParams)),
+            showLoader: true)
         .then(
       (value) {
         if (value != null) {

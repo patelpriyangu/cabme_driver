@@ -1,5 +1,5 @@
-import 'package:cabme_driver/themes/app_them_data.dart';
-import 'package:cabme_driver/themes/responsive.dart';
+import 'package:uniqcars_driver/themes/app_them_data.dart';
+import 'package:uniqcars_driver/themes/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -50,21 +50,34 @@ class RoundedButtonFill extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            (isRight == false) ? Padding(padding: const EdgeInsets.only(right: 26, left: 20), child: icon) : const SizedBox(),
+            (isRight == false)
+                ? Padding(
+                    padding: const EdgeInsets.only(right: 26, left: 20),
+                    child: icon)
+                : const SizedBox(),
             isCenter == true
                 ? Text(
                     title.toString().tr,
                     textAlign: TextAlign.center,
-                    style: AppThemeData.boldTextStyle(fontSize: fontSizes ?? 14, color: textColor ?? AppThemeData.neutral900),
+                    style: AppThemeData.boldTextStyle(
+                        fontSize: fontSizes ?? 14,
+                        color: textColor ?? AppThemeData.neutral900),
                   )
                 : Expanded(
                     child: Text(
                       title.toString().tr,
                       textAlign: TextAlign.center,
-                      style: AppThemeData.boldTextStyle(fontSize: fontSizes ?? 14, color: textColor ?? AppThemeData.neutral900),
+                      style: AppThemeData.boldTextStyle(
+                          fontSize: fontSizes ?? 14,
+                          color: textColor ?? AppThemeData.neutral900),
                     ),
                   ),
-            (isRight == true) ? Padding(padding: EdgeInsets.only(left: 5, right: isCenter == true ? 0 : 10), child: icon) : const SizedBox(),
+            (isRight == true)
+                ? Padding(
+                    padding: EdgeInsets.only(
+                        left: 5, right: isCenter == true ? 0 : 10),
+                    child: icon)
+                : const SizedBox(),
           ],
         ),
       ),

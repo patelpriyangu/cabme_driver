@@ -3,12 +3,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/model/uploaded_document_model.dart';
-import 'package:cabme_driver/model/user_model.dart';
-import 'package:cabme_driver/service/api.dart';
-import 'package:cabme_driver/utils/Preferences.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/model/uploaded_document_model.dart';
+import 'package:uniqcars_driver/model/user_model.dart';
+import 'package:uniqcars_driver/service/api.dart';
+import 'package:uniqcars_driver/utils/Preferences.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -34,9 +34,17 @@ class DocumentStatusController extends GetxController {
   Future getDriverDocument() async {
     Map<String, String> bodyParams = {
       'driver_id': Preferences.getInt(Preferences.userId).toString(),
-      'type': userModel.value.userData!.isOwner != null && userModel.value.userData!.isOwner == "true" ? "owner" : "driver",
+      'type': userModel.value.userData!.isOwner != null &&
+              userModel.value.userData!.isOwner == "true"
+          ? "owner"
+          : "driver",
     };
-    await API.handleApiRequest(request: () => http.post(Uri.parse(API.getDriverUploadedDocument), body: jsonEncode(bodyParams), headers: API.headers), showLoader: false).then(
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.getDriverUploadedDocument),
+                body: jsonEncode(bodyParams), headers: API.headers),
+            showLoader: false)
+        .then(
       (value) {
         if (value != null) {
           if (value['success'] == "Failed") {
@@ -54,7 +62,9 @@ class DocumentStatusController extends GetxController {
   Future<dynamic> updateDocument(String driverDocumentId, String path) async {
     List<http.MultipartFile> files = [];
 
-    files.add(http.MultipartFile.fromBytes('attachment', File(path).readAsBytesSync(), filename: File(path).path.split('/').last));
+    files.add(http.MultipartFile.fromBytes(
+        'attachment', File(path).readAsBytesSync(),
+        filename: File(path).path.split('/').last));
 
     Map<String, String> fields = {
       'document_id': driverDocumentId,
@@ -67,7 +77,8 @@ class DocumentStatusController extends GetxController {
       files: files,
       showLoader: true,
     );
-    if (response != null && response['success'] == 'Success' || response['success'] == 'success') {
+    if (response != null && response['success'] == 'Success' ||
+        response['success'] == 'success') {
       await getDriverDocument();
       ShowToastDialog.showToast("Document Updated Successfully".tr);
     }

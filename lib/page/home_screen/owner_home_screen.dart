@@ -1,15 +1,15 @@
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/controller/owner_home_controller.dart';
-import 'package:cabme_driver/model/get_vehicle_data_model.dart';
-import 'package:cabme_driver/model/user_model.dart';
-import 'package:cabme_driver/page/add_driver_screen/add_driver_screen.dart';
-import 'package:cabme_driver/page/add_vehicle_screen/add_vehicle_screen.dart';
-import 'package:cabme_driver/page/document_status/document_status_screen.dart';
-import 'package:cabme_driver/page/home_screen/view_all_driver.dart';
-import 'package:cabme_driver/page/home_screen/view_all_vehicle.dart';
-import 'package:cabme_driver/themes/app_them_data.dart';
-import 'package:cabme_driver/utils/dark_theme_provider.dart';
-import 'package:cabme_driver/utils/network_image_widget.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/controller/owner_home_controller.dart';
+import 'package:uniqcars_driver/model/get_vehicle_data_model.dart';
+import 'package:uniqcars_driver/model/user_model.dart';
+import 'package:uniqcars_driver/page/add_driver_screen/add_driver_screen.dart';
+import 'package:uniqcars_driver/page/add_vehicle_screen/add_vehicle_screen.dart';
+import 'package:uniqcars_driver/page/document_status/document_status_screen.dart';
+import 'package:uniqcars_driver/page/home_screen/view_all_driver.dart';
+import 'package:uniqcars_driver/page/home_screen/view_all_vehicle.dart';
+import 'package:uniqcars_driver/themes/app_them_data.dart';
+import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
+import 'package:uniqcars_driver/utils/network_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -28,26 +28,34 @@ class OwnerHomeScreen extends StatelessWidget {
         builder: (controller) {
           return Scaffold(
             appBar: AppBar(
-              backgroundColor: themeChange.getThem() ? AppThemeData.neutralDark50 : AppThemeData.neutral50,
+              backgroundColor: themeChange.getThem()
+                  ? AppThemeData.neutralDark50
+                  : AppThemeData.neutral50,
               centerTitle: false,
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'welcomeUser'.trParams({
-                      'first': controller.userModel.value.userData!.prenom.toString(),
-                      'last': controller.userModel.value.userData!.nom.toString(),
+                      'first': controller.userModel.value.userData!.prenom
+                          .toString(),
+                      'last':
+                          controller.userModel.value.userData!.nom.toString(),
                     }),
                     style: AppThemeData.semiBoldTextStyle(
                       fontSize: 16,
-                      color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                      color: themeChange.getThem()
+                          ? AppThemeData.neutralDark900
+                          : AppThemeData.neutral900,
                     ),
                   ),
                   Text(
                     'Manage your fleet, bookings, and drivers in one place.'.tr,
                     style: AppThemeData.mediumTextStyle(
                       fontSize: 12,
-                      color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                      color: themeChange.getThem()
+                          ? AppThemeData.neutralDark900
+                          : AppThemeData.neutral900,
                     ),
                   )
                 ],
@@ -62,7 +70,8 @@ class OwnerHomeScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SvgPicture.asset("assets/images/document_not_verified.svg"),
+                            SvgPicture.asset(
+                                "assets/images/document_not_verified.svg"),
                             SizedBox(
                               height: 20,
                             ),
@@ -71,7 +80,9 @@ class OwnerHomeScreen extends StatelessWidget {
                               textAlign: TextAlign.center,
                               style: AppThemeData.mediumTextStyle(
                                 fontSize: 18,
-                                color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                color: themeChange.getThem()
+                                    ? AppThemeData.neutralDark900
+                                    : AppThemeData.neutral900,
                               ),
                             ),
                             SizedBox(
@@ -82,7 +93,9 @@ class OwnerHomeScreen extends StatelessWidget {
                               textAlign: TextAlign.center,
                               style: AppThemeData.mediumTextStyle(
                                 fontSize: 14,
-                                color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                color: themeChange.getThem()
+                                    ? AppThemeData.neutralDark900
+                                    : AppThemeData.neutral900,
                               ),
                             ),
                             SizedBox(
@@ -106,7 +119,8 @@ class OwnerHomeScreen extends StatelessWidget {
                       )
                     : SingleChildScrollView(
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 10),
                           child: Column(
                             children: [
                               Row(
@@ -120,15 +134,21 @@ class OwnerHomeScreen extends StatelessWidget {
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            SvgPicture.asset("assets/icons/ic_ride.svg"),
+                                            SvgPicture.asset(
+                                                "assets/icons/ic_ride.svg"),
                                             SizedBox(
                                               height: 10,
                                             ),
                                             Text(
                                               'rideCount'.trParams({
-                                                'count': controller.ownerDashBoardData.value.totalBookings.toString(),
+                                                'count': controller
+                                                    .ownerDashBoardData
+                                                    .value
+                                                    .totalBookings
+                                                    .toString(),
                                               }),
                                               textAlign: TextAlign.center,
                                               style: AppThemeData.boldTextStyle(
@@ -142,7 +162,8 @@ class OwnerHomeScreen extends StatelessWidget {
                                             Text(
                                               'Total Bookings'.tr,
                                               textAlign: TextAlign.center,
-                                              style: AppThemeData.mediumTextStyle(
+                                              style:
+                                                  AppThemeData.mediumTextStyle(
                                                 fontSize: 12,
                                                 color: AppThemeData.neutral900,
                                               ),
@@ -164,9 +185,11 @@ class OwnerHomeScreen extends StatelessWidget {
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            SvgPicture.asset("assets/icons/ic_total_ride.svg"),
+                                            SvgPicture.asset(
+                                                "assets/icons/ic_total_ride.svg"),
                                             SizedBox(
                                               height: 10,
                                             ),
@@ -184,7 +207,8 @@ class OwnerHomeScreen extends StatelessWidget {
                                             Text(
                                               'Total Drivers'.tr,
                                               textAlign: TextAlign.center,
-                                              style: AppThemeData.mediumTextStyle(
+                                              style:
+                                                  AppThemeData.mediumTextStyle(
                                                 fontSize: 12,
                                                 color: AppThemeData.neutral900,
                                               ),
@@ -210,9 +234,11 @@ class OwnerHomeScreen extends StatelessWidget {
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            SvgPicture.asset("assets/icons/ic_total_vihivle.svg"),
+                                            SvgPicture.asset(
+                                                "assets/icons/ic_total_vihivle.svg"),
                                             SizedBox(
                                               height: 10,
                                             ),
@@ -230,7 +256,8 @@ class OwnerHomeScreen extends StatelessWidget {
                                             Text(
                                               'Total Vehicles'.tr,
                                               textAlign: TextAlign.center,
-                                              style: AppThemeData.mediumTextStyle(
+                                              style:
+                                                  AppThemeData.mediumTextStyle(
                                                 fontSize: 12,
                                                 color: AppThemeData.neutral900,
                                               ),
@@ -252,9 +279,11 @@ class OwnerHomeScreen extends StatelessWidget {
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            SvgPicture.asset("assets/icons/ic_earning.svg"),
+                                            SvgPicture.asset(
+                                                "assets/icons/ic_earning.svg"),
                                             SizedBox(
                                               height: 10,
                                             ),
@@ -272,7 +301,8 @@ class OwnerHomeScreen extends StatelessWidget {
                                             Text(
                                               'Earnings'.tr,
                                               textAlign: TextAlign.center,
-                                              style: AppThemeData.mediumTextStyle(
+                                              style:
+                                                  AppThemeData.mediumTextStyle(
                                                 fontSize: 12,
                                                 color: AppThemeData.neutral900,
                                               ),
@@ -290,29 +320,45 @@ class OwnerHomeScreen extends StatelessWidget {
                               controller.driverList.isEmpty
                                   ? SizedBox()
                                   : Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Row(
                                           children: [
                                             Expanded(
                                               child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
                                                     'Your Available Drivers'.tr,
                                                     textAlign: TextAlign.center,
-                                                    style: AppThemeData.boldTextStyle(
+                                                    style: AppThemeData
+                                                        .boldTextStyle(
                                                       fontSize: 16,
-                                                      color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                                      color: themeChange
+                                                              .getThem()
+                                                          ? AppThemeData
+                                                              .neutralDark900
+                                                          : AppThemeData
+                                                              .neutral900,
                                                     ),
                                                   ),
                                                   Text(
-                                                    'Real-time status and earnings summary'.tr,
+                                                    'Real-time status and earnings summary'
+                                                        .tr,
                                                     textAlign: TextAlign.center,
-                                                    style: AppThemeData.mediumTextStyle(
+                                                    style: AppThemeData
+                                                        .mediumTextStyle(
                                                       fontSize: 12,
-                                                      color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                                      color: themeChange
+                                                              .getThem()
+                                                          ? AppThemeData
+                                                              .neutralDark900
+                                                          : AppThemeData
+                                                              .neutral900,
                                                     ),
                                                   ),
                                                 ],
@@ -329,10 +375,18 @@ class OwnerHomeScreen extends StatelessWidget {
                                               child: Text(
                                                 'View all'.tr,
                                                 textAlign: TextAlign.center,
-                                                style: AppThemeData.mediumTextStyle(
-                                                    fontSize: 16,
-                                                    color: themeChange.getThem() ? AppThemeData.accentDefault : AppThemeData.accentDefault,
-                                                    decoration: TextDecoration.underline),
+                                                style: AppThemeData
+                                                    .mediumTextStyle(
+                                                        fontSize: 16,
+                                                        color: themeChange
+                                                                .getThem()
+                                                            ? AppThemeData
+                                                                .accentDefault
+                                                            : AppThemeData
+                                                                .accentDefault,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .underline),
                                               ),
                                             ),
                                           ],
@@ -342,25 +396,36 @@ class OwnerHomeScreen extends StatelessWidget {
                                         ),
                                         Container(
                                           decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
                                             border: Border.all(
-                                              color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
+                                              color: themeChange.getThem()
+                                                  ? AppThemeData.neutralDark300
+                                                  : AppThemeData.neutral300,
                                             ),
                                           ),
                                           child: ListView.builder(
-                                            itemCount: controller.driverList.length,
-                                            physics: NeverScrollableScrollPhysics(),
+                                            itemCount:
+                                                controller.driverList.length,
+                                            physics:
+                                                NeverScrollableScrollPhysics(),
                                             shrinkWrap: true,
                                             itemBuilder: (context, index) {
-                                              UserData driverModel = controller.driverList[index];
+                                              UserData driverModel =
+                                                  controller.driverList[index];
                                               return Padding(
-                                                padding: const EdgeInsets.all(8.0),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
                                                 child: Row(
                                                   children: [
                                                     ClipRRect(
-                                                      borderRadius: BorderRadius.circular(10),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
                                                       child: NetworkImageWidget(
-                                                        imageUrl: driverModel.photoPath.toString(),
+                                                        imageUrl: driverModel
+                                                            .photoPath
+                                                            .toString(),
                                                         height: 50,
                                                         width: 50,
                                                         fit: BoxFit.fill,
@@ -371,26 +436,36 @@ class OwnerHomeScreen extends StatelessWidget {
                                                     ),
                                                     Expanded(
                                                       child: Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
                                                         children: [
                                                           Text(
                                                             '${driverModel.prenom} ${driverModel.nom}',
-                                                            textAlign: TextAlign.center,
-                                                            style: AppThemeData.semiBoldTextStyle(
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: AppThemeData
+                                                                .semiBoldTextStyle(
                                                               fontSize: 16,
                                                               color: themeChange.getThem()
-                                                                  ? AppThemeData.neutralDark900
-                                                                  : AppThemeData.neutral900,
+                                                                  ? AppThemeData
+                                                                      .neutralDark900
+                                                                  : AppThemeData
+                                                                      .neutral900,
                                                             ),
                                                           ),
                                                           Text(
                                                             '${driverModel.countryCode} ${driverModel.phone}',
-                                                            textAlign: TextAlign.center,
-                                                            style: AppThemeData.mediumTextStyle(
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: AppThemeData
+                                                                .mediumTextStyle(
                                                               fontSize: 12,
                                                               color: themeChange.getThem()
-                                                                  ? AppThemeData.neutralDark700
-                                                                  : AppThemeData.neutral700,
+                                                                  ? AppThemeData
+                                                                      .neutralDark700
+                                                                  : AppThemeData
+                                                                      .neutral700,
                                                             ),
                                                           ),
                                                         ],
@@ -400,43 +475,76 @@ class OwnerHomeScreen extends StatelessWidget {
                                                       width: 10,
                                                     ),
                                                     RoundedButtonFill(
-                                                      title: driverModel.online == "no" ? "Offline" : "Online".tr,
+                                                      title:
+                                                          driverModel.online ==
+                                                                  "no"
+                                                              ? "Offline"
+                                                              : "Online".tr,
                                                       height: 3.5,
                                                       width: 18,
                                                       borderRadius: 10,
-                                                      color: driverModel.online == "no"
-                                                          ? AppThemeData.errorDefault
-                                                          : AppThemeData.successDefault,
-                                                      textColor: AppThemeData.neutral50,
+                                                      color: driverModel
+                                                                  .online ==
+                                                              "no"
+                                                          ? AppThemeData
+                                                              .errorDefault
+                                                          : AppThemeData
+                                                              .successDefault,
+                                                      textColor: AppThemeData
+                                                          .neutral50,
                                                       onPress: () async {},
                                                     ),
                                                     PopupMenuButton<String>(
                                                       padding: EdgeInsets.zero,
                                                       onSelected: (value) {
-                                                        if (value == 'Edit Driver') {
-                                                          Get.to(AddDriverScreen(), arguments: {"driverModel": driverModel})!.then(
+                                                        if (value ==
+                                                            'Edit Driver') {
+                                                          Get.to(AddDriverScreen(),
+                                                                  arguments: {
+                                                                "driverModel":
+                                                                    driverModel
+                                                              })!
+                                                              .then(
                                                             (value0) {
-                                                              if (value0 == true) {
-                                                                controller.getDriverList();
+                                                              if (value0 ==
+                                                                  true) {
+                                                                controller
+                                                                    .getDriverList();
                                                               }
                                                             },
                                                           );
-                                                        } else if (value == 'Delete Driver') {
-                                                          controller.deleteDriver(driverModel.id.toString());
+                                                        } else if (value ==
+                                                            'Delete Driver') {
+                                                          controller.deleteDriver(
+                                                              driverModel.id
+                                                                  .toString());
                                                         }
                                                       },
-                                                      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                                                      itemBuilder: (BuildContext
+                                                              context) =>
+                                                          <PopupMenuEntry<
+                                                              String>>[
                                                         PopupMenuItem<String>(
                                                           value: 'Edit Driver',
-                                                          child: Text('Edit Driver'.tr),
+                                                          child: Text(
+                                                              'Edit Driver'.tr),
                                                         ),
                                                         PopupMenuItem<String>(
-                                                          value: 'Delete Driver',
-                                                          child: Text('Delete Driver'.tr),
+                                                          value:
+                                                              'Delete Driver',
+                                                          child: Text(
+                                                              'Delete Driver'
+                                                                  .tr),
                                                         ),
                                                       ],
-                                                      color: themeChange.getThem() ? AppThemeData.neutralDark50 : AppThemeData.neutral50,
-                                                      icon: Icon(Icons.more_vert), // Three dots icon
+                                                      color:
+                                                          themeChange.getThem()
+                                                              ? AppThemeData
+                                                                  .neutralDark50
+                                                              : AppThemeData
+                                                                  .neutral50,
+                                                      icon: Icon(Icons
+                                                          .more_vert), // Three dots icon
                                                     ),
                                                   ],
                                                 ),
@@ -457,22 +565,36 @@ class OwnerHomeScreen extends StatelessWidget {
                                           children: [
                                             Expanded(
                                               child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
                                                     'Vehicles Summary'.tr,
                                                     textAlign: TextAlign.center,
-                                                    style: AppThemeData.boldTextStyle(
+                                                    style: AppThemeData
+                                                        .boldTextStyle(
                                                       fontSize: 16,
-                                                      color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                                      color: themeChange
+                                                              .getThem()
+                                                          ? AppThemeData
+                                                              .neutralDark900
+                                                          : AppThemeData
+                                                              .neutral900,
                                                     ),
                                                   ),
                                                   Text(
-                                                    'Your Registered Vehicles'.tr,
+                                                    'Your Registered Vehicles'
+                                                        .tr,
                                                     textAlign: TextAlign.center,
-                                                    style: AppThemeData.mediumTextStyle(
+                                                    style: AppThemeData
+                                                        .mediumTextStyle(
                                                       fontSize: 12,
-                                                      color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                                      color: themeChange
+                                                              .getThem()
+                                                          ? AppThemeData
+                                                              .neutralDark900
+                                                          : AppThemeData
+                                                              .neutral900,
                                                     ),
                                                   ),
                                                 ],
@@ -489,10 +611,18 @@ class OwnerHomeScreen extends StatelessWidget {
                                               child: Text(
                                                 'View all'.tr,
                                                 textAlign: TextAlign.center,
-                                                style: AppThemeData.mediumTextStyle(
-                                                    fontSize: 16,
-                                                    color: themeChange.getThem() ? AppThemeData.accentDefault : AppThemeData.accentDefault,
-                                                    decoration: TextDecoration.underline),
+                                                style: AppThemeData
+                                                    .mediumTextStyle(
+                                                        fontSize: 16,
+                                                        color: themeChange
+                                                                .getThem()
+                                                            ? AppThemeData
+                                                                .accentDefault
+                                                            : AppThemeData
+                                                                .accentDefault,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .underline),
                                               ),
                                             ),
                                           ],
@@ -502,25 +632,36 @@ class OwnerHomeScreen extends StatelessWidget {
                                         ),
                                         Container(
                                           decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
                                             border: Border.all(
-                                              color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
+                                              color: themeChange.getThem()
+                                                  ? AppThemeData.neutralDark300
+                                                  : AppThemeData.neutral300,
                                             ),
                                           ),
                                           child: ListView.builder(
-                                            itemCount: controller.vehicleList.length,
+                                            itemCount:
+                                                controller.vehicleList.length,
                                             shrinkWrap: true,
-                                            physics: NeverScrollableScrollPhysics(),
+                                            physics:
+                                                NeverScrollableScrollPhysics(),
                                             itemBuilder: (context, index) {
-                                              VehicleData vehicleData = controller.vehicleList[index];
+                                              VehicleData vehicleData =
+                                                  controller.vehicleList[index];
                                               return Padding(
-                                                padding: const EdgeInsets.all(8.0),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
                                                 child: Row(
                                                   children: [
                                                     ClipRRect(
-                                                      borderRadius: BorderRadius.circular(10),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
                                                       child: NetworkImageWidget(
-                                                        imageUrl: vehicleData.vehicleImage.toString(),
+                                                        imageUrl: vehicleData
+                                                            .vehicleImage
+                                                            .toString(),
                                                         height: 50,
                                                         width: 50,
                                                         fit: BoxFit.fill,
@@ -531,26 +672,36 @@ class OwnerHomeScreen extends StatelessWidget {
                                                     ),
                                                     Expanded(
                                                       child: Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
                                                         children: [
                                                           Text(
                                                             '${vehicleData.vehicleName} | ${vehicleData.brand}',
-                                                            textAlign: TextAlign.center,
-                                                            style: AppThemeData.semiBoldTextStyle(
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: AppThemeData
+                                                                .semiBoldTextStyle(
                                                               fontSize: 16,
                                                               color: themeChange.getThem()
-                                                                  ? AppThemeData.neutralDark900
-                                                                  : AppThemeData.neutral900,
+                                                                  ? AppThemeData
+                                                                      .neutralDark900
+                                                                  : AppThemeData
+                                                                      .neutral900,
                                                             ),
                                                           ),
                                                           Text(
                                                             '${vehicleData.numberplate}',
-                                                            textAlign: TextAlign.center,
-                                                            style: AppThemeData.mediumTextStyle(
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: AppThemeData
+                                                                .mediumTextStyle(
                                                               fontSize: 12,
                                                               color: themeChange.getThem()
-                                                                  ? AppThemeData.neutralDark700
-                                                                  : AppThemeData.neutral700,
+                                                                  ? AppThemeData
+                                                                      .neutralDark700
+                                                                  : AppThemeData
+                                                                      .neutral700,
                                                             ),
                                                           ),
                                                         ],
@@ -562,30 +713,55 @@ class OwnerHomeScreen extends StatelessWidget {
                                                     PopupMenuButton<String>(
                                                       padding: EdgeInsets.zero,
                                                       onSelected: (value) {
-                                                        if (value == 'Edit Vehicle') {
-                                                          Get.to(AddVehicleScreen(), arguments: {"vehicleData": vehicleData})!.then(
+                                                        if (value ==
+                                                            'Edit Vehicle') {
+                                                          Get.to(AddVehicleScreen(),
+                                                                  arguments: {
+                                                                "vehicleData":
+                                                                    vehicleData
+                                                              })!
+                                                              .then(
                                                             (value0) {
-                                                              if (value0 == true) {
-                                                                controller.getDriverList();
+                                                              if (value0 ==
+                                                                  true) {
+                                                                controller
+                                                                    .getDriverList();
                                                               }
                                                             },
                                                           );
-                                                        } else if (value == 'Delete Vehicle') {
-                                                          controller.removeVehicle(vehicleData.id.toString());
+                                                        } else if (value ==
+                                                            'Delete Vehicle') {
+                                                          controller.removeVehicle(
+                                                              vehicleData.id
+                                                                  .toString());
                                                         }
                                                       },
-                                                      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                                                      itemBuilder: (BuildContext
+                                                              context) =>
+                                                          <PopupMenuEntry<
+                                                              String>>[
                                                         PopupMenuItem<String>(
                                                           value: 'Edit Vehicle',
-                                                          child: Text('Edit Vehicle'.tr),
+                                                          child: Text(
+                                                              'Edit Vehicle'
+                                                                  .tr),
                                                         ),
                                                         PopupMenuItem<String>(
-                                                          value: 'Delete Vehicle',
-                                                          child: Text('Delete Vehicle'.tr),
+                                                          value:
+                                                              'Delete Vehicle',
+                                                          child: Text(
+                                                              'Delete Vehicle'
+                                                                  .tr),
                                                         ),
                                                       ],
-                                                      color: themeChange.getThem() ? AppThemeData.neutralDark50 : AppThemeData.neutral50,
-                                                      icon: Icon(Icons.more_vert), // Three dots icon
+                                                      color:
+                                                          themeChange.getThem()
+                                                              ? AppThemeData
+                                                                  .neutralDark50
+                                                              : AppThemeData
+                                                                  .neutral50,
+                                                      icon: Icon(Icons
+                                                          .more_vert), // Three dots icon
                                                     ),
                                                   ],
                                                 ),
@@ -599,23 +775,24 @@ class OwnerHomeScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-            floatingActionButton: controller.userModel.value.userData!.isVerified == "yes"
-                ? FloatingActionButton(
-                    key: controller.overlayKey,
-                    onPressed: () {
-                      showOverlay(context, controller);
-                    },
-                    backgroundColor: AppThemeData.primaryDefault,
-                    // Solid color
-                    foregroundColor: Colors.white,
-                    // Icon color
-                    elevation: 8,
-                    // Shadow
-                    shape: CircleBorder(),
-                    // Ensures roundness
-                    child: Icon(Icons.add, size: 28),
-                  )
-                : SizedBox(),
+            floatingActionButton:
+                controller.userModel.value.userData!.isVerified == "yes"
+                    ? FloatingActionButton(
+                        key: controller.overlayKey,
+                        onPressed: () {
+                          showOverlay(context, controller);
+                        },
+                        backgroundColor: AppThemeData.primaryDefault,
+                        // Solid color
+                        foregroundColor: Colors.white,
+                        // Icon color
+                        elevation: 8,
+                        // Shadow
+                        shape: CircleBorder(),
+                        // Ensures roundness
+                        child: Icon(Icons.add, size: 28),
+                      )
+                    : SizedBox(),
             floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           );
         });
@@ -623,7 +800,8 @@ class OwnerHomeScreen extends StatelessWidget {
 
   void showOverlay(BuildContext context, OwnerHomeController controller) {
     final OverlayState overlayState = Overlay.of(context);
-    final RenderBox renderBox = controller.overlayKey.currentContext!.findRenderObject() as RenderBox;
+    final RenderBox renderBox =
+        controller.overlayKey.currentContext!.findRenderObject() as RenderBox;
     final Offset offset = renderBox.localToGlobal(Offset.zero);
     // ignore: unused_local_variable
     final Size size = renderBox.size;
@@ -639,7 +817,8 @@ class OwnerHomeScreen extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: offset.dy - 130, // ✏️ Move overlay above the button (adjust as needed)
+            top: offset.dy -
+                130, // ✏️ Move overlay above the button (adjust as needed)
             right: 16,
             child: Material(
               color: Colors.transparent,
@@ -682,17 +861,21 @@ class OwnerHomeScreen extends StatelessWidget {
                         }
                       },
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 5),
                         child: Row(
                           children: [
                             Expanded(
                               child: Text(
                                 type.tr,
-                                style: AppThemeData.semiBoldTextStyle(color: AppThemeData.neutral900),
+                                style: AppThemeData.semiBoldTextStyle(
+                                    color: AppThemeData.neutral900),
                               ),
                             ),
                             SvgPicture.asset(
-                              type == "Add Driver" ? "assets/icons/ic_add_driver.svg" : "assets/icons/ic_add_vehicle.svg",
+                              type == "Add Driver"
+                                  ? "assets/icons/ic_add_driver.svg"
+                                  : "assets/icons/ic_add_vehicle.svg",
                               width: 40,
                               height: 40,
                             )

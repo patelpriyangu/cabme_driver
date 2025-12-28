@@ -1,5 +1,5 @@
-import 'package:cabme_driver/model/admin_commission.dart';
-import 'package:cabme_driver/model/tax_model.dart';
+import 'package:uniqcars_driver/model/admin_commission.dart';
+import 'package:uniqcars_driver/model/tax_model.dart';
 
 class BookingModel {
   String? success;
@@ -153,9 +153,15 @@ class BookingData {
     adminCommission = json['admin_commission'];
     driver = json['driver'] != null ? Driver.fromJson(json['driver']) : null;
     user = json['user'] != null ? User.fromJson(json['user']) : null;
-    adminCommissionType = json['admin_commission_type'] != null ? AdminCommission.fromJson(json['admin_commission_type']) : null;
-    discountType = json['discount_type'] != null ? AdminCommission.fromJson(json['discount_type']) : null;
-    complainDetails = json['complaint_detail'] != null ? ComplainDetails.fromJson(json['complaint_detail']) : null;
+    adminCommissionType = json['admin_commission_type'] != null
+        ? AdminCommission.fromJson(json['admin_commission_type'])
+        : null;
+    discountType = json['discount_type'] != null
+        ? AdminCommission.fromJson(json['discount_type'])
+        : null;
+    complainDetails = json['complaint_detail'] != null
+        ? ComplainDetails.fromJson(json['complaint_detail'])
+        : null;
     complaint = json['complaint'];
   }
 
@@ -250,7 +256,15 @@ class ComplainDetails {
   String? createdAt;
   String? updatedAt;
 
-  ComplainDetails({this.id, this.title, this.description, this.status, this.bookingId, this.bookingType, this.createdAt, this.updatedAt});
+  ComplainDetails(
+      {this.id,
+      this.title,
+      this.description,
+      this.status,
+      this.bookingId,
+      this.bookingType,
+      this.createdAt,
+      this.updatedAt});
 
   ComplainDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -314,7 +328,9 @@ class Driver {
     reviewCount = json['review_count'] ?? '0.0';
     averageRating = json['average_rating'] ?? '0.0';
     image = json['image'];
-    vehicleDetails = json['vehicle_details'] != null ? VehicleDetails.fromJson(json['vehicle_details']) : null;
+    vehicleDetails = json['vehicle_details'] != null
+        ? VehicleDetails.fromJson(json['vehicle_details'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -344,7 +360,13 @@ class VehicleDetails {
   String? type;
   String? image;
 
-  VehicleDetails({this.brand, this.model, this.carMake, this.numberplate, this.type, this.image});
+  VehicleDetails(
+      {this.brand,
+      this.model,
+      this.carMake,
+      this.numberplate,
+      this.type,
+      this.image});
 
   VehicleDetails.fromJson(Map<String, dynamic> json) {
     brand = json['brand'];
@@ -378,7 +400,16 @@ class User {
   String? averageRating;
   String? image;
 
-  User({this.id, this.nom, this.prenom, this.email, this.phone, this.reviewSum, this.reviewCount, this.averageRating, this.image});
+  User(
+      {this.id,
+      this.nom,
+      this.prenom,
+      this.email,
+      this.phone,
+      this.reviewSum,
+      this.reviewCount,
+      this.averageRating,
+      this.image});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];

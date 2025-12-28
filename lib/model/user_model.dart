@@ -1,5 +1,5 @@
-import 'package:cabme_driver/model/settings_model.dart';
-import 'package:cabme_driver/model/subscription_plan_model.dart';
+import 'package:uniqcars_driver/model/settings_model.dart';
+import 'package:uniqcars_driver/model/subscription_plan_model.dart';
 
 class UserModel {
   String? success;
@@ -209,11 +209,15 @@ class UserData {
     numberplate = json['numberplate'].toString();
     accesstoken = json['accesstoken'].toString();
     serviceType = json['service_type'] ?? [];
-    adminCommission = json['adminCommission'] != null ? AdminCommission.fromJson(json['adminCommission']) : null;
+    adminCommission = json['adminCommission'] != null
+        ? AdminCommission.fromJson(json['adminCommission'])
+        : null;
     subscriptionPlanId = json['subscriptionPlanId'];
     subscriptionExpiryDate = json['subscriptionExpiryDate'];
     subscriptionTotalOrders = json['subscriptionTotalOrders'];
-    subscriptionPlan = json['subscription_plan'] != null ? SubscriptionPlanData.fromJson(json['subscription_plan']) : null;
+    subscriptionPlan = json['subscription_plan'] != null
+        ? SubscriptionPlanData.fromJson(json['subscription_plan'])
+        : null;
 
     ownerId = json['ownerId'];
     vehicleId = json['vehicle_id'];

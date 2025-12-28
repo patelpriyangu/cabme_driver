@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/model/rental_booking_model.dart';
-import 'package:cabme_driver/service/api.dart';
-import 'package:cabme_driver/utils/Preferences.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/model/rental_booking_model.dart';
+import 'package:uniqcars_driver/service/api.dart';
+import 'package:uniqcars_driver/utils/Preferences.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -25,7 +25,8 @@ class RentalBookingSearchController extends GetxController {
     };
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.searchDriverRentalOrder), headers: API.headers, body: jsonEncode(bodyParams)),
+            request: () => http.post(Uri.parse(API.searchDriverRentalOrder),
+                headers: API.headers, body: jsonEncode(bodyParams)),
             showLoader: false)
         .then(
       (value) async {
@@ -34,7 +35,9 @@ class RentalBookingSearchController extends GetxController {
           if (model.success == "Failed" || model.success == "failed") {
             return null;
           } else {
-            rentalBookingData.value = (value['data'] as List).map((e) => RentalBookingData.fromJson(e)).toList();
+            rentalBookingData.value = (value['data'] as List)
+                .map((e) => RentalBookingData.fromJson(e))
+                .toList();
           }
         }
       },
@@ -50,7 +53,9 @@ class RentalBookingSearchController extends GetxController {
 
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.rentalConfirm), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true)
+            request: () => http.post(Uri.parse(API.rentalConfirm),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
         .then(
       (value) async {
         if (value != null) {
@@ -75,7 +80,9 @@ class RentalBookingSearchController extends GetxController {
 
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.rentalRejected), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true)
+            request: () => http.post(Uri.parse(API.rentalRejected),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
         .then(
       (value) async {
         if (value != null) {

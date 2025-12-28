@@ -1,9 +1,7 @@
-
-
-import 'package:cabme_driver/model/admin_commission.dart';
-import 'package:cabme_driver/model/booking_mode.dart';
-import 'package:cabme_driver/model/rental_package_model.dart';
-import 'package:cabme_driver/model/tax_model.dart';
+import 'package:uniqcars_driver/model/admin_commission.dart';
+import 'package:uniqcars_driver/model/booking_mode.dart';
+import 'package:uniqcars_driver/model/rental_package_model.dart';
+import 'package:uniqcars_driver/model/tax_model.dart';
 
 class RentalBookingModel {
   String? success;
@@ -22,7 +20,8 @@ class RentalBookingModel {
       json['data'].forEach((v) {
         data!.add(RentalBookingData.fromJson(v));
       });
-    }  }
+    }
+  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -77,41 +76,42 @@ class RentalBookingData {
 
   RentalBookingData(
       {this.id,
-        this.bookingNumber,
-        this.idUserApp,
-        this.idConducteur,
-        this.departName,
-        this.latSource,
-        this.lngSource,
-        this.status,
-        this.paymentStatus,
-        this.idRentalPackage,
-        this.idVehicleType,
-        this.idPaymentMethod,
-        this.distanceUnit,
-        this.amount,
-        this.discount,
-        this.discountType,
-        this.tax,
-        this.adminCommission,
-        this.adminCommissionType,
-        this.transactionId,
-        this.startDate,
-        this.endDate,
-        this.startTime,
-        this.endTime,
-        this.otp,
-        this.currentKm,
-        this.completeKm,
-        this.createdAt,
-        this.updatedAt,
-        this.paymentMethod,
-        this.vehicleName,
-        this.vehicleImage,
-        this.packageDetails,
-        this.driver,
-        this.user,this.complaint,
-        this.complainDetails});
+      this.bookingNumber,
+      this.idUserApp,
+      this.idConducteur,
+      this.departName,
+      this.latSource,
+      this.lngSource,
+      this.status,
+      this.paymentStatus,
+      this.idRentalPackage,
+      this.idVehicleType,
+      this.idPaymentMethod,
+      this.distanceUnit,
+      this.amount,
+      this.discount,
+      this.discountType,
+      this.tax,
+      this.adminCommission,
+      this.adminCommissionType,
+      this.transactionId,
+      this.startDate,
+      this.endDate,
+      this.startTime,
+      this.endTime,
+      this.otp,
+      this.currentKm,
+      this.completeKm,
+      this.createdAt,
+      this.updatedAt,
+      this.paymentMethod,
+      this.vehicleName,
+      this.vehicleImage,
+      this.packageDetails,
+      this.driver,
+      this.user,
+      this.complaint,
+      this.complainDetails});
 
   RentalBookingData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -158,10 +158,11 @@ class RentalBookingData {
     packageDetails = json['package_details'] != null
         ? RentalPackageData.fromJson(json['package_details'])
         : null;
-    driver =
-    json['driver'] != null ? Driver.fromJson(json['driver']) : null;
+    driver = json['driver'] != null ? Driver.fromJson(json['driver']) : null;
     user = json['user'] != null ? User.fromJson(json['user']) : null;
-    complainDetails = json['complaint_detail'] != null ? ComplainDetails.fromJson(json['complaint_detail']) : null;
+    complainDetails = json['complaint_detail'] != null
+        ? ComplainDetails.fromJson(json['complaint_detail'])
+        : null;
     complaint = json['complaint'];
   }
 
@@ -219,4 +220,3 @@ class RentalBookingData {
     return data;
   }
 }
-

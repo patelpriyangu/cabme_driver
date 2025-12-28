@@ -1,5 +1,5 @@
-import 'package:cabme_driver/themes/app_them_data.dart';
-import 'package:cabme_driver/utils/dark_theme_provider.dart';
+import 'package:uniqcars_driver/themes/app_them_data.dart';
+import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -22,7 +22,6 @@ class TextFieldWidget extends StatelessWidget {
   final TextInputAction? textInputAction;
   final FocusNode? focusNode;
   final Function()? onPress;
-
 
   const TextFieldWidget({
     super.key,
@@ -58,7 +57,11 @@ class TextFieldWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(title == null ? '' : title!.tr,
-                    style: AppThemeData.semiBoldTextStyle(fontSize: 14, color: themeChange.getThem() ? AppThemeData.neutralDark700 : AppThemeData.neutral700)),
+                    style: AppThemeData.semiBoldTextStyle(
+                        fontSize: 14,
+                        color: themeChange.getThem()
+                            ? AppThemeData.neutralDark700
+                            : AppThemeData.neutral700)),
                 const SizedBox(
                   height: 5,
                 ),
@@ -78,7 +81,11 @@ class TextFieldWidget extends StatelessWidget {
             onChanged: onchange,
             readOnly: readOnly ?? false,
             onTap: onPress,
-            style: TextStyle(color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900, fontFamily: AppThemeData.medium),
+            style: TextStyle(
+                color: themeChange.getThem()
+                    ? AppThemeData.neutralDark900
+                    : AppThemeData.neutral900,
+                fontFamily: AppThemeData.medium),
             decoration: InputDecoration(
                 errorStyle: const TextStyle(color: Colors.red),
                 filled: true,
@@ -90,33 +97,61 @@ class TextFieldWidget extends StatelessWidget {
                             ? 14
                             : 14,
                     horizontal: 10),
-                fillColor: themeChange.getThem() ? AppThemeData.neutralDark100 : AppThemeData.neutral100,
+                fillColor: themeChange.getThem()
+                    ? AppThemeData.neutralDark100
+                    : AppThemeData.neutral100,
                 prefixIcon: prefix,
                 suffixIcon: suffix,
-                suffixIconConstraints: BoxConstraints(minHeight: 20, minWidth: 20),
-                prefixIconConstraints: BoxConstraints(minHeight: 20, minWidth: 20),
+                suffixIconConstraints:
+                    BoxConstraints(minHeight: 20, minWidth: 20),
+                prefixIconConstraints:
+                    BoxConstraints(minHeight: 20, minWidth: 20),
                 disabledBorder: OutlineInputBorder(
-                  borderRadius:  BorderRadius.all(Radius.circular(radius??40)),
-                  borderSide: BorderSide(color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300, width: 1),
+                  borderRadius: BorderRadius.all(Radius.circular(radius ?? 40)),
+                  borderSide: BorderSide(
+                      color: themeChange.getThem()
+                          ? AppThemeData.neutralDark300
+                          : AppThemeData.neutral300,
+                      width: 1),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius:  BorderRadius.all(Radius.circular(radius??40)),
-                  borderSide: BorderSide(color: themeChange.getThem() ? AppThemeData.primaryDarkDefault : AppThemeData.primaryDefault, width: 1),
+                  borderRadius: BorderRadius.all(Radius.circular(radius ?? 40)),
+                  borderSide: BorderSide(
+                      color: themeChange.getThem()
+                          ? AppThemeData.primaryDarkDefault
+                          : AppThemeData.primaryDefault,
+                      width: 1),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderRadius:  BorderRadius.all(Radius.circular(radius??40)),
-                  borderSide: BorderSide(color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300, width: 1),
+                  borderRadius: BorderRadius.all(Radius.circular(radius ?? 40)),
+                  borderSide: BorderSide(
+                      color: themeChange.getThem()
+                          ? AppThemeData.neutralDark300
+                          : AppThemeData.neutral300,
+                      width: 1),
                 ),
                 errorBorder: OutlineInputBorder(
-                  borderRadius:  BorderRadius.all(Radius.circular(radius??40)),
-                  borderSide: BorderSide(color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300, width: 1),
+                  borderRadius: BorderRadius.all(Radius.circular(radius ?? 40)),
+                  borderSide: BorderSide(
+                      color: themeChange.getThem()
+                          ? AppThemeData.neutralDark300
+                          : AppThemeData.neutral300,
+                      width: 1),
                 ),
                 border: OutlineInputBorder(
-                  borderRadius:  BorderRadius.all(Radius.circular(radius??40)),
-                  borderSide: BorderSide(color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300, width: 1),
+                  borderRadius: BorderRadius.all(Radius.circular(radius ?? 40)),
+                  borderSide: BorderSide(
+                      color: themeChange.getThem()
+                          ? AppThemeData.neutralDark300
+                          : AppThemeData.neutral300,
+                      width: 1),
                 ),
                 hintText: hintText.tr,
-                hintStyle: AppThemeData.mediumTextStyle(fontSize: 14, color: themeChange.getThem() ? AppThemeData.neutralDark500 : AppThemeData.neutral500)),
+                hintStyle: AppThemeData.mediumTextStyle(
+                    fontSize: 14,
+                    color: themeChange.getThem()
+                        ? AppThemeData.neutralDark500
+                        : AppThemeData.neutral500)),
           ),
         ],
       ),

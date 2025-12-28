@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/model/parcel_bokking_model.dart';
-import 'package:cabme_driver/service/api.dart';
-import 'package:cabme_driver/utils/Preferences.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/model/parcel_bokking_model.dart';
+import 'package:uniqcars_driver/service/api.dart';
+import 'package:uniqcars_driver/utils/Preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -13,9 +13,12 @@ import 'package:intl/intl.dart';
 
 class ParcelSearchController extends GetxController {
   RxBool isLoading = true.obs;
-  final Rx<TextEditingController> sourceTextEditController = TextEditingController().obs;
-  final Rx<TextEditingController> destinationTextEditController = TextEditingController().obs;
-  final Rx<TextEditingController> dateTimeTextEditController = TextEditingController().obs;
+  final Rx<TextEditingController> sourceTextEditController =
+      TextEditingController().obs;
+  final Rx<TextEditingController> destinationTextEditController =
+      TextEditingController().obs;
+  final Rx<TextEditingController> dateTimeTextEditController =
+      TextEditingController().obs;
 
   // Journey
   final Rx<LatLng?> departureLatLong = Rx<LatLng?>(null);
@@ -42,7 +45,8 @@ class ParcelSearchController extends GetxController {
 
     if (date == null) return;
     pickUpDateTime.value = date;
-    dateTimeTextEditController.value.text = DateFormat('dd-MMM-yyyy').format(date);
+    dateTimeTextEditController.value.text =
+        DateFormat('dd-MMM-yyyy').format(date);
     update();
   }
 
@@ -54,8 +58,9 @@ class ParcelSearchController extends GetxController {
       return null;
     }
     Map<String, dynamic> bodyParams = {
-      'source_lat':
-          Constant.selectedMapType == 'osm' ? departureLatLongOsm.value!.latitude.toString() : departureLatLong.value!.latitude.toString(),
+      'source_lat': Constant.selectedMapType == 'osm'
+          ? departureLatLongOsm.value!.latitude.toString()
+          : departureLatLong.value!.latitude.toString(),
       'source_lng': Constant.selectedMapType == 'osm'
           ? departureLatLongOsm.value!.longitude.toString()
           : departureLatLong.value!.longitude.toString(),
@@ -79,7 +84,9 @@ class ParcelSearchController extends GetxController {
 
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.parcelSearch), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true)
+            request: () => http.post(Uri.parse(API.parcelSearch),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
         .then(
       (value) async {
         if (value != null) {
@@ -88,29 +95,38 @@ class ParcelSearchController extends GetxController {
             ShowToastDialog.showToast(value['error']);
             return null;
           } else {
-            parcelList.value = (value['data'] as List).map((e) => ParcelBookingData.fromJson(e)).toList();
+            parcelList.value = (value['data'] as List)
+                .map((e) => ParcelBookingData.fromJson(e))
+                .toList();
           }
         }
       },
     );
   }
 
-  String calculateParcelTotalAmountBooking(ParcelBookingData parcelBookingData) {
+  String calculateParcelTotalAmountBooking(
+      ParcelBookingData parcelBookingData) {
     String subTotal = parcelBookingData.amount.toString();
     String discount = "0.0";
     String taxAmount = "0.0";
     if (parcelBookingData.discountType != null) {
-      discount = Constant.calculateDiscountOrder(amount: subTotal, offerModel: parcelBookingData.discountType).toString();
+      discount = Constant.calculateDiscountOrder(
+              amount: subTotal, offerModel: parcelBookingData.discountType)
+          .toString();
     }
     for (var element in parcelBookingData.tax!) {
-      taxAmount = (double.parse(taxAmount) + Constant().calculateTax(amount: (double.parse(subTotal) - double.parse(discount)).toString(), taxModel: element))
+      taxAmount = (double.parse(taxAmount) +
+              Constant().calculateTax(
+                  amount: (double.parse(subTotal) - double.parse(discount))
+                      .toString(),
+                  taxModel: element))
           .toStringAsFixed(int.tryParse(Constant.decimal.toString()) ?? 2);
     }
 
-    return ((double.parse(subTotal) - (double.parse(discount))) + double.parse(taxAmount)).toStringAsFixed(int.tryParse(Constant.decimal.toString()) ?? 2);
+    return ((double.parse(subTotal) - (double.parse(discount))) +
+            double.parse(taxAmount))
+        .toStringAsFixed(int.tryParse(Constant.decimal.toString()) ?? 2);
   }
-
-
 
   Future<void> acceptParcelBooking(ParcelBookingData parcelBookingData) async {
     Map<String, dynamic> bodyParams = {
@@ -120,7 +136,9 @@ class ParcelSearchController extends GetxController {
 
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.parcelContirm), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true)
+            request: () => http.post(Uri.parse(API.parcelContirm),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
         .then(
       (value) async {
         if (value != null) {

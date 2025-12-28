@@ -1,17 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/constant/ride_satatus.dart';
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/model/booking_mode.dart';
-import 'package:cabme_driver/model/parcel_bokking_model.dart';
-import 'package:cabme_driver/model/rental_booking_model.dart';
-import 'package:cabme_driver/model/user_model.dart';
-import 'package:cabme_driver/page/auth_screens/login_screen.dart';
-import 'package:cabme_driver/service/api.dart';
-import 'package:cabme_driver/service/pusher_service.dart';
-import 'package:cabme_driver/utils/Preferences.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/constant/ride_satatus.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/model/booking_mode.dart';
+import 'package:uniqcars_driver/model/parcel_bokking_model.dart';
+import 'package:uniqcars_driver/model/rental_booking_model.dart';
+import 'package:uniqcars_driver/model/user_model.dart';
+import 'package:uniqcars_driver/page/auth_screens/login_screen.dart';
+import 'package:uniqcars_driver/service/api.dart';
+import 'package:uniqcars_driver/service/pusher_service.dart';
+import 'package:uniqcars_driver/utils/Preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -24,8 +24,10 @@ class HomeController extends GetxController {
 
   Rx<UserModel> userModel = UserModel().obs;
   Rx<TextEditingController> otpController = TextEditingController().obs;
-  Rx<TextEditingController> currentKilometerController = TextEditingController().obs;
-  Rx<TextEditingController> completeKilometerController = TextEditingController().obs;
+  Rx<TextEditingController> currentKilometerController =
+      TextEditingController().obs;
+  Rx<TextEditingController> completeKilometerController =
+      TextEditingController().obs;
   final RxString selectedTabType = ''.obs;
 
   @override
@@ -44,7 +46,7 @@ class HomeController extends GetxController {
   Future<void> getData() async {
     userModel.value = Constant.getUserData();
     await getUserData();
-    await  getBookingData();
+    await getBookingData();
     status.value = userModel.value.userData?.online == "yes";
     if (status.value == true) {
       await updateCurrentLocation();
@@ -76,7 +78,6 @@ class HomeController extends GetxController {
     update();
   }
 
-
   RxString subTotal = "0.0".obs;
   RxString discount = "0.0".obs;
   RxString taxAmount = "0.0".obs;
@@ -86,13 +87,24 @@ class HomeController extends GetxController {
     taxAmount = "0.0".obs;
     subTotal.value = bookingModel.value.data!.montant.toString();
     for (var element in bookingModel.value.data!.tax ?? []) {
-      taxAmount.value = (double.parse(taxAmount.value) + Constant().calculateTax(amount: ((double.parse(subTotal.value)) - (double.parse(discount.value))).toString(), taxModel: element))
+      taxAmount.value = (double.parse(taxAmount.value) +
+              Constant().calculateTax(
+                  amount: ((double.parse(subTotal.value)) -
+                          (double.parse(discount.value)))
+                      .toString(),
+                  taxModel: element))
           .toStringAsFixed(int.tryParse(Constant.decimal.toString()) ?? 2);
     }
     if (bookingModel.value.data!.discountType != null) {
-      discount.value = Constant.calculateDiscountOrder(amount: subTotal.value, offerModel: bookingModel.value.data!.discountType).toString();
+      discount.value = Constant.calculateDiscountOrder(
+              amount: subTotal.value,
+              offerModel: bookingModel.value.data!.discountType)
+          .toString();
     }
-    totalAmount.value = ((double.parse(subTotal.value) - (double.parse(discount.value))) + double.parse(taxAmount.value)).toStringAsFixed(int.tryParse(Constant.decimal.toString()) ?? 2);
+    totalAmount.value =
+        ((double.parse(subTotal.value) - (double.parse(discount.value))) +
+                double.parse(taxAmount.value))
+            .toStringAsFixed(int.tryParse(Constant.decimal.toString()) ?? 2);
     update();
   }
 
@@ -103,13 +115,20 @@ class HomeController extends GetxController {
           booking.data!.statut == RideStatus.confirmed ||
           booking.data!.statut == RideStatus.onRide) {
         locationData.clear();
-        locationData.add(
-            Stops(location: booking.data!.departName, latitude: booking.data!.latitudeDepart, longitude: booking.data!.longitudeDepart));
-        if(booking.data!.stops != null){
-          locationData.addAll(booking.data!.stops!.map((e) => Stops(location: e.location, latitude: e.latitude, longitude: e.longitude)));
+        locationData.add(Stops(
+            location: booking.data!.departName,
+            latitude: booking.data!.latitudeDepart,
+            longitude: booking.data!.longitudeDepart));
+        if (booking.data!.stops != null) {
+          locationData.addAll(booking.data!.stops!.map((e) => Stops(
+              location: e.location,
+              latitude: e.latitude,
+              longitude: e.longitude)));
         }
         locationData.add(Stops(
-            location: booking.data!.destinationName, latitude: booking.data!.latitudeArrivee, longitude: booking.data!.longitudeArrivee));
+            location: booking.data!.destinationName,
+            latitude: booking.data!.latitudeArrivee,
+            longitude: booking.data!.longitudeArrivee));
         calculateTotalAmount();
       } else if (booking.data!.statut == RideStatus.canceled ||
           booking.data!.statut == RideStatus.completed ||
@@ -129,7 +148,9 @@ class HomeController extends GetxController {
 
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.driverRecentRide), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: false)
+            request: () => http.post(Uri.parse(API.driverRecentRide),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: false)
         .then(
       (value) async {
         if (value != null) {
@@ -153,7 +174,9 @@ class HomeController extends GetxController {
 
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.conformRide), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true)
+            request: () => http.post(Uri.parse(API.conformRide),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
         .then(
       (value) async {
         if (value != null) {
@@ -178,7 +201,9 @@ class HomeController extends GetxController {
 
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.onRideRequest), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true)
+            request: () => http.post(Uri.parse(API.onRideRequest),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
         .then(
       (value) async {
         if (value != null) {
@@ -196,21 +221,29 @@ class HomeController extends GetxController {
     );
   }
 
-  String calculateParcelTotalAmountBooking(ParcelBookingData parcelBookingData) {
+  String calculateParcelTotalAmountBooking(
+      ParcelBookingData parcelBookingData) {
     String subTotal = parcelBookingData.amount.toString();
     String discount = "0.0";
     String taxAmount = "0.0";
     if (parcelBookingData.discountType != null) {
-      discount = Constant.calculateDiscountOrder(amount: subTotal, offerModel: parcelBookingData.discountType).toString();
+      discount = Constant.calculateDiscountOrder(
+              amount: subTotal, offerModel: parcelBookingData.discountType)
+          .toString();
     }
     for (var element in parcelBookingData.tax!) {
-      taxAmount = (double.parse(taxAmount) + Constant().calculateTax(amount: (double.parse(subTotal) - double.parse(discount)).toString(), taxModel: element))
+      taxAmount = (double.parse(taxAmount) +
+              Constant().calculateTax(
+                  amount: (double.parse(subTotal) - double.parse(discount))
+                      .toString(),
+                  taxModel: element))
           .toStringAsFixed(int.tryParse(Constant.decimal.toString()) ?? 2);
     }
 
-    return ((double.parse(subTotal) - (double.parse(discount))) + double.parse(taxAmount)).toStringAsFixed(int.tryParse(Constant.decimal.toString()) ?? 2);
+    return ((double.parse(subTotal) - (double.parse(discount))) +
+            double.parse(taxAmount))
+        .toStringAsFixed(int.tryParse(Constant.decimal.toString()) ?? 2);
   }
-
 
   Future<void> completeBooking() async {
     Map<String, dynamic> requestBody = {
@@ -225,7 +258,9 @@ class HomeController extends GetxController {
 
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.completeRequest), headers: API.headers, body: jsonEncode(requestBody)), showLoader: true)
+            request: () => http.post(Uri.parse(API.completeRequest),
+                headers: API.headers, body: jsonEncode(requestBody)),
+            showLoader: true)
         .then(
       (value) async {
         if (value != null) {
@@ -251,7 +286,9 @@ class HomeController extends GetxController {
 
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.rejectRide), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true)
+            request: () => http.post(Uri.parse(API.rejectRide),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
         .then(
       (value) async {
         if (value != null) {
@@ -276,7 +313,9 @@ class HomeController extends GetxController {
 
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.changeStatus), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true)
+            request: () => http.post(Uri.parse(API.changeStatus),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
         .then(
       (value) async {
         if (value != null) {
@@ -285,7 +324,8 @@ class HomeController extends GetxController {
             return null;
           } else {
             await getData();
-            ShowToastDialog.showToast(status.value ? "You are online now" : "You are offline now");
+            ShowToastDialog.showToast(
+                status.value ? "You are online now" : "You are offline now");
             updateCurrentLocation();
           }
         }
@@ -303,7 +343,8 @@ class HomeController extends GetxController {
     };
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.getProfileByPhone), headers: API.headers, body: jsonEncode(bodyParams)),
+            request: () => http.post(Uri.parse(API.getProfileByPhone),
+                headers: API.headers, body: jsonEncode(bodyParams)),
             showLoader: false)
         .then(
       (value) {
@@ -331,26 +372,35 @@ class HomeController extends GetxController {
   Future<void> updateCurrentLocation() async {
     PermissionStatus permissionStatus = await location.hasPermission();
     if (permissionStatus == PermissionStatus.granted) {
-      location.changeSettings(accuracy: LocationAccuracy.high, distanceFilter: double.parse(Constant.driverLocationUpdateUnit.toString()));
+      location.changeSettings(
+          accuracy: LocationAccuracy.high,
+          distanceFilter:
+              double.parse(Constant.driverLocationUpdateUnit.toString()));
       locationSubscription = location.onLocationChanged.listen((locationData) {
         LocationData currentLocation = locationData;
-        setDriverLocationUpdate(currentLocation.latitude.toString(), currentLocation.longitude.toString());
+        setDriverLocationUpdate(currentLocation.latitude.toString(),
+            currentLocation.longitude.toString());
       });
     } else {
       location.requestPermission().then((permissionStatus) {
         if (permissionStatus == PermissionStatus.granted) {
           location.changeSettings(
-              accuracy: LocationAccuracy.high, distanceFilter: double.parse(Constant.driverLocationUpdateUnit.toString()));
-          locationSubscription = location.onLocationChanged.listen((locationData) {
+              accuracy: LocationAccuracy.high,
+              distanceFilter:
+                  double.parse(Constant.driverLocationUpdateUnit.toString()));
+          locationSubscription =
+              location.onLocationChanged.listen((locationData) {
             LocationData currentLocation = locationData;
-            setDriverLocationUpdate(currentLocation.latitude.toString(), currentLocation.longitude.toString());
+            setDriverLocationUpdate(currentLocation.latitude.toString(),
+                currentLocation.longitude.toString());
           });
         }
       });
     }
   }
 
-  Future<void> setDriverLocationUpdate(String latitude, String longitude) async {
+  Future<void> setDriverLocationUpdate(
+      String latitude, String longitude) async {
     Map<String, dynamic> bodyParams = {
       'id_user': Preferences.getInt(Preferences.userId),
       'user_cat': userModel.value.userData!.userCat.toString(),
@@ -358,7 +408,9 @@ class HomeController extends GetxController {
       'longitude': longitude
     };
     await API.handleApiRequest(
-        request: () => http.post(Uri.parse(API.updateLocation), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: false);
+        request: () => http.post(Uri.parse(API.updateLocation),
+            headers: API.headers, body: jsonEncode(bodyParams)),
+        showLoader: false);
   }
 
   var selectedIndex = 0.obs;
@@ -374,7 +426,8 @@ class HomeController extends GetxController {
 
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.getDriverParcelOrders), headers: API.headers, body: jsonEncode(bodyParams)),
+            request: () => http.post(Uri.parse(API.getDriverParcelOrders),
+                headers: API.headers, body: jsonEncode(bodyParams)),
             showLoader: false)
         .then(
       (value) async {
@@ -383,7 +436,9 @@ class HomeController extends GetxController {
             parcelList.clear();
             return null;
           } else {
-            parcelList.value = (value['data'] as List).map((e) => ParcelBookingData.fromJson(e)).toList();
+            parcelList.value = (value['data'] as List)
+                .map((e) => ParcelBookingData.fromJson(e))
+                .toList();
           }
         }
       },
@@ -398,7 +453,9 @@ class HomeController extends GetxController {
 
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.parcelOnride), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true)
+            request: () => http.post(Uri.parse(API.parcelOnride),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
         .then(
       (value) async {
         if (value != null) {
@@ -413,7 +470,8 @@ class HomeController extends GetxController {
     );
   }
 
-  Future<void> completeParcelBooking(ParcelBookingData parcelBookingData) async {
+  Future<void> completeParcelBooking(
+      ParcelBookingData parcelBookingData) async {
     Map<String, dynamic> bodyParams = {
       'id_driver': Preferences.getInt(Preferences.userId),
       'id_parcel': parcelBookingData.id,
@@ -421,7 +479,9 @@ class HomeController extends GetxController {
 
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.parcelComplete), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true)
+            request: () => http.post(Uri.parse(API.parcelComplete),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
         .then(
       (value) async {
         if (value != null) {
@@ -445,7 +505,8 @@ class HomeController extends GetxController {
     };
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.getRecentDriverRentalOrder), headers: API.headers, body: jsonEncode(bodyParams)),
+            request: () => http.post(Uri.parse(API.getRecentDriverRentalOrder),
+                headers: API.headers, body: jsonEncode(bodyParams)),
             showLoader: false)
         .then(
       (value) async {
@@ -455,7 +516,9 @@ class HomeController extends GetxController {
             rentalBookingData.clear();
             return null;
           } else {
-            rentalBookingData.value = (value['data'] as List).map((e) => RentalBookingData.fromJson(e)).toList();
+            rentalBookingData.value = (value['data'] as List)
+                .map((e) => RentalBookingData.fromJson(e))
+                .toList();
           }
         }
       },
@@ -472,7 +535,9 @@ class HomeController extends GetxController {
 
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.rentalOnRide), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true)
+            request: () => http.post(Uri.parse(API.rentalOnRide),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
         .then(
       (value) async {
         if (value != null) {
@@ -497,7 +562,9 @@ class HomeController extends GetxController {
 
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.rentalSetFinalKm), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true)
+            request: () => http.post(Uri.parse(API.rentalSetFinalKm),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
         .then(
       (value) async {
         if (value != null) {

@@ -1,17 +1,17 @@
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/constant/ride_satatus.dart';
-import 'package:cabme_driver/controller/parcel_search_controller.dart';
-import 'package:cabme_driver/model/parcel_bokking_model.dart';
-import 'package:cabme_driver/page/booking_details_screens/parcel_details_screen.dart';
-import 'package:cabme_driver/themes/app_them_data.dart';
-import 'package:cabme_driver/themes/responsive.dart';
-import 'package:cabme_driver/utils/dark_theme_provider.dart';
-import 'package:cabme_driver/utils/network_image_widget.dart';
-import 'package:cabme_driver/widget/dotted_line.dart';
-import 'package:cabme_driver/widget/osm_map/map_picker_page.dart';
-import 'package:cabme_driver/widget/osm_map/place_model.dart';
-import 'package:cabme_driver/widget/place_picker/location_picker_screen.dart';
-import 'package:cabme_driver/widget/place_picker/selected_location_model.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/constant/ride_satatus.dart';
+import 'package:uniqcars_driver/controller/parcel_search_controller.dart';
+import 'package:uniqcars_driver/model/parcel_bokking_model.dart';
+import 'package:uniqcars_driver/page/booking_details_screens/parcel_details_screen.dart';
+import 'package:uniqcars_driver/themes/app_them_data.dart';
+import 'package:uniqcars_driver/themes/responsive.dart';
+import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
+import 'package:uniqcars_driver/utils/network_image_widget.dart';
+import 'package:uniqcars_driver/widget/dotted_line.dart';
+import 'package:uniqcars_driver/widget/osm_map/map_picker_page.dart';
+import 'package:uniqcars_driver/widget/osm_map/place_model.dart';
+import 'package:uniqcars_driver/widget/place_picker/location_picker_screen.dart';
+import 'package:uniqcars_driver/widget/place_picker/selected_location_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -48,28 +48,43 @@ class ParcelSearchScreen extends StatelessWidget {
                             Expanded(
                               child: TextFieldWidget(
                                 readOnly: true,
-                                controller: controller.sourceTextEditController.value,
+                                controller:
+                                    controller.sourceTextEditController.value,
                                 onPress: () async {
                                   if (Constant.selectedMapType == 'osm') {
-                                    PlaceModel? result = await Get.to(() => MapPickerPage());
+                                    PlaceModel? result =
+                                        await Get.to(() => MapPickerPage());
                                     if (result != null) {
-                                      controller.sourceTextEditController.value.text = '';
+                                      controller.sourceTextEditController.value
+                                          .text = '';
                                       final firstPlace = result;
-                                      final lat = firstPlace.coordinates.latitude;
-                                      final lng = firstPlace.coordinates.longitude;
+                                      final lat =
+                                          firstPlace.coordinates.latitude;
+                                      final lng =
+                                          firstPlace.coordinates.longitude;
 
-                                      controller.sourceTextEditController.value.text = result.city.toString();
-                                      controller.departureLatLongOsm.value = latlong.LatLng(lat, lng);
+                                      controller.sourceTextEditController.value
+                                          .text = result.city.toString();
+                                      controller.departureLatLongOsm.value =
+                                          latlong.LatLng(lat, lng);
                                     }
                                   } else {
                                     Get.to(LocationPickerScreen())!.then(
                                       (value) async {
                                         if (value != null) {
-                                          SelectedLocationModel selectedLocationModel = value;
-                                          controller.sourceTextEditController.value.text =
-                                              selectedLocationModel.address!.locality.toString();
+                                          SelectedLocationModel
+                                              selectedLocationModel = value;
+                                          controller.sourceTextEditController
+                                                  .value.text =
+                                              selectedLocationModel
+                                                  .address!.locality
+                                                  .toString();
                                           controller.departureLatLong.value =
-                                              LatLng(selectedLocationModel.latLng!.latitude, selectedLocationModel.latLng!.longitude);
+                                              LatLng(
+                                                  selectedLocationModel
+                                                      .latLng!.latitude,
+                                                  selectedLocationModel
+                                                      .latLng!.longitude);
                                         }
                                       },
                                     );
@@ -77,8 +92,10 @@ class ParcelSearchScreen extends StatelessWidget {
                                 },
                                 hintText: 'Where you want to go?',
                                 prefix: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                                  child: SvgPicture.asset("assets/icons/ic_source.svg"),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
+                                  child: SvgPicture.asset(
+                                      "assets/icons/ic_source.svg"),
                                 ),
                               ),
                             ),
@@ -88,31 +105,48 @@ class ParcelSearchScreen extends StatelessWidget {
                             Expanded(
                               child: TextFieldWidget(
                                 readOnly: true,
-                                controller: controller.destinationTextEditController.value,
+                                controller: controller
+                                    .destinationTextEditController.value,
                                 onPress: () async {
                                   if (Constant.selectedMapType == 'osm') {
-                                    PlaceModel? result = await Get.to(() => MapPickerPage());
+                                    PlaceModel? result =
+                                        await Get.to(() => MapPickerPage());
                                     if (result != null) {
-                                      controller.destinationTextEditController.value.text = '';
+                                      controller.destinationTextEditController
+                                          .value.text = '';
                                       final firstPlace = result;
-                                      final lat = firstPlace.coordinates.latitude;
-                                      final lng = firstPlace.coordinates.longitude;
+                                      final lat =
+                                          firstPlace.coordinates.latitude;
+                                      final lng =
+                                          firstPlace.coordinates.longitude;
                                       // ignore: unused_local_variable
                                       final address = firstPlace.address;
-                                      controller.destinationTextEditController.value.text = result.city.toString();
-                                      controller.destinationLatLongOsm.value = latlong.LatLng(lat, lng);
+                                      controller.destinationTextEditController
+                                          .value.text = result.city.toString();
+                                      controller.destinationLatLongOsm.value =
+                                          latlong.LatLng(lat, lng);
                                     }
                                   } else {
                                     Get.to(LocationPickerScreen())!.then(
                                       (value) async {
                                         if (value != null) {
-                                          SelectedLocationModel selectedLocationModel = value;
+                                          SelectedLocationModel
+                                              selectedLocationModel = value;
 
-                                          controller.destinationTextEditController.value.text =
-                                              selectedLocationModel.address!.locality.toString();
+                                          controller
+                                                  .destinationTextEditController
+                                                  .value
+                                                  .text =
+                                              selectedLocationModel
+                                                  .address!.locality
+                                                  .toString();
 
                                           controller.destinationLatLong.value =
-                                              LatLng(selectedLocationModel.latLng!.latitude, selectedLocationModel.latLng!.longitude);
+                                              LatLng(
+                                                  selectedLocationModel
+                                                      .latLng!.latitude,
+                                                  selectedLocationModel
+                                                      .latLng!.longitude);
                                         }
                                       },
                                     );
@@ -120,15 +154,18 @@ class ParcelSearchScreen extends StatelessWidget {
                                 },
                                 hintText: 'Where to?',
                                 prefix: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                                  child: SvgPicture.asset("assets/icons/ic_destination.svg"),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
+                                  child: SvgPicture.asset(
+                                      "assets/icons/ic_destination.svg"),
                                 ),
                               ),
                             ),
                           ],
                         ),
                         TextFieldWidget(
-                          controller: controller.dateTimeTextEditController.value,
+                          controller:
+                              controller.dateTimeTextEditController.value,
                           hintText: 'Select Date',
                           readOnly: true,
                           onPress: () async {
@@ -136,7 +173,8 @@ class ParcelSearchScreen extends StatelessWidget {
                           },
                           prefix: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: SvgPicture.asset("assets/images/ic_data.svg"),
+                            child:
+                                SvgPicture.asset("assets/images/ic_data.svg"),
                           ),
                         ),
                         RoundedButtonFill(
@@ -151,29 +189,40 @@ class ParcelSearchScreen extends StatelessWidget {
                         ),
                         Expanded(
                           child: controller.parcelList.isEmpty
-                              ? Constant.showEmptyView(message: "Parcel Booking not found".tr)
+                              ? Constant.showEmptyView(
+                                  message: "Parcel Booking not found".tr)
                               : ListView.builder(
                                   itemCount: controller.parcelList.length,
                                   shrinkWrap: true,
                                   padding: EdgeInsets.zero,
                                   itemBuilder: (context, index) {
-                                    ParcelBookingData parcelBookingData = controller.parcelList[index];
+                                    ParcelBookingData parcelBookingData =
+                                        controller.parcelList[index];
                                     return InkWell(
                                       onTap: () {
-                                        Get.to(ParcelDetailsScreen(), arguments: {"parcelBookingData": parcelBookingData});
+                                        Get.to(ParcelDetailsScreen(),
+                                            arguments: {
+                                              "parcelBookingData":
+                                                  parcelBookingData
+                                            });
                                       },
                                       child: Container(
                                         width: Responsive.width(100, context),
                                         margin: const EdgeInsets.all(8),
                                         padding: const EdgeInsets.all(16),
                                         decoration: ShapeDecoration(
-                                          color: themeChange.getThem() ? AppThemeData.neutralDark50 : AppThemeData.neutral50,
+                                          color: themeChange.getThem()
+                                              ? AppThemeData.neutralDark50
+                                              : AppThemeData.neutral50,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                           ),
                                           shadows: [
                                             BoxShadow(
-                                              color: themeChange.getThem() ? AppThemeData.neutralDark200 : Color(0x14000000),
+                                              color: themeChange.getThem()
+                                                  ? AppThemeData.neutralDark200
+                                                  : Color(0x14000000),
                                               blurRadius: 23,
                                               offset: Offset(0, 0),
                                               spreadRadius: 0,
@@ -181,49 +230,77 @@ class ParcelSearchScreen extends StatelessWidget {
                                           ],
                                         ),
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Container(
                                               decoration: BoxDecoration(
-                                                color: themeChange.getThem() ? AppThemeData.neutralDark100 : AppThemeData.neutral100,
-                                                borderRadius: BorderRadius.circular(10),
+                                                color: themeChange.getThem()
+                                                    ? AppThemeData
+                                                        .neutralDark100
+                                                    : AppThemeData.neutral100,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
                                               ),
                                               child: Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16,
+                                                        vertical: 10),
                                                 child: Timeline.tileBuilder(
                                                   shrinkWrap: true,
                                                   padding: EdgeInsets.zero,
-                                                  physics: const NeverScrollableScrollPhysics(),
+                                                  physics:
+                                                      const NeverScrollableScrollPhysics(),
                                                   theme: TimelineThemeData(
                                                     nodePosition: 0,
                                                     // indicatorPosition: 0,
                                                   ),
-                                                  builder: TimelineTileBuilder.connected(
-                                                    contentsAlign: ContentsAlign.basic,
-                                                    indicatorBuilder: (context, index) {
+                                                  builder: TimelineTileBuilder
+                                                      .connected(
+                                                    contentsAlign:
+                                                        ContentsAlign.basic,
+                                                    indicatorBuilder:
+                                                        (context, index) {
                                                       return index == 0
-                                                          ? SvgPicture.asset("assets/icons/ic_sender.svg")
+                                                          ? SvgPicture.asset(
+                                                              "assets/icons/ic_sender.svg")
                                                           : index == 1
-                                                              ? SvgPicture.asset("assets/icons/ic_recevier.svg")
+                                                              ? SvgPicture.asset(
+                                                                  "assets/icons/ic_recevier.svg")
                                                               : SizedBox();
                                                     },
-                                                    connectorBuilder: (context, index, connectorType) {
+                                                    connectorBuilder: (context,
+                                                        index, connectorType) {
                                                       return DashedLineConnector(
-                                                        color:
-                                                            themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
+                                                        color: themeChange
+                                                                .getThem()
+                                                            ? AppThemeData
+                                                                .neutralDark300
+                                                            : AppThemeData
+                                                                .neutral300,
                                                         gap: 4,
                                                       );
                                                     },
-                                                    contentsBuilder: (context, index) {
+                                                    contentsBuilder:
+                                                        (context, index) {
                                                       return Padding(
-                                                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 14,
+                                                                vertical: 10),
                                                         child: Text(
-                                                          index == 0 ? "${parcelBookingData.source}" : "${parcelBookingData.destination}",
+                                                          index == 0
+                                                              ? "${parcelBookingData.source}"
+                                                              : "${parcelBookingData.destination}",
                                                           style: AppThemeData.mediumTextStyle(
                                                               fontSize: 14,
                                                               color: themeChange.getThem()
-                                                                  ? AppThemeData.neutralDark900
-                                                                  : AppThemeData.neutral900),
+                                                                  ? AppThemeData
+                                                                      .neutralDark900
+                                                                  : AppThemeData
+                                                                      .neutral900),
                                                         ),
                                                       );
                                                     },
@@ -237,7 +314,9 @@ class ParcelSearchScreen extends StatelessWidget {
                                               children: [
                                                 ClipOval(
                                                   child: NetworkImageWidget(
-                                                    imageUrl: parcelBookingData.user!.image.toString(),
+                                                    imageUrl: parcelBookingData
+                                                        .user!.image
+                                                        .toString(),
                                                     width: 52,
                                                     height: 52,
                                                     fit: BoxFit.cover,
@@ -248,16 +327,23 @@ class ParcelSearchScreen extends StatelessWidget {
                                                 ),
                                                 Expanded(
                                                   child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       Text(
-                                                        '${parcelBookingData.user!.prenom} ${parcelBookingData.user!.nom}'.tr,
-                                                        textAlign: TextAlign.start,
+                                                        '${parcelBookingData.user!.prenom} ${parcelBookingData.user!.nom}'
+                                                            .tr,
+                                                        textAlign:
+                                                            TextAlign.start,
                                                         style: AppThemeData.boldTextStyle(
                                                             fontSize: 16,
-                                                            color: themeChange.getThem()
-                                                                ? AppThemeData.neutralDark900
-                                                                : AppThemeData.neutral900),
+                                                            color: themeChange
+                                                                    .getThem()
+                                                                ? AppThemeData
+                                                                    .neutralDark900
+                                                                : AppThemeData
+                                                                    .neutral900),
                                                       ),
                                                       SizedBox(
                                                         height: 5,
@@ -265,20 +351,33 @@ class ParcelSearchScreen extends StatelessWidget {
                                                       Container(
                                                         width: 75,
                                                         decoration: BoxDecoration(
-                                                            borderRadius: BorderRadius.circular(30),
-                                                            color: themeChange.getThem()
-                                                                ? AppThemeData.successLight
-                                                                : AppThemeData.successLight),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        30),
+                                                            color: themeChange
+                                                                    .getThem()
+                                                                ? AppThemeData
+                                                                    .successLight
+                                                                : AppThemeData
+                                                                    .successLight),
                                                         child: Padding(
-                                                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  horizontal:
+                                                                      14,
+                                                                  vertical: 4),
                                                           child: Row(
                                                             children: [
                                                               Icon(
                                                                 Icons.star_half,
                                                                 size: 14,
                                                                 color: themeChange.getThem()
-                                                                    ? AppThemeData.successDefault
-                                                                    : AppThemeData.successDefault,
+                                                                    ? AppThemeData
+                                                                        .successDefault
+                                                                    : AppThemeData
+                                                                        .successDefault,
                                                               ),
                                                               SizedBox(
                                                                 width: 5,
@@ -286,10 +385,13 @@ class ParcelSearchScreen extends StatelessWidget {
                                                               Text(
                                                                 "${parcelBookingData.user!.averageRating}",
                                                                 style: AppThemeData.mediumTextStyle(
-                                                                    fontSize: 14,
+                                                                    fontSize:
+                                                                        14,
                                                                     color: themeChange.getThem()
-                                                                        ? AppThemeData.successDefault
-                                                                        : AppThemeData.successDefault),
+                                                                        ? AppThemeData
+                                                                            .successDefault
+                                                                        : AppThemeData
+                                                                            .successDefault),
                                                               ),
                                                             ],
                                                           ),
@@ -308,18 +410,28 @@ class ParcelSearchScreen extends StatelessWidget {
                                                 Expanded(
                                                   child: Column(
                                                     children: [
-                                                      SvgPicture.asset("assets/icons/ic_amount.svg"),
+                                                      SvgPicture.asset(
+                                                          "assets/icons/ic_amount.svg"),
                                                       SizedBox(
                                                         height: 5,
                                                       ),
                                                       Text(
-                                                        Constant().amountShow(amount: controller.calculateParcelTotalAmountBooking(parcelBookingData)).tr,
-                                                        textAlign: TextAlign.start,
+                                                        Constant()
+                                                            .amountShow(
+                                                                amount: controller
+                                                                    .calculateParcelTotalAmountBooking(
+                                                                        parcelBookingData))
+                                                            .tr,
+                                                        textAlign:
+                                                            TextAlign.start,
                                                         style: AppThemeData.semiBoldTextStyle(
                                                             fontSize: 12,
-                                                            color: themeChange.getThem()
-                                                                ? AppThemeData.neutralDark900
-                                                                : AppThemeData.neutral900),
+                                                            color: themeChange
+                                                                    .getThem()
+                                                                ? AppThemeData
+                                                                    .neutralDark900
+                                                                : AppThemeData
+                                                                    .neutral900),
                                                       )
                                                     ],
                                                   ),
@@ -327,18 +439,24 @@ class ParcelSearchScreen extends StatelessWidget {
                                                 Expanded(
                                                   child: Column(
                                                     children: [
-                                                      SvgPicture.asset("assets/images/ic_data.svg"),
+                                                      SvgPicture.asset(
+                                                          "assets/images/ic_data.svg"),
                                                       SizedBox(
                                                         height: 5,
                                                       ),
                                                       Text(
-                                                        '${parcelBookingData.receiveDate}  '.tr,
-                                                        textAlign: TextAlign.start,
+                                                        '${parcelBookingData.receiveDate}  '
+                                                            .tr,
+                                                        textAlign:
+                                                            TextAlign.start,
                                                         style: AppThemeData.semiBoldTextStyle(
                                                             fontSize: 12,
-                                                            color: themeChange.getThem()
-                                                                ? AppThemeData.neutralDark900
-                                                                : AppThemeData.neutral900),
+                                                            color: themeChange
+                                                                    .getThem()
+                                                                ? AppThemeData
+                                                                    .neutralDark900
+                                                                : AppThemeData
+                                                                    .neutral900),
                                                       )
                                                     ],
                                                   ),
@@ -347,7 +465,10 @@ class ParcelSearchScreen extends StatelessWidget {
                                                   child: Column(
                                                     children: [
                                                       NetworkImageWidget(
-                                                        imageUrl: parcelBookingData.parcelTypeImage.toString(),
+                                                        imageUrl:
+                                                            parcelBookingData
+                                                                .parcelTypeImage
+                                                                .toString(),
                                                         width: 20,
                                                         height: 20,
                                                       ),
@@ -355,13 +476,18 @@ class ParcelSearchScreen extends StatelessWidget {
                                                         height: 5,
                                                       ),
                                                       Text(
-                                                        '${parcelBookingData.parcelType}'.tr,
-                                                        textAlign: TextAlign.start,
+                                                        '${parcelBookingData.parcelType}'
+                                                            .tr,
+                                                        textAlign:
+                                                            TextAlign.start,
                                                         style: AppThemeData.semiBoldTextStyle(
                                                             fontSize: 12,
-                                                            color: themeChange.getThem()
-                                                                ? AppThemeData.neutralDark900
-                                                                : AppThemeData.neutral900),
+                                                            color: themeChange
+                                                                    .getThem()
+                                                                ? AppThemeData
+                                                                    .neutralDark900
+                                                                : AppThemeData
+                                                                    .neutral900),
                                                       )
                                                     ],
                                                   ),
@@ -377,31 +503,54 @@ class ParcelSearchScreen extends StatelessWidget {
                                               direction: Axis.horizontal,
                                             ),
                                             const SizedBox(height: 16),
-                                            parcelBookingData.status == RideStatus.confirmed
+                                            parcelBookingData.status ==
+                                                    RideStatus.confirmed
                                                 ? RoundedButtonFill(
                                                     title: "Pickup Parcel".tr,
                                                     height: 5.5,
-                                                    color:
-                                                        themeChange.getThem() ? AppThemeData.successDefault : AppThemeData.successDefault,
-                                                    textColor: themeChange.getThem() ? AppThemeData.neutral50 : AppThemeData.neutral50,
+                                                    color: themeChange.getThem()
+                                                        ? AppThemeData
+                                                            .successDefault
+                                                        : AppThemeData
+                                                            .successDefault,
+                                                    textColor: themeChange
+                                                            .getThem()
+                                                        ? AppThemeData.neutral50
+                                                        : AppThemeData
+                                                            .neutral50,
                                                     onPress: () async {},
                                                   )
-                                                : parcelBookingData.status == RideStatus.onRide
+                                                : parcelBookingData.status ==
+                                                        RideStatus.onRide
                                                     ? RoundedButtonFill(
-                                                        title: "Payment Pending".tr,
+                                                        title: "Payment Pending"
+                                                            .tr,
                                                         height: 5.5,
-                                                        color:
-                                                            themeChange.getThem() ? AppThemeData.errorDefault : AppThemeData.errorDefault,
-                                                        textColor: themeChange.getThem() ? AppThemeData.neutral50 : AppThemeData.neutral50,
+                                                        color: themeChange
+                                                                .getThem()
+                                                            ? AppThemeData
+                                                                .errorDefault
+                                                            : AppThemeData
+                                                                .errorDefault,
+                                                        textColor: themeChange
+                                                                .getThem()
+                                                            ? AppThemeData
+                                                                .neutral50
+                                                            : AppThemeData
+                                                                .neutral50,
                                                         onPress: () async {},
                                                       )
                                                     : RoundedButtonFill(
                                                         title: "Accept".tr,
                                                         height: 5.5,
-                                                        color: AppThemeData.successDefault,
-                                                        textColor: AppThemeData.neutral50,
+                                                        color: AppThemeData
+                                                            .successDefault,
+                                                        textColor: AppThemeData
+                                                            .neutral50,
                                                         onPress: () async {
-                                                          controller.acceptParcelBooking(parcelBookingData);
+                                                          controller
+                                                              .acceptParcelBooking(
+                                                                  parcelBookingData);
                                                         },
                                                       )
                                           ],

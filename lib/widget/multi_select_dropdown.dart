@@ -1,6 +1,6 @@
-import 'package:cabme_driver/themes/app_them_data.dart';
-import 'package:cabme_driver/themes/round_button_fill.dart';
-import 'package:cabme_driver/utils/dark_theme_provider.dart';
+import 'package:uniqcars_driver/themes/app_them_data.dart';
+import 'package:uniqcars_driver/themes/round_button_fill.dart';
+import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -26,19 +26,25 @@ class MultiSelectDropdown<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeChange = Provider.of<DarkThemeProvider>(context);
-    if (selectedItems.isEmpty && initialSelectedItems != null && initialSelectedItems!.isNotEmpty) {
+    if (selectedItems.isEmpty &&
+        initialSelectedItems != null &&
+        initialSelectedItems!.isNotEmpty) {
       selectedItems.addAll(initialSelectedItems!);
     }
 
     return Obx(() => InkWell(
-          onTap: () => _showMultiSelectDialog(themeChange,context),
+          onTap: () => _showMultiSelectDialog(themeChange, context),
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
             decoration: BoxDecoration(
-              color: themeChange.getThem() ? AppThemeData.neutralDark100 : AppThemeData.neutral100,
+              color: themeChange.getThem()
+                  ? AppThemeData.neutralDark100
+                  : AppThemeData.neutral100,
               borderRadius: BorderRadius.circular(40),
               border: Border.all(
-                color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
+                color: themeChange.getThem()
+                    ? AppThemeData.neutralDark300
+                    : AppThemeData.neutral300,
                 width: 1,
               ),
             ),
@@ -47,9 +53,13 @@ class MultiSelectDropdown<T> extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    selectedItems.isEmpty ? hintText : selectedItems.map(labelSelector).join(', '),
+                    selectedItems.isEmpty
+                        ? hintText
+                        : selectedItems.map(labelSelector).join(', '),
                     style: TextStyle(
-                      color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                      color: themeChange.getThem()
+                          ? AppThemeData.neutralDark900
+                          : AppThemeData.neutral900,
                       fontFamily: AppThemeData.medium,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -57,7 +67,9 @@ class MultiSelectDropdown<T> extends StatelessWidget {
                 ),
                 Icon(
                   Icons.arrow_drop_down,
-                  color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                  color: themeChange.getThem()
+                      ? AppThemeData.neutralDark900
+                      : AppThemeData.neutral900,
                 )
               ],
             ),
@@ -65,14 +77,19 @@ class MultiSelectDropdown<T> extends StatelessWidget {
         ));
   }
 
-  void _showMultiSelectDialog(themeChange,BuildContext context) {
+  void _showMultiSelectDialog(themeChange, BuildContext context) {
     showDialog(
       context: context,
       builder: (_) {
         return AlertDialog(
           title: Text(
             dialogTitle.tr,
-            style: AppThemeData.boldTextStyle(fontSize: 18, color: themeChange.getThem() ? AppThemeData.primaryDefault : AppThemeData.primaryDefault,),
+            style: AppThemeData.boldTextStyle(
+              fontSize: 18,
+              color: themeChange.getThem()
+                  ? AppThemeData.primaryDefault
+                  : AppThemeData.primaryDefault,
+            ),
           ),
           content: SizedBox(
             width: double.maxFinite,
@@ -83,7 +100,12 @@ class MultiSelectDropdown<T> extends StatelessWidget {
                       value: selectedItems.contains(item),
                       title: Text(
                         labelSelector(item),
-                        style: AppThemeData.semiBoldTextStyle(fontSize: 14, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,),
+                        style: AppThemeData.semiBoldTextStyle(
+                          fontSize: 14,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark900
+                              : AppThemeData.neutral900,
+                        ),
                       ),
                       onChanged: (bool? selected) {
                         if (selected == true) {

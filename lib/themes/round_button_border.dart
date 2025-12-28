@@ -1,4 +1,4 @@
-import 'package:cabme_driver/themes/responsive.dart';
+import 'package:uniqcars_driver/themes/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -53,7 +53,11 @@ class RoundedButtonBorder extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            (isRight == false) ? Padding(padding: const EdgeInsets.only(right: 5, left: 20), child: icon) : const SizedBox(),
+            (isRight == false)
+                ? Padding(
+                    padding: const EdgeInsets.only(right: 5, left: 20),
+                    child: icon)
+                : const SizedBox(),
             isCenter == true
                 ? Text(
                     title.toString().tr,
@@ -75,7 +79,11 @@ class RoundedButtonBorder extends StatelessWidget {
                       ),
                     ),
                   ),
-            (isRight == true) ? Padding(padding: const EdgeInsets.only(left: 0, right: 20), child: icon) : const SizedBox(),
+            (isRight == true)
+                ? Padding(
+                    padding: const EdgeInsets.only(left: 0, right: 20),
+                    child: icon)
+                : const SizedBox(),
           ],
         ),
       ),

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:cabme_driver/constant/constant.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -48,7 +48,8 @@ class _MidtransScreenState extends State<MidtransScreen> {
               }
             } else {
               log("Midtrans :: ${navigation.url}");
-              String? orderId = Uri.parse(navigation.url).queryParameters['merchant_order_id'];
+              String? orderId = Uri.parse(navigation.url)
+                  .queryParameters['merchant_order_id'];
               await Future.delayed(const Duration(seconds: 2));
               if (orderId != null) {
                 Get.back(result: true);
@@ -84,9 +85,10 @@ class _MidtransScreenState extends State<MidtransScreen> {
                     color: Colors.white,
                   ),
                 )),
-            body: Stack(
-                alignment: Alignment.center,
-                children: [WebViewWidget(controller: controller), Visibility(visible: isLoading, child: Constant.loader(context))])));
+            body: Stack(alignment: Alignment.center, children: [
+              WebViewWidget(controller: controller),
+              Visibility(visible: isLoading, child: Constant.loader(context))
+            ])));
   }
 
   Future<void> _showMyDialog() async {

@@ -2,7 +2,7 @@
 
 import 'dart:async';
 
-import 'package:cabme_driver/service/api.dart';
+import 'package:uniqcars_driver/service/api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -41,7 +41,8 @@ class _MercadoPagoScreenState extends State<MercadoPagoScreen> {
             if (navigation.url.contains("${API.baseUrl}payment/success")) {
               Get.back(result: true);
             }
-            if (navigation.url.contains("${API.baseUrl}payment/failure") || navigation.url.contains("${API.baseUrl}payment/pending")) {
+            if (navigation.url.contains("${API.baseUrl}payment/failure") ||
+                navigation.url.contains("${API.baseUrl}payment/pending")) {
               Get.back(result: false);
             }
             return NavigationDecision.navigate;

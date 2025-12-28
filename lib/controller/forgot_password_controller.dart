@@ -1,25 +1,32 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/service/api.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/service/api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class ForgotPasswordController extends GetxController {
-  Rx<TextEditingController> emailTextEditController = TextEditingController().obs;
+  Rx<TextEditingController> emailTextEditController =
+      TextEditingController().obs;
 
   Rx<TextEditingController> otpEditingController = TextEditingController().obs;
   Rx<TextEditingController> passwordController = TextEditingController().obs;
-  Rx<TextEditingController> conformPasswordController = TextEditingController().obs;
+  Rx<TextEditingController> conformPasswordController =
+      TextEditingController().obs;
 
   RxBool isPasswordShow = true.obs;
   RxBool isConformPasswordShow = true.obs;
 
   Future<bool?> sendEmail(Map<String, String> bodyParams) async {
     bool? isSuccess = false;
-    await API.handleApiRequest(request: () => http.post(Uri.parse(API.sendResetPasswordOtp), headers: API.authheader, body: jsonEncode(bodyParams)), showLoader: true).then(
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.sendResetPasswordOtp),
+                headers: API.authheader, body: jsonEncode(bodyParams)),
+            showLoader: true)
+        .then(
       (value) {
         if (value != null) {
           ShowToastDialog.closeLoader();
@@ -37,7 +44,12 @@ class ForgotPasswordController extends GetxController {
     print(bodyParams);
     bool? isSuccess = false;
     ShowToastDialog.showLoader("Please wait");
-    await API.handleApiRequest(request: () => http.post(Uri.parse(API.resetPasswordOtp), headers: API.authheader, body: jsonEncode(bodyParams)), showLoader: true).then(
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.resetPasswordOtp),
+                headers: API.authheader, body: jsonEncode(bodyParams)),
+            showLoader: true)
+        .then(
       (value) {
         if (value != null) {
           ShowToastDialog.closeLoader();

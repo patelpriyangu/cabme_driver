@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/model/user_model.dart';
-import 'package:cabme_driver/service/api.dart';
-import 'package:cabme_driver/utils/Preferences.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/model/user_model.dart';
+import 'package:uniqcars_driver/service/api.dart';
+import 'package:uniqcars_driver/utils/Preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -19,7 +19,8 @@ class EditProfileController extends GetxController {
   Rx<TextEditingController> firstNameController = TextEditingController().obs;
   Rx<TextEditingController> lastNameController = TextEditingController().obs;
   Rx<TextEditingController> phoneNumber = TextEditingController().obs;
-  Rx<TextEditingController> countryCodeController = TextEditingController(text: "+91").obs;
+  Rx<TextEditingController> countryCodeController =
+      TextEditingController(text: "+91").obs;
   Rx<TextEditingController> emailController = TextEditingController().obs;
 
   Rx<UserModel> userModel = UserModel().obs;
@@ -37,7 +38,8 @@ class EditProfileController extends GetxController {
     lastNameController.value.text = userModel.value.userData!.nom ?? '';
     emailController.value.text = userModel.value.userData!.email ?? '';
     phoneNumber.value.text = userModel.value.userData!.phone ?? '';
-    countryCodeController.value.text = userModel.value.userData!.countryCode ?? '';
+    countryCodeController.value.text =
+        userModel.value.userData!.countryCode ?? '';
     profileImage.value = userModel.value.userData!.photoPath ?? '';
   }
 
@@ -58,9 +60,12 @@ class EditProfileController extends GetxController {
       request.headers.addAll(API.headers);
       request.fields['nom'] = lname;
       request.fields['prenom'] = name;
-      request.fields['id_user'] = Preferences.getInt(Preferences.userId).toString();
-      if (Constant().hasValidUrl(profileImage.value) == false && profileImage.value.isNotEmpty) {
-        request.files.add(http.MultipartFile.fromBytes('image', File(image.toString()).readAsBytesSync(),
+      request.fields['id_user'] =
+          Preferences.getInt(Preferences.userId).toString();
+      if (Constant().hasValidUrl(profileImage.value) == false &&
+          profileImage.value.isNotEmpty) {
+        request.files.add(http.MultipartFile.fromBytes(
+            'image', File(image.toString()).readAsBytesSync(),
             filename: File(image.toString()).path.split('/').last));
       }
       request.fields['email'] = email;
@@ -73,7 +78,8 @@ class EditProfileController extends GetxController {
       var res = await request.send();
 
       var responseData = await res.stream.toBytes();
-      Map<String, dynamic> response = jsonDecode(String.fromCharCodes(responseData));
+      Map<String, dynamic> response =
+          jsonDecode(String.fromCharCodes(responseData));
 
       if (res.statusCode == 200) {
         log(response.toString());
@@ -85,7 +91,8 @@ class EditProfileController extends GetxController {
         Get.back(result: true);
       } else {
         ShowToastDialog.closeLoader();
-        ShowToastDialog.showToast('Something want wrong. Please try again later');
+        ShowToastDialog.showToast(
+            'Something want wrong. Please try again later');
         throw Exception('Failed to load album');
       }
     } on TimeoutException catch (e) {

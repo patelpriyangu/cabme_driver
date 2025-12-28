@@ -1,9 +1,9 @@
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/themes/app_them_data.dart';
-import 'package:cabme_driver/themes/responsive.dart';
-import 'package:cabme_driver/themes/round_button_fill.dart';
-import 'package:cabme_driver/utils/dark_theme_provider.dart';
-import 'package:cabme_driver/widget/place_picker/location_controller.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/themes/app_them_data.dart';
+import 'package:uniqcars_driver/themes/responsive.dart';
+import 'package:uniqcars_driver/themes/round_button_fill.dart';
+import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
+import 'package:uniqcars_driver/widget/place_picker/location_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
 import 'package:flutter_google_places_hoc081098/google_maps_webservice_places.dart';
@@ -12,7 +12,8 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
-final GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: Constant.kGoogleApiKey);
+final GoogleMapsPlaces _places =
+    GoogleMapsPlaces(apiKey: Constant.kGoogleApiKey);
 
 class LocationPickerScreen extends StatelessWidget {
   const LocationPickerScreen({super.key});
@@ -47,14 +48,16 @@ class LocationPickerScreen extends StatelessWidget {
                                   markerId: const MarkerId("selected-location"),
                                   position: controller.selectedLocation.value!,
                                   onTap: () {
-                                    controller.getAddressFromLatLng(controller.selectedLocation.value!);
+                                    controller.getAddressFromLatLng(
+                                        controller.selectedLocation.value!);
                                   },
                                 )
                               },
                         onCameraMove: controller.onMapMoved,
                         onCameraIdle: () {
                           if (controller.selectedLocation.value != null) {
-                            controller.getAddressFromLatLng(controller.selectedLocation.value!);
+                            controller.getAddressFromLatLng(
+                                controller.selectedLocation.value!);
                           }
                         },
                       ),
@@ -71,7 +74,9 @@ class LocationPickerScreen extends StatelessWidget {
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                            color: themeChange.getThem() ? AppThemeData.neutralDark50 : AppThemeData.neutral50,
+                            color: themeChange.getThem()
+                                ? AppThemeData.neutralDark50
+                                : AppThemeData.neutral50,
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: Padding(
@@ -79,7 +84,10 @@ class LocationPickerScreen extends StatelessWidget {
                             child: SvgPicture.asset(
                               "assets/icons/ic_back.svg",
                               colorFilter: ColorFilter.mode(
-                                  themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900, BlendMode.srcIn),
+                                  themeChange.getThem()
+                                      ? AppThemeData.neutralDark900
+                                      : AppThemeData.neutral900,
+                                  BlendMode.srcIn),
                             ),
                           ),
                         ),
@@ -97,7 +105,8 @@ class LocationPickerScreen extends StatelessWidget {
                             components: [Component(Component.country, "us")],
                           );
                           if (p != null) {
-                            final detail = await _places.getDetailsByPlaceId(p.placeId!);
+                            final detail =
+                                await _places.getDetailsByPlaceId(p.placeId!);
                             final lat = detail.result.geometry!.location.lat;
                             final lng = detail.result.geometry!.location.lng;
                             final LatLng pos = LatLng(lat, lng);
@@ -110,7 +119,8 @@ class LocationPickerScreen extends StatelessWidget {
                         },
                         child: Container(
                           width: Responsive.width(100, context),
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(60),
@@ -146,7 +156,8 @@ class LocationPickerScreen extends StatelessWidget {
                         Obx(() => Text(
                               controller.address.value,
                               textAlign: TextAlign.center,
-                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w500),
                             )),
                         const SizedBox(height: 10),
                         RoundedButtonFill(

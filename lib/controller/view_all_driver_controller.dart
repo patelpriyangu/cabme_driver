@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/model/user_model.dart';
-import 'package:cabme_driver/service/api.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/model/user_model.dart';
+import 'package:uniqcars_driver/service/api.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -31,7 +31,12 @@ class ViewAllDriverController extends GetxController {
     Map<String, String> bodyParams = {
       'owner_id': userModel.value.userData!.id.toString(),
     };
-    await API.handleApiRequest(request: () => http.post(Uri.parse(API.getOwnerDriver), body: jsonEncode(bodyParams), headers: API.headers), showLoader: false).then(
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.getOwnerDriver),
+                body: jsonEncode(bodyParams), headers: API.headers),
+            showLoader: false)
+        .then(
       (value) {
         if (value != null) {
           if (value['success'] == "failed" || value['success'] == "Failed") {
@@ -39,7 +44,9 @@ class ViewAllDriverController extends GetxController {
             ShowToastDialog.showToast(value['message']);
             return null;
           } else {
-            driverList.value = (value['data'] as List).map((e) => UserData.fromJson(e)).toList();
+            driverList.value = (value['data'] as List)
+                .map((e) => UserData.fromJson(e))
+                .toList();
           }
         }
       },
@@ -50,7 +57,12 @@ class ViewAllDriverController extends GetxController {
     Map<String, String> bodyParams = {
       'id_driver': driverId,
     };
-    await API.handleApiRequest(request: () => http.post(Uri.parse(API.deleteOwnerDriver), body: jsonEncode(bodyParams), headers: API.headers), showLoader: false).then(
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.deleteOwnerDriver),
+                body: jsonEncode(bodyParams), headers: API.headers),
+            showLoader: false)
+        .then(
       (value) async {
         if (value != null) {
           if (value['success'] == "failed" || value['success'] == "Failed") {

@@ -1,13 +1,13 @@
 import 'dart:convert';
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/constant/ride_satatus.dart';
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/model/booking_mode.dart';
-import 'package:cabme_driver/model/parcel_bokking_model.dart';
-import 'package:cabme_driver/model/rental_booking_model.dart';
-import 'package:cabme_driver/model/user_model.dart';
-import 'package:cabme_driver/service/api.dart';
-import 'package:cabme_driver/utils/Preferences.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/constant/ride_satatus.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/model/booking_mode.dart';
+import 'package:uniqcars_driver/model/parcel_bokking_model.dart';
+import 'package:uniqcars_driver/model/rental_booking_model.dart';
+import 'package:uniqcars_driver/model/user_model.dart';
+import 'package:uniqcars_driver/service/api.dart';
+import 'package:uniqcars_driver/utils/Preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -18,21 +18,26 @@ class BookingController extends GetxController {
   final LayerLink layerLink = LayerLink();
   GlobalKey overlayKey = GlobalKey();
 
-  Rx<TextEditingController> currentKilometerController = TextEditingController().obs;
-  Rx<TextEditingController> completeKilometerController = TextEditingController().obs;
+  Rx<TextEditingController> currentKilometerController =
+      TextEditingController().obs;
+  Rx<TextEditingController> completeKilometerController =
+      TextEditingController().obs;
 
-   RxList<String> types = <String>[].obs;
+  RxList<String> types = <String>[].obs;
 
-   Rx<UserModel> userModel = UserModel().obs;
+  Rx<UserModel> userModel = UserModel().obs;
   @override
   void onInit() {
     // TODO: implement onInit
     userModel.value = Constant.getUserData();
     getBookingList();
     types.value = [
-      if(userModel.value.userData!.serviceType!.contains("ride"))'Ride Booking',
-      if(userModel.value.userData!.serviceType!.contains("parcel"))'Parcel Delivery',
-      if(userModel.value.userData!.serviceType!.contains("rental"))'Rental Cars',
+      if (userModel.value.userData!.serviceType!.contains("ride"))
+        'Ride Booking',
+      if (userModel.value.userData!.serviceType!.contains("parcel"))
+        'Parcel Delivery',
+      if (userModel.value.userData!.serviceType!.contains("rental"))
+        'Rental Cars',
     ];
     isLoading.value = false;
     super.onInit();
@@ -50,7 +55,6 @@ class BookingController extends GetxController {
   RxList<ParcelBookingData> completedParcelList = <ParcelBookingData>[].obs;
   RxList<ParcelBookingData> cancelledParcelList = <ParcelBookingData>[].obs;
 
-
   RxList<RentalBookingData> newRentalList = <RentalBookingData>[].obs;
   RxList<RentalBookingData> onGoingRentalList = <RentalBookingData>[].obs;
   RxList<RentalBookingData> completedRentalList = <RentalBookingData>[].obs;
@@ -67,7 +71,12 @@ class BookingController extends GetxController {
               : 'rental',
     };
     print("Booking : $bodyParams");
-    await API.handleApiRequest(request: () => http.post(Uri.parse(API.getBookingList), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: false).then(
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.getBookingList),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: false)
+        .then(
       (value) {
         if (value != null) {
           if (value['success'] == "Failed" || value['success'] == "failed") {
@@ -77,7 +86,9 @@ class BookingController extends GetxController {
               newList.value = (value['data'] as List)
                   .map((e) => BookingData.fromJson(e))
                   .toList()
-                  .where((element) => element.statut == RideStatus.newRide || element.statut == RideStatus.confirmed)
+                  .where((element) =>
+                      element.statut == RideStatus.newRide ||
+                      element.statut == RideStatus.confirmed)
                   .toList();
               onGoingList.value = (value['data'] as List)
                   .map((e) => BookingData.fromJson(e))
@@ -92,14 +103,17 @@ class BookingController extends GetxController {
               cancelledList.value = (value['data'] as List)
                   .map((e) => BookingData.fromJson(e))
                   .toList()
-                  .where((element) => element.statut == RideStatus.rejected || element.statut == RideStatus.canceled)
+                  .where((element) =>
+                      element.statut == RideStatus.rejected ||
+                      element.statut == RideStatus.canceled)
                   .toList();
-            }
-            else if (bookingType.value == "Parcel Delivery") {
+            } else if (bookingType.value == "Parcel Delivery") {
               newParcelList.value = (value['data'] as List)
                   .map((e) => ParcelBookingData.fromJson(e))
                   .toList()
-                  .where((element) => element.status == RideStatus.newRide || element.status == RideStatus.confirmed)
+                  .where((element) =>
+                      element.status == RideStatus.newRide ||
+                      element.status == RideStatus.confirmed)
                   .toList();
               onGoingParcelList.value = (value['data'] as List)
                   .map((e) => ParcelBookingData.fromJson(e))
@@ -114,14 +128,17 @@ class BookingController extends GetxController {
               cancelledParcelList.value = (value['data'] as List)
                   .map((e) => ParcelBookingData.fromJson(e))
                   .toList()
-                  .where((element) => element.status == RideStatus.rejected || element.status == RideStatus.canceled)
+                  .where((element) =>
+                      element.status == RideStatus.rejected ||
+                      element.status == RideStatus.canceled)
                   .toList();
-            }
-            else if (bookingType.value == "Rental Cars") {
+            } else if (bookingType.value == "Rental Cars") {
               newRentalList.value = (value['data'] as List)
                   .map((e) => RentalBookingData.fromJson(e))
                   .toList()
-                  .where((element) => element.status == RideStatus.newRide || element.status == RideStatus.confirmed)
+                  .where((element) =>
+                      element.status == RideStatus.newRide ||
+                      element.status == RideStatus.confirmed)
                   .toList();
               onGoingRentalList.value = (value['data'] as List)
                   .map((e) => RentalBookingData.fromJson(e))
@@ -136,10 +153,11 @@ class BookingController extends GetxController {
               cancelledRentalList.value = (value['data'] as List)
                   .map((e) => RentalBookingData.fromJson(e))
                   .toList()
-                  .where((element) => element.status == RideStatus.rejected || element.status == RideStatus.canceled)
+                  .where((element) =>
+                      element.status == RideStatus.rejected ||
+                      element.status == RideStatus.canceled)
                   .toList();
             }
-
           }
           Get.back();
         }
@@ -153,21 +171,29 @@ class BookingController extends GetxController {
     bookingType.value = type;
   }
 
-  String calculateParcelTotalAmountBooking(ParcelBookingData parcelBookingData) {
+  String calculateParcelTotalAmountBooking(
+      ParcelBookingData parcelBookingData) {
     String subTotal = parcelBookingData.amount.toString();
     String discount = "0.0";
     String taxAmount = "0.0";
     if (parcelBookingData.discountType != null) {
-      discount = Constant.calculateDiscountOrder(amount: subTotal, offerModel: parcelBookingData.discountType).toString();
+      discount = Constant.calculateDiscountOrder(
+              amount: subTotal, offerModel: parcelBookingData.discountType)
+          .toString();
     }
     for (var element in parcelBookingData.tax!) {
-      taxAmount = (double.parse(taxAmount) + Constant().calculateTax(amount: (double.parse(subTotal) - double.parse(discount)).toString(), taxModel: element))
+      taxAmount = (double.parse(taxAmount) +
+              Constant().calculateTax(
+                  amount: (double.parse(subTotal) - double.parse(discount))
+                      .toString(),
+                  taxModel: element))
           .toStringAsFixed(int.tryParse(Constant.decimal.toString()) ?? 2);
     }
 
-    return ((double.parse(subTotal) - (double.parse(discount))) + double.parse(taxAmount)).toStringAsFixed(int.tryParse(Constant.decimal.toString()) ?? 2);
+    return ((double.parse(subTotal) - (double.parse(discount))) +
+            double.parse(taxAmount))
+        .toStringAsFixed(int.tryParse(Constant.decimal.toString()) ?? 2);
   }
-
 
   Future<void> onRideStatusRental(String bookingId) async {
     Map<String, dynamic> bodyParams = {
@@ -177,8 +203,13 @@ class BookingController extends GetxController {
       'current_km': currentKilometerController.value.text.trim(),
     };
 
-    await API.handleApiRequest(request: () => http.post(Uri.parse(API.rentalOnRide), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true).then(
-          (value) async {
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.rentalOnRide),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
+        .then(
+      (value) async {
         if (value != null) {
           if (value['success'] == "Failed" || value['success'] == "failed") {
             ShowToastDialog.showToast(value['message']);
@@ -199,8 +230,13 @@ class BookingController extends GetxController {
       'complete_km': completeKilometerController.value.text.trim(),
     };
 
-    await API.handleApiRequest(request: () => http.post(Uri.parse(API.rentalSetFinalKm), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true).then(
-          (value) async {
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.rentalSetFinalKm),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
+        .then(
+      (value) async {
         if (value != null) {
           if (value['success'] == "Failed" || value['success'] == "failed") {
             ShowToastDialog.showToast(value['message']);
@@ -215,14 +251,18 @@ class BookingController extends GetxController {
     );
   }
 
-
   Future<void> acceptBooking(String rideId) async {
     Map<String, dynamic> bodyParams = {
       'id_driver': Preferences.getInt(Preferences.userId),
       'id_ride': rideId,
     };
 
-    await API.handleApiRequest(request: () => http.post(Uri.parse(API.conformRide), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true).then(
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.conformRide),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
+        .then(
       (value) async {
         if (value != null) {
           if (value['success'] == "Failed" || value['success'] == "failed") {
@@ -244,7 +284,12 @@ class BookingController extends GetxController {
       'reason': "Driver rejected the ride",
     };
 
-    await API.handleApiRequest(request: () => http.post(Uri.parse(API.rejectRide), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true).then(
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.rejectRide),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
+        .then(
       (value) async {
         if (value != null) {
           if (value['success'] == "Failed" || value['success'] == "failed") {
@@ -266,7 +311,12 @@ class BookingController extends GetxController {
       'otp': otpController.value.text.trim(),
     };
 
-    await API.handleApiRequest(request: () => http.post(Uri.parse(API.onRideRequest), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true).then(
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.onRideRequest),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
+        .then(
       (value) async {
         if (value != null) {
           if (value['success'] == "Failed" || value['success'] == "failed") {
@@ -293,7 +343,12 @@ class BookingController extends GetxController {
       "tip": "0",
     };
 
-    await API.handleApiRequest(request: () => http.post(Uri.parse(API.completeRequest), headers: API.headers, body: jsonEncode(requestBody)), showLoader: false).then(
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.completeRequest),
+                headers: API.headers, body: jsonEncode(requestBody)),
+            showLoader: false)
+        .then(
       (value) async {
         if (value != null) {
           if (value['success'] == "Failed" || value['success'] == "ailed") {
@@ -315,7 +370,12 @@ class BookingController extends GetxController {
       'id_parcel': parcelBookingData.id,
     };
 
-    await API.handleApiRequest(request: () => http.post(Uri.parse(API.parcelOnride), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true).then(
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.parcelOnride),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
+        .then(
       (value) async {
         if (value != null) {
           if (value['success'] == "Failed" || value['success'] == "failed") {
@@ -330,13 +390,19 @@ class BookingController extends GetxController {
     );
   }
 
-  Future<void> completeParcelBooking(ParcelBookingData parcelBookingData) async {
+  Future<void> completeParcelBooking(
+      ParcelBookingData parcelBookingData) async {
     Map<String, dynamic> bodyParams = {
       'id_driver': Preferences.getInt(Preferences.userId),
       'id_parcel': parcelBookingData.id,
     };
 
-    await API.handleApiRequest(request: () => http.post(Uri.parse(API.parcelComplete), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true).then(
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.parcelComplete),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
+        .then(
       (value) async {
         if (value != null) {
           if (value['success'] == "Failed" || value['success'] == "failed") {

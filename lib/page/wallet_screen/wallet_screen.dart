@@ -1,13 +1,13 @@
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/controller/wallet_controller.dart';
-import 'package:cabme_driver/model/razorpay_gen_userid_model.dart';
-import 'package:cabme_driver/model/trancation_model.dart';
-import 'package:cabme_driver/model/withdrawal_transaction_model.dart';
-import 'package:cabme_driver/service/rozorpayConroller.dart';
-import 'package:cabme_driver/themes/responsive.dart';
-import 'package:cabme_driver/themes/round_button_fill.dart';
-import 'package:cabme_driver/utils/dark_theme_provider.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/controller/wallet_controller.dart';
+import 'package:uniqcars_driver/model/razorpay_gen_userid_model.dart';
+import 'package:uniqcars_driver/model/trancation_model.dart';
+import 'package:uniqcars_driver/model/withdrawal_transaction_model.dart';
+import 'package:uniqcars_driver/service/rozorpayConroller.dart';
+import 'package:uniqcars_driver/themes/responsive.dart';
+import 'package:uniqcars_driver/themes/round_button_fill.dart';
+import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show FilteringTextInputFormatter;
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -39,17 +39,24 @@ class WalletScreen extends StatelessWidget {
                           width: Responsive.width(100, context),
                           height: Responsive.width(75, context),
                           decoration: BoxDecoration(
-                              image: DecorationImage(image: AssetImage("assets/images/wallet_bg.png"), fit: BoxFit.fitHeight)),
+                              image: DecorationImage(
+                                  image:
+                                      AssetImage("assets/images/wallet_bg.png"),
+                                  fit: BoxFit.fitHeight)),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(top: 60, left: 20, right: 20, bottom: 30),
+                                padding: const EdgeInsets.only(
+                                    top: 60, left: 20, right: 20, bottom: 30),
                                 child: Text(
                                   'My Wallet'.tr,
                                   textAlign: TextAlign.start,
                                   style: AppThemeData.boldTextStyle(
-                                      fontSize: 24, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                      fontSize: 24,
+                                      color: themeChange.getThem()
+                                          ? AppThemeData.neutralDark900
+                                          : AppThemeData.neutral900),
                                 ),
                               ),
                               Center(
@@ -60,19 +67,29 @@ class WalletScreen extends StatelessWidget {
                                       textAlign: TextAlign.center,
                                       style: AppThemeData.mediumTextStyle(
                                           fontSize: 14,
-                                          color: themeChange.getThem() ? AppThemeData.neutralDark700 : AppThemeData.neutral700),
+                                          color: themeChange.getThem()
+                                              ? AppThemeData.neutralDark700
+                                              : AppThemeData.neutral700),
                                     ),
                                     SizedBox(height: 5),
                                     Text(
-                                      Constant().amountShow(amount: controller.walletAmount.value.toString()).tr,
+                                      Constant()
+                                          .amountShow(
+                                              amount: controller
+                                                  .walletAmount.value
+                                                  .toString())
+                                          .tr,
                                       textAlign: TextAlign.center,
                                       style: AppThemeData.boldTextStyle(
                                           fontSize: 36,
-                                          color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                          color: themeChange.getThem()
+                                              ? AppThemeData.neutralDark900
+                                              : AppThemeData.neutral900),
                                     ),
                                     SizedBox(height: 30),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16),
                                       child: Row(
                                         children: [
                                           Expanded(
@@ -83,7 +100,8 @@ class WalletScreen extends StatelessWidget {
                                               color: AppThemeData.accentDefault,
                                               textColor: AppThemeData.neutral50,
                                               onPress: () async {
-                                                paymentBottomSheet(context, themeChange, controller);
+                                                paymentBottomSheet(context,
+                                                    themeChange, controller);
                                               },
                                             ),
                                           ),
@@ -95,13 +113,18 @@ class WalletScreen extends StatelessWidget {
                                               title: "Withdraw".tr,
                                               height: 5.5,
                                               width: 45,
-                                              color: AppThemeData.successDefault,
+                                              color:
+                                                  AppThemeData.successDefault,
                                               textColor: AppThemeData.neutral50,
                                               onPress: () async {
-                                                if (controller.bankDetailsModel.value.data == null) {
-                                                  addBankBottomSheet(context, themeChange, controller);
+                                                if (controller.bankDetailsModel
+                                                        .value.data ==
+                                                    null) {
+                                                  addBankBottomSheet(context,
+                                                      themeChange, controller);
                                                 } else {
-                                                  withdrawBottomSheet(context, themeChange, controller);
+                                                  withdrawBottomSheet(context,
+                                                      themeChange, controller);
                                                 }
                                               },
                                             ),
@@ -128,58 +151,107 @@ class WalletScreen extends StatelessWidget {
                           child: TabBarView(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 10),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Expanded(
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                           border: Border.all(
-                                            color: themeChange.getThem() ? AppThemeData.neutralDark200 : AppThemeData.neutral200,
+                                            color: themeChange.getThem()
+                                                ? AppThemeData.neutralDark200
+                                                : AppThemeData.neutral200,
                                             width: 1,
                                           ),
                                         ),
-                                        child: controller.transactionList.isEmpty
-                                            ? Constant.showEmptyView(message: "Transaction Details not found".tr)
+                                        child: controller
+                                                .transactionList.isEmpty
+                                            ? Constant.showEmptyView(
+                                                message:
+                                                    "Transaction Details not found"
+                                                        .tr)
                                             : Padding(
-                                                padding: const EdgeInsets.all(10),
+                                                padding:
+                                                    const EdgeInsets.all(10),
                                                 child: ListView.builder(
                                                   shrinkWrap: true,
                                                   padding: EdgeInsets.zero,
-                                                  itemCount:
-                                                      controller.transactionList.length, // Replace with your transaction history length
-                                                  itemBuilder: (context, index) {
-                                                    TransactionData transactionData = controller.transactionList[index];
+                                                  itemCount: controller
+                                                      .transactionList
+                                                      .length, // Replace with your transaction history length
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    TransactionData
+                                                        transactionData =
+                                                        controller
+                                                                .transactionList[
+                                                            index];
                                                     return InkWell(
                                                       onTap: () async {
-                                                        if (transactionData.bookingType == "ride") {
-                                                          await controller.getBookingDetails(transactionData.bookingId.toString());
-                                                        } else if (transactionData.bookingType == "rental") {
-                                                          await controller.getRentalDetails(transactionData.bookingId.toString());
-                                                        } else if (transactionData.bookingType == "parcel") {
-                                                          await controller.getParcelDetails(transactionData.bookingId.toString());
+                                                        if (transactionData
+                                                                .bookingType ==
+                                                            "ride") {
+                                                          await controller
+                                                              .getBookingDetails(
+                                                                  transactionData
+                                                                      .bookingId
+                                                                      .toString());
+                                                        } else if (transactionData
+                                                                .bookingType ==
+                                                            "rental") {
+                                                          await controller
+                                                              .getRentalDetails(
+                                                                  transactionData
+                                                                      .bookingId
+                                                                      .toString());
+                                                        } else if (transactionData
+                                                                .bookingType ==
+                                                            "parcel") {
+                                                          await controller
+                                                              .getParcelDetails(
+                                                                  transactionData
+                                                                      .bookingId
+                                                                      .toString());
                                                         }
                                                       },
                                                       child: Padding(
-                                                        padding: const EdgeInsets.only(bottom: 14),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                bottom: 14),
                                                         child: Row(
                                                           children: [
                                                             Container(
                                                               width: 50,
                                                               height: 50,
-                                                              decoration: BoxDecoration(
-                                                                color: transactionData.isCredited == "1"
-                                                                    ? AppThemeData.successLight
-                                                                    : AppThemeData.errorLight,
-                                                                borderRadius: BorderRadius.circular(10),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: transactionData
+                                                                            .isCredited ==
+                                                                        "1"
+                                                                    ? AppThemeData
+                                                                        .successLight
+                                                                    : AppThemeData
+                                                                        .errorLight,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
                                                               ),
                                                               child: Padding(
-                                                                padding: const EdgeInsets.all(8.0),
-                                                                child: SvgPicture.asset(transactionData.isCredited == "1"
-                                                                    ? "assets/icons/arrow-left-down-line.svg"
-                                                                    : "assets/icons/arrow-right-up-line.svg"),
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        8.0),
+                                                                child: SvgPicture.asset(
+                                                                    transactionData.isCredited ==
+                                                                            "1"
+                                                                        ? "assets/icons/arrow-left-down-line.svg"
+                                                                        : "assets/icons/arrow-right-up-line.svg"),
                                                               ),
                                                             ),
                                                             SizedBox(
@@ -187,13 +259,19 @@ class WalletScreen extends StatelessWidget {
                                                             ),
                                                             Expanded(
                                                               child: Column(
-                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
                                                                 children: [
                                                                   Text(
-                                                                    '${transactionData.note}'.tr,
-                                                                    textAlign: TextAlign.start,
+                                                                    '${transactionData.note}'
+                                                                        .tr,
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
                                                                     style: AppThemeData.boldTextStyle(
-                                                                        fontSize: 14,
+                                                                        fontSize:
+                                                                            14,
                                                                         color: themeChange.getThem()
                                                                             ? AppThemeData.neutralDark900
                                                                             : AppThemeData.neutral900),
@@ -202,10 +280,14 @@ class WalletScreen extends StatelessWidget {
                                                                     height: 2,
                                                                   ),
                                                                   Text(
-                                                                    '${transactionData.createdAt}'.tr,
-                                                                    textAlign: TextAlign.center,
+                                                                    '${transactionData.createdAt}'
+                                                                        .tr,
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
                                                                     style: AppThemeData.mediumTextStyle(
-                                                                        fontSize: 14,
+                                                                        fontSize:
+                                                                            14,
                                                                         color: themeChange.getThem()
                                                                             ? AppThemeData.neutralDark500
                                                                             : AppThemeData.neutral500),
@@ -214,13 +296,23 @@ class WalletScreen extends StatelessWidget {
                                                               ),
                                                             ),
                                                             Text(
-                                                              Constant().amountShow(amount: transactionData.amount).tr,
-                                                              textAlign: TextAlign.center,
+                                                              Constant()
+                                                                  .amountShow(
+                                                                      amount: transactionData
+                                                                          .amount)
+                                                                  .tr,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
                                                               style: AppThemeData.boldTextStyle(
                                                                   fontSize: 16,
-                                                                  color: transactionData.isCredited == "1"
-                                                                      ? AppThemeData.successDefault
-                                                                      : AppThemeData.errorDefault),
+                                                                  color: transactionData
+                                                                              .isCredited ==
+                                                                          "1"
+                                                                      ? AppThemeData
+                                                                          .successDefault
+                                                                      : AppThemeData
+                                                                          .errorDefault),
                                                             ),
                                                           ],
                                                         ),
@@ -235,44 +327,71 @@ class WalletScreen extends StatelessWidget {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 10),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Expanded(
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                           border: Border.all(
-                                            color: themeChange.getThem() ? AppThemeData.neutralDark200 : AppThemeData.neutral200,
+                                            color: themeChange.getThem()
+                                                ? AppThemeData.neutralDark200
+                                                : AppThemeData.neutral200,
                                             width: 1,
                                           ),
                                         ),
-                                        child: controller.withdrawalTransactionList.isEmpty
-                                            ? Constant.showEmptyView(message: "Transaction Details not found")
+                                        child: controller
+                                                .withdrawalTransactionList
+                                                .isEmpty
+                                            ? Constant.showEmptyView(
+                                                message:
+                                                    "Transaction Details not found")
                                             : Padding(
-                                                padding: const EdgeInsets.all(10),
+                                                padding:
+                                                    const EdgeInsets.all(10),
                                                 child: ListView.builder(
                                                   shrinkWrap: true,
                                                   padding: EdgeInsets.zero,
-                                                  itemCount: controller.withdrawalTransactionList.length,
+                                                  itemCount: controller
+                                                      .withdrawalTransactionList
+                                                      .length,
                                                   // Replace with your transaction history length
-                                                  itemBuilder: (context, index) {
-                                                    WithdrawalTransactionData transactionData = controller.withdrawalTransactionList[index];
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    WithdrawalTransactionData
+                                                        transactionData =
+                                                        controller
+                                                                .withdrawalTransactionList[
+                                                            index];
                                                     return Padding(
-                                                      padding: const EdgeInsets.only(bottom: 14),
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              bottom: 14),
                                                       child: Row(
                                                         children: [
                                                           Container(
                                                             width: 50,
                                                             height: 50,
-                                                            decoration: BoxDecoration(
-                                                              color: AppThemeData.errorLight,
-                                                              borderRadius: BorderRadius.circular(10),
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: AppThemeData
+                                                                  .errorLight,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
                                                             ),
                                                             child: Padding(
-                                                              padding: const EdgeInsets.all(8.0),
-                                                              child: SvgPicture.asset("assets/icons/arrow-right-up-line.svg"),
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: SvgPicture
+                                                                  .asset(
+                                                                      "assets/icons/arrow-right-up-line.svg"),
                                                             ),
                                                           ),
                                                           SizedBox(
@@ -280,28 +399,42 @@ class WalletScreen extends StatelessWidget {
                                                           ),
                                                           Expanded(
                                                             child: Column(
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
                                                               children: [
                                                                 Text(
-                                                                  '${transactionData.bankName}'.tr,
-                                                                  textAlign: TextAlign.start,
+                                                                  '${transactionData.bankName}'
+                                                                      .tr,
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .start,
                                                                   style: AppThemeData.boldTextStyle(
-                                                                      fontSize: 14,
+                                                                      fontSize:
+                                                                          14,
                                                                       color: themeChange.getThem()
-                                                                          ? AppThemeData.neutralDark900
-                                                                          : AppThemeData.neutral900),
+                                                                          ? AppThemeData
+                                                                              .neutralDark900
+                                                                          : AppThemeData
+                                                                              .neutral900),
                                                                 ),
                                                                 SizedBox(
                                                                   height: 2,
                                                                 ),
                                                                 Text(
-                                                                  '${transactionData.creer}'.tr,
-                                                                  textAlign: TextAlign.center,
+                                                                  '${transactionData.creer}'
+                                                                      .tr,
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
                                                                   style: AppThemeData.mediumTextStyle(
-                                                                      fontSize: 14,
+                                                                      fontSize:
+                                                                          14,
                                                                       color: themeChange.getThem()
-                                                                          ? AppThemeData.neutralDark500
-                                                                          : AppThemeData.neutral500),
+                                                                          ? AppThemeData
+                                                                              .neutralDark500
+                                                                          : AppThemeData
+                                                                              .neutral500),
                                                                 ),
                                                               ],
                                                             ),
@@ -309,19 +442,37 @@ class WalletScreen extends StatelessWidget {
                                                           Column(
                                                             children: [
                                                               Text(
-                                                                Constant().amountShow(amount: transactionData.amount).tr,
-                                                                textAlign: TextAlign.center,
-                                                                style: AppThemeData.boldTextStyle(
-                                                                    fontSize: 16, color: AppThemeData.errorDefault),
+                                                                Constant()
+                                                                    .amountShow(
+                                                                        amount:
+                                                                            transactionData.amount)
+                                                                    .tr,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: AppThemeData
+                                                                    .boldTextStyle(
+                                                                        fontSize:
+                                                                            16,
+                                                                        color: AppThemeData
+                                                                            .errorDefault),
                                                               ),
                                                               Text(
-                                                                transactionData.statut!.capitalizeString(),
-                                                                textAlign: TextAlign.center,
+                                                                transactionData
+                                                                    .statut!
+                                                                    .capitalizeString(),
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
                                                                 style: AppThemeData.boldTextStyle(
-                                                                    fontSize: 14,
-                                                                    color: transactionData.statut! == "pending"
-                                                                        ? AppThemeData.errorDefault
-                                                                        : AppThemeData.successDefault),
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: transactionData.statut! ==
+                                                                            "pending"
+                                                                        ? AppThemeData
+                                                                            .errorDefault
+                                                                        : AppThemeData
+                                                                            .successDefault),
                                                               ),
                                                             ],
                                                           ),
@@ -363,8 +514,11 @@ class WalletScreen extends StatelessWidget {
           builder: (context, scrollController) {
             return Container(
               decoration: BoxDecoration(
-                color: themeChange.getThem() ? AppThemeData.neutralDark50 : AppThemeData.neutral50,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                color: themeChange.getThem()
+                    ? AppThemeData.neutralDark50
+                    : AppThemeData.neutral50,
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(16)),
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -377,7 +531,9 @@ class WalletScreen extends StatelessWidget {
                         child: Container(
                           height: 5,
                           width: 60,
-                          color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark300
+                              : AppThemeData.neutral300,
                         ),
                       ),
                     ),
@@ -386,7 +542,9 @@ class WalletScreen extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: AppThemeData.boldTextStyle(
                         fontSize: 18,
-                        color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                        color: themeChange.getThem()
+                            ? AppThemeData.neutralDark900
+                            : AppThemeData.neutral900,
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -399,7 +557,8 @@ class WalletScreen extends StatelessWidget {
                       ],
                       prefix: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 18),
-                        child: SvgPicture.asset("assets/icons/money-dollar-circle-line.svg"),
+                        child: SvgPicture.asset(
+                            "assets/icons/money-dollar-circle-line.svg"),
                       ),
                     ),
                     Expanded(
@@ -408,38 +567,60 @@ class WalletScreen extends StatelessWidget {
                         controller: scrollController,
                         children: [
                           Visibility(
-                            visible: controller.paymentSettingModel.value.strip != null &&
-                                controller.paymentSettingModel.value.strip!.isEnabled == "true",
+                            visible:
+                                controller.paymentSettingModel.value.strip !=
+                                        null &&
+                                    controller.paymentSettingModel.value.strip!
+                                            .isEnabled ==
+                                        "true",
                             child: cardDecoration(
                               controller,
-                              controller.paymentSettingModel.value.strip!.libelle.toString(),
+                              controller
+                                  .paymentSettingModel.value.strip!.libelle
+                                  .toString(),
                               themeChange,
                               "assets/images/stripe.png",
                             ),
                           ),
                           Visibility(
-                            visible: controller.paymentSettingModel.value.payPal != null &&
-                                controller.paymentSettingModel.value.payPal!.isEnabled == "true",
+                            visible:
+                                controller.paymentSettingModel.value.payPal !=
+                                        null &&
+                                    controller.paymentSettingModel.value.payPal!
+                                            .isEnabled ==
+                                        "true",
                             child: cardDecoration(
                               controller,
-                              controller.paymentSettingModel.value.payPal!.libelle.toString(),
+                              controller
+                                  .paymentSettingModel.value.payPal!.libelle
+                                  .toString(),
                               themeChange,
                               "assets/images/paypal.png",
                             ),
                           ),
                           Visibility(
-                            visible: controller.paymentSettingModel.value.payStack != null &&
-                                controller.paymentSettingModel.value.payStack!.isEnabled == "true",
+                            visible:
+                                controller.paymentSettingModel.value.payStack !=
+                                        null &&
+                                    controller.paymentSettingModel.value
+                                            .payStack!.isEnabled ==
+                                        "true",
                             child: cardDecoration(
                               controller,
-                              controller.paymentSettingModel.value.payStack!.libelle.toString(),
+                              controller
+                                  .paymentSettingModel.value.payStack!.libelle
+                                  .toString(),
                               themeChange,
                               "assets/images/paystack.png",
                             ),
                           ),
                           Visibility(
-                            visible: controller.paymentSettingModel.value.mercadopago != null &&
-                                controller.paymentSettingModel.value.mercadopago!.isEnabled == "true",
+                            visible: controller.paymentSettingModel.value
+                                        .mercadopago !=
+                                    null &&
+                                controller.paymentSettingModel.value
+                                        .mercadopago!.isEnabled ==
+                                    "true",
                             child: cardDecoration(
                               controller,
                               "Mercado Pago",
@@ -448,61 +629,97 @@ class WalletScreen extends StatelessWidget {
                             ),
                           ),
                           Visibility(
-                            visible: controller.paymentSettingModel.value.flutterWave != null &&
-                                controller.paymentSettingModel.value.flutterWave!.isEnabled == "true",
+                            visible: controller.paymentSettingModel.value
+                                        .flutterWave !=
+                                    null &&
+                                controller.paymentSettingModel.value
+                                        .flutterWave!.isEnabled ==
+                                    "true",
                             child: cardDecoration(
                               controller,
-                              controller.paymentSettingModel.value.flutterWave!.libelle.toString(),
+                              controller.paymentSettingModel.value.flutterWave!
+                                  .libelle
+                                  .toString(),
                               themeChange,
                               "assets/images/flutterwave_logo.png",
                             ),
                           ),
                           Visibility(
-                            visible: controller.paymentSettingModel.value.payFast != null &&
-                                controller.paymentSettingModel.value.payFast!.isEnabled == "true",
+                            visible:
+                                controller.paymentSettingModel.value.payFast !=
+                                        null &&
+                                    controller.paymentSettingModel.value
+                                            .payFast!.isEnabled ==
+                                        "true",
                             child: cardDecoration(
                               controller,
-                              controller.paymentSettingModel.value.payFast!.libelle.toString(),
+                              controller
+                                  .paymentSettingModel.value.payFast!.libelle
+                                  .toString(),
                               themeChange,
                               "assets/images/payfast.png",
                             ),
                           ),
                           Visibility(
-                            visible: controller.paymentSettingModel.value.razorpay != null &&
-                                controller.paymentSettingModel.value.razorpay!.isEnabled == "true",
+                            visible:
+                                controller.paymentSettingModel.value.razorpay !=
+                                        null &&
+                                    controller.paymentSettingModel.value
+                                            .razorpay!.isEnabled ==
+                                        "true",
                             child: cardDecoration(
                               controller,
-                              controller.paymentSettingModel.value.razorpay!.libelle.toString(),
+                              controller
+                                  .paymentSettingModel.value.razorpay!.libelle
+                                  .toString(),
                               themeChange,
                               "assets/images/razorpay.png",
                             ),
                           ),
                           Visibility(
-                            visible: controller.paymentSettingModel.value.xendit != null &&
-                                controller.paymentSettingModel.value.xendit!.isEnabled == "true",
+                            visible:
+                                controller.paymentSettingModel.value.xendit !=
+                                        null &&
+                                    controller.paymentSettingModel.value.xendit!
+                                            .isEnabled ==
+                                        "true",
                             child: cardDecoration(
                               controller,
-                              controller.paymentSettingModel.value.xendit!.libelle.toString(),
+                              controller
+                                  .paymentSettingModel.value.xendit!.libelle
+                                  .toString(),
                               themeChange,
                               "assets/images/xendit.png",
                             ),
                           ),
                           Visibility(
-                            visible: controller.paymentSettingModel.value.orangePay != null &&
-                                controller.paymentSettingModel.value.orangePay!.isEnabled == "true",
+                            visible: controller
+                                        .paymentSettingModel.value.orangePay !=
+                                    null &&
+                                controller.paymentSettingModel.value.orangePay!
+                                        .isEnabled ==
+                                    "true",
                             child: cardDecoration(
                               controller,
-                              controller.paymentSettingModel.value.orangePay!.libelle.toString(),
+                              controller
+                                  .paymentSettingModel.value.orangePay!.libelle
+                                  .toString(),
                               themeChange,
                               "assets/images/orangeMoney.png",
                             ),
                           ),
                           Visibility(
-                            visible: controller.paymentSettingModel.value.midtrans != null &&
-                                controller.paymentSettingModel.value.midtrans!.isEnabled == "true",
+                            visible:
+                                controller.paymentSettingModel.value.midtrans !=
+                                        null &&
+                                    controller.paymentSettingModel.value
+                                            .midtrans!.isEnabled ==
+                                        "true",
                             child: cardDecoration(
                               controller,
-                              controller.paymentSettingModel.value.midtrans!.libelle.toString(),
+                              controller
+                                  .paymentSettingModel.value.midtrans!.libelle
+                                  .toString(),
                               themeChange,
                               "assets/images/midtrans.png",
                             ),
@@ -520,56 +737,111 @@ class WalletScreen extends StatelessWidget {
                         onPress: () async {
                           FocusScope.of(context).unfocus();
                           if (controller.amountController.value.text.isEmpty) {
-                            ShowToastDialog.showToast("Please enter topup amount");
-                          } else if (controller.selectedPaymentMethod.value.isEmpty) {
-                            ShowToastDialog.showToast("Please select payment method");
+                            ShowToastDialog.showToast(
+                                "Please enter topup amount");
+                          } else if (controller
+                              .selectedPaymentMethod.value.isEmpty) {
+                            ShowToastDialog.showToast(
+                                "Please select payment method");
                           } else {
                             Get.back();
-                            if (controller.selectedPaymentMethod.value == "Stripe") {
-                              Stripe.publishableKey = controller.paymentSettingModel.value.strip?.key ?? '';
+                            if (controller.selectedPaymentMethod.value ==
+                                "Stripe") {
+                              Stripe.publishableKey = controller
+                                      .paymentSettingModel.value.strip?.key ??
+                                  '';
                               Stripe.merchantIdentifier = 'Cabme';
                               await Stripe.instance.applySettings();
-                              controller.stripeMakePayment(amount: controller.amountController.value.text);
-                            } else if (controller.selectedPaymentMethod.value == controller.paymentSettingModel.value.razorpay!.libelle) {
+                              controller.stripeMakePayment(
+                                  amount:
+                                      controller.amountController.value.text);
+                            } else if (controller.selectedPaymentMethod.value ==
+                                controller.paymentSettingModel.value.razorpay!
+                                    .libelle) {
                               RazorPayController()
                                   .createOrderRazorPay(
-                                      amount: double.parse(controller.amountController.value.text).toStringAsFixed(2),
-                                      razorpayModel: controller.paymentSettingModel.value.razorpay)
+                                      amount: double.parse(controller
+                                              .amountController.value.text)
+                                          .toStringAsFixed(2),
+                                      razorpayModel: controller
+                                          .paymentSettingModel.value.razorpay)
                                   .then((value) {
                                 if (value == null) {
                                   Get.back();
-                                  ShowToastDialog.showToast("Something went wrong, please contact admin.".tr);
+                                  ShowToastDialog.showToast(
+                                      "Something went wrong, please contact admin."
+                                          .tr);
                                 } else {
                                   CreateRazorPayOrderModel result = value;
-                                  controller.openCheckout(amount: controller.amountController.value.text, orderId: result.id);
+                                  controller.openCheckout(
+                                      amount: controller
+                                          .amountController.value.text,
+                                      orderId: result.id);
                                 }
                               });
-                            } else if (controller.selectedPaymentMethod.value == controller.paymentSettingModel.value.payPal!.libelle) {
-                              controller.paypalPaymentSheet(double.parse(controller.amountController.value.text).toString(), context);
+                            } else if (controller.selectedPaymentMethod.value ==
+                                controller.paymentSettingModel.value.payPal!
+                                    .libelle) {
+                              controller.paypalPaymentSheet(
+                                  double.parse(controller
+                                          .amountController.value.text)
+                                      .toString(),
+                                  context);
                               // _paypalPayment();
-                            } else if (controller.selectedPaymentMethod.value == controller.paymentSettingModel.value.payStack!.libelle) {
-                              controller.payStackPayment(controller.amountController.value.text);
                             } else if (controller.selectedPaymentMethod.value ==
-                                controller.paymentSettingModel.value.flutterWave!.libelle) {
+                                controller.paymentSettingModel.value.payStack!
+                                    .libelle) {
+                              controller.payStackPayment(
+                                  controller.amountController.value.text);
+                            } else if (controller.selectedPaymentMethod.value ==
+                                controller.paymentSettingModel.value
+                                    .flutterWave!.libelle) {
                               controller.flutterWaveInitiatePayment(
-                                  context: context, amount: double.parse(controller.amountController.value.text).toString());
-                            } else if (controller.selectedPaymentMethod.value == controller.paymentSettingModel.value.payFast!.libelle) {
-                              controller.payFastPayment(context: context, amount: controller.amountController.value.text);
+                                  context: context,
+                                  amount: double.parse(controller
+                                          .amountController.value.text)
+                                      .toString());
                             } else if (controller.selectedPaymentMethod.value ==
-                                controller.paymentSettingModel.value.mercadopago!.libelle) {
+                                controller.paymentSettingModel.value.payFast!
+                                    .libelle) {
+                              controller.payFastPayment(
+                                  context: context,
+                                  amount:
+                                      controller.amountController.value.text);
+                            } else if (controller.selectedPaymentMethod.value ==
+                                controller.paymentSettingModel.value
+                                    .mercadopago!.libelle) {
                               controller.mercadoPagoMakePayment(
                                 context: context,
-                                amount: double.parse(controller.amountController.value.text).toString(),
+                                amount: double.parse(
+                                        controller.amountController.value.text)
+                                    .toString(),
                               );
-                            } else if (controller.selectedPaymentMethod.value == controller.paymentSettingModel.value.xendit!.libelle) {
-                              controller.xenditPayment(context, double.parse(controller.amountController.value.text));
-                            } else if (controller.selectedPaymentMethod.value == controller.paymentSettingModel.value.orangePay!.libelle) {
+                            } else if (controller.selectedPaymentMethod.value ==
+                                controller.paymentSettingModel.value.xendit!
+                                    .libelle) {
+                              controller.xenditPayment(
+                                  context,
+                                  double.parse(
+                                      controller.amountController.value.text));
+                            } else if (controller.selectedPaymentMethod.value ==
+                                controller.paymentSettingModel.value.orangePay!
+                                    .libelle) {
                               controller.orangeMakePayment(
-                                  amount: double.parse(controller.amountController.value.text).toStringAsFixed(2), context: context);
-                            } else if (controller.selectedPaymentMethod.value == controller.paymentSettingModel.value.midtrans!.libelle) {
-                              controller.midtransMakePayment(amount: controller.amountController.value.text.toString(), context: context);
+                                  amount: double.parse(controller
+                                          .amountController.value.text)
+                                      .toStringAsFixed(2),
+                                  context: context);
+                            } else if (controller.selectedPaymentMethod.value ==
+                                controller.paymentSettingModel.value.midtrans!
+                                    .libelle) {
+                              controller.midtransMakePayment(
+                                  amount: controller.amountController.value.text
+                                      .toString(),
+                                  context: context);
                             } else {
-                              ShowToastDialog.showToast("Please select payment method");
+                              ShowToastDialog.showToast(
+                                  "Please select payment method");
                             }
                           }
                         },
@@ -585,7 +857,8 @@ class WalletScreen extends StatelessWidget {
     );
   }
 
-  Future withdrawBottomSheet(context, themeChange, WalletController controller) {
+  Future withdrawBottomSheet(
+      context, themeChange, WalletController controller) {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -602,8 +875,11 @@ class WalletScreen extends StatelessWidget {
           builder: (context, scrollController) {
             return Container(
               decoration: BoxDecoration(
-                color: themeChange.getThem() ? AppThemeData.neutralDark50 : AppThemeData.neutral50,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                color: themeChange.getThem()
+                    ? AppThemeData.neutralDark50
+                    : AppThemeData.neutral50,
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(16)),
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -616,7 +892,9 @@ class WalletScreen extends StatelessWidget {
                         child: Container(
                           height: 5,
                           width: 60,
-                          color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark300
+                              : AppThemeData.neutral300,
                         ),
                       ),
                     ),
@@ -625,7 +903,9 @@ class WalletScreen extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: AppThemeData.boldTextStyle(
                         fontSize: 18,
-                        color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                        color: themeChange.getThem()
+                            ? AppThemeData.neutralDark900
+                            : AppThemeData.neutral900,
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -638,7 +918,8 @@ class WalletScreen extends StatelessWidget {
                       ],
                       prefix: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 18),
-                        child: SvgPicture.asset("assets/icons/money-dollar-circle-line.svg"),
+                        child: SvgPicture.asset(
+                            "assets/icons/money-dollar-circle-line.svg"),
                       ),
                     ),
                     SizedBox(
@@ -650,7 +931,9 @@ class WalletScreen extends StatelessWidget {
                           width: 60,
                           height: 60,
                           decoration: BoxDecoration(
-                            color: themeChange.getThem() ? AppThemeData.neutralDark200 : AppThemeData.neutral200,
+                            color: themeChange.getThem()
+                                ? AppThemeData.neutralDark200
+                                : AppThemeData.neutral200,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Padding(
@@ -665,16 +948,24 @@ class WalletScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              controller.bankDetailsModel.value.data?.holderName ?? "Bank Name",
+                              controller.bankDetailsModel.value.data
+                                      ?.holderName ??
+                                  "Bank Name",
                               style: AppThemeData.semiBoldTextStyle(
-                                color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                color: themeChange.getThem()
+                                    ? AppThemeData.neutralDark900
+                                    : AppThemeData.neutral900,
                                 fontSize: 16,
                               ),
                             ),
                             Text(
-                              controller.bankDetailsModel.value.data?.accountNo ?? "1234567890",
+                              controller
+                                      .bankDetailsModel.value.data?.accountNo ??
+                                  "1234567890",
                               style: AppThemeData.semiBoldTextStyle(
-                                color: themeChange.getThem() ? AppThemeData.neutralDark500 : AppThemeData.neutral500,
+                                color: themeChange.getThem()
+                                    ? AppThemeData.neutralDark500
+                                    : AppThemeData.neutral500,
                                 fontSize: 14,
                               ),
                             ),
@@ -691,12 +982,15 @@ class WalletScreen extends StatelessWidget {
                         textColor: AppThemeData.neutral50,
                         onPress: () async {
                           FocusScope.of(context).unfocus();
-                          if (controller.withDrawAmountController.value.text.isEmpty) {
+                          if (controller
+                              .withDrawAmountController.value.text.isEmpty) {
                             ShowToastDialog.showToast("Please enter amount");
                           }
-                          if (double.parse(controller.withDrawAmountController.value.text) <
+                          if (double.parse(controller
+                                  .withDrawAmountController.value.text) <
                               double.parse(Constant.minimumWithdrawalAmount!)) {
-                            ShowToastDialog.showToast("You must have at least ${Constant().amountShow(amount: Constant.minimumWithdrawalAmount)} to withdraw.");
+                            ShowToastDialog.showToast(
+                                "You must have at least ${Constant().amountShow(amount: Constant.minimumWithdrawalAmount)} to withdraw.");
                           } else {
                             controller.withdrawAmount();
                           }
@@ -730,8 +1024,11 @@ class WalletScreen extends StatelessWidget {
           builder: (context, scrollController) {
             return Container(
               decoration: BoxDecoration(
-                color: themeChange.getThem() ? AppThemeData.neutralDark50 : AppThemeData.neutral50,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                color: themeChange.getThem()
+                    ? AppThemeData.neutralDark50
+                    : AppThemeData.neutral50,
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(16)),
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -746,7 +1043,9 @@ class WalletScreen extends StatelessWidget {
                           child: Container(
                             height: 5,
                             width: 60,
-                            color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
+                            color: themeChange.getThem()
+                                ? AppThemeData.neutralDark300
+                                : AppThemeData.neutral300,
                           ),
                         ),
                       ),
@@ -755,7 +1054,9 @@ class WalletScreen extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: AppThemeData.boldTextStyle(
                           fontSize: 18,
-                          color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark900
+                              : AppThemeData.neutral900,
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -797,18 +1098,30 @@ class WalletScreen extends StatelessWidget {
                           color: AppThemeData.primaryDefault,
                           textColor: AppThemeData.neutral50,
                           onPress: () async {
-                            if (controller.bankNameController.value.text.isEmpty) {
-                              ShowToastDialog.showToast("Please enter bank name");
-                            } else if (controller.branchController.value.text.isEmpty) {
-                              ShowToastDialog.showToast("Please enter branch name");
-                            } else if (controller.holderNameController.value.text.isEmpty) {
-                              ShowToastDialog.showToast("Please enter bank holder name");
-                            } else if (controller.accountNumberController.value.text.isEmpty) {
-                              ShowToastDialog.showToast("Please enter bank account number");
-                            } else if (controller.ifcsCodeController.value.text.isEmpty) {
-                              ShowToastDialog.showToast("Please enter IFSC code");
-                            } else if (controller.informationController.value.text.isEmpty) {
-                              ShowToastDialog.showToast("Please enter information");
+                            if (controller
+                                .bankNameController.value.text.isEmpty) {
+                              ShowToastDialog.showToast(
+                                  "Please enter bank name");
+                            } else if (controller
+                                .branchController.value.text.isEmpty) {
+                              ShowToastDialog.showToast(
+                                  "Please enter branch name");
+                            } else if (controller
+                                .holderNameController.value.text.isEmpty) {
+                              ShowToastDialog.showToast(
+                                  "Please enter bank holder name");
+                            } else if (controller
+                                .accountNumberController.value.text.isEmpty) {
+                              ShowToastDialog.showToast(
+                                  "Please enter bank account number");
+                            } else if (controller
+                                .ifcsCodeController.value.text.isEmpty) {
+                              ShowToastDialog.showToast(
+                                  "Please enter IFSC code");
+                            } else if (controller
+                                .informationController.value.text.isEmpty) {
+                              ShowToastDialog.showToast(
+                                  "Please enter information");
                             } else {
                               controller.submitBankDetails();
                             }
@@ -826,7 +1139,8 @@ class WalletScreen extends StatelessWidget {
     );
   }
 
-  Obx cardDecoration(WalletController controller, String value, themeChange, String image) {
+  Obx cardDecoration(
+      WalletController controller, String value, themeChange, String image) {
     return Obx(
       () => InkWell(
         onTap: () {
@@ -837,15 +1151,24 @@ class WalletScreen extends StatelessWidget {
             Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   child: Image.asset(
                     image,
-                    width: value == controller.paymentSettingModel.value.myWallet!.libelle ||
-                            value == controller.paymentSettingModel.value.cash!.libelle
+                    width: value ==
+                                controller.paymentSettingModel.value.myWallet!
+                                    .libelle ||
+                            value ==
+                                controller
+                                    .paymentSettingModel.value.cash!.libelle
                         ? 30
                         : 40,
-                    height: value == controller.paymentSettingModel.value.myWallet!.libelle ||
-                            value == controller.paymentSettingModel.value.cash!.libelle
+                    height: value ==
+                                controller.paymentSettingModel.value.myWallet!
+                                    .libelle ||
+                            value ==
+                                controller
+                                    .paymentSettingModel.value.cash!.libelle
                         ? 30
                         : 40,
                     fit: BoxFit.contain,
@@ -855,26 +1178,36 @@ class WalletScreen extends StatelessWidget {
                   width: 10,
                 ),
                 Expanded(
-                  child: value == controller.paymentSettingModel.value.myWallet!.libelle
+                  child: value ==
+                          controller.paymentSettingModel.value.myWallet!.libelle
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               "My Wallet".tr,
                               style: AppThemeData.semiBoldTextStyle(
-                                  color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900, fontSize: 16),
+                                  color: themeChange.getThem()
+                                      ? AppThemeData.neutralDark900
+                                      : AppThemeData.neutral900,
+                                  fontSize: 16),
                             ),
                             Text(
                               "Balance: ${Constant().amountShow(amount: "100")}",
                               style: AppThemeData.semiBoldTextStyle(
-                                  color: themeChange.getThem() ? AppThemeData.secondary200 : AppThemeData.secondary200, fontSize: 12),
+                                  color: themeChange.getThem()
+                                      ? AppThemeData.secondary200
+                                      : AppThemeData.secondary200,
+                                  fontSize: 12),
                             ),
                           ],
                         )
                       : Text(
                           value,
                           style: AppThemeData.semiBoldTextStyle(
-                              color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900, fontSize: 16),
+                              color: themeChange.getThem()
+                                  ? AppThemeData.neutralDark900
+                                  : AppThemeData.neutral900,
+                              fontSize: 16),
                         ),
                 ),
                 const SizedBox(
@@ -883,7 +1216,9 @@ class WalletScreen extends StatelessWidget {
                 Radio(
                   value: value.toString(),
                   groupValue: controller.selectedPaymentMethod.value,
-                  activeColor: themeChange.getThem() ? AppThemeData.primaryDefault : AppThemeData.primaryDefault,
+                  activeColor: themeChange.getThem()
+                      ? AppThemeData.primaryDefault
+                      : AppThemeData.primaryDefault,
                   onChanged: (value) {
                     controller.selectedPaymentMethod.value = value.toString();
                   },
@@ -891,7 +1226,9 @@ class WalletScreen extends StatelessWidget {
               ],
             ),
             Divider(
-              color: themeChange.getThem() ? AppThemeData.neutralDark200 : AppThemeData.neutral200,
+              color: themeChange.getThem()
+                  ? AppThemeData.neutralDark200
+                  : AppThemeData.neutral200,
               height: 1,
             )
           ],

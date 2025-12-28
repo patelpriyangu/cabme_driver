@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/model/user_model.dart';
-import 'package:cabme_driver/service/api.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/model/user_model.dart';
+import 'package:uniqcars_driver/service/api.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -39,8 +39,6 @@ class OTPController extends GetxController {
     otpController.value = TextEditingController();
   }
 
-
-
   Future<bool> sendOTP() async {
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: countryCode.value + phoneNumber.value,
@@ -62,8 +60,13 @@ class OTPController extends GetxController {
 
   Future<bool?> phoneNumberIsExit(Map<String, String> bodyParams) async {
     bool? isExits;
-    await API.handleApiRequest(request: () => http.post(Uri.parse(API.getExistingUserOrNot), headers: API.authheader, body: jsonEncode(bodyParams)), showLoader: true).then(
-          (value) {
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.getExistingUserOrNot),
+                headers: API.authheader, body: jsonEncode(bodyParams)),
+            showLoader: true)
+        .then(
+      (value) {
         if (value != null) {
           if (value['success'] == "Failed" || value['success'] == "failed") {
             ShowToastDialog.showToast(value['error']);
@@ -81,10 +84,16 @@ class OTPController extends GetxController {
     return isExits;
   }
 
-  Future<UserModel?> getDataByPhoneNumber(Map<String, String> bodyParams) async {
+  Future<UserModel?> getDataByPhoneNumber(
+      Map<String, String> bodyParams) async {
     UserModel? userModel;
-    await API.handleApiRequest(request: () => http.post(Uri.parse(API.getProfileByPhone), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true).then(
-          (value) {
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.getProfileByPhone),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
+        .then(
+      (value) {
         if (value != null) {
           userModel = UserModel.fromJson(value);
         }
@@ -92,6 +101,4 @@ class OTPController extends GetxController {
     );
     return userModel;
   }
-
-
 }

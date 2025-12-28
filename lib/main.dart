@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:cabme_driver/controller/settings_controller.dart';
-import 'package:cabme_driver/firebase_options.dart';
-import 'package:cabme_driver/model/language_model.dart';
-import 'package:cabme_driver/page/splash_screen.dart';
-import 'package:cabme_driver/service/pusher_service.dart';
-import 'package:cabme_driver/themes/styles.dart';
-import 'package:cabme_driver/utils/dark_theme_provider.dart';
+import 'package:uniqcars_driver/controller/settings_controller.dart';
+import 'package:uniqcars_driver/firebase_options.dart';
+import 'package:uniqcars_driver/model/language_model.dart';
+import 'package:uniqcars_driver/page/splash_screen.dart';
+import 'package:uniqcars_driver/service/pusher_service.dart';
+import 'package:uniqcars_driver/themes/styles.dart';
+import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -42,12 +42,16 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     getCurrentAppTheme();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (Preferences.getString(Preferences.languageCodeKey).toString().isNotEmpty) {
+      if (Preferences.getString(Preferences.languageCodeKey)
+          .toString()
+          .isNotEmpty) {
         LanguageData languageModel = Constant.getLanguage();
         LocalizationService().changeLocale(languageModel.code.toString());
       } else {
-        LanguageData languageModel = LanguageData(code: "en", isRtl: "no", language: "English");
-        Preferences.setString(Preferences.languageCodeKey, jsonEncode(languageModel.toJson()));
+        LanguageData languageModel =
+            LanguageData(code: "en", isRtl: "no", language: "English");
+        Preferences.setString(
+            Preferences.languageCodeKey, jsonEncode(languageModel.toJson()));
       }
     });
     super.initState();
@@ -59,7 +63,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   void getCurrentAppTheme() async {
-    themeChangeProvider.darkTheme = await themeChangeProvider.darkThemePreference.getTheme();
+    themeChangeProvider.darkTheme =
+        await themeChangeProvider.darkThemePreference.getTheme();
   }
 
   // This widget is the root of your application.
@@ -91,7 +96,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         home: GetX(
             init: SettingsController(),
             builder: (controller) {
-              return controller.isLoading.value ? Constant.loader(context) : SplashScreen();
+              return controller.isLoading.value
+                  ? Constant.loader(context)
+                  : SplashScreen();
             }),
       );
     }));

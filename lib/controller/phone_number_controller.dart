@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/model/user_model.dart';
-import 'package:cabme_driver/page/auth_screens/otp_screen.dart';
-import 'package:cabme_driver/page/owner_dashboard_screen.dart';
-import 'package:cabme_driver/service/api.dart';
-import 'package:cabme_driver/utils/Preferences.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/model/user_model.dart';
+import 'package:uniqcars_driver/page/auth_screens/otp_screen.dart';
+import 'package:uniqcars_driver/page/owner_dashboard_screen.dart';
+import 'package:uniqcars_driver/service/api.dart';
+import 'package:uniqcars_driver/utils/Preferences.dart';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,19 +20,22 @@ import '../page/dashboard_screen.dart';
 
 class PhoneNumberController extends GetxController {
   Rx<TextEditingController> phoneNumber = TextEditingController().obs;
-  Rx<TextEditingController> countryCodeController = TextEditingController(text: "+91").obs;
+  Rx<TextEditingController> countryCodeController =
+      TextEditingController(text: "+91").obs;
   RxInt resendTokenData = 0.obs;
 
   Future<void> sendCode() async {
     await FirebaseAuth.instance
         .verifyPhoneNumber(
-            phoneNumber: countryCodeController.value.text + phoneNumber.value.text.trim(),
+            phoneNumber: countryCodeController.value.text +
+                phoneNumber.value.text.trim(),
             verificationCompleted: (PhoneAuthCredential credential) {},
             verificationFailed: (FirebaseAuthException e) {
               ShowToastDialog.closeLoader();
               print(e.message.toString());
               if (e.code == 'invalid-phone-number') {
-                ShowToastDialog.showToast("The provided phone number is not valid.");
+                ShowToastDialog.showToast(
+                    "The provided phone number is not valid.");
               } else {
                 ShowToastDialog.showToast(e.message.toString());
               }
@@ -54,7 +57,8 @@ class PhoneNumberController extends GetxController {
             forceResendingToken: resendTokenData.value)
         .catchError((error) {
       ShowToastDialog.closeLoader();
-      ShowToastDialog.showToast("You have try many time please send otp after some time");
+      ShowToastDialog.showToast(
+          "You have try many time please send otp after some time");
     });
   }
 
@@ -62,7 +66,8 @@ class PhoneNumberController extends GetxController {
     bool? isExits;
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.getExistingUserOrNot), headers: API.authheader, body: jsonEncode(bodyParams)),
+            request: () => http.post(Uri.parse(API.getExistingUserOrNot),
+                headers: API.authheader, body: jsonEncode(bodyParams)),
             showLoader: true)
         .then(
       (value) {
@@ -83,11 +88,14 @@ class PhoneNumberController extends GetxController {
     return isExits;
   }
 
-  Future<UserModel?> getDataByPhoneNumber(Map<String, String> bodyParams) async {
+  Future<UserModel?> getDataByPhoneNumber(
+      Map<String, String> bodyParams) async {
     UserModel? userModel;
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.getProfileByPhone), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true)
+            request: () => http.post(Uri.parse(API.getProfileByPhone),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
         .then(
       (value) {
         if (value != null) {
@@ -121,15 +129,20 @@ class PhoneNumberController extends GetxController {
                   if (value.success == "success") {
                     ShowToastDialog.closeLoader();
 
-                    Preferences.setInt(Preferences.userId, int.parse(value.userData!.id.toString()));
+                    Preferences.setInt(Preferences.userId,
+                        int.parse(value.userData!.id.toString()));
                     Preferences.setString(Preferences.user, jsonEncode(value));
-                    Preferences.setString(Preferences.accesstoken, value.userData!.accesstoken.toString());
-                    API.headers['accesstoken'] = value.userData!.accesstoken.toString();
+                    Preferences.setString(Preferences.accesstoken,
+                        value.userData!.accesstoken.toString());
+                    API.headers['accesstoken'] =
+                        value.userData!.accesstoken.toString();
                     Preferences.setBoolean(Preferences.isLogin, true);
                     if (value.userData!.isOwner == "true") {
-                      Get.offAll(OwnerDashboardScreen(), transition: Transition.rightToLeft);
+                      Get.offAll(OwnerDashboardScreen(),
+                          transition: Transition.rightToLeft);
                     } else {
-                      Get.offAll(DashboardScreen(), transition: Transition.rightToLeft);
+                      Get.offAll(DashboardScreen(),
+                          transition: Transition.rightToLeft);
                     }
                   } else {
                     ShowToastDialog.showToast(value.error);
@@ -176,15 +189,20 @@ class PhoneNumberController extends GetxController {
                   if (value.success == "success") {
                     ShowToastDialog.closeLoader();
 
-                    Preferences.setInt(Preferences.userId, int.parse(value.userData!.id.toString()));
+                    Preferences.setInt(Preferences.userId,
+                        int.parse(value.userData!.id.toString()));
                     Preferences.setString(Preferences.user, jsonEncode(value));
-                    Preferences.setString(Preferences.accesstoken, value.userData!.accesstoken.toString());
-                    API.headers['accesstoken'] = value.userData!.accesstoken.toString();
+                    Preferences.setString(Preferences.accesstoken,
+                        value.userData!.accesstoken.toString());
+                    API.headers['accesstoken'] =
+                        value.userData!.accesstoken.toString();
                     Preferences.setBoolean(Preferences.isLogin, true);
                     if (value.userData!.isOwner == "true") {
-                      Get.offAll(OwnerDashboardScreen(), transition: Transition.rightToLeft);
+                      Get.offAll(OwnerDashboardScreen(),
+                          transition: Transition.rightToLeft);
                     } else {
-                      Get.offAll(DashboardScreen(), transition: Transition.rightToLeft);
+                      Get.offAll(DashboardScreen(),
+                          transition: Transition.rightToLeft);
                     }
                   } else {
                     ShowToastDialog.showToast(value.error);
@@ -212,7 +230,8 @@ class PhoneNumberController extends GetxController {
       await googleSignIn.initialize();
       final GoogleSignInAccount googleUser = await googleSignIn.authenticate();
       final GoogleSignInAuthentication googleAuth = googleUser.authentication;
-      final credential = GoogleAuthProvider.credential(idToken: googleAuth.idToken);
+      final credential =
+          GoogleAuthProvider.credential(idToken: googleAuth.idToken);
       return await FirebaseAuth.instance.signInWithCredential(credential);
     } catch (e) {
       print('Google Sign-In error: $e');
@@ -233,7 +252,8 @@ class PhoneNumberController extends GetxController {
       final nonce = sha256ofString(rawNonce);
 
       // Request credential for the currently signed in Apple account.
-      AuthorizationCredentialAppleID appleCredential = await SignInWithApple.getAppleIDCredential(
+      AuthorizationCredentialAppleID appleCredential =
+          await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
           AppleIDAuthorizationScopes.fullName,
@@ -251,8 +271,12 @@ class PhoneNumberController extends GetxController {
 
       // Sign in the user with Firebase. If the nonce we generated earlier does
       // not match the nonce in `appleCredential.identityToken`, sign in will fail.
-      UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(oauthCredential);
-      return {"appleCredential": appleCredential, "userCredential": userCredential};
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+      return {
+        "appleCredential": appleCredential,
+        "userCredential": userCredential
+      };
     } catch (e) {
       debugPrint(e.toString());
     }

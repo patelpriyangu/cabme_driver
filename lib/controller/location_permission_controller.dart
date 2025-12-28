@@ -1,11 +1,11 @@
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/model/user_model.dart';
-import 'package:cabme_driver/on_boarding_screen.dart';
-import 'package:cabme_driver/page/dashboard_screen.dart';
-import 'package:cabme_driver/page/owner_dashboard_screen.dart';
-import 'package:cabme_driver/page/subscription_plan_screen/subscription_plan_screen.dart';
-import 'package:cabme_driver/utils/Preferences.dart';
-import 'package:cabme_driver/utils/utils.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/model/user_model.dart';
+import 'package:uniqcars_driver/on_boarding_screen.dart';
+import 'package:uniqcars_driver/page/dashboard_screen.dart';
+import 'package:uniqcars_driver/page/owner_dashboard_screen.dart';
+import 'package:uniqcars_driver/page/subscription_plan_screen/subscription_plan_screen.dart';
+import 'package:uniqcars_driver/utils/Preferences.dart';
+import 'package:uniqcars_driver/utils/utils.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
@@ -26,10 +26,13 @@ class LocationPermissionController extends GetxController {
       return;
     } else {
       LocationPermission permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.always || permission == LocationPermission.whileInUse) {
+      if (permission == LocationPermission.always ||
+          permission == LocationPermission.whileInUse) {
         Constant.currentLocation = await Utils.getCurrentLocation();
         ShowToastDialog.closeLoader();
-        if (Preferences.getString(Preferences.languageCodeKey).toString().isEmpty) {
+        if (Preferences.getString(Preferences.languageCodeKey)
+            .toString()
+            .isEmpty) {
           Get.offAll(LocalizationScreens(intentType: "main"));
         } else {
           if (Preferences.getBoolean(Preferences.isFinishOnBoardingKey)) {
@@ -38,24 +41,31 @@ class LocationPermissionController extends GetxController {
             } else {
               UserModel value = Constant.getUserData();
               UserData? userData = value.userData;
-              await Preferences.setInt(Preferences.userId, int.parse(userData!.id.toString()));
+              await Preferences.setInt(
+                  Preferences.userId, int.parse(userData!.id.toString()));
               bool isPlanExpired = false;
 
               /// Case 1: Admin Commission is 'no' and Subscription model is disabled
-              if (Constant.adminCommission?.statut == "no" && Constant.subscriptionModel == false) {
+              if (Constant.adminCommission?.statut == "no" &&
+                  Constant.subscriptionModel == false) {
                 if (userData.isOwner == "true") {
-                  Get.offAll(() => OwnerDashboardScreen(), transition: Transition.rightToLeft);
+                  Get.offAll(() => OwnerDashboardScreen(),
+                      transition: Transition.rightToLeft);
                 } else {
-                  Get.offAll(() => DashboardScreen(), transition: Transition.rightToLeft);
+                  Get.offAll(() => DashboardScreen(),
+                      transition: Transition.rightToLeft);
                 }
                 return;
               }
 
               /// ✅ Updated: User is a driver *under an owner*
-              bool isOwnerDriver = userData.isOwner == "false" && userData.ownerId != null && userData.ownerId!.isNotEmpty;
+              bool isOwnerDriver = userData.isOwner == "false" &&
+                  userData.ownerId != null &&
+                  userData.ownerId!.isNotEmpty;
 
               if (isOwnerDriver) {
-                Get.offAll(() => DashboardScreen(), transition: Transition.rightToLeft);
+                Get.offAll(() => DashboardScreen(),
+                    transition: Transition.rightToLeft);
                 return;
               }
 
@@ -64,20 +74,25 @@ class LocationPermissionController extends GetxController {
                 if (userData.subscriptionExpiryDate == null) {
                   isPlanExpired = userData.subscriptionPlan?.expiryDay != '-1';
                 } else {
-                  final expiryDate = DateTime.tryParse(userData.subscriptionExpiryDate!);
-                  isPlanExpired = expiryDate != null && expiryDate.isBefore(DateTime.now());
+                  final expiryDate =
+                      DateTime.tryParse(userData.subscriptionExpiryDate!);
+                  isPlanExpired =
+                      expiryDate != null && expiryDate.isBefore(DateTime.now());
                 }
               } else {
                 isPlanExpired = true;
               }
 
               if (userData.subscriptionPlanId == null || isPlanExpired) {
-                Get.to(() => SubscriptionPlanScreen(), arguments: {'isSplashScreen': true});
+                Get.to(() => SubscriptionPlanScreen(),
+                    arguments: {'isSplashScreen': true});
               } else {
                 if (userData.isOwner == "true") {
-                  Get.offAll(() => OwnerDashboardScreen(), transition: Transition.rightToLeft);
+                  Get.offAll(() => OwnerDashboardScreen(),
+                      transition: Transition.rightToLeft);
                 } else {
-                  Get.offAll(() => DashboardScreen(), transition: Transition.rightToLeft);
+                  Get.offAll(() => DashboardScreen(),
+                      transition: Transition.rightToLeft);
                 }
               }
             }
@@ -96,7 +111,8 @@ class LocationPermissionController extends GetxController {
   void _showPermissionDeniedDialog() {
     Get.defaultDialog(
       title: "Permission Required",
-      middleText: "We need your location to show nearby businesses and ensure accurate results. Please allow access when prompted.",
+      middleText:
+          "We need your location to show nearby businesses and ensure accurate results. Please allow access when prompted.",
       barrierDismissible: false,
       confirm: RoundedButtonFill(
         onPress: () async {
@@ -118,7 +134,8 @@ class LocationPermissionController extends GetxController {
   void _showEnableGPSDialog() {
     Get.defaultDialog(
       title: "Enable GPS",
-      middleText: "GPS is required for this app. Please enable location services.",
+      middleText:
+          "GPS is required for this app. Please enable location services.",
       barrierDismissible: false,
       confirm: RoundedButtonFill(
         onPress: () async {

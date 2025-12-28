@@ -1,7 +1,6 @@
-
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/controller/change_password_controller.dart';
-import 'package:cabme_driver/utils/dark_theme_provider.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/controller/change_password_controller.dart';
+import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -25,7 +24,11 @@ class ChangePasswordScreen extends StatelessWidget {
               title: Text(
                 'Forgot Password'.tr,
                 textAlign: TextAlign.center,
-                style: AppThemeData.boldTextStyle(fontSize: 18, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                style: AppThemeData.boldTextStyle(
+                    fontSize: 18,
+                    color: themeChange.getThem()
+                        ? AppThemeData.neutralDark900
+                        : AppThemeData.neutral900),
               ),
               titleSpacing: 0,
               centerTitle: false,
@@ -54,7 +57,9 @@ class ChangePasswordScreen extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 18),
                         child: Obx(
-                          () => controller.isCurrentPasswordShow.value ? SvgPicture.asset("assets/icons/ic_hide.svg") : SvgPicture.asset("assets/icons/ic_show.svg"),
+                          () => controller.isCurrentPasswordShow.value
+                              ? SvgPicture.asset("assets/icons/ic_hide.svg")
+                              : SvgPicture.asset("assets/icons/ic_show.svg"),
                         ),
                       ),
                     ),
@@ -79,7 +84,9 @@ class ChangePasswordScreen extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 18),
                         child: Obx(
-                          () => controller.isPasswordShow.value ? SvgPicture.asset("assets/icons/ic_hide.svg") : SvgPicture.asset("assets/icons/ic_show.svg"),
+                          () => controller.isPasswordShow.value
+                              ? SvgPicture.asset("assets/icons/ic_hide.svg")
+                              : SvgPicture.asset("assets/icons/ic_show.svg"),
                         ),
                       ),
                     ),
@@ -104,7 +111,9 @@ class ChangePasswordScreen extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 18),
                         child: Obx(
-                          () => controller.isConformPasswordShow.value ? SvgPicture.asset("assets/icons/ic_hide.svg") : SvgPicture.asset("assets/icons/ic_show.svg"),
+                          () => controller.isConformPasswordShow.value
+                              ? SvgPicture.asset("assets/icons/ic_hide.svg")
+                              : SvgPicture.asset("assets/icons/ic_show.svg"),
                         ),
                       ),
                     ),
@@ -116,7 +125,7 @@ class ChangePasswordScreen extends StatelessWidget {
               ),
             ),
             bottomNavigationBar: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 40,horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
               child: RoundedButtonFill(
                 title: "Save Changes".tr,
                 height: 5.5,
@@ -124,13 +133,18 @@ class ChangePasswordScreen extends StatelessWidget {
                 textColor: AppThemeData.neutral50,
                 onPress: () async {
                   if (controller.currentPasswordController.value.text.isEmpty) {
-                   ShowToastDialog.showToast('Please enter current password'.tr);
+                    ShowToastDialog.showToast(
+                        'Please enter current password'.tr);
                   } else if (controller.passwordController.value.text.isEmpty) {
                     ShowToastDialog.showToast('Please enter new password'.tr);
-                  } else if (controller.conformPasswordController.value.text.isEmpty) {
-                    ShowToastDialog.showToast('Please enter confirm password'.tr);
-                  } else if (controller.passwordController.value.text != controller.conformPasswordController.value.text) {
-                    ShowToastDialog.showToast('New password and confirm password do not match'.tr);
+                  } else if (controller
+                      .conformPasswordController.value.text.isEmpty) {
+                    ShowToastDialog.showToast(
+                        'Please enter confirm password'.tr);
+                  } else if (controller.passwordController.value.text !=
+                      controller.conformPasswordController.value.text) {
+                    ShowToastDialog.showToast(
+                        'New password and confirm password do not match'.tr);
                   } else {
                     await controller.changePassword();
                   }

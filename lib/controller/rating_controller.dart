@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:cabme_driver/constant/logdata.dart';
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/model/booking_mode.dart';
-import 'package:cabme_driver/model/parcel_bokking_model.dart';
-import 'package:cabme_driver/model/rental_booking_model.dart';
-import 'package:cabme_driver/model/review_list_model.dart';
-import 'package:cabme_driver/service/api.dart';
+import 'package:uniqcars_driver/constant/logdata.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/model/booking_mode.dart';
+import 'package:uniqcars_driver/model/parcel_bokking_model.dart';
+import 'package:uniqcars_driver/model/rental_booking_model.dart';
+import 'package:uniqcars_driver/model/review_list_model.dart';
+import 'package:uniqcars_driver/service/api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -60,14 +60,20 @@ class RatingController extends GetxController {
     };
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.getReview), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true)
+            request: () => http.post(Uri.parse(API.getReview),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
         .then(
       (value) {
         if (value != null) {
           ReviewListModel model = ReviewListModel.fromJson(value);
           if (model.success == "success" || model.success == "Success") {
-            if (model.data!.where((element) => element.reviewTo == "customer").isNotEmpty) {
-              ReviewListData reviewListData = model.data!.where((element) => element.reviewTo == "customer").first;
+            if (model.data!
+                .where((element) => element.reviewTo == "customer")
+                .isNotEmpty) {
+              ReviewListData reviewListData = model.data!
+                  .where((element) => element.reviewTo == "customer")
+                  .first;
               rating.value = double.parse(reviewListData.rating.toString());
               ratingController.value.text = reviewListData.comment.toString();
             }
@@ -102,7 +108,9 @@ class RatingController extends GetxController {
     };
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.submitReview), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true)
+            request: () => http.post(Uri.parse(API.submitReview),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
         .then(
       (value) {
         if (value != null) {

@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/model/parcel_bokking_model.dart';
-import 'package:cabme_driver/model/user_model.dart';
-import 'package:cabme_driver/service/api.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/model/parcel_bokking_model.dart';
+import 'package:uniqcars_driver/model/user_model.dart';
+import 'package:uniqcars_driver/service/api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:get/get.dart';
@@ -48,11 +48,17 @@ class ParcelDetailsController extends GetxController {
     };
 
     print(bodyParams);
-    await API.handleApiRequest(request: () => http.post(Uri.parse(API.getParcelDetail), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: false).then(
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.getParcelDetail),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: false)
+        .then(
       (value) async {
         if (value != null) {
           if (value['success'] == "Failed" || value['success'] == "failed") {
-            ShowToastDialog.showToast(value['error'] ?? "Booking data not found");
+            ShowToastDialog.showToast(
+                value['error'] ?? "Booking data not found");
             return null;
           } else {
             ParcelBookingModel bookingData = ParcelBookingModel.fromJson(value);
@@ -70,8 +76,14 @@ class ParcelDetailsController extends GetxController {
   void setBookingData(ParcelBookingData booking) {
     parcelBookingData.value = booking;
     locationData.clear();
-    locationData.add(Stops(location: booking.source, latitude: booking.latSource, longitude: booking.lngSource));
-    locationData.add(Stops(location: booking.destination, latitude: booking.latDestination, longitude: booking.lngDestination));
+    locationData.add(Stops(
+        location: booking.source,
+        latitude: booking.latSource,
+        longitude: booking.lngSource));
+    locationData.add(Stops(
+        location: booking.destination,
+        latitude: booking.latDestination,
+        longitude: booking.lngDestination));
     calculateTotalAmount();
     if (Constant.selectedMapType == 'osm') {
       fetchRoute();
@@ -89,22 +101,33 @@ class ParcelDetailsController extends GetxController {
     taxAmount = "0.0".obs;
     subTotal.value = parcelBookingData.value.amount.toString();
     if (parcelBookingData.value.discountType != null) {
-      discount.value = Constant.calculateDiscountOrder(amount: subTotal.value, offerModel: parcelBookingData.value.discountType).toString();
+      discount.value = Constant.calculateDiscountOrder(
+              amount: subTotal.value,
+              offerModel: parcelBookingData.value.discountType)
+          .toString();
     }
     for (var element in parcelBookingData.value.tax!) {
-      taxAmount.value = (double.parse(taxAmount.value) + Constant().calculateTax(amount: (double.parse(subTotal.value) - double.parse(discount.value)).toString(), taxModel: element))
+      taxAmount.value = (double.parse(taxAmount.value) +
+              Constant().calculateTax(
+                  amount: (double.parse(subTotal.value) -
+                          double.parse(discount.value))
+                      .toString(),
+                  taxModel: element))
           .toStringAsFixed(int.tryParse(Constant.decimal.toString()) ?? 2);
     }
 
-    totalAmount.value = ((double.parse(subTotal.value) - (double.parse(discount.value))) + double.parse(taxAmount.value)).toStringAsFixed(int.tryParse(Constant.decimal.toString()) ?? 2);
+    totalAmount.value =
+        ((double.parse(subTotal.value) - (double.parse(discount.value))) +
+                double.parse(taxAmount.value))
+            .toStringAsFixed(int.tryParse(Constant.decimal.toString()) ?? 2);
     update();
   }
 
-
-
   gmaps.GoogleMapController? googleMapController;
 
-  List<LatLng> get osmPoints => locationData.map((e) => LatLng(double.parse(e.latitude!), double.parse(e.longitude!))).toList();
+  List<LatLng> get osmPoints => locationData
+      .map((e) => LatLng(double.parse(e.latitude!), double.parse(e.longitude!)))
+      .toList();
   RxList<location.LatLng> routePoints = <location.LatLng>[].obs;
   Future<void> fetchRoute() async {
     try {
@@ -137,8 +160,10 @@ class ParcelDetailsController extends GetxController {
     }
   }
 
-  RxMap<gmaps.PolylineId, gmaps.Polyline> polyLines = <gmaps.PolylineId, gmaps.Polyline>{}.obs;
-  PolylinePoints polylinePoints = PolylinePoints(apiKey: Constant.kGoogleApiKey.toString());
+  RxMap<gmaps.PolylineId, gmaps.Polyline> polyLines =
+      <gmaps.PolylineId, gmaps.Polyline>{}.obs;
+  PolylinePoints polylinePoints =
+      PolylinePoints(apiKey: Constant.kGoogleApiKey.toString());
 
   void getPolyline() async {
     if (googlePoints.length < 2) return;
@@ -148,10 +173,15 @@ class ParcelDetailsController extends GetxController {
 
     if (source.latitude == 0.0 || destination.latitude == 0.0) return;
 
-    final intermediateStops = googlePoints.length > 2 ? googlePoints.sublist(1, googlePoints.length - 1) : <gmaps.LatLng>[];
+    final intermediateStops = googlePoints.length > 2
+        ? googlePoints.sublist(1, googlePoints.length - 1)
+        : <gmaps.LatLng>[];
     [];
 
-    final wayPoints = intermediateStops.map((stop) => PolylineWayPoint(location: "${stop.latitude},${stop.longitude}")).toList();
+    final wayPoints = intermediateStops
+        .map((stop) =>
+            PolylineWayPoint(location: "${stop.latitude},${stop.longitude}"))
+        .toList();
 
     final polylineRequest = PolylineRequest(
       origin: PointLatLng(source.latitude, source.longitude),
@@ -170,7 +200,9 @@ class ParcelDetailsController extends GetxController {
         return;
       }
 
-      final polylineCoordinates = result.points.map((point) => gmaps.LatLng(point.latitude, point.longitude)).toList();
+      final polylineCoordinates = result.points
+          .map((point) => gmaps.LatLng(point.latitude, point.longitude))
+          .toList();
 
       _addPolyLine(polylineCoordinates);
     } catch (e) {
@@ -200,22 +232,29 @@ class ParcelDetailsController extends GetxController {
 
     gmaps.LatLngBounds bounds;
 
-    if (source.latitude > destination.latitude && source.longitude > destination.longitude) {
+    if (source.latitude > destination.latitude &&
+        source.longitude > destination.longitude) {
       bounds = gmaps.LatLngBounds(southwest: destination, northeast: source);
     } else if (source.longitude > destination.longitude) {
-      bounds = gmaps.LatLngBounds(southwest: gmaps.LatLng(source.latitude, destination.longitude), northeast: gmaps.LatLng(destination.latitude, source.longitude));
+      bounds = gmaps.LatLngBounds(
+          southwest: gmaps.LatLng(source.latitude, destination.longitude),
+          northeast: gmaps.LatLng(destination.latitude, source.longitude));
     } else if (source.latitude > destination.latitude) {
-      bounds = gmaps.LatLngBounds(southwest: gmaps.LatLng(destination.latitude, source.longitude), northeast: gmaps.LatLng(source.latitude, destination.longitude));
+      bounds = gmaps.LatLngBounds(
+          southwest: gmaps.LatLng(destination.latitude, source.longitude),
+          northeast: gmaps.LatLng(source.latitude, destination.longitude));
     } else {
       bounds = gmaps.LatLngBounds(southwest: source, northeast: destination);
     }
 
-    gmaps.CameraUpdate cameraUpdate = gmaps.CameraUpdate.newLatLngBounds(bounds, 10);
+    gmaps.CameraUpdate cameraUpdate =
+        gmaps.CameraUpdate.newLatLngBounds(bounds, 10);
 
     return checkCameraLocation(cameraUpdate, mapController);
   }
 
-  Future<void> checkCameraLocation(gmaps.CameraUpdate cameraUpdate, gmaps.GoogleMapController mapController) async {
+  Future<void> checkCameraLocation(gmaps.CameraUpdate cameraUpdate,
+      gmaps.GoogleMapController mapController) async {
     mapController.animateCamera(cameraUpdate);
     gmaps.LatLngBounds l1 = await mapController.getVisibleRegion();
     gmaps.LatLngBounds l2 = await mapController.getVisibleRegion();
@@ -225,7 +264,10 @@ class ParcelDetailsController extends GetxController {
     }
   }
 
-  List<gmaps.LatLng> get googlePoints => locationData.map((e) => gmaps.LatLng(double.parse(e.latitude!), double.parse(e.longitude!))).toList();
+  List<gmaps.LatLng> get googlePoints => locationData
+      .map((e) =>
+          gmaps.LatLng(double.parse(e.latitude!), double.parse(e.longitude!)))
+      .toList();
 
   void fitGoogleBounds() {
     if (locationData.length < 2) return;

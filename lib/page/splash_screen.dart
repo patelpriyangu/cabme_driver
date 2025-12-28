@@ -1,6 +1,6 @@
-import 'package:cabme_driver/controller/splash_controller.dart';
-import 'package:cabme_driver/themes/app_them_data.dart';
-import 'package:cabme_driver/themes/responsive.dart';
+import 'package:uniqcars_driver/controller/splash_controller.dart';
+import 'package:uniqcars_driver/themes/app_them_data.dart';
+import 'package:uniqcars_driver/themes/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

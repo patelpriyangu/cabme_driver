@@ -1,6 +1,6 @@
-import 'package:cabme_driver/themes/app_them_data.dart';
-import 'package:cabme_driver/themes/round_button_fill.dart';
-import 'package:cabme_driver/utils/dark_theme_provider.dart';
+import 'package:uniqcars_driver/themes/app_them_data.dart';
+import 'package:uniqcars_driver/themes/round_button_fill.dart';
+import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -41,13 +41,17 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
     return Stack(
       children: <Widget>[
         Container(
-          padding: const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 20),
+          padding:
+              const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 20),
           decoration: BoxDecoration(
               shape: BoxShape.rectangle,
-              color: themeChange.getThem() ? AppThemeData.neutralDark50 : AppThemeData.neutral50,
+              color: themeChange.getThem()
+                  ? AppThemeData.neutralDark50
+                  : AppThemeData.neutral50,
               borderRadius: BorderRadius.circular(0),
               boxShadow: const [
-                BoxShadow(color: Colors.black, offset: Offset(0, 5), blurRadius: 10),
+                BoxShadow(
+                    color: Colors.black, offset: Offset(0, 5), blurRadius: 10),
               ]),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -58,7 +62,9 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
                 style: TextStyle(
                   fontSize: 18,
                   fontFamily: AppThemeData.semibold,
-                  color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                  color: themeChange.getThem()
+                      ? AppThemeData.neutralDark900
+                      : AppThemeData.neutral900,
                 ),
               ),
               const SizedBox(

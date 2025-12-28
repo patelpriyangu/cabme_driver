@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/controller/phone_number_controller.dart';
-import 'package:cabme_driver/themes/app_them_data.dart';
-import 'package:cabme_driver/utils/dark_theme_provider.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/controller/phone_number_controller.dart';
+import 'package:uniqcars_driver/themes/app_them_data.dart';
+import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -40,7 +40,9 @@ class MobileNumberScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 5),
                       child: Image.asset(
-                        themeChange.getThem() ? "assets/images/login_image_2.png" : "assets/images/login_image.png",
+                        themeChange.getThem()
+                            ? "assets/images/login_image_2.png"
+                            : "assets/images/login_image.png",
                         height: 240,
                       ),
                     ),
@@ -55,7 +57,11 @@ class MobileNumberScreen extends StatelessWidget {
                           Text(
                             'Let’s get you started'.tr,
                             textAlign: TextAlign.center,
-                            style: AppThemeData.boldTextStyle(fontSize: 22, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                            style: AppThemeData.boldTextStyle(
+                                fontSize: 22,
+                                color: themeChange.getThem()
+                                    ? AppThemeData.neutralDark900
+                                    : AppThemeData.neutral900),
                           ),
                           SizedBox(
                             height: 5,
@@ -63,7 +69,11 @@ class MobileNumberScreen extends StatelessWidget {
                           Text(
                             'Use phone or social account'.tr,
                             textAlign: TextAlign.center,
-                            style: AppThemeData.mediumTextStyle(fontSize: 14, color: themeChange.getThem() ? AppThemeData.neutralDark500 : AppThemeData.neutral500),
+                            style: AppThemeData.mediumTextStyle(
+                                fontSize: 14,
+                                color: themeChange.getThem()
+                                    ? AppThemeData.neutralDark500
+                                    : AppThemeData.neutral500),
                           ),
                           SizedBox(
                             height: 20,
@@ -72,33 +82,48 @@ class MobileNumberScreen extends StatelessWidget {
                             controller: controller.phoneNumber.value,
                             hintText: 'Enter mobile number',
                             inputFormatters: [
-                              FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+                              FilteringTextInputFormatter.allow(
+                                  RegExp('[0-9]')),
                             ],
                             prefix: CountryCodePicker(
                               onChanged: (value) {
-                                controller.countryCodeController.value.text = value.dialCode.toString();
+                                controller.countryCodeController.value.text =
+                                    value.dialCode.toString();
                               },
                               dialogTextStyle: TextStyle(
-                                color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                color: themeChange.getThem()
+                                    ? AppThemeData.neutralDark900
+                                    : AppThemeData.neutral900,
                                 fontWeight: FontWeight.w500,
                                 fontFamily: AppThemeData.medium,
                               ),
-                              dialogBackgroundColor: themeChange.getThem() ? AppThemeData.neutralDark50 : AppThemeData.neutral50,
-                              initialSelection: controller.countryCodeController.value.text,
-                              comparator: (a, b) => b.name!.compareTo(a.name.toString()),
+                              dialogBackgroundColor: themeChange.getThem()
+                                  ? AppThemeData.neutralDark50
+                                  : AppThemeData.neutral50,
+                              initialSelection:
+                                  controller.countryCodeController.value.text,
+                              comparator: (a, b) =>
+                                  b.name!.compareTo(a.name.toString()),
                               flagDecoration: const BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(2)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(2)),
                               ),
                               textStyle: TextStyle(
-                                color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                color: themeChange.getThem()
+                                    ? AppThemeData.neutralDark900
+                                    : AppThemeData.neutral900,
                                 fontWeight: FontWeight.w500,
                                 fontFamily: AppThemeData.medium,
                               ),
                               searchDecoration: InputDecoration(
-                                iconColor: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                iconColor: themeChange.getThem()
+                                    ? AppThemeData.neutralDark900
+                                    : AppThemeData.neutral900,
                               ),
                               searchStyle: TextStyle(
-                                color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                color: themeChange.getThem()
+                                    ? AppThemeData.neutralDark900
+                                    : AppThemeData.neutral900,
                                 fontWeight: FontWeight.w500,
                                 fontFamily: AppThemeData.medium,
                               ),
@@ -114,31 +139,42 @@ class MobileNumberScreen extends StatelessWidget {
                             textColor: AppThemeData.neutral50,
                             onPress: () {
                               FocusScope.of(context).unfocus();
-                              if (controller.phoneNumber.value.text.isNotEmpty) {
+                              if (controller
+                                  .phoneNumber.value.text.isNotEmpty) {
                                 ShowToastDialog.showLoader("Code sending");
                                 controller.sendCode();
                               }
                             },
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 30, horizontal: 30),
                             child: Row(
                               children: [
                                 Expanded(
                                     child: Divider(
-                                  color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
+                                  color: themeChange.getThem()
+                                      ? AppThemeData.neutralDark300
+                                      : AppThemeData.neutral300,
                                 )),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
                                   child: Text(
                                     'OR CONTINUE WITH'.tr,
                                     textAlign: TextAlign.center,
-                                    style: AppThemeData.mediumTextStyle(fontSize: 12, color: themeChange.getThem() ? AppThemeData.neutralDark500 : AppThemeData.neutral500),
+                                    style: AppThemeData.mediumTextStyle(
+                                        fontSize: 12,
+                                        color: themeChange.getThem()
+                                            ? AppThemeData.neutralDark500
+                                            : AppThemeData.neutral500),
                                   ),
                                 ),
                                 Expanded(
                                     child: Divider(
-                                  color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
+                                  color: themeChange.getThem()
+                                      ? AppThemeData.neutralDark300
+                                      : AppThemeData.neutral300,
                                 )),
                               ],
                             ),
@@ -154,18 +190,29 @@ class MobileNumberScreen extends StatelessWidget {
                                 child: Column(
                                   children: [
                                     Container(
-                                      decoration: BoxDecoration(color: themeChange.getThem() ? AppThemeData.neutralDark200 : AppThemeData.neutral200, borderRadius: BorderRadius.circular(60)),
+                                      decoration: BoxDecoration(
+                                          color: themeChange.getThem()
+                                              ? AppThemeData.neutralDark200
+                                              : AppThemeData.neutral200,
+                                          borderRadius:
+                                              BorderRadius.circular(60)),
                                       child: Padding(
                                         padding: const EdgeInsets.all(18),
-                                        child: SvgPicture.asset("assets/icons/ic_email.svg"),
+                                        child: SvgPicture.asset(
+                                            "assets/icons/ic_email.svg"),
                                       ),
-
                                     ),
-                                    SizedBox(height: 5,),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
                                     Text(
                                       'Email'.tr,
                                       textAlign: TextAlign.center,
-                                      style: AppThemeData.semiBoldTextStyle(fontSize: 14, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                      style: AppThemeData.semiBoldTextStyle(
+                                          fontSize: 14,
+                                          color: themeChange.getThem()
+                                              ? AppThemeData.neutralDark900
+                                              : AppThemeData.neutral900),
                                     ),
                                   ],
                                 ),
@@ -181,17 +228,29 @@ class MobileNumberScreen extends StatelessWidget {
                                 child: Column(
                                   children: [
                                     Container(
-                                      decoration: BoxDecoration(color: themeChange.getThem() ? AppThemeData.neutralDark200 : AppThemeData.neutral200, borderRadius: BorderRadius.circular(60)),
+                                      decoration: BoxDecoration(
+                                          color: themeChange.getThem()
+                                              ? AppThemeData.neutralDark200
+                                              : AppThemeData.neutral200,
+                                          borderRadius:
+                                              BorderRadius.circular(60)),
                                       child: Padding(
                                         padding: const EdgeInsets.all(18),
-                                        child: SvgPicture.asset("assets/icons/ic_google.svg"),
+                                        child: SvgPicture.asset(
+                                            "assets/icons/ic_google.svg"),
                                       ),
                                     ),
-                                    SizedBox(height: 5,),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
                                     Text(
                                       'Google'.tr,
                                       textAlign: TextAlign.center,
-                                      style: AppThemeData.semiBoldTextStyle(fontSize: 14, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                      style: AppThemeData.semiBoldTextStyle(
+                                          fontSize: 14,
+                                          color: themeChange.getThem()
+                                              ? AppThemeData.neutralDark900
+                                              : AppThemeData.neutral900),
                                     ),
                                   ],
                                 ),
@@ -210,17 +269,37 @@ class MobileNumberScreen extends StatelessWidget {
                                           child: Column(
                                             children: [
                                               Container(
-                                                decoration: BoxDecoration(color: themeChange.getThem() ? AppThemeData.neutralDark200 : AppThemeData.neutral200, borderRadius: BorderRadius.circular(60)),
+                                                decoration: BoxDecoration(
+                                                    color: themeChange.getThem()
+                                                        ? AppThemeData
+                                                            .neutralDark200
+                                                        : AppThemeData
+                                                            .neutral200,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            60)),
                                                 child: Padding(
-                                                  padding: const EdgeInsets.all(18),
-                                                  child: SvgPicture.asset("assets/icons/ic_apple.svg"),
+                                                  padding:
+                                                      const EdgeInsets.all(18),
+                                                  child: SvgPicture.asset(
+                                                      "assets/icons/ic_apple.svg"),
                                                 ),
                                               ),
-                                              SizedBox(height: 5,),
+                                              SizedBox(
+                                                height: 5,
+                                              ),
                                               Text(
                                                 'Apple'.tr,
                                                 textAlign: TextAlign.center,
-                                                style: AppThemeData.semiBoldTextStyle(fontSize: 14, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                                style: AppThemeData
+                                                    .semiBoldTextStyle(
+                                                        fontSize: 14,
+                                                        color: themeChange
+                                                                .getThem()
+                                                            ? AppThemeData
+                                                                .neutralDark900
+                                                            : AppThemeData
+                                                                .neutral900),
                                               ),
                                             ],
                                           ),

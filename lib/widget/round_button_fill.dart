@@ -1,5 +1,4 @@
-
-import 'package:cabme_driver/themes/responsive.dart';
+import 'package:uniqcars_driver/themes/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -20,17 +19,17 @@ class RoundedButtonFill extends StatelessWidget {
 
   const RoundedButtonFill(
       {super.key,
-        required this.title,
-        this.borderRadius,
-        this.height,
-        required this.onPress,
-        this.width,
-        this.color,
-        this.isCenter,
-        this.icon,
-        this.fontSizes,
-        this.textColor,
-        this.isRight});
+      required this.title,
+      this.borderRadius,
+      this.height,
+      required this.onPress,
+      this.width,
+      this.color,
+      this.isCenter,
+      this.icon,
+      this.fontSizes,
+      this.textColor,
+      this.isRight});
 
   @override
   Widget build(BuildContext context) {
@@ -52,21 +51,34 @@ class RoundedButtonFill extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            (isRight == false) ? Padding(padding: const EdgeInsets.only(right: 26, left: 20), child: icon) : const SizedBox(),
+            (isRight == false)
+                ? Padding(
+                    padding: const EdgeInsets.only(right: 26, left: 20),
+                    child: icon)
+                : const SizedBox(),
             isCenter == true
                 ? Text(
-              title.toString().tr,
-              textAlign: TextAlign.center,
-              style: AppThemeData.boldTextStyle(fontSize: fontSizes ?? 14, color: textColor ?? AppThemeData.neutral900),
-            )
+                    title.toString().tr,
+                    textAlign: TextAlign.center,
+                    style: AppThemeData.boldTextStyle(
+                        fontSize: fontSizes ?? 14,
+                        color: textColor ?? AppThemeData.neutral900),
+                  )
                 : Expanded(
-              child: Text(
-                title.toString().tr,
-                textAlign: TextAlign.center,
-                style: AppThemeData.boldTextStyle(fontSize: fontSizes ?? 14, color: textColor ?? AppThemeData.neutral900),
-              ),
-            ),
-            (isRight == true) ? Padding(padding: EdgeInsets.only(left: 5, right: isCenter == true ? 0 : 10), child: icon) : const SizedBox(),
+                    child: Text(
+                      title.toString().tr,
+                      textAlign: TextAlign.center,
+                      style: AppThemeData.boldTextStyle(
+                          fontSize: fontSizes ?? 14,
+                          color: textColor ?? AppThemeData.neutral900),
+                    ),
+                  ),
+            (isRight == true)
+                ? Padding(
+                    padding: EdgeInsets.only(
+                        left: 5, right: isCenter == true ? 0 : 10),
+                    child: icon)
+                : const SizedBox(),
           ],
         ),
       ),

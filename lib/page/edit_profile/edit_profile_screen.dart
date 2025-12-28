@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/controller/edit_profile_controllr.dart';
-import 'package:cabme_driver/themes/responsive.dart';
-import 'package:cabme_driver/utils/dark_theme_provider.dart';
-import 'package:cabme_driver/utils/network_image_widget.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/controller/edit_profile_controllr.dart';
+import 'package:uniqcars_driver/themes/responsive.dart';
+import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
+import 'package:uniqcars_driver/utils/network_image_widget.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,7 +32,11 @@ class EditProfileScreen extends StatelessWidget {
               title: Text(
                 'Edit Profile'.tr,
                 textAlign: TextAlign.center,
-                style: AppThemeData.boldTextStyle(fontSize: 18, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                style: AppThemeData.boldTextStyle(
+                    fontSize: 18,
+                    color: themeChange.getThem()
+                        ? AppThemeData.neutralDark900
+                        : AppThemeData.neutral900),
               ),
               titleSpacing: 0,
               centerTitle: false,
@@ -53,7 +57,9 @@ class EditProfileScreen extends StatelessWidget {
                                 fit: BoxFit.cover,
                               ),
                             )
-                          : Constant().hasValidUrl(controller.profileImage.value) == false
+                          : Constant().hasValidUrl(
+                                      controller.profileImage.value) ==
+                                  false
                               ? ClipRRect(
                                   borderRadius: BorderRadius.circular(60),
                                   child: Image.file(
@@ -68,7 +74,9 @@ class EditProfileScreen extends StatelessWidget {
                                   child: NetworkImageWidget(
                                     width: 120,
                                     height: 120,
-                                    imageUrl: controller.userModel.value.userData!.photoPath.toString(),
+                                    imageUrl: controller
+                                        .userModel.value.userData!.photoPath
+                                        .toString(),
                                     errorWidget: Image.asset(
                                       "assets/images/placeholder_image.png",
                                       width: 120,
@@ -87,7 +95,9 @@ class EditProfileScreen extends StatelessWidget {
                             width: 32,
                             height: 32,
                             decoration: BoxDecoration(
-                              color: themeChange.getThem() ? AppThemeData.accentDefault : AppThemeData.accentDefault,
+                              color: themeChange.getThem()
+                                  ? AppThemeData.accentDefault
+                                  : AppThemeData.accentDefault,
                               borderRadius: BorderRadius.circular(50),
                             ),
                             child: Padding(
@@ -95,7 +105,11 @@ class EditProfileScreen extends StatelessWidget {
                               child: SvgPicture.asset(
                                 "assets/icons/ic_edit.svg",
                                 height: 20,
-                                colorFilter: ColorFilter.mode(themeChange.getThem() ? AppThemeData.neutral50 : AppThemeData.neutral50, BlendMode.srcIn),
+                                colorFilter: ColorFilter.mode(
+                                    themeChange.getThem()
+                                        ? AppThemeData.neutral50
+                                        : AppThemeData.neutral50,
+                                    BlendMode.srcIn),
                               ),
                             ),
                           ),
@@ -128,11 +142,26 @@ class EditProfileScreen extends StatelessWidget {
                     controller: controller.emailController.value,
                     hintText: 'Enter Email Address',
                     title: 'Email Address',
-                    enable: controller.userModel.value.userData!.loginType == "email" || controller.userModel.value.userData!.loginType == "google" || controller.userModel.value.userData!.loginType == "apple" ? false : true,
-                    readOnly: controller.userModel.value.userData!.loginType == "email" || controller.userModel.value.userData!.loginType == "google" || controller.userModel.value.userData!.loginType == "apple" ? true : false,
+                    enable: controller.userModel.value.userData!.loginType ==
+                                "email" ||
+                            controller.userModel.value.userData!.loginType ==
+                                "google" ||
+                            controller.userModel.value.userData!.loginType ==
+                                "apple"
+                        ? false
+                        : true,
+                    readOnly: controller.userModel.value.userData!.loginType ==
+                                "email" ||
+                            controller.userModel.value.userData!.loginType ==
+                                "google" ||
+                            controller.userModel.value.userData!.loginType ==
+                                "apple"
+                        ? true
+                        : false,
                     prefix: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 18),
-                      child: SvgPicture.asset("assets/icons/ic_email_login.svg"),
+                      child:
+                          SvgPicture.asset("assets/icons/ic_email_login.svg"),
                     ),
                   ),
                   TextFieldWidget(
@@ -142,32 +171,52 @@ class EditProfileScreen extends StatelessWidget {
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp('[0-9]')),
                     ],
-                    enable: controller.userModel.value.userData!.loginType == "phoneNumber" ? false : true,
-                    readOnly: controller.userModel.value.userData!.loginType == "phoneNumber" ? true : false,                    prefix: CountryCodePicker(
+                    enable: controller.userModel.value.userData!.loginType ==
+                            "phoneNumber"
+                        ? false
+                        : true,
+                    readOnly: controller.userModel.value.userData!.loginType ==
+                            "phoneNumber"
+                        ? true
+                        : false,
+                    prefix: CountryCodePicker(
                       onChanged: (value) {
-                        controller.countryCodeController.value.text = value.dialCode.toString();
+                        controller.countryCodeController.value.text =
+                            value.dialCode.toString();
                       },
                       dialogTextStyle: TextStyle(
-                        color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                        color: themeChange.getThem()
+                            ? AppThemeData.neutralDark900
+                            : AppThemeData.neutral900,
                         fontWeight: FontWeight.w500,
                         fontFamily: AppThemeData.medium,
                       ),
-                      dialogBackgroundColor: themeChange.getThem() ? AppThemeData.neutralDark50 : AppThemeData.neutral50,
-                      initialSelection: controller.countryCodeController.value.text,
-                      comparator: (a, b) => b.name!.compareTo(a.name.toString()),
+                      dialogBackgroundColor: themeChange.getThem()
+                          ? AppThemeData.neutralDark50
+                          : AppThemeData.neutral50,
+                      initialSelection:
+                          controller.countryCodeController.value.text,
+                      comparator: (a, b) =>
+                          b.name!.compareTo(a.name.toString()),
                       flagDecoration: const BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(2)),
                       ),
                       textStyle: TextStyle(
-                        color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                        color: themeChange.getThem()
+                            ? AppThemeData.neutralDark900
+                            : AppThemeData.neutral900,
                         fontWeight: FontWeight.w500,
                         fontFamily: AppThemeData.medium,
                       ),
                       searchDecoration: InputDecoration(
-                        iconColor: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                        iconColor: themeChange.getThem()
+                            ? AppThemeData.neutralDark900
+                            : AppThemeData.neutral900,
                       ),
                       searchStyle: TextStyle(
-                        color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                        color: themeChange.getThem()
+                            ? AppThemeData.neutralDark900
+                            : AppThemeData.neutral900,
                         fontWeight: FontWeight.w500,
                         fontFamily: AppThemeData.medium,
                       ),
@@ -185,14 +234,19 @@ class EditProfileScreen extends StatelessWidget {
                       FocusScope.of(context).unfocus();
                       if (controller.firstNameController.value.text.isEmpty) {
                         ShowToastDialog.showToast('First Name cannot be empty');
-                      } else if (controller.lastNameController.value.text.isEmpty) {
+                      } else if (controller
+                          .lastNameController.value.text.isEmpty) {
                         ShowToastDialog.showToast('Last Name cannot be empty');
-                      } else if (controller.emailController.value.text.isEmpty) {
+                      } else if (controller
+                          .emailController.value.text.isEmpty) {
                         ShowToastDialog.showToast('Email cannot be empty');
-                      }  else if (!Constant.isValidEmail(controller.emailController.value.text)) {
-                        ShowToastDialog.showToast('Please enter a valid email address');
+                      } else if (!Constant.isValidEmail(
+                          controller.emailController.value.text)) {
+                        ShowToastDialog.showToast(
+                            'Please enter a valid email address');
                       } else if (controller.phoneNumber.value.text.isEmpty) {
-                        ShowToastDialog.showToast('Phone Number cannot be empty');
+                        ShowToastDialog.showToast(
+                            'Phone Number cannot be empty');
                       } else {
                         controller.updateUser(
                             image: controller.profileImage.value,
@@ -210,7 +264,8 @@ class EditProfileScreen extends StatelessWidget {
         });
   }
 
-  Future buildBottomSheet(BuildContext context, EditProfileController controller) {
+  Future buildBottomSheet(
+      BuildContext context, EditProfileController controller) {
     return showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -239,7 +294,8 @@ class EditProfileScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             IconButton(
-                                onPressed: () => controller.pickFile(source: ImageSource.camera),
+                                onPressed: () => controller.pickFile(
+                                    source: ImageSource.camera),
                                 icon: const Icon(
                                   Icons.camera_alt,
                                   size: 32,
@@ -261,7 +317,8 @@ class EditProfileScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             IconButton(
-                              onPressed: () => controller.pickFile(source: ImageSource.gallery),
+                              onPressed: () => controller.pickFile(
+                                  source: ImageSource.gallery),
                               icon: const Icon(
                                 Icons.photo_library_sharp,
                                 size: 32,

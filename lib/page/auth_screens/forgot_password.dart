@@ -1,8 +1,8 @@
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/controller/forgot_password_controller.dart';
-import 'package:cabme_driver/page/auth_screens/forgot_password_otp_screen.dart';
-import 'package:cabme_driver/themes/app_them_data.dart';
-import 'package:cabme_driver/utils/dark_theme_provider.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/controller/forgot_password_controller.dart';
+import 'package:uniqcars_driver/page/auth_screens/forgot_password_otp_screen.dart';
+import 'package:uniqcars_driver/themes/app_them_data.dart';
+import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -30,7 +30,8 @@ class ForgotPasswordScreen extends StatelessWidget {
             ),
             body: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -38,16 +39,23 @@ class ForgotPasswordScreen extends StatelessWidget {
                       'Forgot Your Password?'.tr,
                       textAlign: TextAlign.start,
                       style: AppThemeData.boldTextStyle(
-                          fontSize: 22, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                          fontSize: 22,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark900
+                              : AppThemeData.neutral900),
                     ),
                     SizedBox(
                       height: 5,
                     ),
                     Text(
-                      'Don’t worry! Enter your email address. we’ll help you reset your password.'.tr,
+                      'Don’t worry! Enter your email address. we’ll help you reset your password.'
+                          .tr,
                       textAlign: TextAlign.start,
                       style: AppThemeData.mediumTextStyle(
-                          fontSize: 14, color: themeChange.getThem() ? AppThemeData.neutralDark500 : AppThemeData.neutral500),
+                          fontSize: 14,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark500
+                              : AppThemeData.neutral500),
                     ),
                     SizedBox(
                       height: 40,
@@ -58,7 +66,8 @@ class ForgotPasswordScreen extends StatelessWidget {
                       title: 'Email Address',
                       prefix: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 18),
-                        child: SvgPicture.asset("assets/icons/ic_email_login.svg"),
+                        child:
+                            SvgPicture.asset("assets/icons/ic_email_login.svg"),
                       ),
                     ),
                     SizedBox(
@@ -70,20 +79,29 @@ class ForgotPasswordScreen extends StatelessWidget {
                       color: AppThemeData.primaryDefault,
                       textColor: AppThemeData.neutral50,
                       onPress: () async {
-                        if (controller.emailTextEditController.value.text.isEmpty) {
+                        if (controller
+                            .emailTextEditController.value.text.isEmpty) {
                           ShowToastDialog.showToast("Please enter email");
                         } else {
                           Map<String, String> bodyParams = {
-                            'email': controller.emailTextEditController.value.text.trim(),
+                            'email': controller
+                                .emailTextEditController.value.text
+                                .trim(),
                             'user_cat': "driver",
                           };
                           controller.sendEmail(bodyParams).then((value) {
                             if (value != null) {
                               if (value == true) {
-                                Get.to(() => ForgotPasswordOtpScreen(email: controller.emailTextEditController.value.text.trim()),
-                                    duration: const Duration(milliseconds: 400), transition: Transition.rightToLeft);
+                                Get.to(
+                                    () => ForgotPasswordOtpScreen(
+                                        email: controller
+                                            .emailTextEditController.value.text
+                                            .trim()),
+                                    duration: const Duration(milliseconds: 400),
+                                    transition: Transition.rightToLeft);
                               } else {
-                                ShowToastDialog.showToast("Please try again later");
+                                ShowToastDialog.showToast(
+                                    "Please try again later");
                               }
                             }
                           });

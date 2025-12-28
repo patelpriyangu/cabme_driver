@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/model/user_model.dart';
-import 'package:cabme_driver/page/auth_screens/signup_screen.dart';
-import 'package:cabme_driver/page/dashboard_screen.dart';
-import 'package:cabme_driver/page/owner_dashboard_screen.dart';
-import 'package:cabme_driver/page/subscription_plan_screen/subscription_plan_screen.dart';
-import 'package:cabme_driver/service/api.dart';
-import 'package:cabme_driver/utils/Preferences.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/model/user_model.dart';
+import 'package:uniqcars_driver/page/auth_screens/signup_screen.dart';
+import 'package:uniqcars_driver/page/dashboard_screen.dart';
+import 'package:uniqcars_driver/page/owner_dashboard_screen.dart';
+import 'package:uniqcars_driver/page/subscription_plan_screen/subscription_plan_screen.dart';
+import 'package:uniqcars_driver/service/api.dart';
+import 'package:uniqcars_driver/utils/Preferences.dart';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +29,9 @@ class LoginController extends GetxController {
     UserModel? userModel;
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.userLogin), headers: API.authheader, body: jsonEncode(bodyParams)), showLoader: true)
+            request: () => http.post(Uri.parse(API.userLogin),
+                headers: API.authheader, body: jsonEncode(bodyParams)),
+            showLoader: true)
         .then(
       (value) {
         if (value != null) {
@@ -49,7 +51,8 @@ class LoginController extends GetxController {
     bool? isExits;
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.getExistingUserOrNot), headers: API.authheader, body: jsonEncode(bodyParams)),
+            request: () => http.post(Uri.parse(API.getExistingUserOrNot),
+                headers: API.authheader, body: jsonEncode(bodyParams)),
             showLoader: true)
         .then(
       (value) {
@@ -64,18 +67,20 @@ class LoginController extends GetxController {
               isExits = false;
             }
           }
-
         }
       },
     );
     return isExits;
   }
 
-  Future<UserModel?> getDataByPhoneNumber(Map<String, String> bodyParams) async {
+  Future<UserModel?> getDataByPhoneNumber(
+      Map<String, String> bodyParams) async {
     UserModel? userModel;
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.getProfileByPhone), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true)
+            request: () => http.post(Uri.parse(API.getProfileByPhone),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
         .then(
       (value) {
         if (value != null) {
@@ -102,7 +107,7 @@ class LoginController extends GetxController {
         };
         print("==>$bodyParams");
         await phoneNumberIsExit(bodyParams).then((value) async {
-          if(value != null){
+          if (value != null) {
             if (value == true) {
               Map<String, String> bodyParams = {
                 'email': googleUser.user!.email.toString(),
@@ -114,63 +119,79 @@ class LoginController extends GetxController {
                   if (value.success == "success") {
                     ShowToastDialog.closeLoader();
 
-                    Preferences.setInt(Preferences.userId, int.parse(value.userData!.id.toString()));
+                    Preferences.setInt(Preferences.userId,
+                        int.parse(value.userData!.id.toString()));
                     Preferences.setString(Preferences.user, jsonEncode(value));
-                    Preferences.setString(Preferences.accesstoken, value.userData!.accesstoken.toString());
-                    API.headers['accesstoken'] = value.userData!.accesstoken.toString();
+                    Preferences.setString(Preferences.accesstoken,
+                        value.userData!.accesstoken.toString());
+                    API.headers['accesstoken'] =
+                        value.userData!.accesstoken.toString();
                     Preferences.setBoolean(Preferences.isLogin, true);
 
                     UserData userData = value.userData!;
                     bool isPlanExpired = false;
 
                     /// Case 1: Admin Commission = 'no' and Subscription model = false
-                    if (Constant.adminCommission?.statut == "no" && Constant.subscriptionModel == false) {
+                    if (Constant.adminCommission?.statut == "no" &&
+                        Constant.subscriptionModel == false) {
                       if (userData.isOwner == "true") {
-                        Get.offAll(() => OwnerDashboardScreen(), transition: Transition.rightToLeft);
+                        Get.offAll(() => OwnerDashboardScreen(),
+                            transition: Transition.rightToLeft);
                       } else {
-                        Get.offAll(() => DashboardScreen(), transition: Transition.rightToLeft);
+                        Get.offAll(() => DashboardScreen(),
+                            transition: Transition.rightToLeft);
                       }
                       return;
                     }
 
                     /// Case 3: Owner’s Driver (driver under an owner)
-                    bool isOwnerDriver = userData.isOwner == "false" && userData.ownerId != null && userData.ownerId!.isNotEmpty;
+                    bool isOwnerDriver = userData.isOwner == "false" &&
+                        userData.ownerId != null &&
+                        userData.ownerId!.isNotEmpty;
                     if (isOwnerDriver) {
-                      Get.offAll(() => DashboardScreen(), transition: Transition.rightToLeft);
+                      Get.offAll(() => DashboardScreen(),
+                          transition: Transition.rightToLeft);
                       return;
                     }
 
                     /// Case 2: Individual Driver (no ownerId) → Check subscription
-                    bool isIndividualDriver = userData.isOwner == "false" && (userData.ownerId == null || userData.ownerId!.isEmpty);
+                    bool isIndividualDriver = userData.isOwner == "false" &&
+                        (userData.ownerId == null || userData.ownerId!.isEmpty);
 
                     if (isIndividualDriver || userData.isOwner == "true") {
                       // Check subscription for Owner OR Individual Driver
                       if (userData.subscriptionPlanId != null) {
                         if (userData.subscriptionExpiryDate == null) {
-                          isPlanExpired = userData.subscriptionPlan?.expiryDay != '-1';
+                          isPlanExpired =
+                              userData.subscriptionPlan?.expiryDay != '-1';
                         } else {
-                          final expiryDate = DateTime.tryParse(userData.subscriptionExpiryDate!);
-                          isPlanExpired = expiryDate != null && expiryDate.isBefore(DateTime.now());
+                          final expiryDate = DateTime.tryParse(
+                              userData.subscriptionExpiryDate!);
+                          isPlanExpired = expiryDate != null &&
+                              expiryDate.isBefore(DateTime.now());
                         }
                       } else {
                         isPlanExpired = true;
                       }
 
-                      if (userData.subscriptionPlanId == null || isPlanExpired) {
-                        Get.to(() => SubscriptionPlanScreen(), arguments: {'isSplashScreen': true});
+                      if (userData.subscriptionPlanId == null ||
+                          isPlanExpired) {
+                        Get.to(() => SubscriptionPlanScreen(),
+                            arguments: {'isSplashScreen': true});
                       } else {
                         if (userData.isOwner == "true") {
-                          Get.offAll(() => OwnerDashboardScreen(), transition: Transition.rightToLeft);
+                          Get.offAll(() => OwnerDashboardScreen(),
+                              transition: Transition.rightToLeft);
                         } else {
-                          Get.offAll(() => DashboardScreen(), transition: Transition.rightToLeft);
+                          Get.offAll(() => DashboardScreen(),
+                              transition: Transition.rightToLeft);
                         }
                       }
                     }
                   }
                 }
               });
-            }
-            else if (value == false) {
+            } else if (value == false) {
               ShowToastDialog.closeLoader();
               Get.to(() => SignupScreen(), arguments: {
                 'email': googleUser.user!.email,
@@ -179,7 +200,6 @@ class LoginController extends GetxController {
               });
             }
           }
-
         });
       }
     });
@@ -199,7 +219,7 @@ class LoginController extends GetxController {
           'login_type': "apple",
         };
         await phoneNumberIsExit(bodyParams).then((value) async {
-          if(value != null){
+          if (value != null) {
             if (value == true) {
               Map<String, String> bodyParams = {
                 'email': userCredential.user!.email.toString(),
@@ -211,55 +231,72 @@ class LoginController extends GetxController {
                   if (value.success == "success") {
                     ShowToastDialog.closeLoader();
 
-                    Preferences.setInt(Preferences.userId, int.parse(value.userData!.id.toString()));
+                    Preferences.setInt(Preferences.userId,
+                        int.parse(value.userData!.id.toString()));
                     Preferences.setString(Preferences.user, jsonEncode(value));
-                    Preferences.setString(Preferences.accesstoken, value.userData!.accesstoken.toString());
-                    API.headers['accesstoken'] = value.userData!.accesstoken.toString();
+                    Preferences.setString(Preferences.accesstoken,
+                        value.userData!.accesstoken.toString());
+                    API.headers['accesstoken'] =
+                        value.userData!.accesstoken.toString();
                     Preferences.setBoolean(Preferences.isLogin, true);
 
                     UserData userData = value.userData!;
                     bool isPlanExpired = false;
 
                     /// Case 1: Admin Commission = 'no' and Subscription model = false
-                    if (Constant.adminCommission?.statut == "no" && Constant.subscriptionModel == false) {
+                    if (Constant.adminCommission?.statut == "no" &&
+                        Constant.subscriptionModel == false) {
                       if (userData.isOwner == "true") {
-                        Get.offAll(() => OwnerDashboardScreen(), transition: Transition.rightToLeft);
+                        Get.offAll(() => OwnerDashboardScreen(),
+                            transition: Transition.rightToLeft);
                       } else {
-                        Get.offAll(() => DashboardScreen(), transition: Transition.rightToLeft);
+                        Get.offAll(() => DashboardScreen(),
+                            transition: Transition.rightToLeft);
                       }
                       return;
                     }
 
                     /// Case 3: Owner’s Driver (driver under an owner)
-                    bool isOwnerDriver = userData.isOwner == "false" && userData.ownerId != null && userData.ownerId!.isNotEmpty;
+                    bool isOwnerDriver = userData.isOwner == "false" &&
+                        userData.ownerId != null &&
+                        userData.ownerId!.isNotEmpty;
                     if (isOwnerDriver) {
-                      Get.offAll(() => DashboardScreen(), transition: Transition.rightToLeft);
+                      Get.offAll(() => DashboardScreen(),
+                          transition: Transition.rightToLeft);
                       return;
                     }
 
                     /// Case 2: Individual Driver (no ownerId) → Check subscription
-                    bool isIndividualDriver = userData.isOwner == "false" && (userData.ownerId == null || userData.ownerId!.isEmpty);
+                    bool isIndividualDriver = userData.isOwner == "false" &&
+                        (userData.ownerId == null || userData.ownerId!.isEmpty);
 
                     if (isIndividualDriver || userData.isOwner == "true") {
                       // Check subscription for Owner OR Individual Driver
                       if (userData.subscriptionPlanId != null) {
                         if (userData.subscriptionExpiryDate == null) {
-                          isPlanExpired = userData.subscriptionPlan?.expiryDay != '-1';
+                          isPlanExpired =
+                              userData.subscriptionPlan?.expiryDay != '-1';
                         } else {
-                          final expiryDate = DateTime.tryParse(userData.subscriptionExpiryDate!);
-                          isPlanExpired = expiryDate != null && expiryDate.isBefore(DateTime.now());
+                          final expiryDate = DateTime.tryParse(
+                              userData.subscriptionExpiryDate!);
+                          isPlanExpired = expiryDate != null &&
+                              expiryDate.isBefore(DateTime.now());
                         }
                       } else {
                         isPlanExpired = true;
                       }
 
-                      if (userData.subscriptionPlanId == null || isPlanExpired) {
-                        Get.to(() => SubscriptionPlanScreen(), arguments: {'isSplashScreen': true});
+                      if (userData.subscriptionPlanId == null ||
+                          isPlanExpired) {
+                        Get.to(() => SubscriptionPlanScreen(),
+                            arguments: {'isSplashScreen': true});
                       } else {
                         if (userData.isOwner == "true") {
-                          Get.offAll(() => OwnerDashboardScreen(), transition: Transition.rightToLeft);
+                          Get.offAll(() => OwnerDashboardScreen(),
+                              transition: Transition.rightToLeft);
                         } else {
-                          Get.offAll(() => DashboardScreen(), transition: Transition.rightToLeft);
+                          Get.offAll(() => DashboardScreen(),
+                              transition: Transition.rightToLeft);
                         }
                       }
                     }
@@ -287,7 +324,8 @@ class LoginController extends GetxController {
       await googleSignIn.initialize();
       final GoogleSignInAccount googleUser = await googleSignIn.authenticate();
       final GoogleSignInAuthentication googleAuth = googleUser.authentication;
-      final credential = GoogleAuthProvider.credential(idToken: googleAuth.idToken);
+      final credential =
+          GoogleAuthProvider.credential(idToken: googleAuth.idToken);
       return await FirebaseAuth.instance.signInWithCredential(credential);
     } catch (e) {
       print('Google Sign-In error: $e');
@@ -308,7 +346,8 @@ class LoginController extends GetxController {
       final nonce = sha256ofString(rawNonce);
 
       // Request credential for the currently signed in Apple account.
-      AuthorizationCredentialAppleID appleCredential = await SignInWithApple.getAppleIDCredential(
+      AuthorizationCredentialAppleID appleCredential =
+          await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
           AppleIDAuthorizationScopes.fullName,
@@ -326,8 +365,12 @@ class LoginController extends GetxController {
 
       // Sign in the user with Firebase. If the nonce we generated earlier does
       // not match the nonce in `appleCredential.identityToken`, sign in will fail.
-      UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(oauthCredential);
-      return {"appleCredential": appleCredential, "userCredential": userCredential};
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+      return {
+        "appleCredential": appleCredential,
+        "userCredential": userCredential
+      };
     } catch (e) {
       debugPrint(e.toString());
     }

@@ -1,13 +1,12 @@
 // ignore_for_file: must_be_immutable
 
-
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/controller/sign_up_controller.dart';
-import 'package:cabme_driver/page/auth_screens/login_screen.dart';
-import 'package:cabme_driver/themes/app_them_data.dart';
-import 'package:cabme_driver/utils/dark_theme_provider.dart';
-import 'package:cabme_driver/widget/multi_select_dropdown.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/controller/sign_up_controller.dart';
+import 'package:uniqcars_driver/page/auth_screens/login_screen.dart';
+import 'package:uniqcars_driver/themes/app_them_data.dart';
+import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
+import 'package:uniqcars_driver/widget/multi_select_dropdown.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -49,7 +48,10 @@ class SignupScreen extends StatelessWidget {
                       'Let’s get you started'.tr,
                       textAlign: TextAlign.center,
                       style: AppThemeData.boldTextStyle(
-                          fontSize: 22, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                          fontSize: 22,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark900
+                              : AppThemeData.neutral900),
                     ),
                     SizedBox(
                       height: 5,
@@ -58,7 +60,10 @@ class SignupScreen extends StatelessWidget {
                       'Start booking your rides in just a few taps.'.tr,
                       textAlign: TextAlign.center,
                       style: AppThemeData.mediumTextStyle(
-                          fontSize: 14, color: themeChange.getThem() ? AppThemeData.neutralDark500 : AppThemeData.neutral500),
+                          fontSize: 14,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark500
+                              : AppThemeData.neutral500),
                     ),
                     Column(
                       mainAxisSize: MainAxisSize.max,
@@ -71,7 +76,10 @@ class SignupScreen extends StatelessWidget {
                           'Continue as a.'.tr,
                           textAlign: TextAlign.center,
                           style: AppThemeData.mediumTextStyle(
-                              fontSize: 14, color: themeChange.getThem() ? AppThemeData.neutralDark700 : AppThemeData.neutral700),
+                              fontSize: 14,
+                              color: themeChange.getThem()
+                                  ? AppThemeData.neutralDark700
+                                  : AppThemeData.neutral700),
                         ),
                         Row(
                           children: [
@@ -104,7 +112,9 @@ class SignupScreen extends StatelessWidget {
                           'Service',
                           style: AppThemeData.semiBoldTextStyle(
                             fontSize: 14,
-                            color: themeChange.getThem() ? AppThemeData.neutralDark700 : AppThemeData.neutral700,
+                            color: themeChange.getThem()
+                                ? AppThemeData.neutralDark700
+                                : AppThemeData.neutral700,
                           ),
                         ),
                         const SizedBox(
@@ -116,7 +126,8 @@ class SignupScreen extends StatelessWidget {
                           hintText: "Select Service Types",
                           dialogTitle: 'Select Service Types',
                           initialSelectedItems: controller.selectedService,
-                          labelSelector: (item) => item.toString().capitalizeString(),
+                          labelSelector: (item) =>
+                              item.toString().capitalizeString(),
                         ),
                         SizedBox(
                           height: 10,
@@ -143,10 +154,13 @@ class SignupScreen extends StatelessWidget {
                           controller: controller.emailController.value,
                           hintText: 'Enter Email Address',
                           title: 'Email Address',
-                          enable: controller.loginType.value == "phoneNumber" ? true : false,
+                          enable: controller.loginType.value == "phoneNumber"
+                              ? true
+                              : false,
                           prefix: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 18),
-                            child: SvgPicture.asset("assets/icons/ic_email_login.svg"),
+                            child: SvgPicture.asset(
+                                "assets/icons/ic_email_login.svg"),
                           ),
                         ),
                         TextFieldWidget(
@@ -156,32 +170,48 @@ class SignupScreen extends StatelessWidget {
                           inputFormatters: [
                             FilteringTextInputFormatter.allow(RegExp('[0-9]')),
                           ],
-                          enable: controller.loginType.value == "phoneNumber" ? false : true,
+                          enable: controller.loginType.value == "phoneNumber"
+                              ? false
+                              : true,
                           prefix: CountryCodePicker(
                             onChanged: (value) {
-                              controller.countryCodeController.value.text = value.dialCode.toString();
+                              controller.countryCodeController.value.text =
+                                  value.dialCode.toString();
                             },
                             dialogTextStyle: TextStyle(
-                              color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                              color: themeChange.getThem()
+                                  ? AppThemeData.neutralDark900
+                                  : AppThemeData.neutral900,
                               fontWeight: FontWeight.w500,
                               fontFamily: AppThemeData.medium,
                             ),
-                            dialogBackgroundColor: themeChange.getThem() ? AppThemeData.neutralDark50 : AppThemeData.neutral50,
-                            initialSelection: controller.countryCodeController.value.text,
-                            comparator: (a, b) => b.name!.compareTo(a.name.toString()),
+                            dialogBackgroundColor: themeChange.getThem()
+                                ? AppThemeData.neutralDark50
+                                : AppThemeData.neutral50,
+                            initialSelection:
+                                controller.countryCodeController.value.text,
+                            comparator: (a, b) =>
+                                b.name!.compareTo(a.name.toString()),
                             flagDecoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(2)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(2)),
                             ),
                             textStyle: TextStyle(
-                              color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                              color: themeChange.getThem()
+                                  ? AppThemeData.neutralDark900
+                                  : AppThemeData.neutral900,
                               fontWeight: FontWeight.w500,
                               fontFamily: AppThemeData.medium,
                             ),
                             searchDecoration: InputDecoration(
-                              iconColor: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                              iconColor: themeChange.getThem()
+                                  ? AppThemeData.neutralDark900
+                                  : AppThemeData.neutral900,
                             ),
                             searchStyle: TextStyle(
-                              color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                              color: themeChange.getThem()
+                                  ? AppThemeData.neutralDark900
+                                  : AppThemeData.neutral900,
                               fontWeight: FontWeight.w500,
                               fontFamily: AppThemeData.medium,
                             ),
@@ -194,7 +224,8 @@ class SignupScreen extends StatelessWidget {
                           obscureText: controller.isPasswordShow.value,
                           prefix: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 18),
-                            child: SvgPicture.asset("assets/icons/ic_lock_login.svg"),
+                            child: SvgPicture.asset(
+                                "assets/icons/ic_lock_login.svg"),
                           ),
                           suffix: InkWell(
                             onTap: () {
@@ -205,23 +236,28 @@ class SignupScreen extends StatelessWidget {
                               }
                             },
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 18),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 18),
                               child: Obx(
                                 () => controller.isPasswordShow.value
-                                    ? SvgPicture.asset("assets/icons/ic_hide.svg")
-                                    : SvgPicture.asset("assets/icons/ic_show.svg"),
+                                    ? SvgPicture.asset(
+                                        "assets/icons/ic_hide.svg")
+                                    : SvgPicture.asset(
+                                        "assets/icons/ic_show.svg"),
                               ),
                             ),
                           ),
                         ),
                         TextFieldWidget(
-                          controller: controller.conformPasswordController.value,
+                          controller:
+                              controller.conformPasswordController.value,
                           hintText: 'Enter Confirm Password',
                           title: 'Confirm Password',
                           obscureText: controller.isConformPasswordShow.value,
                           prefix: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 18),
-                            child: SvgPicture.asset("assets/icons/ic_lock_login.svg"),
+                            child: SvgPicture.asset(
+                                "assets/icons/ic_lock_login.svg"),
                           ),
                           suffix: InkWell(
                             onTap: () {
@@ -232,11 +268,14 @@ class SignupScreen extends StatelessWidget {
                               }
                             },
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 18),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 18),
                               child: Obx(
                                 () => controller.isConformPasswordShow.value
-                                    ? SvgPicture.asset("assets/icons/ic_hide.svg")
-                                    : SvgPicture.asset("assets/icons/ic_show.svg"),
+                                    ? SvgPicture.asset(
+                                        "assets/icons/ic_hide.svg")
+                                    : SvgPicture.asset(
+                                        "assets/icons/ic_show.svg"),
                               ),
                             ),
                           ),
@@ -266,25 +305,37 @@ class SignupScreen extends StatelessWidget {
                     ShowToastDialog.showToast("Please enter a phone number");
                   } else if (controller.passwordController.value.text.isEmpty) {
                     ShowToastDialog.showToast("Please enter a password");
-                  } else if (controller.passwordController.value.text.trim() != controller.conformPasswordController.value.text.trim()) {
-                    ShowToastDialog.showToast("Password and conform password not match");
+                  } else if (controller.passwordController.value.text.trim() !=
+                      controller.conformPasswordController.value.text.trim()) {
+                    ShowToastDialog.showToast(
+                        "Password and conform password not match");
                   } else {
                     Map<String, String> bodyParams = {
-                      'firstname': controller.firstNameController.value.text.trim().toString(),
-                      'lastname': controller.lastNameController.value.text.trim().toString(),
+                      'firstname': controller.firstNameController.value.text
+                          .trim()
+                          .toString(),
+                      'lastname': controller.lastNameController.value.text
+                          .trim()
+                          .toString(),
                       'phone': controller.phoneNumber.value.text.trim(),
-                      'country_code': controller.countryCodeController.value.text,
+                      'country_code':
+                          controller.countryCodeController.value.text,
                       'email': controller.emailController.value.text.trim(),
                       'password': controller.passwordController.value.text,
                       'login_type': controller.loginType.value,
                       'tonotify': 'yes',
-                      'account_type': controller.selectedValue.value == "Company" ? "owner" : 'driver', // driver or customer or owner
-                      'service_type': controller.selectedService.join(","), // driver or customer or owner
+                      'account_type':
+                          controller.selectedValue.value == "Company"
+                              ? "owner"
+                              : 'driver', // driver or customer or owner
+                      'service_type': controller.selectedService
+                          .join(","), // driver or customer or owner
                     };
                     await controller.signUp(bodyParams).then((value) {
                       if (value != null) {
                         if (value.success == "success") {
-                          ShowToastDialog.showToast("Account created successfully");
+                          ShowToastDialog.showToast(
+                              "Account created successfully");
                           Get.offAll(LoginScreen());
                         } else {
                           ShowToastDialog.showToast(value.message);

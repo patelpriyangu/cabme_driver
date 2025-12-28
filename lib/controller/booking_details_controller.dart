@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/constant/ride_satatus.dart';
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/model/user_model.dart';
-import 'package:cabme_driver/service/pusher_service.dart';
-import 'package:cabme_driver/utils/Preferences.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/constant/ride_satatus.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/model/user_model.dart';
+import 'package:uniqcars_driver/service/pusher_service.dart';
+import 'package:uniqcars_driver/utils/Preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:get/get.dart';
@@ -47,7 +47,9 @@ class BookingDetailsController extends GetxController {
   }
 
   Future<void> getPusherBookingData() async {
-    if (bookingModel.value.statut == RideStatus.newRide || bookingModel.value.statut == RideStatus.confirmed || bookingModel.value.statut == RideStatus.onRide) {
+    if (bookingModel.value.statut == RideStatus.newRide ||
+        bookingModel.value.statut == RideStatus.confirmed ||
+        bookingModel.value.statut == RideStatus.onRide) {
       PusherService().subscribeToRideEvent<BookingModel>(
         rideId: bookingModel.value.id.toString(),
         event: 'updated',
@@ -62,11 +64,17 @@ class BookingDetailsController extends GetxController {
       'id_ride': bookingModel.value.id,
     };
 
-    await API.handleApiRequest(request: () => http.post(Uri.parse(API.getBookingDetails), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: false).then(
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.getBookingDetails),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: false)
+        .then(
       (value) async {
         if (value != null) {
           if (value['success'] == "Failed" || value['success'] == "failed") {
-            ShowToastDialog.showToast(value['error'] ?? "Booking data not found");
+            ShowToastDialog.showToast(
+                value['error'] ?? "Booking data not found");
             return null;
           } else {
             BookingModel bookingData = BookingModel.fromJson(value);
@@ -84,11 +92,18 @@ class BookingDetailsController extends GetxController {
   void setBookingData(BookingData booking) {
     bookingModel.value = booking;
     locationData.clear();
-    locationData.add(Stops(location: booking.departName, latitude: booking.latitudeDepart, longitude: booking.longitudeDepart));
-    if(booking.stops != null){
-      locationData.addAll(booking.stops!.map((e) => Stops(location: e.location, latitude: e.latitude, longitude: e.longitude)));
+    locationData.add(Stops(
+        location: booking.departName,
+        latitude: booking.latitudeDepart,
+        longitude: booking.longitudeDepart));
+    if (booking.stops != null) {
+      locationData.addAll(booking.stops!.map((e) => Stops(
+          location: e.location, latitude: e.latitude, longitude: e.longitude)));
     }
-    locationData.add(Stops(location: booking.destinationName, latitude: booking.latitudeArrivee, longitude: booking.longitudeArrivee));
+    locationData.add(Stops(
+        location: booking.destinationName,
+        latitude: booking.latitudeArrivee,
+        longitude: booking.longitudeArrivee));
     calculateTotalAmount();
     calculateTotalAmount();
     if (Constant.selectedMapType == 'osm') {
@@ -107,13 +122,24 @@ class BookingDetailsController extends GetxController {
     taxAmount = "0.0".obs;
     subTotal.value = bookingModel.value.montant.toString();
     for (var element in bookingModel.value.tax ?? []) {
-      taxAmount.value = (double.parse(taxAmount.value) + Constant().calculateTax(amount: ((double.parse(subTotal.value)) - (double.parse(discount.value))).toString(), taxModel: element))
+      taxAmount.value = (double.parse(taxAmount.value) +
+              Constant().calculateTax(
+                  amount: ((double.parse(subTotal.value)) -
+                          (double.parse(discount.value)))
+                      .toString(),
+                  taxModel: element))
           .toStringAsFixed(int.tryParse(Constant.decimal.toString()) ?? 2);
     }
     if (bookingModel.value.discountType != null) {
-      discount.value = Constant.calculateDiscountOrder(amount: subTotal.value, offerModel: bookingModel.value.discountType).toString();
+      discount.value = Constant.calculateDiscountOrder(
+              amount: subTotal.value,
+              offerModel: bookingModel.value.discountType)
+          .toString();
     }
-    totalAmount.value = ((double.parse(subTotal.value) - (double.parse(discount.value))) + double.parse(taxAmount.value)).toStringAsFixed(int.tryParse(Constant.decimal.toString()) ?? 2);
+    totalAmount.value =
+        ((double.parse(subTotal.value) - (double.parse(discount.value))) +
+                double.parse(taxAmount.value))
+            .toStringAsFixed(int.tryParse(Constant.decimal.toString()) ?? 2);
     update();
   }
 
@@ -123,7 +149,12 @@ class BookingDetailsController extends GetxController {
       'id_ride': rideId,
     };
 
-    await API.handleApiRequest(request: () => http.post(Uri.parse(API.conformRide), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true).then(
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.conformRide),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
+        .then(
       (value) async {
         if (value != null) {
           if (value['success'] == "Failed" || value['success'] == "failed") {
@@ -145,7 +176,12 @@ class BookingDetailsController extends GetxController {
       'otp': otpController.value.text.trim(),
     };
 
-    await API.handleApiRequest(request: () => http.post(Uri.parse(API.onRideRequest), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true).then(
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.onRideRequest),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
+        .then(
       (value) async {
         if (value != null) {
           if (value['success'] == "Failed" || value['success'] == "failed") {
@@ -168,7 +204,12 @@ class BookingDetailsController extends GetxController {
       'reason': "Driver rejected the ride",
     };
 
-    await API.handleApiRequest(request: () => http.post(Uri.parse(API.rejectRide), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true).then(
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.rejectRide),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
+        .then(
       (value) async {
         if (value != null) {
           if (value['success'] == "Failed" || value['success'] == "failed") {
@@ -196,9 +237,11 @@ class BookingDetailsController extends GetxController {
 
     await API
         .handleApiRequest(
-        request: () => http.post(Uri.parse(API.completeRequest), headers: API.headers, body: jsonEncode(requestBody)), showLoader: false)
+            request: () => http.post(Uri.parse(API.completeRequest),
+                headers: API.headers, body: jsonEncode(requestBody)),
+            showLoader: false)
         .then(
-          (value) {
+      (value) {
         if (value != null) {
           if (value['success'] == "Failed" || value['success'] == "ailed") {
             ShowToastDialog.showToast(value['error']);
@@ -213,9 +256,10 @@ class BookingDetailsController extends GetxController {
     );
   }
 
-
-  RxMap<gmaps.PolylineId, gmaps.Polyline> polyLines = <gmaps.PolylineId, gmaps.Polyline>{}.obs;
-  PolylinePoints polylinePoints = PolylinePoints(apiKey: Constant.kGoogleApiKey.toString());
+  RxMap<gmaps.PolylineId, gmaps.Polyline> polyLines =
+      <gmaps.PolylineId, gmaps.Polyline>{}.obs;
+  PolylinePoints polylinePoints =
+      PolylinePoints(apiKey: Constant.kGoogleApiKey.toString());
 
   void getPolyline() async {
     if (googlePoints.length < 2) return;
@@ -225,9 +269,14 @@ class BookingDetailsController extends GetxController {
 
     if (source.latitude == 0.0 || destination.latitude == 0.0) return;
 
-    final intermediateStops = googlePoints.length > 2 ? googlePoints.sublist(1, googlePoints.length - 1) : <gmaps.LatLng>[];
+    final intermediateStops = googlePoints.length > 2
+        ? googlePoints.sublist(1, googlePoints.length - 1)
+        : <gmaps.LatLng>[];
 
-    final wayPoints = intermediateStops.map((stop) => PolylineWayPoint(location: "${stop.latitude},${stop.longitude}")).toList();
+    final wayPoints = intermediateStops
+        .map((stop) =>
+            PolylineWayPoint(location: "${stop.latitude},${stop.longitude}"))
+        .toList();
 
     final polylineRequest = PolylineRequest(
       origin: PointLatLng(source.latitude, source.longitude),
@@ -246,7 +295,9 @@ class BookingDetailsController extends GetxController {
         return;
       }
 
-      final polylineCoordinates = result.points.map((point) => gmaps.LatLng(point.latitude, point.longitude)).toList();
+      final polylineCoordinates = result.points
+          .map((point) => gmaps.LatLng(point.latitude, point.longitude))
+          .toList();
 
       _addPolyLine(polylineCoordinates);
     } catch (e) {
@@ -276,22 +327,29 @@ class BookingDetailsController extends GetxController {
 
     gmaps.LatLngBounds bounds;
 
-    if (source.latitude > destination.latitude && source.longitude > destination.longitude) {
+    if (source.latitude > destination.latitude &&
+        source.longitude > destination.longitude) {
       bounds = gmaps.LatLngBounds(southwest: destination, northeast: source);
     } else if (source.longitude > destination.longitude) {
-      bounds = gmaps.LatLngBounds(southwest: gmaps.LatLng(source.latitude, destination.longitude), northeast: gmaps.LatLng(destination.latitude, source.longitude));
+      bounds = gmaps.LatLngBounds(
+          southwest: gmaps.LatLng(source.latitude, destination.longitude),
+          northeast: gmaps.LatLng(destination.latitude, source.longitude));
     } else if (source.latitude > destination.latitude) {
-      bounds = gmaps.LatLngBounds(southwest: gmaps.LatLng(destination.latitude, source.longitude), northeast: gmaps.LatLng(source.latitude, destination.longitude));
+      bounds = gmaps.LatLngBounds(
+          southwest: gmaps.LatLng(destination.latitude, source.longitude),
+          northeast: gmaps.LatLng(source.latitude, destination.longitude));
     } else {
       bounds = gmaps.LatLngBounds(southwest: source, northeast: destination);
     }
 
-    gmaps.CameraUpdate cameraUpdate = gmaps.CameraUpdate.newLatLngBounds(bounds, 10);
+    gmaps.CameraUpdate cameraUpdate =
+        gmaps.CameraUpdate.newLatLngBounds(bounds, 10);
 
     return checkCameraLocation(cameraUpdate, mapController);
   }
 
-  Future<void> checkCameraLocation(gmaps.CameraUpdate cameraUpdate, gmaps.GoogleMapController mapController) async {
+  Future<void> checkCameraLocation(gmaps.CameraUpdate cameraUpdate,
+      gmaps.GoogleMapController mapController) async {
     mapController.animateCamera(cameraUpdate);
     gmaps.LatLngBounds l1 = await mapController.getVisibleRegion();
     gmaps.LatLngBounds l2 = await mapController.getVisibleRegion();
@@ -303,9 +361,15 @@ class BookingDetailsController extends GetxController {
 
   gmaps.GoogleMapController? googleMapController;
 
-  List<location.LatLng> get osmPoints => locationData.map((e) => location.LatLng(double.parse(e.latitude!), double.parse(e.longitude!))).toList();
+  List<location.LatLng> get osmPoints => locationData
+      .map((e) => location.LatLng(
+          double.parse(e.latitude!), double.parse(e.longitude!)))
+      .toList();
 
-  List<gmaps.LatLng> get googlePoints => locationData.map((e) => gmaps.LatLng(double.parse(e.latitude!), double.parse(e.longitude!))).toList();
+  List<gmaps.LatLng> get googlePoints => locationData
+      .map((e) =>
+          gmaps.LatLng(double.parse(e.latitude!), double.parse(e.longitude!)))
+      .toList();
 
   RxList<location.LatLng> routePoints = <location.LatLng>[].obs;
   Future<void> fetchRoute() async {
@@ -357,5 +421,4 @@ class BookingDetailsController extends GetxController {
       gmaps.CameraUpdate.newLatLngBounds(bounds, 60),
     );
   }
-
 }

@@ -1,4 +1,4 @@
-import 'package:cabme_driver/widget/place_picker/selected_location_model.dart';
+import 'package:uniqcars_driver/widget/place_picker/selected_location_model.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -54,11 +54,12 @@ class LocationController extends GetxController {
   Future<void> getAddressFromLatLng(LatLng latLng) async {
     try {
       List<Placemark> placemarks =
-      await placemarkFromCoordinates(latLng.latitude, latLng.longitude);
+          await placemarkFromCoordinates(latLng.latitude, latLng.longitude);
       if (placemarks.isNotEmpty) {
         Placemark place = placemarks.first;
         selectedPlaceAddress.value = place;
-        address.value = "${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
+        address.value =
+            "${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
       } else {
         address.value = "Address not found";
       }

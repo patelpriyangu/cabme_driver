@@ -1,14 +1,14 @@
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/constant/ride_satatus.dart';
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/controller/booking_details_controller.dart';
-import 'package:cabme_driver/model/tax_model.dart';
-import 'package:cabme_driver/page/chats_screen/conversation_screen.dart';
-import 'package:cabme_driver/page/live_tracking_screen/live_tracking_screen.dart';
-import 'package:cabme_driver/page/rating_screen/rating_screen.dart';
-import 'package:cabme_driver/themes/responsive.dart';
-import 'package:cabme_driver/utils/dark_theme_provider.dart';
-import 'package:cabme_driver/utils/network_image_widget.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/constant/ride_satatus.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/controller/booking_details_controller.dart';
+import 'package:uniqcars_driver/model/tax_model.dart';
+import 'package:uniqcars_driver/page/chats_screen/conversation_screen.dart';
+import 'package:uniqcars_driver/page/live_tracking_screen/live_tracking_screen.dart';
+import 'package:uniqcars_driver/page/rating_screen/rating_screen.dart';
+import 'package:uniqcars_driver/themes/responsive.dart';
+import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
+import 'package:uniqcars_driver/utils/network_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -39,15 +39,20 @@ class BookingDetailsScreen extends StatelessWidget {
               ),
               centerTitle: false,
               title: Text(
-                controller.bookingModel.value.bookingNumber ?? "#${controller.bookingModel.value.id}",
+                controller.bookingModel.value.bookingNumber ??
+                    "#${controller.bookingModel.value.id}",
                 style: AppThemeData.semiBoldTextStyle(
-                    fontSize: 18, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                    fontSize: 18,
+                    color: themeChange.getThem()
+                        ? AppThemeData.neutralDark900
+                        : AppThemeData.neutral900),
               ),
             ),
             body: controller.isLoading.value
                 ? Constant.loader(context)
                 : Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 10),
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
@@ -65,11 +70,14 @@ class BookingDetailsScreen extends StatelessWidget {
                           ),
                           Container(
                             decoration: BoxDecoration(
-                              color: themeChange.getThem() ? AppThemeData.neutralDark100 : AppThemeData.neutral100,
+                              color: themeChange.getThem()
+                                  ? AppThemeData.neutralDark100
+                                  : AppThemeData.neutral100,
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 10),
                               child: Timeline.tileBuilder(
                                 shrinkWrap: true,
                                 padding: EdgeInsets.zero,
@@ -82,39 +90,60 @@ class BookingDetailsScreen extends StatelessWidget {
                                   contentsAlign: ContentsAlign.basic,
                                   indicatorBuilder: (context, index) {
                                     return index == 0
-                                        ? SvgPicture.asset("assets/icons/ic_sender.svg")
-                                        : controller.locationData.length - 1 == index
-                                            ? SvgPicture.asset("assets/icons/ic_recevier.svg")
+                                        ? SvgPicture.asset(
+                                            "assets/icons/ic_sender.svg")
+                                        : controller.locationData.length - 1 ==
+                                                index
+                                            ? SvgPicture.asset(
+                                                "assets/icons/ic_recevier.svg")
                                             : Container(
                                                 width: 24,
                                                 height: 24,
-                                                decoration:
-                                                    BoxDecoration(color: AppThemeData.neutral900, borderRadius: BorderRadius.circular(40)),
+                                                decoration: BoxDecoration(
+                                                    color:
+                                                        AppThemeData.neutral900,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            40)),
                                                 child: Center(
                                                   child: Text(
-                                                    String.fromCharCode(index - 1 + 65),
+                                                    String.fromCharCode(
+                                                        index - 1 + 65),
                                                     style: TextStyle(
                                                         fontSize: 14,
-                                                        fontFamily: AppThemeData.regular,
-                                                        color: themeChange.getThem() ? AppThemeData.neutral50 : AppThemeData.neutral50),
+                                                        fontFamily: AppThemeData
+                                                            .regular,
+                                                        color:
+                                                            themeChange
+                                                                    .getThem()
+                                                                ? AppThemeData
+                                                                    .neutral50
+                                                                : AppThemeData
+                                                                    .neutral50),
                                                   ),
                                                 ),
                                               );
                                   },
-                                  connectorBuilder: (context, index, connectorType) {
+                                  connectorBuilder:
+                                      (context, index, connectorType) {
                                     return DashedLineConnector(
-                                      color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
+                                      color: themeChange.getThem()
+                                          ? AppThemeData.neutralDark300
+                                          : AppThemeData.neutral300,
                                       gap: 4,
                                     );
                                   },
                                   contentsBuilder: (context, index) {
                                     return Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 14, vertical: 10),
                                       child: Text(
                                         "${controller.locationData[index].location}",
                                         style: AppThemeData.mediumTextStyle(
                                             fontSize: 14,
-                                            color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                            color: themeChange.getThem()
+                                                ? AppThemeData.neutralDark900
+                                                : AppThemeData.neutral900),
                                       ),
                                     );
                                   },
@@ -126,37 +155,52 @@ class BookingDetailsScreen extends StatelessWidget {
                           SizedBox(
                             height: 20,
                           ),
-                          controller.bookingModel.value.driver == null || controller.userModel.value.userData!.isOwner != "true"
+                          controller.bookingModel.value.driver == null ||
+                                  controller
+                                          .userModel.value.userData!.isOwner !=
+                                      "true"
                               ? const SizedBox()
                               : Container(
                                   width: Responsive.width(100, context),
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 10),
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
+                                      color: themeChange.getThem()
+                                          ? AppThemeData.neutralDark300
+                                          : AppThemeData.neutral300,
                                     ),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       // Title
                                       Text(
                                         "Driver Details".tr,
                                         style: AppThemeData.boldTextStyle(
                                           fontSize: 16,
-                                          color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                          color: themeChange.getThem()
+                                              ? AppThemeData.neutralDark900
+                                              : AppThemeData.neutral900,
                                         ),
                                       ),
-                                      Divider(color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300),
+                                      Divider(
+                                          color: themeChange.getThem()
+                                              ? AppThemeData.neutralDark300
+                                              : AppThemeData.neutral300),
 
                                       // Driver Info
                                       Row(
                                         children: [
                                           ClipRRect(
-                                            borderRadius: BorderRadius.circular(10),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
                                             child: NetworkImageWidget(
-                                              imageUrl: controller.bookingModel.value.driver!.image.toString(),
+                                              imageUrl: controller.bookingModel
+                                                  .value.driver!.image
+                                                  .toString(),
                                               width: 55,
                                               height: 55,
                                             ),
@@ -164,35 +208,54 @@ class BookingDetailsScreen extends StatelessWidget {
                                           const SizedBox(width: 10),
                                           Expanded(
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 // Name
                                                 Text(
                                                   "${controller.bookingModel.value.driver!.prenom} ${controller.bookingModel.value.driver!.nom}"
                                                       .tr,
-                                                  style: AppThemeData.boldTextStyle(
+                                                  style: AppThemeData
+                                                      .boldTextStyle(
                                                     fontSize: 16,
-                                                    color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                                    color: themeChange.getThem()
+                                                        ? AppThemeData
+                                                            .neutralDark900
+                                                        : AppThemeData
+                                                            .neutral900,
                                                   ),
                                                 ),
                                                 const SizedBox(height: 5),
                                                 // Rating Badge
                                                 Container(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 14,
+                                                      vertical: 4),
                                                   decoration: BoxDecoration(
-                                                    color: AppThemeData.successLight,
-                                                    borderRadius: BorderRadius.circular(30),
+                                                    color: AppThemeData
+                                                        .successLight,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30),
                                                   ),
                                                   child: Row(
-                                                    mainAxisSize: MainAxisSize.min,
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
                                                     children: [
-                                                      const Icon(Icons.star_half, size: 14, color: AppThemeData.successDefault),
+                                                      const Icon(
+                                                          Icons.star_half,
+                                                          size: 14,
+                                                          color: AppThemeData
+                                                              .successDefault),
                                                       const SizedBox(width: 5),
                                                       Text(
                                                         "${controller.bookingModel.value.driver!.averageRating}",
-                                                        style: AppThemeData.mediumTextStyle(
+                                                        style: AppThemeData
+                                                            .mediumTextStyle(
                                                           fontSize: 14,
-                                                          color: AppThemeData.successDefault,
+                                                          color: AppThemeData
+                                                              .successDefault,
                                                         ),
                                                       ),
                                                     ],
@@ -214,30 +277,46 @@ class BookingDetailsScreen extends StatelessWidget {
                               : Container(
                                   width: Responsive.width(100, context),
                                   decoration: BoxDecoration(
-                                    border:
-                                        Border.all(color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300),
+                                    border: Border.all(
+                                        color: themeChange.getThem()
+                                            ? AppThemeData.neutralDark300
+                                            : AppThemeData.neutral300),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 10),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           "Customer Details".tr,
                                           style: AppThemeData.boldTextStyle(
                                               fontSize: 16,
-                                              color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                              color: themeChange.getThem()
+                                                  ? AppThemeData.neutralDark900
+                                                  : AppThemeData.neutral900),
                                         ),
-                                        Divider(color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300),
+                                        Divider(
+                                            color: themeChange.getThem()
+                                                ? AppThemeData.neutralDark300
+                                                : AppThemeData.neutral300),
                                         Padding(
-                                          padding: const EdgeInsets.symmetric(vertical: 10),
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 10),
                                           child: Row(
                                             children: [
                                               ClipRRect(
-                                                borderRadius: BorderRadius.circular(10),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
                                                 child: NetworkImageWidget(
-                                                  imageUrl: controller.bookingModel.value.user!.image.toString(),
+                                                  imageUrl: controller
+                                                      .bookingModel
+                                                      .value
+                                                      .user!
+                                                      .image
+                                                      .toString(),
                                                   width: 55,
                                                   height: 55,
                                                 ),
@@ -247,17 +326,22 @@ class BookingDetailsScreen extends StatelessWidget {
                                               ),
                                               Expanded(
                                                 child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
                                                       '${controller.bookingModel.value.user!.prenom} ${controller.bookingModel.value.user!.nom}'
                                                           .tr,
-                                                      textAlign: TextAlign.start,
+                                                      textAlign:
+                                                          TextAlign.start,
                                                       style: AppThemeData.boldTextStyle(
                                                           fontSize: 16,
-                                                          color: themeChange.getThem()
-                                                              ? AppThemeData.neutralDark900
-                                                              : AppThemeData.neutral900),
+                                                          color: themeChange
+                                                                  .getThem()
+                                                              ? AppThemeData
+                                                                  .neutralDark900
+                                                              : AppThemeData
+                                                                  .neutral900),
                                                     ),
                                                     SizedBox(
                                                       height: 5,
@@ -265,22 +349,37 @@ class BookingDetailsScreen extends StatelessWidget {
                                                     Container(
                                                       width: 70,
                                                       decoration: BoxDecoration(
-                                                          borderRadius: BorderRadius.circular(30),
-                                                          color: themeChange.getThem()
-                                                              ? AppThemeData.successLight
-                                                              : AppThemeData.successLight),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(30),
+                                                          color: themeChange
+                                                                  .getThem()
+                                                              ? AppThemeData
+                                                                  .successLight
+                                                              : AppThemeData
+                                                                  .successLight),
                                                       child: Padding(
-                                                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 14,
+                                                                vertical: 4),
                                                         child: Row(
-                                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
                                                           children: [
                                                             Icon(
                                                               Icons.star_half,
                                                               size: 14,
                                                               color: themeChange.getThem()
-                                                                  ? AppThemeData.successDefault
-                                                                  : AppThemeData.successDefault,
+                                                                  ? AppThemeData
+                                                                      .successDefault
+                                                                  : AppThemeData
+                                                                      .successDefault,
                                                             ),
                                                             SizedBox(
                                                               width: 5,
@@ -290,8 +389,10 @@ class BookingDetailsScreen extends StatelessWidget {
                                                               style: AppThemeData.mediumTextStyle(
                                                                   fontSize: 14,
                                                                   color: themeChange.getThem()
-                                                                      ? AppThemeData.successDefault
-                                                                      : AppThemeData.successDefault),
+                                                                      ? AppThemeData
+                                                                          .successDefault
+                                                                      : AppThemeData
+                                                                          .successDefault),
                                                             ),
                                                           ],
                                                         ),
@@ -300,17 +401,32 @@ class BookingDetailsScreen extends StatelessWidget {
                                                   ],
                                                 ),
                                               ),
-                                              controller.bookingModel.value.statut == RideStatus.confirmed ||
-                                                      controller.bookingModel.value.statut == RideStatus.onRide
+                                              controller.bookingModel.value
+                                                              .statut ==
+                                                          RideStatus
+                                                              .confirmed ||
+                                                      controller.bookingModel
+                                                              .value.statut ==
+                                                          RideStatus.onRide
                                                   ? Row(
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
                                                         InkWell(
                                                           onTap: () {
-                                                            Constant.makePhoneCall(controller.bookingModel.value.user!.phone!);
+                                                            Constant.makePhoneCall(
+                                                                controller
+                                                                    .bookingModel
+                                                                    .value
+                                                                    .user!
+                                                                    .phone!);
                                                           },
-                                                          child: SvgPicture.asset(
+                                                          child:
+                                                              SvgPicture.asset(
                                                             "assets/icons/ic_phone_dial.svg",
                                                             width: 36,
                                                           ),
@@ -320,15 +436,33 @@ class BookingDetailsScreen extends StatelessWidget {
                                                         ),
                                                         InkWell(
                                                           onTap: () {
-                                                            Get.to(() => ConversationScreen(), arguments: {
-                                                              "receiverId": controller.bookingModel.value.user!.id,
-                                                              "orderId": controller.bookingModel.value.id,
-                                                              "receiverName":
-                                                                  "${controller.bookingModel.value.user!.prenom} ${controller.bookingModel.value.user!.nom}",
-                                                              "receiverPhoto": controller.bookingModel.value.user!.image
-                                                            });
+                                                            Get.to(
+                                                                () =>
+                                                                    ConversationScreen(),
+                                                                arguments: {
+                                                                  "receiverId":
+                                                                      controller
+                                                                          .bookingModel
+                                                                          .value
+                                                                          .user!
+                                                                          .id,
+                                                                  "orderId":
+                                                                      controller
+                                                                          .bookingModel
+                                                                          .value
+                                                                          .id,
+                                                                  "receiverName":
+                                                                      "${controller.bookingModel.value.user!.prenom} ${controller.bookingModel.value.user!.nom}",
+                                                                  "receiverPhoto":
+                                                                      controller
+                                                                          .bookingModel
+                                                                          .value
+                                                                          .user!
+                                                                          .image
+                                                                });
                                                           },
-                                                          child: SvgPicture.asset(
+                                                          child:
+                                                              SvgPicture.asset(
                                                             "assets/icons/ic_chat_details.svg",
                                                             width: 36,
                                                           ),
@@ -339,34 +473,55 @@ class BookingDetailsScreen extends StatelessWidget {
                                             ],
                                           ),
                                         ),
-                                        Divider(color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300),
+                                        Divider(
+                                            color: themeChange.getThem()
+                                                ? AppThemeData.neutralDark300
+                                                : AppThemeData.neutral300),
                                         Padding(
-                                          padding: const EdgeInsets.symmetric(vertical: 5),
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 5),
                                           child: InkWell(
                                             onTap: () {
                                               Get.to(() => RatingScreen(),
-                                                      arguments: {"bookingType": "ride", "bookingModel": controller.bookingModel.value})!
+                                                      arguments: {
+                                                    "bookingType": "ride",
+                                                    "bookingModel": controller
+                                                        .bookingModel.value
+                                                  })!
                                                   .then(
                                                 (value) {
                                                   if (value != null) {
                                                     if (value == true) {
-                                                      controller.getPusherBookingData();
+                                                      controller
+                                                          .getPusherBookingData();
                                                     }
                                                   }
                                                 },
                                               );
                                             },
                                             child: Row(
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
                                               children: [
                                                 Icon(Icons.add,
-                                                    color: themeChange.getThem() ? AppThemeData.accentDark : AppThemeData.accentDark),
+                                                    color: themeChange.getThem()
+                                                        ? AppThemeData
+                                                            .accentDark
+                                                        : AppThemeData
+                                                            .accentDark),
                                                 Text(
                                                   "Add Ratings".tr,
-                                                  style: AppThemeData.boldTextStyle(
-                                                      fontSize: 16,
-                                                      color: themeChange.getThem() ? AppThemeData.accentDark : AppThemeData.accentDark),
+                                                  style: AppThemeData
+                                                      .boldTextStyle(
+                                                          fontSize: 16,
+                                                          color: themeChange
+                                                                  .getThem()
+                                                              ? AppThemeData
+                                                                  .accentDark
+                                                              : AppThemeData
+                                                                  .accentDark),
                                                 ),
                                               ],
                                             ),
@@ -382,20 +537,30 @@ class BookingDetailsScreen extends StatelessWidget {
                           Container(
                             width: Responsive.width(100, context),
                             decoration: BoxDecoration(
-                              border: Border.all(color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300),
+                              border: Border.all(
+                                  color: themeChange.getThem()
+                                      ? AppThemeData.neutralDark300
+                                      : AppThemeData.neutral300),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 10),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     "Booking Details".tr,
                                     style: AppThemeData.boldTextStyle(
-                                        fontSize: 16, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                        fontSize: 16,
+                                        color: themeChange.getThem()
+                                            ? AppThemeData.neutralDark900
+                                            : AppThemeData.neutral900),
                                   ),
-                                  Divider(color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300),
+                                  Divider(
+                                      color: themeChange.getThem()
+                                          ? AppThemeData.neutralDark300
+                                          : AppThemeData.neutral300),
                                   Row(
                                     children: [
                                       Expanded(
@@ -403,7 +568,9 @@ class BookingDetailsScreen extends StatelessWidget {
                                           "Booking Date and Time:".tr,
                                           style: AppThemeData.mediumTextStyle(
                                               fontSize: 14,
-                                              color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                              color: themeChange.getThem()
+                                                  ? AppThemeData.neutralDark900
+                                                  : AppThemeData.neutral900),
                                         ),
                                       ),
                                       SizedBox(
@@ -411,10 +578,13 @@ class BookingDetailsScreen extends StatelessWidget {
                                       ),
                                       Expanded(
                                         child: Text(
-                                          controller.bookingModel.value.creer.toString(),
+                                          controller.bookingModel.value.creer
+                                              .toString(),
                                           style: AppThemeData.boldTextStyle(
                                               fontSize: 14,
-                                              color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                              color: themeChange.getThem()
+                                                  ? AppThemeData.neutralDark900
+                                                  : AppThemeData.neutral900),
                                         ),
                                       ),
                                     ],
@@ -429,20 +599,30 @@ class BookingDetailsScreen extends StatelessWidget {
                           Container(
                             width: Responsive.width(100, context),
                             decoration: BoxDecoration(
-                              border: Border.all(color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300),
+                              border: Border.all(
+                                  color: themeChange.getThem()
+                                      ? AppThemeData.neutralDark300
+                                      : AppThemeData.neutral300),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 10),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     "Payment Details".tr,
                                     style: AppThemeData.boldTextStyle(
-                                        fontSize: 16, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                        fontSize: 16,
+                                        color: themeChange.getThem()
+                                            ? AppThemeData.neutralDark900
+                                            : AppThemeData.neutral900),
                                   ),
-                                  Divider(color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300),
+                                  Divider(
+                                      color: themeChange.getThem()
+                                          ? AppThemeData.neutralDark300
+                                          : AppThemeData.neutral300),
                                   Row(
                                     children: [
                                       Expanded(
@@ -451,7 +631,9 @@ class BookingDetailsScreen extends StatelessWidget {
                                           "Ride Cost".tr,
                                           style: AppThemeData.mediumTextStyle(
                                               fontSize: 16,
-                                              color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                              color: themeChange.getThem()
+                                                  ? AppThemeData.neutralDark900
+                                                  : AppThemeData.neutral900),
                                         ),
                                       ),
                                       SizedBox(
@@ -459,11 +641,15 @@ class BookingDetailsScreen extends StatelessWidget {
                                       ),
                                       Expanded(
                                         child: Text(
-                                          Constant().amountShow(amount: controller.subTotal.value),
+                                          Constant().amountShow(
+                                              amount:
+                                                  controller.subTotal.value),
                                           textAlign: TextAlign.end,
                                           style: AppThemeData.boldTextStyle(
                                               fontSize: 16,
-                                              color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                              color: themeChange.getThem()
+                                                  ? AppThemeData.neutralDark900
+                                                  : AppThemeData.neutral900),
                                         ),
                                       ),
                                     ],
@@ -480,43 +666,62 @@ class BookingDetailsScreen extends StatelessWidget {
                                             'Discount ${controller.bookingModel.value.discountType == null ? "" : controller.bookingModel.value.discountType!.type.toString() == "Percentage" ? " (${controller.bookingModel.value.discountType!.value}%)" : Constant().amountShow(amount: controller.bookingModel.value.discountType!.value)}'
                                                 .tr,
                                             textAlign: TextAlign.start,
-                                            style: AppThemeData.semiBoldTextStyle(
-                                                fontSize: 16,
-                                                color: themeChange.getThem() ? AppThemeData.neutralDark700 : AppThemeData.neutral700),
+                                            style:
+                                                AppThemeData.semiBoldTextStyle(
+                                                    fontSize: 16,
+                                                    color: themeChange.getThem()
+                                                        ? AppThemeData
+                                                            .neutralDark700
+                                                        : AppThemeData
+                                                            .neutral700),
                                           ),
                                         ),
                                         Text(
-                                          Constant().amountShow(amount: controller.discount.value).tr,
+                                          Constant()
+                                              .amountShow(
+                                                  amount:
+                                                      controller.discount.value)
+                                              .tr,
                                           textAlign: TextAlign.start,
                                           style: AppThemeData.semiBoldTextStyle(
                                               fontSize: 16,
-                                              color: themeChange.getThem() ? AppThemeData.errorDefault : AppThemeData.errorDefault),
+                                              color: themeChange.getThem()
+                                                  ? AppThemeData.errorDefault
+                                                  : AppThemeData.errorDefault),
                                         ),
                                       ],
                                     ),
                                   ),
                                   controller.bookingModel.value.tax != null
                                       ? ListView.builder(
-                                          itemCount: controller.bookingModel.value.tax!.length,
+                                          itemCount: controller
+                                              .bookingModel.value.tax!.length,
                                           shrinkWrap: true,
-                                          physics: NeverScrollableScrollPhysics(),
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
                                           padding: EdgeInsets.zero,
                                           itemBuilder: (context, index) {
-                                            TaxModel taxModel = controller.bookingModel.value.tax![index];
+                                            TaxModel taxModel = controller
+                                                .bookingModel.value.tax![index];
                                             return Padding(
-                                              padding: const EdgeInsets.only(bottom: 10),
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 10),
                                               child: Row(
                                                 children: [
                                                   Expanded(
                                                     child: Text(
                                                       '${taxModel.libelle} (${taxModel.value} ${taxModel.type == "Fixed" ? "${Constant.currency}" : "%"})'
                                                           .tr,
-                                                      textAlign: TextAlign.start,
+                                                      textAlign:
+                                                          TextAlign.start,
                                                       style: AppThemeData.semiBoldTextStyle(
                                                           fontSize: 16,
-                                                          color: themeChange.getThem()
-                                                              ? AppThemeData.neutralDark700
-                                                              : AppThemeData.neutral700),
+                                                          color: themeChange
+                                                                  .getThem()
+                                                              ? AppThemeData
+                                                                  .neutralDark700
+                                                              : AppThemeData
+                                                                  .neutral700),
                                                     ),
                                                   ),
                                                   Text(
@@ -525,16 +730,23 @@ class BookingDetailsScreen extends StatelessWidget {
                                                             amount: Constant()
                                                                 .calculateTax(
                                                                     amount: ((double.parse(controller.subTotal.value)) -
-                                                                            (double.parse(controller.discount.value)))
+                                                                            (double.parse(controller
+                                                                                .discount.value)))
                                                                         .toString(),
-                                                                    taxModel: taxModel)
+                                                                    taxModel:
+                                                                        taxModel)
                                                                 .toString())
                                                         .tr,
                                                     textAlign: TextAlign.start,
-                                                    style: AppThemeData.semiBoldTextStyle(
-                                                        fontSize: 16,
-                                                        color:
-                                                            themeChange.getThem() ? AppThemeData.neutralDark700 : AppThemeData.neutral700),
+                                                    style: AppThemeData
+                                                        .semiBoldTextStyle(
+                                                            fontSize: 16,
+                                                            color: themeChange
+                                                                    .getThem()
+                                                                ? AppThemeData
+                                                                    .neutralDark700
+                                                                : AppThemeData
+                                                                    .neutral700),
                                                   ),
                                                 ],
                                               ),
@@ -553,7 +765,9 @@ class BookingDetailsScreen extends StatelessWidget {
                                           "Total Payable Amount".tr,
                                           style: AppThemeData.mediumTextStyle(
                                               fontSize: 16,
-                                              color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                              color: themeChange.getThem()
+                                                  ? AppThemeData.neutralDark900
+                                                  : AppThemeData.neutral900),
                                         ),
                                       ),
                                       SizedBox(
@@ -561,11 +775,15 @@ class BookingDetailsScreen extends StatelessWidget {
                                       ),
                                       Expanded(
                                         child: Text(
-                                          Constant().amountShow(amount: controller.totalAmount.value),
+                                          Constant().amountShow(
+                                              amount:
+                                                  controller.totalAmount.value),
                                           textAlign: TextAlign.end,
                                           style: AppThemeData.boldTextStyle(
                                               fontSize: 16,
-                                              color: themeChange.getThem() ? AppThemeData.accentDark : AppThemeData.accentDark),
+                                              color: themeChange.getThem()
+                                                  ? AppThemeData.accentDark
+                                                  : AppThemeData.accentDark),
                                         ),
                                       ),
                                     ],
@@ -581,7 +799,9 @@ class BookingDetailsScreen extends StatelessWidget {
                                           "Payment Method:".tr,
                                           style: AppThemeData.mediumTextStyle(
                                               fontSize: 16,
-                                              color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                              color: themeChange.getThem()
+                                                  ? AppThemeData.neutralDark900
+                                                  : AppThemeData.neutral900),
                                         ),
                                       ),
                                       SizedBox(
@@ -593,7 +813,9 @@ class BookingDetailsScreen extends StatelessWidget {
                                           textAlign: TextAlign.end,
                                           style: AppThemeData.boldTextStyle(
                                               fontSize: 16,
-                                              color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                              color: themeChange.getThem()
+                                                  ? AppThemeData.neutralDark900
+                                                  : AppThemeData.neutral900),
                                         ),
                                       ),
                                     ],
@@ -601,7 +823,18 @@ class BookingDetailsScreen extends StatelessWidget {
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  (controller.userModel.value.userData!.ownerId != null && controller.userModel.value.userData!.ownerId!.isNotEmpty) || controller.bookingModel.value.statut == RideStatus.newRide
+                                  (controller.userModel.value.userData!
+                                                      .ownerId !=
+                                                  null &&
+                                              controller
+                                                  .userModel
+                                                  .value
+                                                  .userData!
+                                                  .ownerId!
+                                                  .isNotEmpty) ||
+                                          controller
+                                                  .bookingModel.value.statut ==
+                                              RideStatus.newRide
                                       ? SizedBox()
                                       : Row(
                                           children: [
@@ -609,9 +842,15 @@ class BookingDetailsScreen extends StatelessWidget {
                                               flex: 2,
                                               child: Text(
                                                 "Admin commission:",
-                                                style: AppThemeData.mediumTextStyle(
-                                                    fontSize: 16,
-                                                    color: themeChange.getThem() ? AppThemeData.errorDefault : AppThemeData.errorDefault),
+                                                style: AppThemeData
+                                                    .mediumTextStyle(
+                                                        fontSize: 16,
+                                                        color: themeChange
+                                                                .getThem()
+                                                            ? AppThemeData
+                                                                .errorDefault
+                                                            : AppThemeData
+                                                                .errorDefault),
                                               ),
                                             ),
                                             SizedBox(
@@ -621,15 +860,29 @@ class BookingDetailsScreen extends StatelessWidget {
                                               child: Text(
                                                 Constant().amountShow(
                                                     amount: Constant.calculateAdminCommission(
-                                                            adminCommission: controller.bookingModel.value.adminCommissionType,
-                                                            amount: (double.parse(controller.subTotal.value) -
-                                                                    double.parse(controller.discount.value))
+                                                            adminCommission:
+                                                                controller
+                                                                    .bookingModel
+                                                                    .value
+                                                                    .adminCommissionType,
+                                                            amount: (double.parse(controller
+                                                                        .subTotal
+                                                                        .value) -
+                                                                    double.parse(controller
+                                                                        .discount
+                                                                        .value))
                                                                 .toString())
                                                         .toString()),
                                                 textAlign: TextAlign.end,
-                                                style: AppThemeData.boldTextStyle(
-                                                    fontSize: 16,
-                                                    color: themeChange.getThem() ? AppThemeData.errorDefault : AppThemeData.errorDefault),
+                                                style:
+                                                    AppThemeData.boldTextStyle(
+                                                        fontSize: 16,
+                                                        color: themeChange
+                                                                .getThem()
+                                                            ? AppThemeData
+                                                                .errorDefault
+                                                            : AppThemeData
+                                                                .errorDefault),
                                               ),
                                             ),
                                           ],
@@ -641,25 +894,36 @@ class BookingDetailsScreen extends StatelessWidget {
                           SizedBox(
                             height: 20,
                           ),
-                          controller.userModel.value.userData!.ownerId != null && controller.userModel.value.userData!.ownerId!.isNotEmpty  || controller.bookingModel.value.statut == RideStatus.newRide
+                          controller.userModel.value.userData!.ownerId !=
+                                          null &&
+                                      controller.userModel.value.userData!
+                                          .ownerId!.isNotEmpty ||
+                                  controller.bookingModel.value.statut ==
+                                      RideStatus.newRide
                               ? SizedBox()
                               : Container(
                                   width: Responsive.width(100, context),
                                   decoration: BoxDecoration(
-                                    border:
-                                        Border.all(color: themeChange.getThem() ? AppThemeData.errorDefault : AppThemeData.errorDefault),
+                                    border: Border.all(
+                                        color: themeChange.getThem()
+                                            ? AppThemeData.errorDefault
+                                            : AppThemeData.errorDefault),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 10),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           "Note : Admin commission will be debited from your wallet balance. \n \nAdmin commission will apply on your booking Amount minus Discount(if applicable).",
                                           style: AppThemeData.boldTextStyle(
                                               fontSize: 16,
-                                              color: themeChange.getThem() ? AppThemeData.errorDefault : AppThemeData.errorDefault),
+                                              color: themeChange.getThem()
+                                                  ? AppThemeData.errorDefault
+                                                  : AppThemeData.errorDefault),
                                         ),
                                       ],
                                     ),
@@ -669,25 +933,36 @@ class BookingDetailsScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-            bottomNavigationBar: controller.userModel.value.userData!.isOwner == "true"
+            bottomNavigationBar: controller.userModel.value.userData!.isOwner ==
+                    "true"
                 ? SizedBox()
                 : Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 30),
-                    child: controller.bookingModel.value.statut == RideStatus.canceled ||
-                            controller.bookingModel.value.statut == RideStatus.completed ||
-                            controller.bookingModel.value.statut == RideStatus.rejected
+                    padding: const EdgeInsets.only(
+                        left: 16, right: 16, top: 10, bottom: 30),
+                    child: controller.bookingModel.value.statut ==
+                                RideStatus.canceled ||
+                            controller.bookingModel.value.statut ==
+                                RideStatus.completed ||
+                            controller.bookingModel.value.statut ==
+                                RideStatus.rejected
                         ? SizedBox()
-                        : controller.bookingModel.value.statut == RideStatus.confirmed
+                        : controller.bookingModel.value.statut ==
+                                RideStatus.confirmed
                             ? Row(
                                 children: [
                                   Expanded(
                                     child: RoundedButtonFill(
                                       title: "Reached Location".tr,
                                       height: 5.5,
-                                      color: themeChange.getThem() ? AppThemeData.successDefault : AppThemeData.successDefault,
-                                      textColor: themeChange.getThem() ? AppThemeData.neutral50 : AppThemeData.neutral50,
+                                      color: themeChange.getThem()
+                                          ? AppThemeData.successDefault
+                                          : AppThemeData.successDefault,
+                                      textColor: themeChange.getThem()
+                                          ? AppThemeData.neutral50
+                                          : AppThemeData.neutral50,
                                       onPress: () async {
-                                        showVerifyPassengerDialog(context, themeChange, controller);
+                                        showVerifyPassengerDialog(
+                                            context, themeChange, controller);
                                       },
                                     ),
                                   ),
@@ -696,7 +971,10 @@ class BookingDetailsScreen extends StatelessWidget {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      Get.to(LiveTrackingScreen(), arguments: {'orderModel': controller.bookingModel.value});
+                                      Get.to(LiveTrackingScreen(), arguments: {
+                                        'orderModel':
+                                            controller.bookingModel.value
+                                      });
                                     },
                                     child: SvgPicture.asset(
                                       "assets/icons/ic_livetracking.svg",
@@ -705,33 +983,52 @@ class BookingDetailsScreen extends StatelessWidget {
                                   ),
                                 ],
                               )
-                            : controller.bookingModel.value.statut == RideStatus.onRide
+                            : controller.bookingModel.value.statut ==
+                                    RideStatus.onRide
                                 ? RoundedButtonFill(
-                                    title: controller.bookingModel.value.paymentMethod == "Cash"
+                                    title: controller.bookingModel.value
+                                                .paymentMethod ==
+                                            "Cash"
                                         ? "Confirm Cash Payment".tr
                                         : "Payment Pending".tr,
                                     height: 5.5,
-                                    color: themeChange.getThem() ? AppThemeData.errorDefault : AppThemeData.errorDefault,
-                                    textColor: themeChange.getThem() ? AppThemeData.neutral50 : AppThemeData.neutral50,
+                                    color: themeChange.getThem()
+                                        ? AppThemeData.errorDefault
+                                        : AppThemeData.errorDefault,
+                                    textColor: themeChange.getThem()
+                                        ? AppThemeData.neutral50
+                                        : AppThemeData.neutral50,
                                     onPress: () async {
-                                      if (controller.bookingModel.value.paymentMethod == "Cash") {
-                                        conformCashPayment(context, themeChange, controller);
+                                      if (controller.bookingModel.value
+                                              .paymentMethod ==
+                                          "Cash") {
+                                        conformCashPayment(
+                                            context, themeChange, controller);
                                       } else {
-                                        ShowToastDialog.showToast("Payment is pending from customer");
+                                        ShowToastDialog.showToast(
+                                            "Payment is pending from customer");
                                       }
                                     },
                                   )
-                                : controller.bookingModel.value.statut == RideStatus.newRide
+                                : controller.bookingModel.value.statut ==
+                                        RideStatus.newRide
                                     ? Row(
                                         children: [
                                           Expanded(
                                             child: RoundedButtonFill(
                                               title: "Reject".tr,
                                               height: 5.5,
-                                              color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
-                                              textColor: themeChange.getThem() ? AppThemeData.neutralDark500 : AppThemeData.neutral500,
+                                              color: themeChange.getThem()
+                                                  ? AppThemeData.neutralDark300
+                                                  : AppThemeData.neutral300,
+                                              textColor: themeChange.getThem()
+                                                  ? AppThemeData.neutralDark500
+                                                  : AppThemeData.neutral500,
                                               onPress: () async {
-                                                controller.rejectBooking(controller.bookingModel.value.id.toString());
+                                                controller.rejectBooking(
+                                                    controller
+                                                        .bookingModel.value.id
+                                                        .toString());
                                               },
                                             ),
                                           ),
@@ -742,10 +1039,14 @@ class BookingDetailsScreen extends StatelessWidget {
                                             child: RoundedButtonFill(
                                               title: "Accept".tr,
                                               height: 5.5,
-                                              color: AppThemeData.successDefault,
+                                              color:
+                                                  AppThemeData.successDefault,
                                               textColor: AppThemeData.neutral50,
                                               onPress: () async {
-                                                controller.acceptBooking(controller.bookingModel.value.id.toString());
+                                                controller.acceptBooking(
+                                                    controller
+                                                        .bookingModel.value.id
+                                                        .toString());
                                               },
                                             ),
                                           ),
@@ -757,8 +1058,9 @@ class BookingDetailsScreen extends StatelessWidget {
         });
   }
 
-  void showVerifyPassengerDialog(BuildContext context, DarkThemeProvider themeChange, BookingDetailsController controller) {
-    if(Constant.rideOtp == "no") {
+  void showVerifyPassengerDialog(BuildContext context,
+      DarkThemeProvider themeChange, BookingDetailsController controller) {
+    if (Constant.rideOtp == "no") {
       controller.onRideStatus();
       return;
     }
@@ -777,7 +1079,10 @@ class BookingDetailsScreen extends StatelessWidget {
                     Expanded(
                         child: Text("Verify Passenger",
                             style: AppThemeData.boldTextStyle(
-                                fontSize: 22, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900))),
+                                fontSize: 22,
+                                color: themeChange.getThem()
+                                    ? AppThemeData.neutralDark900
+                                    : AppThemeData.neutral900))),
                     InkWell(
                       onTap: () {
                         Get.back();
@@ -791,7 +1096,10 @@ class BookingDetailsScreen extends StatelessWidget {
                   "Enter the OTP shared by the customer to begin the trip",
                   textAlign: TextAlign.start,
                   style: AppThemeData.mediumTextStyle(
-                      color: themeChange.getThem() ? AppThemeData.neutralDark500 : AppThemeData.neutral500, fontSize: 14),
+                      color: themeChange.getThem()
+                          ? AppThemeData.neutralDark500
+                          : AppThemeData.neutral500,
+                      fontSize: 14),
                 ),
                 SizedBox(height: 20),
                 Pinput(
@@ -803,12 +1111,21 @@ class BookingDetailsScreen extends StatelessWidget {
                     height: 42,
                     width: 50,
                     textStyle: AppThemeData.mediumTextStyle(
-                        fontSize: 14, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                        fontSize: 14,
+                        color: themeChange.getThem()
+                            ? AppThemeData.neutralDark900
+                            : AppThemeData.neutral900),
                     decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.circular(50),
-                      color: themeChange.getThem() ? AppThemeData.neutralDark100 : AppThemeData.neutral100,
-                      border: Border.all(color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300, width: 0.8),
+                      color: themeChange.getThem()
+                          ? AppThemeData.neutralDark100
+                          : AppThemeData.neutral100,
+                      border: Border.all(
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark300
+                              : AppThemeData.neutral300,
+                          width: 0.8),
                     ),
                   ),
                   keyboardType: TextInputType.phone,
@@ -834,7 +1151,8 @@ class BookingDetailsScreen extends StatelessWidget {
     );
   }
 
-  void conformCashPayment(BuildContext context, DarkThemeProvider themeChange, BookingDetailsController controller) {
+  void conformCashPayment(BuildContext context, DarkThemeProvider themeChange,
+      BookingDetailsController controller) {
     Get.dialog(
       Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -850,7 +1168,10 @@ class BookingDetailsScreen extends StatelessWidget {
                     Expanded(
                         child: Text("Confirm Cash Collection",
                             style: AppThemeData.boldTextStyle(
-                                fontSize: 20, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900))),
+                                fontSize: 20,
+                                color: themeChange.getThem()
+                                    ? AppThemeData.neutralDark900
+                                    : AppThemeData.neutral900))),
                     InkWell(
                       onTap: () {
                         Get.back();
@@ -864,7 +1185,10 @@ class BookingDetailsScreen extends StatelessWidget {
                   "Please confirm that you have received the full cash amount from the customer before continuing.",
                   textAlign: TextAlign.start,
                   style: AppThemeData.mediumTextStyle(
-                      color: themeChange.getThem() ? AppThemeData.neutralDark500 : AppThemeData.neutral500, fontSize: 14),
+                      color: themeChange.getThem()
+                          ? AppThemeData.neutralDark500
+                          : AppThemeData.neutral500,
+                      fontSize: 14),
                 ),
                 SizedBox(height: 25),
                 RoundedButtonFill(

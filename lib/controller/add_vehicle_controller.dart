@@ -1,14 +1,14 @@
 import 'dart:convert';
 
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/model/brand_model.dart';
-import 'package:cabme_driver/model/get_vehicle_data_model.dart';
-import 'package:cabme_driver/model/get_vehicle_getegory.dart';
-import 'package:cabme_driver/model/model.dart';
-import 'package:cabme_driver/model/user_model.dart';
-import 'package:cabme_driver/service/api.dart';
-import 'package:cabme_driver/utils/Preferences.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/model/brand_model.dart';
+import 'package:uniqcars_driver/model/get_vehicle_data_model.dart';
+import 'package:uniqcars_driver/model/get_vehicle_getegory.dart';
+import 'package:uniqcars_driver/model/model.dart';
+import 'package:uniqcars_driver/model/user_model.dart';
+import 'package:uniqcars_driver/service/api.dart';
+import 'package:uniqcars_driver/utils/Preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -48,18 +48,25 @@ class AddVehicleController extends GetxController {
     if (args != null) {
       vehicleData.value = args["vehicleData"];
       if (vehicleData.value.id != null) {
-        selectedVehicleCategory.value = vehicleCategoryList.firstWhere((p0) => p0.id == vehicleData.value.idTypeVehicule);
-        selectedBrand.value = brandList.firstWhere((p0) => p0.id == vehicleData.value.brand);
+        selectedVehicleCategory.value = vehicleCategoryList
+            .firstWhere((p0) => p0.id == vehicleData.value.idTypeVehicule);
+        selectedBrand.value =
+            brandList.firstWhere((p0) => p0.id == vehicleData.value.brand);
         await getModel();
 
-        if(modelList.where((p0) => p0.id == vehicleData.value.model).isNotEmpty){
-          selectedModel.value = modelList.firstWhere((p0) => p0.id == vehicleData.value.model);
+        if (modelList
+            .where((p0) => p0.id == vehicleData.value.model)
+            .isNotEmpty) {
+          selectedModel.value =
+              modelList.firstWhere((p0) => p0.id == vehicleData.value.model);
         }
 
         colorController.value.text = vehicleData.value.color!;
         carMakeController.value.text = vehicleData.value.carMake!;
         numberPlateController.value.text = vehicleData.value.numberplate!;
-        passenger.value = vehicleData.value.passenger!.isEmpty ? 1 : int.parse(vehicleData.value.passenger.toString());
+        passenger.value = vehicleData.value.passenger!.isEmpty
+            ? 1
+            : int.parse(vehicleData.value.passenger.toString());
         kmDrivenController.value.text = vehicleData.value.km!;
         millageController.value.text = vehicleData.value.milage!;
       }
@@ -69,21 +76,31 @@ class AddVehicleController extends GetxController {
   }
 
   Future<void> getVehicleCategory() async {
-    await API.handleApiRequest(request: () => http.get(Uri.parse(API.vehicleCategory), headers: API.headers), showLoader: false).then(
+    await API
+        .handleApiRequest(
+            request: () =>
+                http.get(Uri.parse(API.vehicleCategory), headers: API.headers),
+            showLoader: false)
+        .then(
       (value) {
         if (value != null) {
           if (value['success'] == "failed" || value['success'] == "Failed") {
             ShowToastDialog.showToast(value['message']);
             return null;
           } else {
-            VehicleCategoryModel vehicleCategoryModel = VehicleCategoryModel.fromJson(value);
+            VehicleCategoryModel vehicleCategoryModel =
+                VehicleCategoryModel.fromJson(value);
             vehicleCategoryList.value = vehicleCategoryModel.data ?? [];
           }
         }
       },
     );
 
-    await API.handleApiRequest(request: () => http.get(Uri.parse(API.brand), headers: API.headers), showLoader: false).then(
+    await API
+        .handleApiRequest(
+            request: () => http.get(Uri.parse(API.brand), headers: API.headers),
+            showLoader: false)
+        .then(
       (value) async {
         if (value != null) {
           if (value['success'] == "failed" || value['success'] == "Failed") {
@@ -92,7 +109,7 @@ class AddVehicleController extends GetxController {
           } else {
             BrandModel brandModel = BrandModel.fromJson(value);
             brandList.value = brandModel.data ?? [];
-            if(brandList.isNotEmpty) {
+            if (brandList.isNotEmpty) {
               selectedBrand.value = brandList.first;
               selectedVehicleCategory.value = vehicleCategoryList.first;
               await getModel();
@@ -105,7 +122,8 @@ class AddVehicleController extends GetxController {
 
   Future<void> saveVehicle() async {
     Map<String, dynamic> bodyParams = {
-      'id_vehicle': Get.arguments == null ? "" : vehicleData.value.id!.toString(),
+      'id_vehicle':
+          Get.arguments == null ? "" : vehicleData.value.id!.toString(),
       'owner_id': Preferences.getInt(Preferences.userId).toString(),
       'id_categorie_vehicle': selectedVehicleCategory.value.id.toString(),
       'brand': selectedBrand.value.id.toString(),
@@ -117,7 +135,12 @@ class AddVehicleController extends GetxController {
       'km_driven': kmDrivenController.value.text,
       'passenger': passenger.value.toString(),
     };
-    await API.handleApiRequest(request: () => http.post(Uri.parse(API.ownerVehicleRegister), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true).then(
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.ownerVehicleRegister),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
+        .then(
       (value) {
         if (value != null) {
           if (value['success'] == "failed" || value['success'] == "Failed") {
@@ -138,7 +161,12 @@ class AddVehicleController extends GetxController {
       'brand': selectedBrand.value.name.toString(),
       'vehicle_type': selectedVehicleCategory.value.id.toString(),
     };
-    await API.handleApiRequest(request: () => http.post(Uri.parse(API.model), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: false).then(
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.model),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: false)
+        .then(
       (value) {
         if (value != null) {
           if (value['success'] == "failed" || value['success'] == "Failed") {

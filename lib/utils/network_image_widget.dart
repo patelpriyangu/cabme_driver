@@ -1,6 +1,6 @@
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/themes/responsive.dart';
-import 'package:cabme_driver/utils/dark_theme_provider.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/themes/responsive.dart';
+import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -35,7 +35,8 @@ class NetworkImageWidget extends StatelessWidget {
       height: height ?? Responsive.height(8, context),
       width: width ?? Responsive.width(15, context),
       color: color,
-      progressIndicatorBuilder: (context, url, downloadProgress) => Constant.loader(context),
+      progressIndicatorBuilder: (context, url, downloadProgress) =>
+          Constant.loader(context),
       errorWidget: (context, url, error) =>
           errorWidget ??
           Image.network(

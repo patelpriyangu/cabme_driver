@@ -2,12 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/constant/logdata.dart';
-import 'package:cabme_driver/constant/send_notification.dart';
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/model/user_model.dart';
-import 'package:cabme_driver/service/api.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/constant/logdata.dart';
+import 'package:uniqcars_driver/constant/send_notification.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/model/user_model.dart';
+import 'package:uniqcars_driver/service/api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -51,7 +51,8 @@ class ConversationController extends GetxController {
 
     senderId.value = int.parse(userModel.userData!.id.toString());
     senderPhoto.value = userModel.userData!.photoPath!;
-    senderName.value = '${userModel.userData!.prenom!} ${userModel.userData!.nom!}';
+    senderName.value =
+        '${userModel.userData!.prenom!} ${userModel.userData!.nom!}';
   }
 
   Future<dynamic> getToken(int receiverId) async {
@@ -60,7 +61,8 @@ class ConversationController extends GetxController {
         'id_user': receiverId,
         'cat_user': "user_app",
       };
-      final response = await http.post(Uri.parse(API.getFcmToken), headers: API.headers, body: jsonEncode(bodyParams));
+      final response = await http.post(Uri.parse(API.getFcmToken),
+          headers: API.headers, body: jsonEncode(bodyParams));
       showLog("API :: URL :: ${API.getFcmToken} ");
       showLog("API :: Request Body :: ${jsonEncode(bodyParams)} ");
       showLog("API :: Request Header :: ${API.headers.toString()} ");
@@ -69,10 +71,12 @@ class ConversationController extends GetxController {
       Map<String, dynamic> responseBody = json.decode(response.body);
       if (response.statusCode == 200 && responseBody['success'] == "success") {
         receiverToken.value = responseBody['data']['fcm_id'];
-      } else if (response.statusCode == 200 && responseBody['success'] == "failed") {
+      } else if (response.statusCode == 200 &&
+          responseBody['success'] == "failed") {
         ShowToastDialog.showToast(responseBody['error']);
       } else {
-        ShowToastDialog.showToast('Something want wrong. Please try again later');
+        ShowToastDialog.showToast(
+            'Something want wrong. Please try again later');
         throw Exception('Failed to load album');
       }
     } on TimeoutException catch (e) {
@@ -87,7 +91,8 @@ class ConversationController extends GetxController {
     return null;
   }
 
-  void sendMessage(String message, Url url, String videoThumbnail, String type) {
+  void sendMessage(
+      String message, Url url, String videoThumbnail, String type) {
     String id = Constant.getUuid();
     Map<String, dynamic> messageData = {
       'id': id,
@@ -118,7 +123,11 @@ class ConversationController extends GetxController {
     };
 
     Constant.conversation.doc(idCollection).set(inboxData);
-    Constant.conversation.doc(idCollection).collection("thread").doc(id).set(messageData);
+    Constant.conversation
+        .doc(idCollection)
+        .collection("thread")
+        .doc(id)
+        .set(messageData);
 
     Map<String, dynamic> notificationData = {
       'id': id,
@@ -142,6 +151,10 @@ class ConversationController extends GetxController {
       'message': notificationData,
       'isGroup': false,
     };
-    SendNotification.sendOneNotification(token: receiverToken.value, title: senderName.value, body: message, payload: payload);
+    SendNotification.sendOneNotification(
+        token: receiverToken.value,
+        title: senderName.value,
+        body: message,
+        payload: payload);
   }
 }

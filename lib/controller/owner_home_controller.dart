@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/model/get_vehicle_data_model.dart';
-import 'package:cabme_driver/model/owner_dashboard_model.dart';
-import 'package:cabme_driver/model/user_model.dart';
-import 'package:cabme_driver/service/api.dart';
-import 'package:cabme_driver/utils/Preferences.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/model/get_vehicle_data_model.dart';
+import 'package:uniqcars_driver/model/owner_dashboard_model.dart';
+import 'package:uniqcars_driver/model/user_model.dart';
+import 'package:uniqcars_driver/service/api.dart';
+import 'package:uniqcars_driver/utils/Preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -47,7 +47,8 @@ class OwnerHomeController extends GetxController {
     };
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.getProfileByPhone), headers: API.headers, body: jsonEncode(bodyParams)),
+            request: () => http.post(Uri.parse(API.getProfileByPhone),
+                headers: API.headers, body: jsonEncode(bodyParams)),
             showLoader: false)
         .then(
       (value) {
@@ -73,7 +74,8 @@ class OwnerHomeController extends GetxController {
     };
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.getOwnerDashboard), body: jsonEncode(bodyParams), headers: API.headers),
+            request: () => http.post(Uri.parse(API.getOwnerDashboard),
+                body: jsonEncode(bodyParams), headers: API.headers),
             showLoader: false)
         .then(
       (value) {
@@ -81,14 +83,17 @@ class OwnerHomeController extends GetxController {
           if (value['success'] == "failed" || value['success'] == "Failed") {
             return null;
           } else {
-            ownerDashBoardData.value = OwnerDashBoardData.fromJson(value['data']);
+            ownerDashBoardData.value =
+                OwnerDashBoardData.fromJson(value['data']);
           }
         }
       },
     );
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.getOwnerDriver), body: jsonEncode(bodyParams), headers: API.headers), showLoader: false)
+            request: () => http.post(Uri.parse(API.getOwnerDriver),
+                body: jsonEncode(bodyParams), headers: API.headers),
+            showLoader: false)
         .then(
       (value) {
         if (value != null) {
@@ -96,7 +101,9 @@ class OwnerHomeController extends GetxController {
             driverList.clear();
             return null;
           } else {
-            driverList.value = (value['data'] as List).map((e) => UserData.fromJson(e)).toList();
+            driverList.value = (value['data'] as List)
+                .map((e) => UserData.fromJson(e))
+                .toList();
           }
         }
       },
@@ -104,7 +111,9 @@ class OwnerHomeController extends GetxController {
 
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.getOwnerVehicle), body: jsonEncode(bodyParams), headers: API.headers), showLoader: false)
+            request: () => http.post(Uri.parse(API.getOwnerVehicle),
+                body: jsonEncode(bodyParams), headers: API.headers),
+            showLoader: false)
         .then(
       (value) {
         if (value != null) {
@@ -112,7 +121,9 @@ class OwnerHomeController extends GetxController {
             vehicleList.clear();
             return null;
           } else {
-            vehicleList.value = (value['data'] as List).map((e) => VehicleData.fromJson(e)).toList();
+            vehicleList.value = (value['data'] as List)
+                .map((e) => VehicleData.fromJson(e))
+                .toList();
           }
         }
       },
@@ -125,7 +136,8 @@ class OwnerHomeController extends GetxController {
     };
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.removeDriverVehicle), body: jsonEncode(bodyParams), headers: API.headers),
+            request: () => http.post(Uri.parse(API.removeDriverVehicle),
+                body: jsonEncode(bodyParams), headers: API.headers),
             showLoader: false)
         .then(
       (value) async {
@@ -148,7 +160,9 @@ class OwnerHomeController extends GetxController {
     };
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.deleteOwnerDriver), body: jsonEncode(bodyParams), headers: API.headers), showLoader: true)
+            request: () => http.post(Uri.parse(API.deleteOwnerDriver),
+                body: jsonEncode(bodyParams), headers: API.headers),
+            showLoader: true)
         .then(
       (value) async {
         if (value != null) {

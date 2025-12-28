@@ -1,15 +1,15 @@
 import 'dart:convert';
 
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/model/brand_model.dart';
-import 'package:cabme_driver/model/get_vehicle_data_model.dart';
-import 'package:cabme_driver/model/get_vehicle_getegory.dart';
-import 'package:cabme_driver/model/model.dart';
-import 'package:cabme_driver/model/user_model.dart';
-import 'package:cabme_driver/model/zone_model.dart';
-import 'package:cabme_driver/service/api.dart';
-import 'package:cabme_driver/utils/Preferences.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/model/brand_model.dart';
+import 'package:uniqcars_driver/model/get_vehicle_data_model.dart';
+import 'package:uniqcars_driver/model/get_vehicle_getegory.dart';
+import 'package:uniqcars_driver/model/model.dart';
+import 'package:uniqcars_driver/model/user_model.dart';
+import 'package:uniqcars_driver/model/zone_model.dart';
+import 'package:uniqcars_driver/service/api.dart';
+import 'package:uniqcars_driver/utils/Preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -56,7 +56,10 @@ class VehicleInfoController extends GetxController {
   Future<void> getVehicleCategory() async {
     await API
         .handleApiRequest(
-            request: () => http.get(Uri.parse("${API.getVehicleData}${Preferences.getInt(Preferences.userId)}"), headers: API.headers),
+            request: () => http.get(
+                Uri.parse(
+                    "${API.getVehicleData}${Preferences.getInt(Preferences.userId)}"),
+                headers: API.headers),
             showLoader: false)
         .then(
       (value) {
@@ -64,28 +67,40 @@ class VehicleInfoController extends GetxController {
           if (value['success'] == "failed" || value['success'] == "Failed") {
             return null;
           } else {
-            GetVehicleDataModel vehicleCategoryModel = GetVehicleDataModel.fromJson(value);
+            GetVehicleDataModel vehicleCategoryModel =
+                GetVehicleDataModel.fromJson(value);
             vehicleData.value = vehicleCategoryModel.vehicleData!;
           }
         }
       },
     );
 
-    await API.handleApiRequest(request: () => http.get(Uri.parse(API.vehicleCategory), headers: API.headers), showLoader: false).then(
+    await API
+        .handleApiRequest(
+            request: () =>
+                http.get(Uri.parse(API.vehicleCategory), headers: API.headers),
+            showLoader: false)
+        .then(
       (value) {
         if (value != null) {
           if (value['success'] == "failed" || value['success'] == "Failed") {
             ShowToastDialog.showToast(value['message']);
             return null;
           } else {
-            VehicleCategoryModel vehicleCategoryModel = VehicleCategoryModel.fromJson(value);
+            VehicleCategoryModel vehicleCategoryModel =
+                VehicleCategoryModel.fromJson(value);
             vehicleCategoryList.value = vehicleCategoryModel.data ?? [];
           }
         }
       },
     );
 
-    await API.handleApiRequest(request: () => http.get(Uri.parse(API.getZone), headers: API.headers), showLoader: false).then(
+    await API
+        .handleApiRequest(
+            request: () =>
+                http.get(Uri.parse(API.getZone), headers: API.headers),
+            showLoader: false)
+        .then(
       (value) {
         if (value != null) {
           if (value['success'] == "failed" || value['success'] == "Failed") {
@@ -99,7 +114,11 @@ class VehicleInfoController extends GetxController {
       },
     );
 
-    await API.handleApiRequest(request: () => http.get(Uri.parse(API.brand), headers: API.headers), showLoader: false).then(
+    await API
+        .handleApiRequest(
+            request: () => http.get(Uri.parse(API.brand), headers: API.headers),
+            showLoader: false)
+        .then(
       (value) {
         if (value != null) {
           if (value['success'] == "failed" || value['success'] == "Failed") {
@@ -114,15 +133,20 @@ class VehicleInfoController extends GetxController {
     );
 
     if (vehicleData.value.id != null) {
-      selectedVehicleCategory.value = vehicleCategoryList.firstWhere((p0) => p0.id == vehicleData.value.idTypeVehicule);
-      selectedBrand.value = brandList.firstWhere((p0) => p0.id == vehicleData.value.brand);
+      selectedVehicleCategory.value = vehicleCategoryList
+          .firstWhere((p0) => p0.id == vehicleData.value.idTypeVehicule);
+      selectedBrand.value =
+          brandList.firstWhere((p0) => p0.id == vehicleData.value.brand);
       await getModel();
-      selectedModel.value = modelList.firstWhere((p0) => p0.id == vehicleData.value.model);
+      selectedModel.value =
+          modelList.firstWhere((p0) => p0.id == vehicleData.value.model);
 
       colorController.value.text = vehicleData.value.color!;
       carMakeController.value.text = vehicleData.value.carMake!;
       numberPlateController.value.text = vehicleData.value.numberplate!;
-      passenger.value = vehicleData.value.passenger!.isEmpty ? 1 : int.parse(vehicleData.value.passenger.toString());
+      passenger.value = vehicleData.value.passenger!.isEmpty
+          ? 1
+          : int.parse(vehicleData.value.passenger.toString());
       kmDrivenController.value.text = vehicleData.value.km!;
       millageController.value.text = vehicleData.value.milage!;
 
@@ -130,9 +154,9 @@ class VehicleInfoController extends GetxController {
         selectedZone.add(int.parse(element.toString()));
       }
       for (var element in selectedZone) {
-        if(zoneList.where((p0) => p0.id == element).isNotEmpty){
+        if (zoneList.where((p0) => p0.id == element).isNotEmpty) {
           zoneNameController.value.text =
-          "${zoneNameController.value.text}${zoneNameController.value.text.isEmpty ? "" : ","} ${zoneList.where((p0) => p0.id == element).first.name}";
+              "${zoneNameController.value.text}${zoneNameController.value.text.isEmpty ? "" : ","} ${zoneList.where((p0) => p0.id == element).first.name}";
         }
       }
     }
@@ -146,7 +170,9 @@ class VehicleInfoController extends GetxController {
     };
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.model), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true)
+            request: () => http.post(Uri.parse(API.model),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
         .then(
       (value) {
         if (value != null) {
@@ -178,7 +204,9 @@ class VehicleInfoController extends GetxController {
     };
     await API
         .handleApiRequest(
-            request: () => http.post(Uri.parse(API.vehicleRegister), headers: API.headers, body: jsonEncode(bodyParams)), showLoader: true)
+            request: () => http.post(Uri.parse(API.vehicleRegister),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
         .then(
       (value) {
         if (value != null) {

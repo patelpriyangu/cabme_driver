@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/constant/show_toast_dialog.dart';
-import 'package:cabme_driver/controller/conversation_controller.dart';
-import 'package:cabme_driver/themes/app_them_data.dart';
-import 'package:cabme_driver/themes/text_field_widget.dart';
-import 'package:cabme_driver/utils/dark_theme_provider.dart';
-import 'package:cabme_driver/widget/firebase_pagination/src/firestore_pagination.dart';
-import 'package:cabme_driver/widget/firebase_pagination/src/models/view_type.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
+import 'package:uniqcars_driver/controller/conversation_controller.dart';
+import 'package:uniqcars_driver/themes/app_them_data.dart';
+import 'package:uniqcars_driver/themes/text_field_widget.dart';
+import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
+import 'package:uniqcars_driver/widget/firebase_pagination/src/firestore_pagination.dart';
+import 'package:uniqcars_driver/widget/firebase_pagination/src/models/view_type.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,8 +29,10 @@ class ConversationScreen extends StatelessWidget {
       init: ConversationController(),
       initState: (controller) {
         if (controller.controller!.scrollController.hasClients) {
-          Timer(const Duration(milliseconds: 500),
-              () => controller.controller!.scrollController.jumpTo(controller.controller!.scrollController.position.maxScrollExtent));
+          Timer(
+              const Duration(milliseconds: 500),
+              () => controller.controller!.scrollController.jumpTo(controller
+                  .controller!.scrollController.position.maxScrollExtent));
         }
       },
       builder: (controller) {
@@ -48,14 +50,18 @@ class ConversationScreen extends StatelessWidget {
                 CircleAvatar(
                   radius: 20,
                   backgroundImage: controller.receiverPhoto.value.isNotEmpty
-                      ? CachedNetworkImageProvider(controller.receiverPhoto.value)
-                      : const AssetImage("assets/images/user.png") as ImageProvider,
+                      ? CachedNetworkImageProvider(
+                          controller.receiverPhoto.value)
+                      : const AssetImage("assets/images/user.png")
+                          as ImageProvider,
                 ),
                 const SizedBox(width: 20),
                 Text(
                   controller.receiverName.value,
                   style: AppThemeData.semiBoldTextStyle(
-                    color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                    color: themeChange.getThem()
+                        ? AppThemeData.neutralDark900
+                        : AppThemeData.neutral900,
                     fontSize: 16,
                   ),
                 ),
@@ -69,10 +75,15 @@ class ConversationScreen extends StatelessWidget {
                 child: FirestorePagination(
                   controller: controller.scrollController,
                   physics: const BouncingScrollPhysics(),
-                  onEmpty: Constant.showEmptyView(message: "No messages yet".tr),
+                  onEmpty:
+                      Constant.showEmptyView(message: "No messages yet".tr),
                   itemBuilder: (context, documentSnapshots, index) {
                     final data = documentSnapshots[index].data() as Map?;
-                    return chatItemView(data!['senderId'] == controller.senderId.value, data, controller, themeChange.getThem());
+                    return chatItemView(
+                        data!['senderId'] == controller.senderId.value,
+                        data,
+                        controller,
+                        themeChange.getThem());
                   },
                   // orderBy is compulsory to enable pagination
                   query: Constant.conversation
@@ -94,7 +105,8 @@ class ConversationScreen extends StatelessWidget {
     );
   }
 
-  Widget chatItemView(bool isMe, Map<dynamic, dynamic> data, ConversationController controller, bool isDarKMode) {
+  Widget chatItemView(bool isMe, Map<dynamic, dynamic> data,
+      ConversationController controller, bool isDarKMode) {
     return Container(
       padding: const EdgeInsets.only(left: 14, right: 14, top: 10, bottom: 10),
       child: isMe
@@ -112,14 +124,20 @@ class ConversationScreen extends StatelessWidget {
                           ? Container(
                               decoration: BoxDecoration(
                                 borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10)),
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10)),
                                 color: AppThemeData.primaryDefault,
                               ),
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 10),
                               child: Text(
                                 data['message'].toString(),
                                 style: AppThemeData.semiBoldTextStyle(
-                                    color: data['senderId'] == controller.senderId.value ? Colors.white : Colors.black),
+                                    color: data['senderId'] ==
+                                            controller.senderId.value
+                                        ? Colors.white
+                                        : Colors.black),
                               ),
                             )
                           : data['type'] == "image"
@@ -130,24 +148,33 @@ class ConversationScreen extends StatelessWidget {
                                   ),
                                   child: ClipRRect(
                                     borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10)),
-                                    child: Stack(alignment: Alignment.center, children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          Get.to(() => FullScreenImageViewer(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10)),
+                                    child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              Get.to(
+                                                  () => FullScreenImageViewer(
+                                                        imageUrl: data['url']
+                                                            ['url'],
+                                                      ));
+                                            },
+                                            child: Hero(
+                                              tag: data['url']['url'],
+                                              child: CachedNetworkImage(
                                                 imageUrl: data['url']['url'],
-                                              ));
-                                        },
-                                        child: Hero(
-                                          tag: data['url']['url'],
-                                          child: CachedNetworkImage(
-                                            imageUrl: data['url']['url'],
-                                            placeholder: (context, url) => Constant.loader(context),
-                                            errorWidget: (context, url, error) => const Icon(Icons.error),
+                                                placeholder: (context, url) =>
+                                                    Constant.loader(context),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        const Icon(Icons.error),
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                    ]),
+                                        ]),
                                   ))
                               : FloatingActionButton(
                                   mini: true,
@@ -168,7 +195,10 @@ class ConversationScreen extends StatelessWidget {
                       Text(
                         Constant.timestampToDateTime(data['created']),
                         style: AppThemeData.mediumTextStyle(
-                            color: isDarKMode ? AppThemeData.neutralDark700 : AppThemeData.neutral700, fontSize: 12),
+                            color: isDarKMode
+                                ? AppThemeData.neutralDark700
+                                : AppThemeData.neutral700,
+                            fontSize: 12),
                       )
                     ],
                   ),
@@ -187,14 +217,20 @@ class ConversationScreen extends StatelessWidget {
                         ? Container(
                             decoration: BoxDecoration(
                               borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomRight: Radius.circular(10)),
-                              color: isDarKMode ? AppThemeData.neutralDark200 : AppThemeData.neutral200,
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                              color: isDarKMode
+                                  ? AppThemeData.neutralDark200
+                                  : AppThemeData.neutral200,
                             ),
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 10),
                             child: Text(
                               data['message'].toString(),
                               style: AppThemeData.semiBoldTextStyle(
-                                  color: data['senderId'] == controller.senderId.value
+                                  color: data['senderId'] ==
+                                          controller.senderId.value
                                       ? Colors.white
                                       : isDarKMode
                                           ? AppThemeData.neutralDark900
@@ -209,24 +245,31 @@ class ConversationScreen extends StatelessWidget {
                                 ),
                                 child: ClipRRect(
                                   borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                  child: Stack(alignment: Alignment.center, children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        Get.to(FullScreenImageViewer(
-                                          imageUrl: data['url']['url'],
-                                        ));
-                                      },
-                                      child: Hero(
-                                        tag: data['url']['url'],
-                                        child: CachedNetworkImage(
-                                          imageUrl: data['url']['url'],
-                                          placeholder: (context, url) => Constant.loader(context),
-                                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomRight: Radius.circular(10)),
+                                  child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            Get.to(FullScreenImageViewer(
+                                              imageUrl: data['url']['url'],
+                                            ));
+                                          },
+                                          child: Hero(
+                                            tag: data['url']['url'],
+                                            child: CachedNetworkImage(
+                                              imageUrl: data['url']['url'],
+                                              placeholder: (context, url) =>
+                                                  Constant.loader(context),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      const Icon(Icons.error),
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                  ]),
+                                      ]),
                                 ))
                             : FloatingActionButton(
                                 mini: true,
@@ -243,12 +286,14 @@ class ConversationScreen extends StatelessWidget {
                                   color: Colors.white,
                                 ),
                               ),
-
                     SizedBox(height: 3),
                     Text(
                       Constant.timestampToDateTime(data['created']),
                       style: AppThemeData.mediumTextStyle(
-                          color: isDarKMode ? AppThemeData.neutralDark700 : AppThemeData.neutral700, fontSize: 12),
+                          color: isDarKMode
+                              ? AppThemeData.neutralDark700
+                              : AppThemeData.neutral700,
+                          fontSize: 12),
                     )
                   ],
                 ),
@@ -257,7 +302,8 @@ class ConversationScreen extends StatelessWidget {
     );
   }
 
-  Widget buildMessageInput(ConversationController controller, BuildContext context) {
+  Widget buildMessageInput(
+      ConversationController controller, BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: Padding(
@@ -298,10 +344,18 @@ class ConversationScreen extends StatelessWidget {
               ),
               child: IconButton(
                 onPressed: () async {
-                  if (controller.messageController.value.text.trim().isNotEmpty) {
-                    controller.sendMessage(controller.messageController.value.text.trim(), Url(mime: '', url: ''), "", "text");
-                    Timer(const Duration(milliseconds: 500),
-                        () => controller.scrollController.jumpTo(controller.scrollController.position.maxScrollExtent));
+                  if (controller.messageController.value.text
+                      .trim()
+                      .isNotEmpty) {
+                    controller.sendMessage(
+                        controller.messageController.value.text.trim(),
+                        Url(mime: '', url: ''),
+                        "",
+                        "text");
+                    Timer(
+                        const Duration(milliseconds: 500),
+                        () => controller.scrollController.jumpTo(controller
+                            .scrollController.position.maxScrollExtent));
                     controller.messageController.value.clear();
                   } else {
                     ShowToastDialog.showToast("Please enter a message".tr);
@@ -331,9 +385,11 @@ class ConversationScreen extends StatelessWidget {
           isDefaultAction: false,
           onPressed: () async {
             Get.back();
-            XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
+            XFile? image =
+                await ImagePicker().pickImage(source: ImageSource.gallery);
             if (image != null) {
-              Url url = await Constant.uploadChatImageToFireStorage(File(image.path));
+              Url url =
+                  await Constant.uploadChatImageToFireStorage(File(image.path));
               controller.sendMessage("Sent an image".tr, url, "", 'image');
             }
           },
@@ -343,11 +399,18 @@ class ConversationScreen extends StatelessWidget {
           isDefaultAction: false,
           onPressed: () async {
             Get.back();
-            XFile? galleryVideo = await ImagePicker().pickVideo(source: ImageSource.gallery);
+            XFile? galleryVideo =
+                await ImagePicker().pickVideo(source: ImageSource.gallery);
             if (galleryVideo != null) {
-              ChatVideoContainer? videoContainer = await Constant.uploadChatVideoToFireStorage(File(galleryVideo.path));
+              ChatVideoContainer? videoContainer =
+                  await Constant.uploadChatVideoToFireStorage(
+                      File(galleryVideo.path));
               if (videoContainer != null) {
-                controller.sendMessage('Sent an video'.tr, videoContainer.videoUrl, videoContainer.thumbnailUrl, 'video');
+                controller.sendMessage(
+                    'Sent an video'.tr,
+                    videoContainer.videoUrl,
+                    videoContainer.thumbnailUrl,
+                    'video');
               }
             }
           },
@@ -357,9 +420,11 @@ class ConversationScreen extends StatelessWidget {
           isDestructiveAction: false,
           onPressed: () async {
             Get.back();
-            XFile? image = await ImagePicker().pickImage(source: ImageSource.camera);
+            XFile? image =
+                await ImagePicker().pickImage(source: ImageSource.camera);
             if (image != null) {
-              Url url = await Constant.uploadChatImageToFireStorage(File(image.path));
+              Url url =
+                  await Constant.uploadChatImageToFireStorage(File(image.path));
               controller.sendMessage('Sent an image'.tr, url, '', 'image');
             }
           },
@@ -369,11 +434,18 @@ class ConversationScreen extends StatelessWidget {
           isDestructiveAction: false,
           onPressed: () async {
             Get.back();
-            XFile? recordedVideo = await ImagePicker().pickVideo(source: ImageSource.camera);
+            XFile? recordedVideo =
+                await ImagePicker().pickVideo(source: ImageSource.camera);
             if (recordedVideo != null) {
-              ChatVideoContainer? videoContainer = await Constant.uploadChatVideoToFireStorage(File(recordedVideo.path));
+              ChatVideoContainer? videoContainer =
+                  await Constant.uploadChatVideoToFireStorage(
+                      File(recordedVideo.path));
               if (videoContainer != null) {
-                controller.sendMessage('Sent an video'.tr, videoContainer.videoUrl, videoContainer.thumbnailUrl, 'video');
+                controller.sendMessage(
+                    'Sent an video'.tr,
+                    videoContainer.videoUrl,
+                    videoContainer.thumbnailUrl,
+                    'video');
               }
             }
           },

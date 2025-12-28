@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:cabme_driver/themes/round_button_fill.dart';
-import 'package:cabme_driver/utils/dark_theme_provider.dart';
-import 'package:cabme_driver/widget/osm_map/map_controller.dart';
+import 'package:uniqcars_driver/themes/round_button_fill.dart';
+import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
+import 'package:uniqcars_driver/widget/osm_map/map_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -28,8 +28,7 @@ class MapPickerPage extends StatelessWidget {
             () => FlutterMap(
               mapController: controller.mapController,
               options: MapOptions(
-                initialCenter:
-                    controller.pickedPlace.value?.coordinates ??
+                initialCenter: controller.pickedPlace.value?.coordinates ??
                     const LatLng(20.5937, 78.9629), // Default India center
                 initialZoom: 13,
                 onTap: (tapPos, latlng) {

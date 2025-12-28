@@ -1,22 +1,22 @@
 import 'dart:developer' show log;
 
-import 'package:cabme_driver/constant/constant.dart';
-import 'package:cabme_driver/controller/profile_controller.dart';
-import 'package:cabme_driver/model/user_model.dart';
-import 'package:cabme_driver/page/auth_screens/vehicle_info_screen.dart';
-import 'package:cabme_driver/page/bank_details_add/bank_details_add.dart';
-import 'package:cabme_driver/page/change_password_screen/change_password_screen.dart';
-import 'package:cabme_driver/page/document_status/document_status_screen.dart';
-import 'package:cabme_driver/page/edit_profile/edit_profile_screen.dart';
-import 'package:cabme_driver/page/localization_screens/localization_screen.dart';
-import 'package:cabme_driver/page/privacy_policy/privacy_policy_screen.dart';
-import 'package:cabme_driver/page/subscription_plan_screen/subscription_history_screen.dart';
-import 'package:cabme_driver/page/subscription_plan_screen/subscription_plan_screen.dart';
-import 'package:cabme_driver/page/terms_of_service/terms_of_service_screen.dart';
-import 'package:cabme_driver/themes/responsive.dart';
-import 'package:cabme_driver/themes/round_button_fill.dart';
-import 'package:cabme_driver/utils/dark_theme_provider.dart';
-import 'package:cabme_driver/utils/network_image_widget.dart';
+import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/controller/profile_controller.dart';
+import 'package:uniqcars_driver/model/user_model.dart';
+import 'package:uniqcars_driver/page/auth_screens/vehicle_info_screen.dart';
+import 'package:uniqcars_driver/page/bank_details_add/bank_details_add.dart';
+import 'package:uniqcars_driver/page/change_password_screen/change_password_screen.dart';
+import 'package:uniqcars_driver/page/document_status/document_status_screen.dart';
+import 'package:uniqcars_driver/page/edit_profile/edit_profile_screen.dart';
+import 'package:uniqcars_driver/page/localization_screens/localization_screen.dart';
+import 'package:uniqcars_driver/page/privacy_policy/privacy_policy_screen.dart';
+import 'package:uniqcars_driver/page/subscription_plan_screen/subscription_history_screen.dart';
+import 'package:uniqcars_driver/page/subscription_plan_screen/subscription_plan_screen.dart';
+import 'package:uniqcars_driver/page/terms_of_service/terms_of_service_screen.dart';
+import 'package:uniqcars_driver/themes/responsive.dart';
+import 'package:uniqcars_driver/themes/round_button_fill.dart';
+import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
+import 'package:uniqcars_driver/utils/network_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -39,7 +39,10 @@ class ProfileScreen extends StatelessWidget {
                 'My Profile'.tr,
                 textAlign: TextAlign.center,
                 style: AppThemeData.boldTextStyle(
-                    fontSize: 22, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                    fontSize: 22,
+                    color: themeChange.getThem()
+                        ? AppThemeData.neutralDark900
+                        : AppThemeData.neutral900),
               ),
               centerTitle: false,
             ),
@@ -53,7 +56,9 @@ class ProfileScreen extends StatelessWidget {
                         child: NetworkImageWidget(
                           width: 120,
                           height: 120,
-                          imageUrl: controller.userModel.value.userData!.photoPath.toString(),
+                          imageUrl: controller
+                              .userModel.value.userData!.photoPath
+                              .toString(),
                           errorWidget: Image.asset(
                             "assets/images/placeholder_image.png",
                             width: 120,
@@ -66,37 +71,59 @@ class ProfileScreen extends StatelessWidget {
                     Text(
                       "${controller.userModel.value.userData!.prenom} ${controller.userModel.value.userData!.nom}",
                       style: AppThemeData.boldTextStyle(
-                          fontSize: 18, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                          fontSize: 18,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark900
+                              : AppThemeData.neutral900),
                     ),
                     Text(
                       "${controller.userModel.value.userData!.email}",
                       style: AppThemeData.mediumTextStyle(
-                          fontSize: 14, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                          fontSize: 14,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark900
+                              : AppThemeData.neutral900),
                     ),
                     Text(
                       "${controller.userModel.value.userData!.countryCode} ${controller.userModel.value.userData!.phone}",
                       style: AppThemeData.mediumTextStyle(
-                          fontSize: 14, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                          fontSize: 14,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark900
+                              : AppThemeData.neutral900),
                     ),
                     const SizedBox(height: 20),
-                    controller.userModel.value.userData!.ownerId != null && controller.userModel.value.userData!.ownerId!.isNotEmpty
+                    controller.userModel.value.userData!.ownerId != null &&
+                            controller
+                                .userModel.value.userData!.ownerId!.isNotEmpty
                         ? SizedBox()
-                        : controller.userModel.value.userData!.subscriptionPlan == null
+                        : controller.userModel.value.userData!
+                                    .subscriptionPlan ==
+                                null
                             ? SizedBox()
                             : Container(
                                 width: Responsive.width(100, context),
                                 decoration: BoxDecoration(
-                                  color: themeChange.getThem() ? AppThemeData.neutralDark700 : AppThemeData.neutral900,
+                                  color: themeChange.getThem()
+                                      ? AppThemeData.neutralDark700
+                                      : AppThemeData.neutral900,
                                   borderRadius: BorderRadius.circular(22),
                                 ),
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 20),
                                   child: Column(
                                     children: [
                                       Row(
                                         children: [
                                           NetworkImageWidget(
-                                            imageUrl: controller.userModel.value.userData!.subscriptionPlan!.image.toString(),
+                                            imageUrl: controller
+                                                .userModel
+                                                .value
+                                                .userData!
+                                                .subscriptionPlan!
+                                                .image
+                                                .toString(),
                                             width: 40,
                                             height: 40,
                                           ),
@@ -105,21 +132,36 @@ class ProfileScreen extends StatelessWidget {
                                           ),
                                           Expanded(
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  '${controller.userModel.value.userData!.subscriptionPlan!.name}'.tr,
+                                                  '${controller.userModel.value.userData!.subscriptionPlan!.name}'
+                                                      .tr,
                                                   textAlign: TextAlign.start,
-                                                  style: AppThemeData.boldTextStyle(
-                                                      fontSize: 18,
-                                                      color: themeChange.getThem() ? AppThemeData.neutralDark50 : AppThemeData.neutral50),
+                                                  style: AppThemeData
+                                                      .boldTextStyle(
+                                                          fontSize: 18,
+                                                          color: themeChange
+                                                                  .getThem()
+                                                              ? AppThemeData
+                                                                  .neutralDark50
+                                                              : AppThemeData
+                                                                  .neutral50),
                                                 ),
                                                 Text(
-                                                  '${controller.userModel.value.userData!.subscriptionPlan!.description}'.tr,
+                                                  '${controller.userModel.value.userData!.subscriptionPlan!.description}'
+                                                      .tr,
                                                   textAlign: TextAlign.start,
-                                                  style: AppThemeData.boldTextStyle(
-                                                      fontSize: 12,
-                                                      color: themeChange.getThem() ? AppThemeData.neutralDark500 : AppThemeData.neutral500),
+                                                  style: AppThemeData
+                                                      .boldTextStyle(
+                                                          fontSize: 12,
+                                                          color: themeChange
+                                                                  .getThem()
+                                                              ? AppThemeData
+                                                                  .neutralDark500
+                                                              : AppThemeData
+                                                                  .neutral500),
                                                 ),
                                               ],
                                             ),
@@ -143,11 +185,14 @@ class ProfileScreen extends StatelessWidget {
                     const SizedBox(height: 20),
                     Container(
                       decoration: BoxDecoration(
-                        color: themeChange.getThem() ? AppThemeData.neutralDark100 : AppThemeData.neutral100,
+                        color: themeChange.getThem()
+                            ? AppThemeData.neutralDark100
+                            : AppThemeData.neutral100,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 10),
                         child: Column(
                           children: [
                             InkWell(
@@ -159,10 +204,13 @@ class ProfileScreen extends StatelessWidget {
                                 });
                               },
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
                                 child: Row(
                                   children: [
-                                    SvgPicture.asset(height: 24, "assets/icons/ic_user_icon.svg"),
+                                    SvgPicture.asset(
+                                        height: 24,
+                                        "assets/icons/ic_user_icon.svg"),
                                     SizedBox(
                                       width: 20,
                                     ),
@@ -171,13 +219,17 @@ class ProfileScreen extends StatelessWidget {
                                         'Edit Profile'.tr,
                                         style: AppThemeData.semiBoldTextStyle(
                                             fontSize: 16,
-                                            color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                            color: themeChange.getThem()
+                                                ? AppThemeData.neutralDark900
+                                                : AppThemeData.neutral900),
                                       ),
                                     ),
                                     Icon(
                                       Icons.arrow_forward_ios,
                                       size: 16,
-                                      color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                      color: themeChange.getThem()
+                                          ? AppThemeData.neutralDark900
+                                          : AppThemeData.neutral900,
                                     )
                                   ],
                                 ),
@@ -188,10 +240,12 @@ class ProfileScreen extends StatelessWidget {
                                 Get.to(ChangePasswordScreen());
                               },
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
                                 child: Row(
                                   children: [
-                                    SvgPicture.asset(height: 24, "assets/icons/ic_lock.svg"),
+                                    SvgPicture.asset(
+                                        height: 24, "assets/icons/ic_lock.svg"),
                                     SizedBox(
                                       width: 20,
                                     ),
@@ -200,89 +254,122 @@ class ProfileScreen extends StatelessWidget {
                                         'Change Password'.tr,
                                         style: AppThemeData.semiBoldTextStyle(
                                             fontSize: 16,
-                                            color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                            color: themeChange.getThem()
+                                                ? AppThemeData.neutralDark900
+                                                : AppThemeData.neutral900),
                                       ),
                                     ),
                                     Icon(
                                       Icons.arrow_forward_ios,
                                       size: 16,
-                                      color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                      color: themeChange.getThem()
+                                          ? AppThemeData.neutralDark900
+                                          : AppThemeData.neutral900,
                                     )
                                   ],
                                 ),
                               ),
                             ),
-                            controller.userModel.value.userData!.isOwner == "true"
+                            controller.userModel.value.userData!.isOwner ==
+                                    "true"
                                 ? SizedBox()
                                 : InkWell(
                                     onTap: () {
                                       Get.to(VehicleInfoScreen());
                                     },
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 10),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10),
                                       child: Row(
                                         children: [
-                                          SvgPicture.asset(height: 24, "assets/icons/car-fill.svg"),
+                                          SvgPicture.asset(
+                                              height: 24,
+                                              "assets/icons/car-fill.svg"),
                                           SizedBox(
                                             width: 20,
                                           ),
                                           Expanded(
                                             child: Text(
                                               'Vehicle Information\'s'.tr,
-                                              style: AppThemeData.semiBoldTextStyle(
-                                                  fontSize: 16,
-                                                  color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                              style: AppThemeData
+                                                  .semiBoldTextStyle(
+                                                      fontSize: 16,
+                                                      color: themeChange
+                                                              .getThem()
+                                                          ? AppThemeData
+                                                              .neutralDark900
+                                                          : AppThemeData
+                                                              .neutral900),
                                             ),
                                           ),
                                           Icon(
                                             Icons.arrow_forward_ios,
                                             size: 16,
-                                            color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                            color: themeChange.getThem()
+                                                ? AppThemeData.neutralDark900
+                                                : AppThemeData.neutral900,
                                           )
                                         ],
                                       ),
                                     ),
                                   ),
-                            _shouldShowDocumentStatus(controller.userModel.value.userData!)
+                            _shouldShowDocumentStatus(
+                                    controller.userModel.value.userData!)
                                 ? InkWell(
                                     onTap: () {
                                       Get.to(DocumentStatusScreen());
                                     },
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 10),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10),
                                       child: Row(
                                         children: [
-                                          SvgPicture.asset(height: 24, "assets/icons/car-fill.svg"),
+                                          SvgPicture.asset(
+                                              height: 24,
+                                              "assets/icons/car-fill.svg"),
                                           SizedBox(
                                             width: 20,
                                           ),
                                           Expanded(
                                             child: Text(
                                               'Document Status'.tr,
-                                              style: AppThemeData.semiBoldTextStyle(
-                                                  fontSize: 16,
-                                                  color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                              style: AppThemeData
+                                                  .semiBoldTextStyle(
+                                                      fontSize: 16,
+                                                      color: themeChange
+                                                              .getThem()
+                                                          ? AppThemeData
+                                                              .neutralDark900
+                                                          : AppThemeData
+                                                              .neutral900),
                                             ),
                                           ),
                                           Icon(
                                             Icons.arrow_forward_ios,
                                             size: 16,
-                                            color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                            color: themeChange.getThem()
+                                                ? AppThemeData.neutralDark900
+                                                : AppThemeData.neutral900,
                                           )
                                         ],
                                       ),
                                     ),
                                   )
                                 : SizedBox(),
-                            controller.userModel.value.userData!.isOwner == "false" &&
-                                    (controller.userModel.value.userData!.ownerId != null &&
-                                        controller.userModel.value.userData!.ownerId!.isNotEmpty)
+                            controller.userModel.value.userData!.isOwner ==
+                                        "false" &&
+                                    (controller.userModel.value.userData!
+                                                .ownerId !=
+                                            null &&
+                                        controller.userModel.value.userData!
+                                            .ownerId!.isNotEmpty)
                                 ? SizedBox()
                                 : Constant.subscriptionModel == false
                                     ? SizedBox()
                                     : InkWell(
                                         onTap: () {
-                                          Get.to(SubscriptionPlanScreen())!.then(
+                                          Get.to(SubscriptionPlanScreen())!
+                                              .then(
                                             (value) {
                                               if (value == true) {
                                                 controller.getUserData();
@@ -291,83 +378,117 @@ class ProfileScreen extends StatelessWidget {
                                           );
                                         },
                                         child: Padding(
-                                          padding: const EdgeInsets.symmetric(vertical: 10),
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 10),
                                           child: Row(
                                             children: [
-                                              SvgPicture.asset(height: 24, "assets/icons/vip-crown-2-fill.svg"),
+                                              SvgPicture.asset(
+                                                  height: 24,
+                                                  "assets/icons/vip-crown-2-fill.svg"),
                                               SizedBox(
                                                 width: 20,
                                               ),
                                               Expanded(
                                                 child: Text(
                                                   'Subscription Plan'.tr,
-                                                  style: AppThemeData.semiBoldTextStyle(
-                                                      fontSize: 16,
-                                                      color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                                  style: AppThemeData
+                                                      .semiBoldTextStyle(
+                                                          fontSize: 16,
+                                                          color: themeChange
+                                                                  .getThem()
+                                                              ? AppThemeData
+                                                                  .neutralDark900
+                                                              : AppThemeData
+                                                                  .neutral900),
                                                 ),
                                               ),
                                               Icon(
                                                 Icons.arrow_forward_ios,
                                                 size: 16,
-                                                color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                                color: themeChange.getThem()
+                                                    ? AppThemeData
+                                                        .neutralDark900
+                                                    : AppThemeData.neutral900,
                                               )
                                             ],
                                           ),
                                         ),
                                       ),
-                            controller.userModel.value.userData!.isOwner == "false" &&
-                                    (controller.userModel.value.userData!.ownerId != null &&
-                                        controller.userModel.value.userData!.ownerId!.isNotEmpty)
+                            controller.userModel.value.userData!.isOwner ==
+                                        "false" &&
+                                    (controller.userModel.value.userData!
+                                                .ownerId !=
+                                            null &&
+                                        controller.userModel.value.userData!
+                                            .ownerId!.isNotEmpty)
                                 ? SizedBox()
                                 : InkWell(
                                     onTap: () {
                                       Get.to(SubscriptionHistoryScreen());
                                     },
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 10),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10),
                                       child: Row(
                                         children: [
                                           SvgPicture.asset(
                                               height: 24,
                                               "assets/icons/hourglass-line.svg",
-                                              colorFilter: ColorFilter.mode(AppThemeData.primaryDark, BlendMode.srcIn)),
+                                              colorFilter: ColorFilter.mode(
+                                                  AppThemeData.primaryDark,
+                                                  BlendMode.srcIn)),
                                           SizedBox(
                                             width: 20,
                                           ),
                                           Expanded(
                                             child: Text(
                                               'Subscription History'.tr,
-                                              style: AppThemeData.semiBoldTextStyle(
-                                                  fontSize: 16,
-                                                  color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                              style: AppThemeData
+                                                  .semiBoldTextStyle(
+                                                      fontSize: 16,
+                                                      color: themeChange
+                                                              .getThem()
+                                                          ? AppThemeData
+                                                              .neutralDark900
+                                                          : AppThemeData
+                                                              .neutral900),
                                             ),
                                           ),
                                           Icon(
                                             Icons.arrow_forward_ios,
                                             size: 16,
-                                            color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                            color: themeChange.getThem()
+                                                ? AppThemeData.neutralDark900
+                                                : AppThemeData.neutral900,
                                           )
                                         ],
                                       ),
                                     ),
                                   ),
 
-                            controller.userModel.value.userData!.isOwner == "false" &&
-                                    (controller.userModel.value.userData!.ownerId != null &&
-                                        controller.userModel.value.userData!.ownerId!.isNotEmpty)
+                            controller.userModel.value.userData!.isOwner ==
+                                        "false" &&
+                                    (controller.userModel.value.userData!
+                                                .ownerId !=
+                                            null &&
+                                        controller.userModel.value.userData!
+                                            .ownerId!.isNotEmpty)
                                 ? SizedBox()
                                 : InkWell(
                                     onTap: () {
                                       Get.to(BankDetailsAdd());
                                     },
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 10),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10),
                                       child: Row(
                                         children: [
                                           SvgPicture.asset(
                                             height: 24,
                                             "assets/icons/ic_bank.svg",
-                                            colorFilter: ColorFilter.mode(AppThemeData.warningDark, BlendMode.srcIn),
+                                            colorFilter: ColorFilter.mode(
+                                                AppThemeData.warningDark,
+                                                BlendMode.srcIn),
                                           ),
                                           SizedBox(
                                             width: 20,
@@ -375,15 +496,23 @@ class ProfileScreen extends StatelessWidget {
                                           Expanded(
                                             child: Text(
                                               'Bank Details'.tr,
-                                              style: AppThemeData.semiBoldTextStyle(
-                                                  fontSize: 16,
-                                                  color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                              style: AppThemeData
+                                                  .semiBoldTextStyle(
+                                                      fontSize: 16,
+                                                      color: themeChange
+                                                              .getThem()
+                                                          ? AppThemeData
+                                                              .neutralDark900
+                                                          : AppThemeData
+                                                              .neutral900),
                                             ),
                                           ),
                                           Icon(
                                             Icons.arrow_forward_ios,
                                             size: 16,
-                                            color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                            color: themeChange.getThem()
+                                                ? AppThemeData.neutralDark900
+                                                : AppThemeData.neutral900,
                                           )
                                         ],
                                       ),
@@ -429,11 +558,14 @@ class ProfileScreen extends StatelessWidget {
                     const SizedBox(height: 20),
                     Container(
                       decoration: BoxDecoration(
-                        color: themeChange.getThem() ? AppThemeData.neutralDark100 : AppThemeData.neutral100,
+                        color: themeChange.getThem()
+                            ? AppThemeData.neutralDark100
+                            : AppThemeData.neutral100,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 10),
                         child: Column(
                           children: [
                             InkWell(
@@ -443,10 +575,13 @@ class ProfileScreen extends StatelessWidget {
                                 ));
                               },
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
                                 child: Row(
                                   children: [
-                                    SvgPicture.asset(height: 24, "assets/icons/globe-fill.svg"),
+                                    SvgPicture.asset(
+                                        height: 24,
+                                        "assets/icons/globe-fill.svg"),
                                     SizedBox(
                                       width: 20,
                                     ),
@@ -455,13 +590,17 @@ class ProfileScreen extends StatelessWidget {
                                         'Change Language'.tr,
                                         style: AppThemeData.semiBoldTextStyle(
                                             fontSize: 16,
-                                            color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                            color: themeChange.getThem()
+                                                ? AppThemeData.neutralDark900
+                                                : AppThemeData.neutral900),
                                       ),
                                     ),
                                     Icon(
                                       Icons.arrow_forward_ios,
                                       size: 16,
-                                      color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                      color: themeChange.getThem()
+                                          ? AppThemeData.neutralDark900
+                                          : AppThemeData.neutral900,
                                     )
                                   ],
                                 ),
@@ -472,10 +611,13 @@ class ProfileScreen extends StatelessWidget {
                                 Get.to(TermsOfServiceScreen());
                               },
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
                                 child: Row(
                                   children: [
-                                    SvgPicture.asset(height: 24, "assets/icons/book-2-fill.svg"),
+                                    SvgPicture.asset(
+                                        height: 24,
+                                        "assets/icons/book-2-fill.svg"),
                                     SizedBox(
                                       width: 20,
                                     ),
@@ -484,13 +626,17 @@ class ProfileScreen extends StatelessWidget {
                                         'Terms & Conditions'.tr,
                                         style: AppThemeData.semiBoldTextStyle(
                                             fontSize: 16,
-                                            color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                            color: themeChange.getThem()
+                                                ? AppThemeData.neutralDark900
+                                                : AppThemeData.neutral900),
                                       ),
                                     ),
                                     Icon(
                                       Icons.arrow_forward_ios,
                                       size: 16,
-                                      color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                      color: themeChange.getThem()
+                                          ? AppThemeData.neutralDark900
+                                          : AppThemeData.neutral900,
                                     )
                                   ],
                                 ),
@@ -501,10 +647,13 @@ class ProfileScreen extends StatelessWidget {
                                 Get.to(PrivacyPolicyScreen());
                               },
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
                                 child: Row(
                                   children: [
-                                    SvgPicture.asset(height: 24, "assets/icons/shield-flash-fill.svg"),
+                                    SvgPicture.asset(
+                                        height: 24,
+                                        "assets/icons/shield-flash-fill.svg"),
                                     SizedBox(
                                       width: 20,
                                     ),
@@ -513,13 +662,17 @@ class ProfileScreen extends StatelessWidget {
                                         'Privacy & Policy'.tr,
                                         style: AppThemeData.semiBoldTextStyle(
                                             fontSize: 16,
-                                            color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                            color: themeChange.getThem()
+                                                ? AppThemeData.neutralDark900
+                                                : AppThemeData.neutral900),
                                       ),
                                     ),
                                     Icon(
                                       Icons.arrow_forward_ios,
                                       size: 16,
-                                      color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                      color: themeChange.getThem()
+                                          ? AppThemeData.neutralDark900
+                                          : AppThemeData.neutral900,
                                     )
                                   ],
                                 ),
@@ -528,10 +681,13 @@ class ProfileScreen extends StatelessWidget {
                             InkWell(
                               onTap: () {},
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
                                 child: Row(
                                   children: [
-                                    SvgPicture.asset(height: 24, "assets/icons/moon-clear-fill.svg"),
+                                    SvgPicture.asset(
+                                        height: 24,
+                                        "assets/icons/moon-clear-fill.svg"),
                                     SizedBox(
                                       width: 20,
                                     ),
@@ -540,22 +696,35 @@ class ProfileScreen extends StatelessWidget {
                                         'Dark Mode'.tr,
                                         style: AppThemeData.semiBoldTextStyle(
                                             fontSize: 16,
-                                            color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                            color: themeChange.getThem()
+                                                ? AppThemeData.neutralDark900
+                                                : AppThemeData.neutral900),
                                       ),
                                     ),
                                     SizedBox(
                                       height: 25,
                                       child: Switch(
-                                        trackOutlineColor: WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
+                                        trackOutlineColor: WidgetStateProperty
+                                            .resolveWith<Color>(
+                                                (Set<WidgetState> states) {
                                           return Colors.transparent;
                                         }),
-                                        inactiveTrackColor: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
-                                        activeTrackColor: AppThemeData.successDefault,
-                                        thumbColor: WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
-                                          return themeChange.getThem() ? AppThemeData.neutralDark50 : AppThemeData.neutral50;
+                                        inactiveTrackColor:
+                                            themeChange.getThem()
+                                                ? AppThemeData.neutralDark300
+                                                : AppThemeData.neutral300,
+                                        activeTrackColor:
+                                            AppThemeData.successDefault,
+                                        thumbColor: WidgetStateProperty
+                                            .resolveWith<Color>(
+                                                (Set<WidgetState> states) {
+                                          return themeChange.getThem()
+                                              ? AppThemeData.neutralDark50
+                                              : AppThemeData.neutral50;
                                         }),
                                         value: themeChange.getThem(),
-                                        onChanged: (value) => (themeChange.darkTheme = value == true ? 0 : 1),
+                                        onChanged: (value) => (themeChange
+                                            .darkTheme = value == true ? 0 : 1),
                                       ),
                                     )
                                   ],
@@ -569,11 +738,14 @@ class ProfileScreen extends StatelessWidget {
                     const SizedBox(height: 20),
                     Container(
                       decoration: BoxDecoration(
-                        color: themeChange.getThem() ? AppThemeData.neutralDark100 : AppThemeData.neutral100,
+                        color: themeChange.getThem()
+                            ? AppThemeData.neutralDark100
+                            : AppThemeData.neutral100,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 10),
                         child: InkWell(
                           onTap: () async {
                             try {
@@ -590,7 +762,9 @@ class ProfileScreen extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Row(
                               children: [
-                                SvgPicture.asset(height: 24, "assets/icons/star-smile-fill.svg"),
+                                SvgPicture.asset(
+                                    height: 24,
+                                    "assets/icons/star-smile-fill.svg"),
                                 SizedBox(
                                   width: 20,
                                 ),
@@ -598,13 +772,18 @@ class ProfileScreen extends StatelessWidget {
                                   child: Text(
                                     'Rate the app'.tr,
                                     style: AppThemeData.semiBoldTextStyle(
-                                        fontSize: 16, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                        fontSize: 16,
+                                        color: themeChange.getThem()
+                                            ? AppThemeData.neutralDark900
+                                            : AppThemeData.neutral900),
                                   ),
                                 ),
                                 Icon(
                                   Icons.arrow_forward_ios,
                                   size: 16,
-                                  color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                  color: themeChange.getThem()
+                                      ? AppThemeData.neutralDark900
+                                      : AppThemeData.neutral900,
                                 )
                               ],
                             ),
@@ -615,22 +794,29 @@ class ProfileScreen extends StatelessWidget {
                     const SizedBox(height: 20),
                     Container(
                       decoration: BoxDecoration(
-                        color: themeChange.getThem() ? AppThemeData.neutralDark100 : AppThemeData.neutral100,
+                        color: themeChange.getThem()
+                            ? AppThemeData.neutralDark100
+                            : AppThemeData.neutral100,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 10),
                         child: Column(
                           children: [
                             InkWell(
                               onTap: () {
-                                logoutBottomSheet(themeChange, context, controller);
+                                logoutBottomSheet(
+                                    themeChange, context, controller);
                               },
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
                                 child: Row(
                                   children: [
-                                    SvgPicture.asset(height: 24, "assets/icons/ic_logout.svg"),
+                                    SvgPicture.asset(
+                                        height: 24,
+                                        "assets/icons/ic_logout.svg"),
                                     SizedBox(
                                       width: 20,
                                     ),
@@ -639,13 +825,17 @@ class ProfileScreen extends StatelessWidget {
                                         'Log out'.tr,
                                         style: AppThemeData.semiBoldTextStyle(
                                             fontSize: 16,
-                                            color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                            color: themeChange.getThem()
+                                                ? AppThemeData.neutralDark900
+                                                : AppThemeData.neutral900),
                                       ),
                                     ),
                                     Icon(
                                       Icons.arrow_forward_ios,
                                       size: 16,
-                                      color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                      color: themeChange.getThem()
+                                          ? AppThemeData.neutralDark900
+                                          : AppThemeData.neutral900,
                                     )
                                   ],
                                 ),
@@ -653,13 +843,17 @@ class ProfileScreen extends StatelessWidget {
                             ),
                             InkWell(
                               onTap: () {
-                                deleteBottomSheet(themeChange, context, controller);
+                                deleteBottomSheet(
+                                    themeChange, context, controller);
                               },
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
                                 child: Row(
                                   children: [
-                                    SvgPicture.asset(height: 24, "assets/icons/ic_delete.svg"),
+                                    SvgPicture.asset(
+                                        height: 24,
+                                        "assets/icons/ic_delete.svg"),
                                     SizedBox(
                                       width: 20,
                                     ),
@@ -668,13 +862,17 @@ class ProfileScreen extends StatelessWidget {
                                         'Delete Account'.tr,
                                         style: AppThemeData.semiBoldTextStyle(
                                             fontSize: 16,
-                                            color: themeChange.getThem() ? AppThemeData.errorDefault : AppThemeData.errorDefault),
+                                            color: themeChange.getThem()
+                                                ? AppThemeData.errorDefault
+                                                : AppThemeData.errorDefault),
                                       ),
                                     ),
                                     Icon(
                                       Icons.arrow_forward_ios,
                                       size: 16,
-                                      color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                                      color: themeChange.getThem()
+                                          ? AppThemeData.neutralDark900
+                                          : AppThemeData.neutral900,
                                     )
                                   ],
                                 ),
@@ -692,7 +890,8 @@ class ProfileScreen extends StatelessWidget {
         });
   }
 
-  Future deleteBottomSheet(themeChange, BuildContext context, ProfileController controller) {
+  Future deleteBottomSheet(
+      themeChange, BuildContext context, ProfileController controller) {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -710,8 +909,11 @@ class ProfileScreen extends StatelessWidget {
             return SafeArea(
               child: Container(
                 decoration: BoxDecoration(
-                  color: themeChange.getThem() ? AppThemeData.neutralDark50 : AppThemeData.neutral50,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                  color: themeChange.getThem()
+                      ? AppThemeData.neutralDark50
+                      : AppThemeData.neutral50,
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(16)),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -724,7 +926,9 @@ class ProfileScreen extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: AppThemeData.boldTextStyle(
                           fontSize: 24,
-                          color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark900
+                              : AppThemeData.neutral900,
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -734,7 +938,9 @@ class ProfileScreen extends StatelessWidget {
                         textAlign: TextAlign.start,
                         style: AppThemeData.mediumTextStyle(
                           fontSize: 16,
-                          color: themeChange.getThem() ? AppThemeData.neutralDark500 : AppThemeData.neutral500,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark500
+                              : AppThemeData.neutral500,
                         ),
                       ),
                       const SizedBox(height: 30),
@@ -758,8 +964,12 @@ class ProfileScreen extends StatelessWidget {
                             child: RoundedButtonFill(
                               title: "Cancel".tr,
                               height: 5.5,
-                              color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
-                              textColor: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                              color: themeChange.getThem()
+                                  ? AppThemeData.neutralDark300
+                                  : AppThemeData.neutral300,
+                              textColor: themeChange.getThem()
+                                  ? AppThemeData.neutralDark900
+                                  : AppThemeData.neutral900,
                               onPress: () async {
                                 Get.back();
                               },
@@ -778,7 +988,8 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Future logoutBottomSheet(themeChange, BuildContext context, ProfileController controller) {
+  Future logoutBottomSheet(
+      themeChange, BuildContext context, ProfileController controller) {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -795,8 +1006,11 @@ class ProfileScreen extends StatelessWidget {
           builder: (context, scrollController) {
             return Container(
               decoration: BoxDecoration(
-                color: themeChange.getThem() ? AppThemeData.neutralDark50 : AppThemeData.neutral50,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                color: themeChange.getThem()
+                    ? AppThemeData.neutralDark50
+                    : AppThemeData.neutral50,
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(16)),
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -809,7 +1023,9 @@ class ProfileScreen extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: AppThemeData.boldTextStyle(
                         fontSize: 24,
-                        color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                        color: themeChange.getThem()
+                            ? AppThemeData.neutralDark900
+                            : AppThemeData.neutral900,
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -819,7 +1035,9 @@ class ProfileScreen extends StatelessWidget {
                       textAlign: TextAlign.start,
                       style: AppThemeData.mediumTextStyle(
                         fontSize: 16,
-                        color: themeChange.getThem() ? AppThemeData.neutralDark500 : AppThemeData.neutral500,
+                        color: themeChange.getThem()
+                            ? AppThemeData.neutralDark500
+                            : AppThemeData.neutral500,
                       ),
                     ),
                     const SizedBox(height: 30),
@@ -843,8 +1061,12 @@ class ProfileScreen extends StatelessWidget {
                           child: RoundedButtonFill(
                             title: "Cancel".tr,
                             height: 5.5,
-                            color: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
-                            textColor: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900,
+                            color: themeChange.getThem()
+                                ? AppThemeData.neutralDark300
+                                : AppThemeData.neutral300,
+                            textColor: themeChange.getThem()
+                                ? AppThemeData.neutralDark900
+                                : AppThemeData.neutral900,
                             onPress: () async {
                               Get.back();
                             },
@@ -864,10 +1086,13 @@ class ProfileScreen extends StatelessWidget {
 
   bool _shouldShowDocumentStatus(UserData user) {
     // Document verification must be enabled for either owner or driver
-    final isVerificationEnabled = Constant.ownerDocVerification == "yes" || Constant.driverDocVerification == "yes";
+    final isVerificationEnabled = Constant.ownerDocVerification == "yes" ||
+        Constant.driverDocVerification == "yes";
 
     // If user is a sub-owner, then skip
-    final isSubOwner = user.isOwner == "false" && user.ownerId != null && user.ownerId!.isNotEmpty;
+    final isSubOwner = user.isOwner == "false" &&
+        user.ownerId != null &&
+        user.ownerId!.isNotEmpty;
 
     return isVerificationEnabled && !isSubOwner;
   }
