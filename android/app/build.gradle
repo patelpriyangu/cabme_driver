@@ -1,0 +1,47 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+    id "com.google.gms.google-services"
+}
+
+android {
+    namespace = "com.uniqcars.driver.co.uk.driver"
+    compileSdk = 36
+    ndkVersion = "27.0.12077973"
+
+    defaultConfig {
+        applicationId = "com.uniqcars.driver.co.uk.driver"
+        minSdkVersion flutter.minSdkVersion
+        targetSdk = 35
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            shrinkResources false
+            signingConfig signingConfigs.debug // TODO: Replace with release config
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+        coreLibraryDesugaringEnabled true
+    }
+
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+}
+
+dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
+    implementation platform('com.google.firebase:firebase-bom:33.1.0')
+}
+
+flutter {
+    source = "../.."
+}

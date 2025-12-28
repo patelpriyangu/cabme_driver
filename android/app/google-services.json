@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "587441137020",
+    "project_id": "noovatest",
+    "storage_bucket": "noovatest.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:587441137020:android:52e21f0c5a1f311e59f0f9",
+        "android_client_info": {
+          "package_name": "com.uniqcars.co.uk"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqgLBkbE4EvrgJaW_yzyxIaxEv196s1eA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:587441137020:android:0366892adf30a2a959f0f9",
+        "android_client_info": {
+          "package_name": "com.uniqcars.driver.co.uk.driver"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqgLBkbE4EvrgJaW_yzyxIaxEv196s1eA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
