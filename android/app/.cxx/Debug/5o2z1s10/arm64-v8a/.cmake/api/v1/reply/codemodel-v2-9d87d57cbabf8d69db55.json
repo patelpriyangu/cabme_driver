@@ -32,7 +32,7 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/Users/mayankmodi/Documents/Project/github/cabme/uniqcars_driver/android/app/.cxx/Debug/5o2z1s10/arm64-v8a",
+		"build" : "/Users/mayankmodi/Documents/Project/github/UniqCars/uniqcars_driver/android/app/.cxx/Debug/5o2z1s10/arm64-v8a",
 		"source" : "/Users/mayankmodi/Documents/flutter_sdk/flutter/packages/flutter_tools/gradle/src/main/groovy"
 	},
 	"version" : 

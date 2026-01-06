@@ -23,7 +23,7 @@ rule CUSTOM_COMMAND
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /Users/mayankmodi/Library/Android/sdk/cmake/3.22.1/bin/cmake --regenerate-during-build -S/Users/mayankmodi/Documents/flutter_sdk/flutter/packages/flutter_tools/gradle/src/main/groovy -B/Users/mayankmodi/Documents/Project/github/cabme/uniqcars_driver/android/app/.cxx/Debug/5o2z1s10/armeabi-v7a
+  command = /Users/mayankmodi/Library/Android/sdk/cmake/3.22.1/bin/cmake --regenerate-during-build -S/Users/mayankmodi/Documents/flutter_sdk/flutter/packages/flutter_tools/gradle/src/main/groovy -B/Users/mayankmodi/Documents/Project/github/UniqCars/uniqcars_driver/android/app/.cxx/Debug/5o2z1s10/armeabi-v7a
   description = Re-running CMake...
   generator = 1
 

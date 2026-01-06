@@ -6,14 +6,14 @@
     [
       "/Users/mayankmodi/Library/Android/sdk/cmake/3.22.1/bin/ninja",
       "-C",
-      "/Users/mayankmodi/Documents/Project/github/cabme/uniqcars_driver/android/app/.cxx/Debug/356we396/x86",
+      "/Users/mayankmodi/Documents/Project/github/UniqCars/uniqcars_driver/android/app/.cxx/Debug/356we396/x86",
       "clean"
     ]
   ],
   "buildTargetsCommandComponents": [
     "/Users/mayankmodi/Library/Android/sdk/cmake/3.22.1/bin/ninja",
     "-C",
-    "/Users/mayankmodi/Documents/Project/github/cabme/uniqcars_driver/android/app/.cxx/Debug/356we396/x86",
+    "/Users/mayankmodi/Documents/Project/github/UniqCars/uniqcars_driver/android/app/.cxx/Debug/356we396/x86",
     "{LIST_OF_TARGETS_TO_BUILD}"
   ],
   "libraries": {}

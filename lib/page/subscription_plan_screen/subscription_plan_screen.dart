@@ -863,7 +863,7 @@ class SubscriptionPlanScreen extends StatelessWidget {
                               Stripe.publishableKey = controller
                                       .paymentSettingModel.value.strip?.key ??
                                   '';
-                              Stripe.merchantIdentifier = 'Cabme';
+                              Stripe.merchantIdentifier = 'UniqCars';
                               await Stripe.instance.applySettings();
                               controller.stripeMakePayment(
                                   amount: controller.amount.value.toString());

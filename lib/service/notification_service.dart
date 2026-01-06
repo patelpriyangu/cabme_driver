@@ -93,8 +93,8 @@ class NotificationService {
     try {
       AndroidNotificationChannel channel = const AndroidNotificationChannel(
         '0',
-        'Cabme-driver',
-        description: 'Show CabMe Notification',
+        'UniqCars-driver',
+        description: 'Show UniqCars Notification',
         importance: Importance.max,
       );
       AndroidNotificationDetails notificationDetails =

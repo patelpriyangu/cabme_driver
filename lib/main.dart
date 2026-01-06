@@ -74,7 +74,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       return themeChangeProvider;
     }, child: Consumer<DarkThemeProvider>(builder: (context, value, child) {
       return GetMaterialApp(
-        title: 'CabMe Driver',
+        title: 'UniqCars Driver',
         debugShowCheckedModeBanner: false,
         theme: Styles.themeData(
             themeChangeProvider.darkTheme == 0

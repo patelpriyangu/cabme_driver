@@ -36,7 +36,7 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="CabMe driver"
+        android:label="UniqCars driver"
         tools:replace="android:label">
         <service
             android:name=".MyService"
@@ -89,7 +89,7 @@
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="cabme-driver" />
+            android:value="UniqCars-driver" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@mipmap/ic_launcher" />

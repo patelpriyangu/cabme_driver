@@ -49,7 +49,7 @@ class Constant {
   static bool symbolAtRight = false;
   static List<TaxModel> taxList = [];
   static adminComm.AdminCommission? adminCommission;
-  static String globalUrl = "https://cabme.siswebapp.com/";
+  static String globalUrl = "https://admin.uniqcars.co.uk/";
 
   static String? distanceUnit = "KM";
   static String? contactUsEmail = "";

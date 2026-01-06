@@ -30,8 +30,10 @@ class OnBoardingController extends GetxController {
             showLoader: false)
         .then(
       (value) {
-        if (value != null) {
+        if (value != null && value['success'] == "success") {
           onboardingModel.value = OnboardingModel.fromJson(value);
+        } else {
+          print("Error loading onboarding data: $value");
         }
       },
     );

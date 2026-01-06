@@ -1,2 +1,2 @@
-/Users/mayankmodi/Documents/Project/github/cabme/uniqcars_driver/android/app/.cxx/Debug/356we396/armeabi-v7a/CMakeFiles/edit_cache.dir
-/Users/mayankmodi/Documents/Project/github/cabme/uniqcars_driver/android/app/.cxx/Debug/356we396/armeabi-v7a/CMakeFiles/rebuild_cache.dir
+/Users/mayankmodi/Documents/Project/github/UniqCars/uniqcars_driver/android/app/.cxx/Debug/356we396/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/mayankmodi/Documents/Project/github/UniqCars/uniqcars_driver/android/app/.cxx/Debug/356we396/armeabi-v7a/CMakeFiles/rebuild_cache.dir

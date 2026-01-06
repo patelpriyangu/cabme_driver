@@ -12,8 +12,8 @@ import 'package:http/http.dart' as http;
 import '../constant/logdata.dart';
 
 class API {
-  static const baseUrl = "https://your-base-url.com/api/v1/"; // live
-  static const apiKey = "your-api-key";
+  static const baseUrl = "https://admin.uniqcars.co.uk/api/v1/"; // live
+  static const apiKey = "base64:WwYjyDabOIfPYo1krAyaBBsOmxsQwdW2SZnv9TM0jjI=";
 
   static Map<String, String> authheader = {
     HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
@@ -139,11 +139,15 @@ class API {
 
       final response = await request().timeout(const Duration(seconds: 30));
 
-      showLog("✅ API :: URL :: ${response.request?.url}");
+      showLog("DEBUG: API Request URL: ${response.request?.url}");
+      showLog("DEBUG: API Request Headers: ${response.request?.headers}");
+      showLog("DEBUG: API Response Status: ${response.statusCode}");
+      showLog("DEBUG: API Response Body: ${response.body}");
+
+      final decodedResponse = jsonDecode(response.body);
       showLog("✅ API :: Response Status :: ${response.statusCode}");
       showLog("✅ API :: Response Body :: ${response.body}");
 
-      final decodedResponse = jsonDecode(response.body);
 
       if (showLoader) ShowToastDialog.closeLoader();
 

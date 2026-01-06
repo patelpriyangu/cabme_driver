@@ -1,6 +1,7 @@
 const Map<String, String> enAR = {
   'Add New Driver': "إضافة سائق جديد",
-  'Set up driver details and assign a vehicle.': "قم بإعداد تفاصيل السائق وتعيين مركبة.",
+  'Set up driver details and assign a vehicle.':
+      "قم بإعداد تفاصيل السائق وتعيين مركبة.",
   'Assign Vehicle': "تعيين مركبة",
   'Select Vehicle Type': "اختر نوع المركبة",
   'Enter First Name': "أدخل الاسم الأول",
@@ -24,7 +25,8 @@ const Map<String, String> enAR = {
   'Please enter a phone number': "يرجى إدخال رقم الهاتف",
   'Please enter a email': "يرجى إدخال البريد الإلكتروني",
   'Please enter a password': "يرجى إدخال كلمة المرور",
-  'Password and conform password not match': "كلمة المرور وتأكيد كلمة المرور غير متطابقتين",
+  'Password and conform password not match':
+      "كلمة المرور وتأكيد كلمة المرور غير متطابقتين",
   'Cancel': "إلغاء",
   'Add': "إضافة",
   'Please select zone': "يرجى اختيار المنطقة",
@@ -47,7 +49,8 @@ const Map<String, String> enAR = {
   'Enter KM': "أدخل الكيلومترات",
   'KM Driven': "الكيلومترات المقطوعة",
   'Passenger Capacity': "سعة الركاب",
-  'Passenger capacity cannot be less than 1': "لا يمكن أن تكون سعة الركاب أقل من 1",
+  'Passenger capacity cannot be less than 1':
+      "لا يمكن أن تكون سعة الركاب أقل من 1",
   'Save': "حفظ",
   'Please select vehicle type': "يرجى اختيار نوع المركبة",
   'Please select brand': "يرجى اختيار العلامة التجارية",
@@ -65,13 +68,15 @@ const Map<String, String> enAR = {
   'Please enter email': "يرجى إدخال البريد الإلكتروني",
   'Please try again later': "يرجى المحاولة مرة أخرى لاحقًا",
   'Create New Password': "إنشاء كلمة مرور جديدة",
-  'Set a strong password to secure your account and get back on track.': "قم بتعيين كلمة مرور قوية لتأمين حسابك والعودة إلى المسار الصحيح.",
+  'Set a strong password to secure your account and get back on track.':
+      "قم بتعيين كلمة مرور قوية لتأمين حسابك والعودة إلى المسار الصحيح.",
   'Enter OTP': "أدخل رمز التحقق",
   'Resent Password': "إعادة تعيين كلمة المرور",
   'Please enter OTP': "يرجى إدخال رمز التحقق",
   'Please enter password': "يرجى إدخال كلمة المرور",
   'Please enter confirm password': "يرجى إدخال تأكيد كلمة المرور",
-  'Password and confirm password do not match': "كلمة المرور وتأكيد كلمة المرور غير متطابقتين",
+  'Password and confirm password do not match':
+      "كلمة المرور وتأكيد كلمة المرور غير متطابقتين",
   'Password change successfully!': "تم تغيير كلمة المرور بنجاح!",
   'Let’s get you started': "لنبدأ",
   'Use phone or social account': "استخدم الهاتف أو الحساب الاجتماعي",
@@ -90,7 +95,8 @@ const Map<String, String> enAR = {
   'Please Enter OTP': "يرجى إدخال رمز التحقق",
   'Didn’t Received OTP ': "لم تستلم رمز التحقق ",
   'Send Again': "أرسل مرة أخرى",
-  'Start booking your rides in just a few taps.': "ابدأ حجز رحلاتك في بضع نقرات فقط.",
+  'Start booking your rides in just a few taps.':
+      "ابدأ حجز رحلاتك في بضع نقرات فقط.",
   'Continue as a.': "المتابعة كـ.",
   'Individual': "فرد",
   'Company': "شركة",
@@ -110,7 +116,8 @@ const Map<String, String> enAR = {
   'Reject': "رفض",
   'Accept': "قبول",
   'Verify Passenger': "تحقق من الراكب",
-  'Enter the OTP shared by the customer to begin the trip': "أدخل رمز التحقق الذي شاركه العميل لبدء الرحلة",
+  'Enter the OTP shared by the customer to begin the trip':
+      "أدخل رمز التحقق الذي شاركه العميل لبدء الرحلة",
   'Start Ride': "بدء الرحلة",
   'Confirm Cash Collection': "تأكيد استلام النقد",
   'Please confirm that you have received the full cash amount from the customer before continuing.':
@@ -141,7 +148,8 @@ const Map<String, String> enAR = {
   'Save Changes': "حفظ التغييرات",
   'Please enter current password': "يرجى إدخال كلمة المرور الحالية",
   'Please enter new password': "يرجى إدخال كلمة مرور جديدة",
-  'New password and confirm password do not match': "كلمة المرور الجديدة وتأكيد كلمة المرور لا تتطابق",
+  'New password and confirm password do not match':
+      "كلمة المرور الجديدة وتأكيد كلمة المرور لا تتطابق",
   'No messages yet': "لا توجد رسائل بعد",
   'Write message here...': "اكتب رسالة هنا...",
   'Please enter a message': "يرجى إدخال رسالة",
@@ -153,7 +161,8 @@ const Map<String, String> enAR = {
   'Upload Your Documents': "قم بتحميل مستنداتك",
   'We need to verify your identity.': "نحتاج إلى التحقق من هويتك.",
   'uploadDocument': 'تحميل @title',
-  'documentInstructions': 'قم بالتقاط صورة واضحة لـ @title أو اختر صورة من المعرض الخاص بك لضمان التحقق من المستند.',
+  'documentInstructions':
+      'قم بالتقاط صورة واضحة لـ @title أو اختر صورة من المعرض الخاص بك لضمان التحقق من المستند.',
   'reason': 'السبب:',
   'underVerification': 'تحت التحقق',
   'Please Select': "يرجى الاختيار",
@@ -161,7 +170,8 @@ const Map<String, String> enAR = {
   'Gallery': "المعرض",
   'Your information send well. We will treat them and inform you after the treatment.':
       "تم إرسال معلوماتك بنجاح. سنقوم بمعالجتها وإبلاغك بعد المعالجة.",
-  'Your account will be active after validation of your information.': "سيكون حسابك نشطًا بعد التحقق من معلوماتك.",
+  'Your account will be active after validation of your information.':
+      "سيكون حسابك نشطًا بعد التحقق من معلوماتك.",
   'Close': "إغلاق",
   'Edit Profile': "تعديل الملف الشخصي",
   'welcomeUser': 'مرحبًا، @first @last',
@@ -170,11 +180,14 @@ const Map<String, String> enAR = {
   'Cab Booking': "حجز سيارة أجرة",
   'Parcel Delivery': "توصيل الطرود",
   'Rental': "تأجير",
-  'No Booking requests available in your selected zone.': "لا توجد طلبات حجز متاحة في منطقتك المحددة.",
-  'No parcel requests available in your selected zone.': "لا توجد طلبات طرد متاحة في منطقتك المحددة.",
+  'No Booking requests available in your selected zone.':
+      "لا توجد طلبات حجز متاحة في منطقتك المحددة.",
+  'No parcel requests available in your selected zone.':
+      "لا توجد طلبات طرد متاحة في منطقتك المحددة.",
   'Try changing the location or date.': "حاول تغيير الموقع أو التاريخ.",
   'Search Parcel': "ابحث عن الطرد",
-  'No rental requests available in your selected zone.': "لا توجد طلبات تأجير متاحة في منطقتك المحددة.",
+  'No rental requests available in your selected zone.':
+      "لا توجد طلبات تأجير متاحة في منطقتك المحددة.",
   'Search Rental Booking': "ابحث ��ن حجز التأجير",
   'Package Details:': "تفاصيل الطرد:",
   'includingDistance': 'بما في ذلك @unit:',
@@ -184,11 +197,14 @@ const Map<String, String> enAR = {
   'Enter Current Kilometer reading': "أدخل قراءة الكيلومترات الحالية",
   'Current Kilometer reading': "قراءة الكيلومترات الحالية",
   'Information': "معلومات",
-  'To start earning with CabMe you need to fill in your information': "لبدء الكسب مع CabMe تحتاج إلى ملء معلوماتك",
+  'To start earning with UniqCars you need to fill in your information':
+      "لبدء الكسب مع UniqCars تحتاج إلى ملء معلوماتك",
   'No': "لا",
   'Yes': "نعم",
-  'Manage your fleet, bookings, and drivers in one place.': "إدارة أسطولك وحجوزاتك وسائقيك في مكان واحد.",
-  'Verification Required to Access Dashboard': "مطلوب التحقق للوصول إلى لوحة التحكم",
+  'Manage your fleet, bookings, and drivers in one place.':
+      "إدارة أسطولك وحجوزاتك وسائقيك في مكان واحد.",
+  'Verification Required to Access Dashboard':
+      "مطلوب التحقق للوصول إلى لوحة التحكم",
   'First, please verify your identity and vehicle details to access the owner dashboard and manage Drivers and Bookings.':
       "أولاً، يرجى التحقق من هويتك وتفاصيل المركبة للوصول إلى لوحة تحكم المالك وإدارة السائقين والحجوزات.",
   'Upload Documents': "تحميل المستندات",
@@ -198,7 +214,8 @@ const Map<String, String> enAR = {
   'Total Vehicles': "إجمالي المركبات",
   'Earnings': "الأرباح (هذا الأسبوع)",
   'Your Available Drivers': "السائقون المتاحون لديك",
-  'Real-time status and earnings summary': "ملخص الحالة والأرباح في الوقت الحقيقي",
+  'Real-time status and earnings summary':
+      "ملخص الحالة والأرباح في الوقت الحقيقي",
   'View all': "عرض الكل",
   'Edit Driver': "تعديل السائق",
   'Delete Driver': "حذف السائق",
@@ -214,7 +231,8 @@ const Map<String, String> enAR = {
   'Skip': "تخطي",
   'Language save successfully': "تم حفظ اللغة بنجاح",
   'Select Your Preferred Language': "اختر لغتك المفضلة",
-  'Choose a language to personalize your CabME experience.': "اختر لغة لتخصيص ��جربتك مع CabME.",
+  'Choose a language to personalize your UniqCars experience.':
+      "اختر لغة لتخصيص ��جربتك مع UniqCars.",
   'Enable Location Access': "تمكين الوصول إلى الموقع",
   'To find nearby passengers and provide accurate navigation, we need access to your real-time location. This helps ensure smooth pickups and efficient routing.':
       "للعثور على السائقين القريبين والحصول على مواقع استلام دقيقة، نحتاج إلى الوصول إلى موقعك.",
@@ -262,7 +280,8 @@ const Map<String, String> enAR = {
   'Withdrawal History': "سجل السحوبات",
   'Transaction Details not found': "لم يتم العثور على تفاصيل المعاملة",
   'Please enter topup amount': "يرجى إدخال مبلغ الشحن",
-  'Something went wrong, please contact admin.': "حدث خطأ ما، يرجى الاتصال بالمسؤول.",
+  'Something went wrong, please contact admin.':
+      "حدث خطأ ما، يرجى الاتصال بالمسؤول.",
   'Withdraw Amount': "مبلغ السحب",
   'Enter Bank Name': "أدخل اسم البنك",
   'Bank Name': "اسم البنك",
@@ -291,13 +310,14 @@ const Map<String, String> enAR = {
   'Booking': "الحجز",
   'Profile': "الملف الشخصي",
   'Wallet': "المحفظة",
-  'Welcome to CabME': "مرحبًا بكم في CabME",
-  'A modern way to ride, parcel & rent a car': "طريقة حديثة للركوب، الطرود واستئجار سيارة",
+  'Welcome to UniqCars': "مرحبًا بكم في UniqCars",
+  'A modern way to ride, parcel & rent a car':
+      "طريقة حديثة للركوب، الطرود واستئجار سيارة",
   'Lets Get Started': "لنبدأ",
   'Confirm language': "تأكيد اللغة",
   'Confirm Cash Payment': "تأكيد الدفع نقدًا",
   'Note : Admin commission will be debited from your wallet balance. \n \nAdmin commission will apply on your booking Amount minus Discount(if applicable).':
-  "ملاحظة: سيتم خصم عمولة المسؤول من رصيد محفظتك. \n \nسيتم تطبيق العمولة على مبلغ الحجز بعد خصم الخصم (إن وجد).",
+      "ملاحظة: سيتم خصم عمولة المسؤول من رصيد محفظتك. \n \nسيتم تطبيق العمولة على مبلغ الحجز بعد خصم الخصم (إن وجد).",
   'Select Zone': "اختر المنطقة",
   'Subscription History': "سجل الاشتراك",
   'Rental Booking not Found': "لم يتم العثور على حجز إيجار",

@@ -1,6 +1,7 @@
 const Map<String, String> enUS = {
   'Add New Driver': "Add New Driver",
-  'Set up driver details and assign a vehicle.': "Set up driver details and assign a vehicle.",
+  'Set up driver details and assign a vehicle.':
+      "Set up driver details and assign a vehicle.",
   'Assign Vehicle': "Assign Vehicle",
   'Select Vehicle Type': "Select Vehicle Type",
   'Enter First Name': "Enter First Name",
@@ -24,13 +25,15 @@ const Map<String, String> enUS = {
   'Please enter a phone number': "Please enter a phone number",
   'Please enter a email': "Please enter a email",
   'Please enter a password': "Please enter a password",
-  'Password and conform password not match': "Password and conform password not match",
+  'Password and conform password not match':
+      "Password and conform password not match",
   'Cancel': "Cancel",
   'Add': "Add",
   'Please select zone': "Please select zone",
   'Zone list': "Zone list",
   'Tell Us About Your Vehicle': "Tell Us About Your Vehicle",
-  'Enter your vehicle details accurately.': "Enter your vehicle details accurately.",
+  'Enter your vehicle details accurately.':
+      "Enter your vehicle details accurately.",
   'Vehicle Type': "Vehicle Type",
   'Brand': "Brand",
   'Select Brand': "Select Brand",
@@ -47,7 +50,8 @@ const Map<String, String> enUS = {
   'Enter KM': "Enter KM",
   'KM Driven': "KM Driven",
   'Passenger Capacity': "Passenger Capacity",
-  'Passenger capacity cannot be less than 1': "Passenger capacity cannot be less than 1",
+  'Passenger capacity cannot be less than 1':
+      "Passenger capacity cannot be less than 1",
   'Save': "Save",
   'Please select vehicle type': "Please select vehicle type",
   'Please select brand': "Please select brand",
@@ -72,7 +76,8 @@ const Map<String, String> enUS = {
   'Please enter OTP': "Please enter OTP",
   'Please enter password': "Please enter password",
   'Please enter confirm password': "Please enter confirm password",
-  'Password and confirm password do not match': "Password and confirm password do not match",
+  'Password and confirm password do not match':
+      "Password and confirm password do not match",
   'Password change successfully!': "Password change successfully!",
   'Let’s get you started': "Let’s get you started",
   'Use phone or social account': "Use phone or social account",
@@ -91,7 +96,8 @@ const Map<String, String> enUS = {
   'Please Enter OTP': "Please Enter OTP",
   'Didn’t Received OTP ': "Didn’t Received OTP ",
   'Send Again': "Send Again",
-  'Start booking your rides in just a few taps.': "Start booking your rides in just a few taps.",
+  'Start booking your rides in just a few taps.':
+      "Start booking your rides in just a few taps.",
   'Continue as a.': "Continue as a.",
   'Individual': "Individual",
   'Company': "Company",
@@ -111,7 +117,8 @@ const Map<String, String> enUS = {
   'Reject': "Reject",
   'Accept': "Accept",
   'Verify Passenger': "Verify Passenger",
-  'Enter the OTP shared by the customer to begin the trip': "Enter the OTP shared by the customer to begin the trip",
+  'Enter the OTP shared by the customer to begin the trip':
+      "Enter the OTP shared by the customer to begin the trip",
   'Start Ride': "Start Ride",
   'Confirm Cash Collection': "Confirm Cash Collection",
   'Please confirm that you have received the full cash amount from the customer before continuing.':
@@ -142,7 +149,8 @@ const Map<String, String> enUS = {
   'Save Changes': "Save Changes",
   'Please enter current password': "Please enter current password",
   'Please enter new password': "Please enter new password",
-  'New password and confirm password do not match': "New password and confirm password do not match",
+  'New password and confirm password do not match':
+      "New password and confirm password do not match",
   'No messages yet': "No messages yet",
   'Write message here...': "Write message here...",
   'Please enter a message': "Please enter a message",
@@ -154,7 +162,8 @@ const Map<String, String> enUS = {
   'Upload Your Documents': "Upload Your Documents",
   'We need to verify your identity.': "We need to verify your identity.",
   'uploadDocument': 'Upload @title',
-  'documentInstructions': 'Take a clear picture of your @title or choose an image from your gallery to ensure document verification.',
+  'documentInstructions':
+      'Take a clear picture of your @title or choose an image from your gallery to ensure document verification.',
   'reason': 'Reason:',
   'underVerification': 'Under Verification',
   'Please Select': "Please Select",
@@ -162,7 +171,8 @@ const Map<String, String> enUS = {
   'Gallery': "Gallery",
   'Your information send well. We will treat them and inform you after the treatment.':
       "Your information send well. We will treat them and inform you after the treatment.",
-  'Your account will be active after validation of your information.': "Your account will be active after validation of your information.",
+  'Your account will be active after validation of your information.':
+      "Your account will be active after validation of your information.",
   'Close': "Close",
   'Edit Profile': "Edit Profile",
   'welcomeUser': 'Welcome, @first @last',
@@ -171,11 +181,14 @@ const Map<String, String> enUS = {
   'Cab Booking': "Cab Booking",
   'Parcel Delivery': "Parcel Delivery",
   'Rental': "Rental",
-  'No Booking requests available in your selected zone.': "No Booking requests available in your selected zone.",
-  'No parcel requests available in your selected zone.': "No parcel requests available in your selected zone.",
+  'No Booking requests available in your selected zone.':
+      "No Booking requests available in your selected zone.",
+  'No parcel requests available in your selected zone.':
+      "No parcel requests available in your selected zone.",
   'Try changing the location or date.': "Try changing the location or date.",
   'Search Parcel': "Search Parcel",
-  'No rental requests available in your selected zone.': "No rental requests available in your selected zone.",
+  'No rental requests available in your selected zone.':
+      "No rental requests available in your selected zone.",
   'Search Rental Booking': "Search Rental Booking",
   'Package Details:': "Package Details:",
   'includingDistance': 'Including @unit:',
@@ -185,11 +198,14 @@ const Map<String, String> enUS = {
   'Enter Current Kilometer reading': "Enter Current Kilometer reading",
   'Current Kilometer reading': "Current Kilometer reading",
   'Information': "Information",
-  'To start earning with CabMe you need to fill in your information': "To start earning with CabMe you need to fill in your information",
+  'To start earning with UniqCars you need to fill in your information':
+      "To start earning with UniqCars you need to fill in your information",
   'No': "No",
   'Yes': "Yes",
-  'Manage your fleet, bookings, and drivers in one place.': "Manage your fleet, bookings, and drivers in one place.",
-  'Verification Required to Access Dashboard': "Verification Required to Access Dashboard",
+  'Manage your fleet, bookings, and drivers in one place.':
+      "Manage your fleet, bookings, and drivers in one place.",
+  'Verification Required to Access Dashboard':
+      "Verification Required to Access Dashboard",
   'First, please verify your identity and vehicle details to access the owner dashboard and manage Drivers and Bookings.':
       "First, please verify your identity and vehicle details to access the owner dashboard and manage Drivers and Bookings.",
   'Upload Documents': "Upload Documents",
@@ -199,7 +215,8 @@ const Map<String, String> enUS = {
   'Total Vehicles': "Total Vehicles",
   'Earnings': "Earnings",
   'Your Available Drivers': "Your Available Drivers",
-  'Real-time status and earnings summary': "Real-time status and earnings summary",
+  'Real-time status and earnings summary':
+      "Real-time status and earnings summary",
   'View all': "View all",
   'Edit Driver': "Edit Driver",
   'Delete Driver': "Delete Driver",
@@ -215,7 +232,8 @@ const Map<String, String> enUS = {
   'Skip': "Skip",
   'Language save successfully': "Language save successfully",
   'Select Your Preferred Language': "Select Your Preferred Language",
-  'Choose a language to personalize your CabME experience.': "Choose a language to personalize your CabME experience.",
+  'Choose a language to personalize your UniqCars experience.':
+      "Choose a language to personalize your UniqCars experience.",
   'Enable Location Access': "Enable Location Access",
   'To find nearby passengers and provide accurate navigation, we need access to your real-time location. This helps ensure smooth pickups and efficient routing.':
       "To find nearby passengers and provide accurate navigation, we need access to your real-time location. This helps ensure smooth pickups and efficient routing.",
@@ -263,7 +281,8 @@ const Map<String, String> enUS = {
   'Withdrawal History': "Withdrawal History",
   'Transaction Details not found': "Transaction Details not found",
   'Please enter topup amount': "Please enter topup amount",
-  'Something went wrong, please contact admin.': "Something went wrong, please contact admin.",
+  'Something went wrong, please contact admin.':
+      "Something went wrong, please contact admin.",
   'Withdraw Amount': "Withdraw Amount",
   'Enter Bank Name': "Enter Bank Name",
   'Bank Name': "Bank Name",
@@ -285,15 +304,17 @@ const Map<String, String> enUS = {
   'Please enter information': "Please enter information",
   'Bank Details added successfully': "Bank Details added successfully",
   'Something went wrong': "Something went wrong",
-  'Withdrawal request submitted successfully': "Withdrawal request submitted successfully",
+  'Withdrawal request submitted successfully':
+      "Withdrawal request submitted successfully",
   'Amount added successfully': "Amount added successfully",
   'Payment Successful!!': "Payment Successful!!",
   'Home': "Home",
   'Booking': "Booking",
   'Profile': "Profile",
   'Wallet': "Wallet",
-  'Welcome to CabME': "Welcome to CabME",
-  'A modern way to ride, parcel & rent a car': "A modern way to ride, parcel & rent a car",
+  'Welcome to UniqCars': "Welcome to UniqCars",
+  'A modern way to ride, parcel & rent a car':
+      "A modern way to ride, parcel & rent a car",
   'Lets Get Started': "Let's Get Started",
   'Confirm language': "Confirm language",
   'Confirm Cash Payment': "Confirm Cash Payment",
@@ -317,9 +338,6 @@ const Map<String, String> enUS = {
   'No Location Picked': "No Location Picked",
   'No Rental booking available': "No Rental booking available",
   'Operating Zone': "Operating Zone",
-
-
   'Document Status': "Document Status",
   'Bank Details': "Bank Details",
-
 };

@@ -2150,7 +2150,7 @@ class HomeScreen extends StatelessWidget {
             child: ListBody(
               children: <Widget>[
                 Text(
-                  'To start earning with CabMe you need to fill in your information'
+                  'To start earning with UniqCars you need to fill in your information'
                       .tr,
                   style: AppThemeData.mediumTextStyle(
                       fontSize: 14,

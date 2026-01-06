@@ -179,7 +179,7 @@ class SubscriptionController extends GetxController {
             Stripe.publishableKey = paymentSettingModel
                 .value.strip!.clientpublishableKey
                 .toString();
-            Stripe.merchantIdentifier = 'CabmeDriver';
+            Stripe.merchantIdentifier = 'UniqCarsDriver';
             Stripe.instance.applySettings();
 
             setRef();

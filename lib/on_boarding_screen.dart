@@ -51,147 +51,167 @@ class OnBoardingScreen extends StatelessWidget {
           ),
           body: controller.isLoading.value
               ? Constant.loader(context)
-              : Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 50),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: PageView.builder(
-                              controller: controller.pageController,
-                              onPageChanged: controller.selectedPageIndex.call,
-                              itemCount:
-                                  controller.onboardingModel.value.data!.length,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      NetworkImageWidget(
-                                        imageUrl: controller.onboardingModel
-                                            .value.data![index].image
-                                            .toString(),
-                                        width: Responsive.width(100, context),
-                                        height: Responsive.height(30, context),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 16, vertical: 50),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: List.generate(
-                                            controller.onboardingModel.value
-                                                .data!.length,
-                                            (index) => Container(
-                                              margin:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 4),
-                                              width: controller
-                                                          .selectedPageIndex
-                                                          .value ==
-                                                      index
-                                                  ? 38
-                                                  : 10,
-                                              height: 10,
-                                              decoration: BoxDecoration(
-                                                color: controller
-                                                            .selectedPageIndex
-                                                            .value ==
-                                                        index
-                                                    ? themeChange.getThem()
-                                                        ? AppThemeData
-                                                            .primaryDefault
-                                                        : AppThemeData
-                                                            .primaryDefault
-                                                    : themeChange.getThem()
-                                                        ? AppThemeData
-                                                            .neutralDark200
-                                                        : AppThemeData
-                                                            .neutral200,
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(20.0)),
+              : (controller.onboardingModel.value.data == null ||
+                      controller.onboardingModel.value.data!.isEmpty)
+                  ? Center(
+                      child: Text(
+                        "No onboarding data available.".tr,
+                        style: TextStyle(
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark900
+                              : AppThemeData.neutral900,
+                          fontSize: 16,
+                        ),
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 50),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: PageView.builder(
+                                  controller: controller.pageController,
+                                  onPageChanged:
+                                      controller.selectedPageIndex.call,
+                                  itemCount: (controller.onboardingModel.value
+                                          .data?.length ??
+                                      0),
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          NetworkImageWidget(
+                                            imageUrl: controller.onboardingModel
+                                                .value.data![index].image
+                                                .toString(),
+                                            width: Responsive.width(100, context),
+                                            height: Responsive.height(30, context),
+                                            fit: BoxFit.cover,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 16, vertical: 50),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: List.generate(
+                                                (controller.onboardingModel.value
+                                                        .data?.length ??
+                                                    0),
+                                                (index) => Container(
+                                                  margin:
+                                                      const EdgeInsets.symmetric(
+                                                          horizontal: 4),
+                                                  width: controller
+                                                              .selectedPageIndex
+                                                              .value ==
+                                                          index
+                                                      ? 38
+                                                      : 10,
+                                                  height: 10,
+                                                  decoration: BoxDecoration(
+                                                    color: controller
+                                                                .selectedPageIndex
+                                                                .value ==
+                                                            index
+                                                        ? themeChange.getThem()
+                                                            ? AppThemeData
+                                                                .primaryDefault
+                                                            : AppThemeData
+                                                                .primaryDefault
+                                                        : themeChange.getThem()
+                                                            ? AppThemeData
+                                                                .neutralDark200
+                                                            : AppThemeData
+                                                                .neutral200,
+                                                    borderRadius:
+                                                        const BorderRadius.all(
+                                                            Radius.circular(
+                                                                20.0)),
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
+                                          Text(
+                                            controller.onboardingModel.value
+                                                .data![index].title
+                                                .toString()
+                                                .tr,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: themeChange.getThem()
+                                                  ? AppThemeData.neutralDark900
+                                                  : AppThemeData.neutral900,
+                                              fontSize: 24,
+                                              fontFamily: AppThemeData.bold,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            controller.onboardingModel.value
+                                                .data![index].description
+                                                .toString()
+                                                .tr,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: themeChange.getThem()
+                                                  ? AppThemeData.neutralDark500
+                                                  : AppThemeData.neutral500,
+                                              fontSize: 14,
+                                              fontFamily: AppThemeData.regular,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      Text(
-                                        controller.onboardingModel.value
-                                            .data![index].title
-                                            .toString()
-                                            .tr,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: themeChange.getThem()
-                                              ? AppThemeData.neutralDark900
-                                              : AppThemeData.neutral900,
-                                          fontSize: 24,
-                                          fontFamily: AppThemeData.bold,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        controller.onboardingModel.value
-                                            .data![index].description
-                                            .toString()
-                                            .tr,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: themeChange.getThem()
-                                              ? AppThemeData.neutralDark500
-                                              : AppThemeData.neutral500,
-                                          fontSize: 14,
-                                          fontFamily: AppThemeData.regular,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }),
+                                    );
+                                  }),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 5),
+                              child: RoundedButtonFill(
+                                title: controller.selectedPageIndex.value ==
+                                        (controller.onboardingModel.value.data
+                                                ?.length ??
+                                            0) -
+                                            1
+                                    ? "Lets Get Started".tr
+                                    : "Continue".tr,
+                                color: AppThemeData.primaryDefault,
+                                textColor: AppThemeData.neutral50,
+                                onPress: () {
+                                  if (controller.selectedPageIndex.value ==
+                                      (controller.onboardingModel.value.data
+                                              ?.length ??
+                                          0) -
+                                          1) {
+                                    Preferences.setBoolean(
+                                        Preferences.isFinishOnBoardingKey, true);
+                                    Get.offAll(const LoginScreen());
+                                  } else {
+                                    controller.pageController.jumpToPage(
+                                        controller.selectedPageIndex.value + 1);
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 5),
-                          child: RoundedButtonFill(
-                            title: controller.selectedPageIndex.value ==
-                                    controller.onboardingModel.value.data!
-                                            .length -
-                                        1
-                                ? "Lets Get Started".tr
-                                : "Continue".tr,
-                            color: AppThemeData.primaryDefault,
-                            textColor: AppThemeData.neutral50,
-                            onPress: () {
-                              if (controller.selectedPageIndex.value ==
-                                  controller
-                                          .onboardingModel.value.data!.length -
-                                      1) {
-                                Preferences.setBoolean(
-                                    Preferences.isFinishOnBoardingKey, true);
-                                Get.offAll(const LoginScreen());
-                              } else {
-                                controller.pageController.jumpToPage(
-                                    controller.selectedPageIndex.value + 1);
-                              }
-                            },
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
         );
       },
     );

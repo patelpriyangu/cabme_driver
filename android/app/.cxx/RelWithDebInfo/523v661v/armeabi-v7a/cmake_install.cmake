@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/rushabhpatel/Documents/GitHub/cabme/uniqcars_driver/android/app/.cxx/RelWithDebInfo/523v661v/armeabi-v7a/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/rushabhpatel/Documents/GitHub/UniqCars/uniqcars_driver/android/app/.cxx/RelWithDebInfo/523v661v/armeabi-v7a/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

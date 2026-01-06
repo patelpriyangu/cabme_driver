@@ -78,7 +78,7 @@ class LocalizationScreens extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Choose a language to personalize your CabME experience.'
+                    'Choose a language to personalize your UniqCars experience.'
                         .tr,
                     style: AppThemeData.mediumTextStyle(
                         fontSize: 14,
