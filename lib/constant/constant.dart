@@ -35,11 +35,11 @@ import 'package:video_compress/video_compress.dart';
 import 'show_toast_dialog.dart';
 
 class Constant {
-  static String? pusherApiKey = "";
-  static String? cluster = "";
+  static String? pusherApiKey = "64e0aa5b6b368b57ce56";
+  static String? cluster = "eu";
 
   static String? kGoogleApiKey = "";
-  static String? rideOtp = "yes";
+  static String? rideOtp = "no";
   static String? appVersion = "0.0";
   static String? minimumWalletBalance = "0";
   static String? decimal = "2";
@@ -346,6 +346,10 @@ class Constant {
       {required String name,
       required double latitude,
       required double longLatitude}) async {
+    String mapType = Preferences.getString(Preferences.mapType);
+    if (mapType.isNotEmpty) {
+      liveTrackingMapType = mapType;
+    }
     if (Constant.liveTrackingMapType == "google") {
       bool? isAvailable = await MapLauncher.isMapAvailable(MapType.google);
       if (isAvailable == true) {

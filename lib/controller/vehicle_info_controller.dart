@@ -20,6 +20,8 @@ class VehicleInfoController extends GetxController {
   Rx<TextEditingController> millageController = TextEditingController().obs;
   Rx<TextEditingController> kmDrivenController = TextEditingController().obs;
   Rx<TextEditingController> numberPlateController = TextEditingController().obs;
+  Rx<TextEditingController> pinNumberController = TextEditingController().obs;
+  Rx<TextEditingController> councilRegistrationNumberController = TextEditingController().obs;
   Rx<TextEditingController> zoneNameController = TextEditingController().obs;
 
   Rx<UserModel> userModel = UserModel().obs;
@@ -149,6 +151,8 @@ class VehicleInfoController extends GetxController {
           : int.parse(vehicleData.value.passenger.toString());
       kmDrivenController.value.text = vehicleData.value.km!;
       millageController.value.text = vehicleData.value.milage!;
+      pinNumberController.value.text = vehicleData.value.pinNumber ?? "";
+      councilRegistrationNumberController.value.text = vehicleData.value.councilRegistrationNumber ?? "";
 
       for (var element in vehicleData.value.zone_id!) {
         selectedZone.add(int.parse(element.toString()));
@@ -200,6 +204,8 @@ class VehicleInfoController extends GetxController {
       'milage': millageController.value.text,
       'km_driven': kmDrivenController.value.text,
       'passenger': passenger.value.toString(),
+      'pin_number': pinNumberController.value.text,
+      'council_registration_number': councilRegistrationNumberController.value.text,
       "zone_id": selectedZone.join(",")
     };
     await API

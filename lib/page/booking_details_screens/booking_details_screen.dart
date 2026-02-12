@@ -589,6 +589,42 @@ class BookingDetailsScreen extends StatelessWidget {
                                       ),
                                     ],
                                   ),
+                                  if (controller.bookingModel.value.statut ==
+                                          RideStatus.onRide ||
+                                      controller.bookingModel.value.statut ==
+                                          RideStatus.completed)
+                                    Column(
+                                      children: [
+                                        SizedBox(height: 10),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                "Waiting Time:".tr,
+                                                style: AppThemeData.mediumTextStyle(
+                                                    fontSize: 14,
+                                                    color: themeChange.getThem()
+                                                        ? AppThemeData.neutralDark900
+                                                        : AppThemeData.neutral900),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                controller.getWaitingDuration(),
+                                                style: AppThemeData.boldTextStyle(
+                                                    fontSize: 14,
+                                                    color: themeChange.getThem()
+                                                        ? AppThemeData.primaryDefault
+                                                        : AppThemeData.primaryDefault),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                 ],
                               ),
                             ),
@@ -952,7 +988,7 @@ class BookingDetailsScreen extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     child: RoundedButtonFill(
-                                      title: "Reached Location".tr,
+                                      title: "Arrived".tr,
                                       height: 5.5,
                                       color: themeChange.getThem()
                                           ? AppThemeData.successDefault
@@ -961,8 +997,7 @@ class BookingDetailsScreen extends StatelessWidget {
                                           ? AppThemeData.neutral50
                                           : AppThemeData.neutral50,
                                       onPress: () async {
-                                        showVerifyPassengerDialog(
-                                            context, themeChange, controller);
+                                        controller.arrivedAtPickup();
                                       },
                                     ),
                                   ),
@@ -984,13 +1019,50 @@ class BookingDetailsScreen extends StatelessWidget {
                                 ],
                               )
                             : controller.bookingModel.value.statut ==
+                                    RideStatus.arrived
+                                ? Row(
+                                    children: [
+                                      Expanded(
+                                        child: RoundedButtonFill(
+                                          title: "Passenger On Board (POB)".tr,
+                                          height: 5.5,
+                                          color: themeChange.getThem()
+                                              ? AppThemeData.primaryDefault
+                                              : AppThemeData.primaryDefault,
+                                          textColor: themeChange.getThem()
+                                              ? AppThemeData.neutral50
+                                              : AppThemeData.neutral50,
+                                          onPress: () async {
+                                            showVerifyPassengerDialog(
+                                                context, themeChange, controller);
+                                          },
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          Get.to(LiveTrackingScreen(), arguments: {
+                                            'orderModel':
+                                                controller.bookingModel.value
+                                          });
+                                        },
+                                        child: SvgPicture.asset(
+                                          "assets/icons/ic_livetracking.svg",
+                                          width: 42,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : controller.bookingModel.value.statut ==
                                     RideStatus.onRide
                                 ? RoundedButtonFill(
                                     title: controller.bookingModel.value
                                                 .paymentMethod ==
                                             "Cash"
                                         ? "Confirm Cash Payment".tr
-                                        : "Payment Pending".tr,
+                                        : "Stop Journey".tr,
                                     height: 5.5,
                                     color: themeChange.getThem()
                                         ? AppThemeData.errorDefault
@@ -1005,8 +1077,8 @@ class BookingDetailsScreen extends StatelessWidget {
                                         conformCashPayment(
                                             context, themeChange, controller);
                                       } else {
-                                        ShowToastDialog.showToast(
-                                            "Payment is pending from customer");
+                                        confirmStopJourney(
+                                            context, themeChange, controller);
                                       }
                                     },
                                   )
@@ -1195,6 +1267,63 @@ class BookingDetailsScreen extends StatelessWidget {
                   title: "Ride Completed".tr,
                   height: 5.5,
                   color: AppThemeData.successDefault,
+                  textColor: AppThemeData.neutral50,
+                  onPress: () async {
+                    controller.completeBooking();
+                  },
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+      barrierDismissible: true,
+    );
+  }
+  void confirmStopJourney(BuildContext context, DarkThemeProvider themeChange,
+      BookingDetailsController controller) {
+    Get.dialog(
+      Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: SizedBox(
+          width: Responsive.width(80, context),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                        child: Text("Stop Journey".tr,
+                            style: AppThemeData.boldTextStyle(
+                                fontSize: 20,
+                                color: themeChange.getThem()
+                                    ? AppThemeData.neutralDark900
+                                    : AppThemeData.neutral900))),
+                    InkWell(
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: Icon(Icons.close),
+                    )
+                  ],
+                ),
+                SizedBox(height: 8),
+                Text(
+                  "Are you sure you want to stop the journey?".tr,
+                  textAlign: TextAlign.start,
+                  style: AppThemeData.mediumTextStyle(
+                      color: themeChange.getThem()
+                          ? AppThemeData.neutralDark500
+                          : AppThemeData.neutral500,
+                      fontSize: 14),
+                ),
+                SizedBox(height: 25),
+                RoundedButtonFill(
+                  title: "Yes".tr,
+                  height: 5.5,
+                  color: AppThemeData.errorDefault,
                   textColor: AppThemeData.neutral50,
                   onPress: () async {
                     controller.completeBooking();

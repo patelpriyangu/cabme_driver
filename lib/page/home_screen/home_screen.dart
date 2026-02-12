@@ -108,50 +108,107 @@ class HomeScreen extends StatelessWidget {
                       ),
                       SizedBox(
                         height: 34, // smaller than default
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: CupertinoSwitch(
-                            value: controller.status.value,
-                            activeTrackColor: AppThemeData.accentDefault,
-                            thumbColor: themeChange.getThem()
-                                ? AppThemeData.neutralDark50
-                                : AppThemeData.neutral50,
-                            onChanged: (bool value) {
-                              if (value == false) {
-                                controller.changeStatus(value);
-                              } else {
-                                if (controller.userModel.value.userData
-                                            ?.ownerId !=
-                                        null &&
-                                    controller.userModel.value.userData!
-                                        .ownerId!.isNotEmpty) {
-                                  if (controller.userModel.value.userData!
-                                          .statutVehicule ==
-                                      "no") {
-                                    ShowToastDialog.showToast(
-                                        "You don’t have any vehicle assigned. Please contact your owner to get one assigned.");
-                                  } else {
-                                    controller.changeStatus(value);
-                                  }
+                        child: PopupMenuButton<String>(
+                          onSelected: (String value) {
+                            if (value == "yes") {
+                              if (controller.userModel.value.userData?.ownerId !=
+                                      null &&
+                                  controller.userModel.value.userData!.ownerId!
+                                      .isNotEmpty) {
+                                if (controller
+                                        .userModel.value.userData!.statutVehicule ==
+                                    "no") {
+                                  ShowToastDialog.showToast(
+                                      "You don’t have any vehicle assigned. Please contact your owner to get one assigned.");
                                 } else {
-                                  if (controller.userModel.value.userData!
-                                          .statutVehicule ==
-                                      "no") {
-                                    showAlertDialog(themeChange, context,
-                                        "vehicleInformation", controller);
-                                  } else if (Constant.driverDocVerification ==
-                                          "yes" &&
-                                      controller.userModel.value.userData
-                                              ?.isVerified ==
-                                          "no") {
-                                    showAlertDialog(themeChange, context,
-                                        "document", controller);
-                                  } else {
-                                    controller.changeStatus(value);
-                                  }
+                                  controller.changeStatus(value);
+                                }
+                              } else {
+                                if (controller
+                                        .userModel.value.userData!.statutVehicule ==
+                                    "no") {
+                                  showAlertDialog(themeChange, context,
+                                      "vehicleInformation", controller);
+                                } else if (Constant.driverDocVerification ==
+                                        "yes" &&
+                                    controller.userModel.value.userData
+                                            ?.isVerified ==
+                                        "no") {
+                                  showAlertDialog(themeChange, context,
+                                      "document", controller);
+                                } else {
+                                  controller.changeStatus(value);
                                 }
                               }
-                            },
+                            } else {
+                              controller.changeStatus(value);
+                            }
+                          },
+                          itemBuilder: (BuildContext context) =>
+                              <PopupMenuEntry<String>>[
+                            PopupMenuItem<String>(
+                              value: 'yes',
+                              child: Text(
+                                'Online'.tr,
+                                style: TextStyle(
+                                    color: controller.status.value == 'yes'
+                                        ? AppThemeData.successDefault
+                                        : AppThemeData.neutral900),
+                              ),
+                            ),
+                            PopupMenuItem<String>(
+                              value: 'break',
+                              child: Text(
+                                'On Break'.tr,
+                                style: TextStyle(
+                                    color: controller.status.value == 'break'
+                                        ? AppThemeData.warningDark
+                                        : AppThemeData.neutral900),
+                              ),
+                            ),
+                            PopupMenuItem<String>(
+                              value: 'no',
+                              child: Text(
+                                'Complete Log Off'.tr,
+                                style: TextStyle(
+                                    color: controller.status.value == 'no'
+                                        ? AppThemeData.errorDefault
+                                        : AppThemeData.neutral900),
+                              ),
+                            ),
+                          ],
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: controller.status.value == 'yes'
+                                  ? AppThemeData.successDefault
+                                  : controller.status.value == 'break'
+                                      ? AppThemeData.warningDark
+                                      : AppThemeData.errorDefault,
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  controller.status.value == 'yes'
+                                      ? 'Online'.tr
+                                      : controller.status.value == 'break'
+                                          ? 'On Break'.tr
+                                          : 'Complete Log Off'.tr,
+                                  style: AppThemeData.semiBoldTextStyle(
+                                    fontSize: 14,
+                                    color: AppThemeData.neutral50,
+                                  ),
+                                ),
+                                SizedBox(width: 5),
+                                Icon(
+                                  Icons.arrow_drop_down,
+                                  color: AppThemeData.neutral50,
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       )
@@ -709,8 +766,7 @@ class HomeScreen extends StatelessWidget {
                                             ? AppThemeData.neutral50
                                             : AppThemeData.neutral50,
                                         onPress: () async {
-                                          showVerifyPassengerDialog(
-                                              context, themeChange, controller);
+                                          controller.arrivedRequest();
                                         },
                                       ),
                                     ),
@@ -732,6 +788,44 @@ class HomeScreen extends StatelessWidget {
                                     ),
                                   ],
                                 )
+                              : controller.bookingModel.value.data!.statut ==
+                                      RideStatus.arrived
+                                  ? Row(
+                                      children: [
+                                        Expanded(
+                                          child: RoundedButtonFill(
+                                            title: "Passenger on Board".tr,
+                                            height: 5.5,
+                                            color: themeChange.getThem()
+                                                ? AppThemeData.primaryDefault
+                                                : AppThemeData.primaryDefault,
+                                            textColor: themeChange.getThem()
+                                                ? AppThemeData.neutral50
+                                                : AppThemeData.neutral50,
+                                            onPress: () async {
+                                              showVerifyPassengerDialog(context,
+                                                  themeChange, controller);
+                                            },
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            Get.to(LiveTrackingScreen(),
+                                                arguments: {
+                                                  'orderModel': controller
+                                                      .bookingModel.value.data
+                                                });
+                                          },
+                                          child: SvgPicture.asset(
+                                            "assets/icons/ic_livetracking.svg",
+                                            width: 36,
+                                          ),
+                                        ),
+                                      ],
+                                    )
                               : controller.bookingModel.value.data!.statut ==
                                       RideStatus.onRide
                                   ? Row(

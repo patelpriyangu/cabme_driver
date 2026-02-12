@@ -19,7 +19,7 @@ import 'package:location/location.dart';
 
 class HomeController extends GetxController {
   RxBool isLoading = true.obs;
-  RxBool status = true.obs;
+  RxString status = "no".obs;
   RxList<ParcelBookingData> parcelList = <ParcelBookingData>[].obs;
 
   Rx<UserModel> userModel = UserModel().obs;
@@ -47,8 +47,8 @@ class HomeController extends GetxController {
     userModel.value = Constant.getUserData();
     await getUserData();
     await getBookingData();
-    status.value = userModel.value.userData?.online == "yes";
-    if (status.value == true) {
+    status.value = userModel.value.userData?.online ?? "no";
+    if (status.value == "yes") {
       await updateCurrentLocation();
       await getBooking();
       await getParcelList();
@@ -113,6 +113,7 @@ class HomeController extends GetxController {
     if (booking.data != null) {
       if (booking.data!.statut == RideStatus.newRide ||
           booking.data!.statut == RideStatus.confirmed ||
+          booking.data!.statut == RideStatus.arrived ||
           booking.data!.statut == RideStatus.onRide) {
         locationData.clear();
         locationData.add(Stops(
@@ -186,6 +187,32 @@ class HomeController extends GetxController {
           } else {
             await getBooking();
             ShowToastDialog.showToast("Ride accepted successfully");
+          }
+        }
+      },
+    );
+  }
+
+  Future<void> arrivedRequest() async {
+    Map<String, dynamic> bodyParams = {
+      'id_driver': Preferences.getInt(Preferences.userId),
+      'id_ride': bookingModel.value.data!.id,
+    };
+
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.arrivedRequest),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
+        .then(
+      (value) async {
+        if (value != null) {
+          if (value['success'] == "Failed" || value['success'] == "failed") {
+            ShowToastDialog.showToast(value['message']);
+            return null;
+          } else {
+            await getBooking();
+            ShowToastDialog.showToast("Notify: Driver Arrived");
           }
         }
       },
@@ -304,11 +331,11 @@ class HomeController extends GetxController {
     );
   }
 
-  Future<void> changeStatus(bool value) async {
+  Future<void> changeStatus(String value) async {
     status.value = value;
     Map<String, dynamic> bodyParams = {
       'id_driver': Preferences.getInt(Preferences.userId),
-      'online': status.value ? 'yes' : 'no',
+      'online': status.value,
     };
 
     await API
@@ -325,7 +352,7 @@ class HomeController extends GetxController {
           } else {
             await getData();
             ShowToastDialog.showToast(
-                status.value ? "You are online now" : "You are offline now");
+                status.value == "yes" ? "You are online now" : status.value == "break" ? "You are on break" : "You are offline now");
             updateCurrentLocation();
           }
         }

@@ -67,6 +67,9 @@ class BookingData {
   AdminCommission? discountType;
   ComplainDetails? complainDetails;
   bool? complaint;
+  String? arrivedTime;
+  String? pobTime;
+  String? waitingDuration;
 
   BookingData(
       {this.id,
@@ -106,7 +109,10 @@ class BookingData {
       this.adminCommissionType,
       this.discountType,
       this.complaint,
-      this.complainDetails});
+      this.complainDetails,
+      this.arrivedTime,
+      this.pobTime,
+      this.waitingDuration});
 
   BookingData.fromJson(Map<String, dynamic> json) {
     id = json['id'].toString();
@@ -163,6 +169,9 @@ class BookingData {
         ? ComplainDetails.fromJson(json['complaint_detail'])
         : null;
     complaint = json['complaint'];
+    arrivedTime = json['arrived_time'];
+    pobTime = json['pob_time'];
+    waitingDuration = json['waiting_duration'];
   }
 
   Map<String, dynamic> toJson() {
@@ -220,6 +229,9 @@ class BookingData {
       data['complaint_detail'] = complainDetails!.toJson();
     }
     data['complaint'] = complaint;
+    data['arrived_time'] = arrivedTime;
+    data['pob_time'] = pobTime;
+    data['waiting_duration'] = waitingDuration;
     return data;
   }
 }

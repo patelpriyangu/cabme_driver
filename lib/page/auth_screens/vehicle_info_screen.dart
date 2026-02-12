@@ -424,6 +424,30 @@ class VehicleInfoScreen extends StatelessWidget {
                                     ? false
                                     : true,
                           ),
+                          TextFieldWidget(
+                            controller: controller.pinNumberController.value,
+                            hintText: 'Enter Pin Number'.tr,
+                            title: 'Pin Number'.tr,
+                            enable:
+                                controller.userModel.value.userData!.ownerId !=
+                                            null &&
+                                        controller.userModel.value.userData!
+                                            .ownerId!.isNotEmpty
+                                    ? false
+                                    : true,
+                          ),
+                          TextFieldWidget(
+                            controller: controller.councilRegistrationNumberController.value,
+                            hintText: 'Enter Council Registration Number'.tr,
+                            title: 'Council Registration Number'.tr,
+                            enable:
+                                controller.userModel.value.userData!.ownerId !=
+                                            null &&
+                                        controller.userModel.value.userData!
+                                            .ownerId!.isNotEmpty
+                                    ? false
+                                    : true,
+                          ),
                           Row(
                             children: [
                               Expanded(
@@ -617,6 +641,14 @@ class VehicleInfoScreen extends StatelessWidget {
                               .numberPlateController.value.text.isEmpty) {
                             ShowToastDialog.showToast(
                                 "Please enter number plate");
+                          } else if (controller
+                              .pinNumberController.value.text.isEmpty) {
+                            ShowToastDialog.showToast(
+                                "Please enter PIN number".tr);
+                          } else if (controller
+                              .councilRegistrationNumberController.value.text.isEmpty) {
+                            ShowToastDialog.showToast(
+                                "Please enter council registration number".tr);
                           } else if (controller
                               .millageController.value.text.isEmpty) {
                             ShowToastDialog.showToast("Please enter mileage");

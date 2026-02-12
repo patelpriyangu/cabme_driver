@@ -143,6 +143,31 @@ class BookingDetailsController extends GetxController {
     update();
   }
 
+  String getWaitingDuration() {
+    if (bookingModel.value.arrivedTime != null &&
+        bookingModel.value.pobTime != null) {
+      try {
+        DateTime arrivedDateTime = DateTime.parse(bookingModel.value.arrivedTime!);
+        DateTime pobDateTime = DateTime.parse(bookingModel.value.pobTime!);
+        Duration difference = pobDateTime.difference(arrivedDateTime);
+
+        int minutes = difference.inMinutes;
+        int seconds = difference.inSeconds % 60;
+
+        if (minutes > 0) {
+          return "$minutes min $seconds sec";
+        } else {
+          return "$seconds sec";
+        }
+      } catch (e) {
+        return "N/A";
+      }
+    } else if (bookingModel.value.waitingDuration != null) {
+      return bookingModel.value.waitingDuration!;
+    }
+    return "N/A";
+  }
+
   Future<void> acceptBooking(String rideId) async {
     Map<String, dynamic> bodyParams = {
       'id_driver': Preferences.getInt(Preferences.userId),
@@ -163,6 +188,32 @@ class BookingDetailsController extends GetxController {
           } else {
             await getPusherBookingData();
             ShowToastDialog.showToast("Ride accepted successfully");
+          }
+        }
+      },
+    );
+  }
+
+  Future<void> arrivedAtPickup() async {
+    Map<String, dynamic> bodyParams = {
+      'id_driver': Preferences.getInt(Preferences.userId),
+      'id_ride': bookingModel.value.id,
+    };
+
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.arrivedRequest),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: true)
+        .then(
+      (value) async {
+        if (value != null) {
+          if (value['success'] == "Failed" || value['success'] == "failed") {
+            ShowToastDialog.showToast(value['error']);
+            return null;
+          } else {
+            await getPusherBookingData();
+            ShowToastDialog.showToast("Arrived at pickup location");
           }
         }
       },

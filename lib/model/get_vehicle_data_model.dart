@@ -47,6 +47,8 @@ class VehicleData {
   String? deliveryCharges;
   String? minimumDeliveryCharges;
   String? minimumDeliveryChargesWithin;
+  String? pinNumber;
+  String? councilRegistrationNumber;
   List<dynamic>? zone_id;
 
   VehicleData(
@@ -71,7 +73,9 @@ class VehicleData {
       this.deliveryCharges,
       this.zone_id,
       this.minimumDeliveryCharges,
-      this.minimumDeliveryChargesWithin});
+      this.minimumDeliveryChargesWithin,
+      this.pinNumber,
+      this.councilRegistrationNumber});
 
   VehicleData.fromJson(Map<String, dynamic> json) {
     id = json['id'].toString();
@@ -95,6 +99,8 @@ class VehicleData {
     deliveryCharges = json['delivery_charges_per_km'].toString();
     minimumDeliveryCharges = json['minimum_delivery_charges'].toString();
     minimumDeliveryChargesWithin = json['minimum_delivery_charges_within_km'].toString();
+    pinNumber = json['pin_number'].toString();
+    councilRegistrationNumber = json['council_registration_number'].toString();
     zone_id = json['zone_id'] ?? [];
   }
 
@@ -121,6 +127,8 @@ class VehicleData {
     data['delivery_charges_per_km'] = deliveryCharges;
     data['minimum_delivery_charges'] = minimumDeliveryCharges;
     data['minimum_delivery_charges_within_km'] = minimumDeliveryChargesWithin;
+    data['pin_number'] = pinNumber;
+    data['council_registration_number'] = councilRegistrationNumber;
     data['zone_id'] = zone_id;
     return data;
   }

@@ -8,6 +8,7 @@ import 'package:uniqcars_driver/service/pusher_service.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:uniqcars_driver/utils/Preferences.dart';
 
 import '../themes/app_them_data.dart';
 
@@ -35,7 +36,14 @@ class SettingsController extends GetxController {
             Constant.adminCommission = model.data!.adminCommission!;
             Constant.subscriptionModel =
                 bool.parse(model.data!.subscriptionModel!);
-            Constant.liveTrackingMapType = model.data?.mapType ?? '';
+            
+            String savedMapType = Preferences.getString(Preferences.mapType);
+             if (savedMapType.isNotEmpty) {
+                 Constant.liveTrackingMapType = savedMapType;
+            } else {
+                 Constant.liveTrackingMapType = model.data?.mapType ?? '';
+            }
+            
             Constant.selectedMapType = model.data?.mapForApplication != null
                 ? '${model.data?.mapForApplication?.toLowerCase()}'
                 : '';

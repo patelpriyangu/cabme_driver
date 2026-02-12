@@ -13,6 +13,7 @@ class Preferences {
   static const userId = "userId";
   static const accesstoken = "accesstoken";
   static const paymentSetting = "paymentSetting";
+  static const mapType = "mapType";
 
   static late SharedPreferences pref;
 

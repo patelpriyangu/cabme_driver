@@ -16,6 +16,7 @@ import 'package:uniqcars_driver/page/terms_of_service/terms_of_service_screen.da
 import 'package:uniqcars_driver/themes/responsive.dart';
 import 'package:uniqcars_driver/themes/round_button_fill.dart';
 import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
+import 'package:uniqcars_driver/utils/Preferences.dart';
 import 'package:uniqcars_driver/utils/network_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -588,6 +589,100 @@ class ProfileScreen extends StatelessWidget {
                                     Expanded(
                                       child: Text(
                                         'Change Language'.tr,
+                                        style: AppThemeData.semiBoldTextStyle(
+                                            fontSize: 16,
+                                            color: themeChange.getThem()
+                                                ? AppThemeData.neutralDark900
+                                                : AppThemeData.neutral900),
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 16,
+                                      color: themeChange.getThem()
+                                          ? AppThemeData.neutralDark900
+                                          : AppThemeData.neutral900,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: Text('Select Navigation Map'.tr),
+                                    content: SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          ListTile(
+                                            title: Text("Google Maps"),
+                                            onTap: () {
+                                              Preferences.setString(Preferences.mapType, "google");
+                                              Constant.liveTrackingMapType = "google";
+                                              Get.back();
+                                            },
+                                          ),
+                                          ListTile(
+                                            title: Text("Google Go"),
+                                            onTap: () {
+                                              Preferences.setString(Preferences.mapType, "googleGo");
+                                              Constant.liveTrackingMapType = "googleGo";
+                                              Get.back();
+                                            },
+                                          ),
+                                          ListTile(
+                                            title: Text("Waze"),
+                                            onTap: () {
+                                              Preferences.setString(Preferences.mapType, "waze");
+                                              Constant.liveTrackingMapType = "waze";
+                                              Get.back();
+                                            },
+                                          ),
+                                          ListTile(
+                                            title: Text("Maps.Me"),
+                                            onTap: () {
+                                              Preferences.setString(Preferences.mapType, "mapswithme");
+                                              Constant.liveTrackingMapType = "mapswithme";
+                                              Get.back();
+                                            },
+                                          ),
+                                          ListTile(
+                                            title: Text("Yandex Navi"),
+                                            onTap: () {
+                                              Preferences.setString(Preferences.mapType, "yandexNavi");
+                                              Constant.liveTrackingMapType = "yandexNavi";
+                                              Get.back();
+                                            },
+                                          ),
+                                          ListTile(
+                                            title: Text("Yandex Maps"),
+                                            onTap: () {
+                                              Preferences.setString(Preferences.mapType, "yandexMaps");
+                                              Constant.liveTrackingMapType = "yandexMaps";
+                                              Get.back();
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.map, size: 24, color: themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        'Navigation Map'.tr,
                                         style: AppThemeData.semiBoldTextStyle(
                                             fontSize: 16,
                                             color: themeChange.getThem()

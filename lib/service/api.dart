@@ -54,6 +54,7 @@ class API {
   static const driverRecentRide = "${baseUrl}driver-recent-ride";
   static const conformRide = "${baseUrl}confirm-requete";
   static const rejectRide = "${baseUrl}set-rejected-requete";
+  static const arrivedRequest = "${baseUrl}arrived-requete";
   static const onRideRequest = "${baseUrl}onride-requete";
 
   static const changePassword = "${baseUrl}update-user-mdp";
