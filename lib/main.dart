@@ -25,6 +25,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseAppCheck.instance.activate(
+    androidProvider: AndroidProvider.playIntegrity,
+  );
+  await GoogleSignIn.instance.initialize();
   await Preferences.initPref();
   runApp(const MyApp());
 }
