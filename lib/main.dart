@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:uniqcars_driver/controller/settings_controller.dart';
 import 'package:uniqcars_driver/firebase_options.dart';
 import 'package:uniqcars_driver/model/language_model.dart';
@@ -23,6 +24,9 @@ void main() async {
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await FirebaseAppCheck.instance.activate(
+    androidProvider: AndroidProvider.playIntegrity,
   );
   await GoogleSignIn.instance.initialize();
   await Preferences.initPref();
