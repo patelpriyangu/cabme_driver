@@ -154,9 +154,8 @@ class SignupScreen extends StatelessWidget {
                           controller: controller.emailController.value,
                           hintText: 'Enter Email Address',
                           title: 'Email Address',
-                          enable: controller.loginType.value == "phoneNumber"
-                              ? true
-                              : false,
+                          enable: controller.loginType.value == "phoneNumber" ||
+                              controller.loginType.value == "email",
                           prefix: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 18),
                             child: SvgPicture.asset(
@@ -217,69 +216,77 @@ class SignupScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        TextFieldWidget(
-                          controller: controller.passwordController.value,
-                          hintText: 'Enter Password',
-                          title: 'Password',
-                          obscureText: controller.isPasswordShow.value,
-                          prefix: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 18),
-                            child: SvgPicture.asset(
-                                "assets/icons/ic_lock_login.svg"),
-                          ),
-                          suffix: InkWell(
-                            onTap: () {
-                              if (controller.isPasswordShow.value) {
-                                controller.isPasswordShow.value = false;
-                              } else {
-                                controller.isPasswordShow.value = true;
-                              }
-                            },
-                            child: Padding(
+                        if (controller.loginType.value != "google" &&
+                            controller.loginType.value != "apple") ...[
+                          TextFieldWidget(
+                            controller: controller.passwordController.value,
+                            hintText: 'Enter Password',
+                            title: 'Password',
+                            obscureText: controller.isPasswordShow.value,
+                            prefix: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 18),
-                              child: Obx(
-                                () => controller.isPasswordShow.value
-                                    ? SvgPicture.asset(
-                                        "assets/icons/ic_hide.svg")
-                                    : SvgPicture.asset(
-                                        "assets/icons/ic_show.svg"),
+                              child: SvgPicture.asset(
+                                  "assets/icons/ic_lock_login.svg"),
+                            ),
+                            suffix: InkWell(
+                              onTap: () {
+                                if (controller.isPasswordShow.value) {
+                                  controller.isPasswordShow.value = false;
+                                } else {
+                                  controller.isPasswordShow.value = true;
+                                }
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 18),
+                                child: Obx(
+                                  () => controller.isPasswordShow.value
+                                      ? SvgPicture.asset(
+                                          "assets/icons/ic_hide.svg")
+                                      : SvgPicture.asset(
+                                          "assets/icons/ic_show.svg"),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        TextFieldWidget(
-                          controller:
-                              controller.conformPasswordController.value,
-                          hintText: 'Enter Confirm Password',
-                          title: 'Confirm Password',
-                          obscureText: controller.isConformPasswordShow.value,
-                          prefix: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 18),
-                            child: SvgPicture.asset(
-                                "assets/icons/ic_lock_login.svg"),
-                          ),
-                          suffix: InkWell(
-                            onTap: () {
-                              if (controller.isConformPasswordShow.value) {
-                                controller.isConformPasswordShow.value = false;
-                              } else {
-                                controller.isConformPasswordShow.value = true;
-                              }
-                            },
-                            child: Padding(
+                          TextFieldWidget(
+                            controller:
+                                controller.conformPasswordController.value,
+                            hintText: 'Enter Confirm Password',
+                            title: 'Confirm Password',
+                            obscureText:
+                                controller.isConformPasswordShow.value,
+                            prefix: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 18),
-                              child: Obx(
-                                () => controller.isConformPasswordShow.value
-                                    ? SvgPicture.asset(
-                                        "assets/icons/ic_hide.svg")
-                                    : SvgPicture.asset(
-                                        "assets/icons/ic_show.svg"),
+                              child: SvgPicture.asset(
+                                  "assets/icons/ic_lock_login.svg"),
+                            ),
+                            suffix: InkWell(
+                              onTap: () {
+                                if (controller.isConformPasswordShow.value) {
+                                  controller.isConformPasswordShow.value =
+                                      false;
+                                } else {
+                                  controller.isConformPasswordShow.value =
+                                      true;
+                                }
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 18),
+                                child: Obx(
+                                  () => controller.isConformPasswordShow.value
+                                      ? SvgPicture.asset(
+                                          "assets/icons/ic_hide.svg")
+                                      : SvgPicture.asset(
+                                          "assets/icons/ic_show.svg"),
+                                ),
                               ),
                             ),
                           ),
-                        ),
+                        ],
                       ],
                     ),
                   ],
@@ -303,12 +310,17 @@ class SignupScreen extends StatelessWidget {
                     ShowToastDialog.showToast("Please enter a email");
                   } else if (controller.phoneNumber.value.text.isEmpty) {
                     ShowToastDialog.showToast("Please enter a phone number");
-                  } else if (controller.passwordController.value.text.isEmpty) {
+                  } else if (controller.loginType.value != "google" &&
+                      controller.loginType.value != "apple" &&
+                      controller.passwordController.value.text.isEmpty) {
                     ShowToastDialog.showToast("Please enter a password");
-                  } else if (controller.passwordController.value.text.trim() !=
-                      controller.conformPasswordController.value.text.trim()) {
+                  } else if (controller.loginType.value != "google" &&
+                      controller.loginType.value != "apple" &&
+                      controller.passwordController.value.text.trim() !=
+                          controller.conformPasswordController.value.text
+                              .trim()) {
                     ShowToastDialog.showToast(
-                        "Password and conform password not match");
+                        "Password and confirm password do not match");
                   } else {
                     Map<String, String> bodyParams = {
                       'firstname': controller.firstNameController.value.text
@@ -327,16 +339,23 @@ class SignupScreen extends StatelessWidget {
                       'account_type':
                           controller.selectedValue.value == "Company"
                               ? "owner"
-                              : 'driver', // driver or customer or owner
-                      'service_type': controller.selectedService
-                          .join(","), // driver or customer or owner
+                              : 'driver',
+                      'service_type': controller.selectedService.join(","),
                     };
-                    await controller.signUp(bodyParams).then((value) {
+                    await controller.signUp(bodyParams).then((value) async {
                       if (value != null) {
                         if (value.success == "success") {
-                          ShowToastDialog.showToast(
-                              "Account created successfully");
-                          Get.offAll(LoginScreen());
+                          if (controller.loginType.value == "google" ||
+                              controller.loginType.value == "apple") {
+                            await controller.autoLoginAfterSocialSignup(
+                              controller.emailController.value.text.trim(),
+                              controller.loginType.value,
+                            );
+                          } else {
+                            ShowToastDialog.showToast(
+                                "Account created successfully");
+                            Get.offAll(() => LoginScreen());
+                          }
                         } else {
                           ShowToastDialog.showToast(value.message);
                         }

@@ -144,7 +144,7 @@ class LoginController extends GetxController {
                       return;
                     }
 
-                    /// Case 3: Owner’s Driver (driver under an owner)
+                    /// Case 3: Owner's Driver (driver under an owner)
                     bool isOwnerDriver = userData.isOwner == "false" &&
                         userData.ownerId != null &&
                         userData.ownerId!.isNotEmpty;
@@ -188,7 +188,13 @@ class LoginController extends GetxController {
                         }
                       }
                     }
+                  } else {
+                    ShowToastDialog.showToast(
+                        value.error ?? 'Something went wrong'.tr);
                   }
+                } else {
+                  ShowToastDialog.showToast(
+                      'Something went wrong, please try again'.tr);
                 }
               });
             } else if (value == false) {
@@ -199,6 +205,9 @@ class LoginController extends GetxController {
                 'login_type': "google",
               });
             }
+          } else {
+            ShowToastDialog.showToast(
+                'Something went wrong, please try again'.tr);
           }
         });
       }
@@ -213,16 +222,26 @@ class LoginController extends GetxController {
         Map<String, dynamic> map = value;
         AuthorizationCredentialAppleID appleCredential = map['appleCredential'];
         UserCredential userCredential = map['userCredential'];
+        // Apple only sends email on first sign-in; use Firebase cached email as fallback
+        final String? appleEmail =
+            userCredential.user?.email ?? appleCredential.email;
+        if (appleEmail == null || appleEmail.isEmpty) {
+          ShowToastDialog.closeLoader();
+          ShowToastDialog.showToast(
+              'Could not retrieve Apple account email. Please try another sign-in method.'
+                  .tr);
+          return;
+        }
         Map<String, String> bodyParams = {
           'user_cat': "driver",
-          'email': userCredential.user!.email.toString(),
+          'email': appleEmail,
           'login_type': "apple",
         };
         await phoneNumberIsExit(bodyParams).then((value) async {
           if (value != null) {
             if (value == true) {
               Map<String, String> bodyParams = {
-                'email': userCredential.user!.email.toString(),
+                'email': appleEmail,
                 'user_cat': "driver",
                 'login_type': "apple",
               };
@@ -256,7 +275,7 @@ class LoginController extends GetxController {
                       return;
                     }
 
-                    /// Case 3: Owner’s Driver (driver under an owner)
+                    /// Case 3: Owner's Driver (driver under an owner)
                     bool isOwnerDriver = userData.isOwner == "false" &&
                         userData.ownerId != null &&
                         userData.ownerId!.isNotEmpty;
@@ -300,18 +319,27 @@ class LoginController extends GetxController {
                         }
                       }
                     }
+                  } else {
+                    ShowToastDialog.showToast(
+                        value.error ?? 'Something went wrong'.tr);
                   }
+                } else {
+                  ShowToastDialog.showToast(
+                      'Something went wrong, please try again'.tr);
                 }
               });
             } else if (value == false) {
               ShowToastDialog.closeLoader();
               Get.to(() => SignupScreen(), arguments: {
-                'email': userCredential.user!.email,
+                'email': appleEmail,
                 'firstName': appleCredential.givenName,
                 'lastname': appleCredential.familyName,
                 'login_type': "apple",
               });
             }
+          } else {
+            ShowToastDialog.showToast(
+                'Something went wrong, please try again'.tr);
           }
         });
       }
@@ -320,9 +348,8 @@ class LoginController extends GetxController {
 
   Future<UserCredential?> signInWithGoogle() async {
     try {
-      final GoogleSignIn googleSignIn = GoogleSignIn.instance;
-      await googleSignIn.initialize();
-      final GoogleSignInAccount googleUser = await googleSignIn.authenticate();
+      final GoogleSignInAccount googleUser =
+          await GoogleSignIn.instance.authenticate();
       final GoogleSignInAuthentication googleAuth = googleUser.authentication;
       final credential =
           GoogleAuthProvider.credential(idToken: googleAuth.idToken);

@@ -9,6 +9,7 @@ import 'package:uniqcars_driver/themes/styles.dart';
 import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await GoogleSignIn.instance.initialize();
   await Preferences.initPref();
   runApp(const MyApp());
 }
