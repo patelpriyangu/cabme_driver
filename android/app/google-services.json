@@ -12,7 +12,20 @@
           "package_name": "com.uniqcars.co.uk"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "587441137020-o68if8dgpu570t4rl4evg8uddu5ifpcu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uniqcars.co.uk",
+            "certificate_hash": "cdf18e9ca146e7a5df698ac9578ce5cecc356bab"
+          }
+        },
+        {
+          "client_id": "587441137020-q7fc5fnhu5q5tkim951vb2bcv8g4agos.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCqgLBkbE4EvrgJaW_yzyxIaxEv196s1eA"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "587441137020-q7fc5fnhu5q5tkim951vb2bcv8g4agos.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "587441137020-1n7jovugv3n6s4rrh4b79qks05jl0je6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.uniqcars.co.uk"
+              }
+            }
+          ]
         }
       }
     },
@@ -31,7 +56,28 @@
           "package_name": "com.uniqcars.driver.co.uk.driver"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "587441137020-1cv510j4ekn1kddobidqsmm69bq7l473.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uniqcars.driver.co.uk.driver",
+            "certificate_hash": "49b5f060a2ef687d62d1eefb489bc7ca9e58e5ac"
+          }
+        },
+        {
+          "client_id": "587441137020-26v9vt5obf8uskero447bsukk41mujn8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uniqcars.driver.co.uk.driver",
+            "certificate_hash": "cdf18e9ca146e7a5df698ac9578ce5cecc356bab"
+          }
+        },
+        {
+          "client_id": "587441137020-q7fc5fnhu5q5tkim951vb2bcv8g4agos.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCqgLBkbE4EvrgJaW_yzyxIaxEv196s1eA"
@@ -39,7 +85,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "587441137020-q7fc5fnhu5q5tkim951vb2bcv8g4agos.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "587441137020-1n7jovugv3n6s4rrh4b79qks05jl0je6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.uniqcars.co.uk"
+              }
+            }
+          ]
         }
       }
     }

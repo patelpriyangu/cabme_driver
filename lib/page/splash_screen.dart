@@ -22,7 +22,7 @@ class SplashScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Image.asset(
-                    "assets/images/customer_logo.png",
+                    "assets/images/app_icon.png",
                     width: 120,
                   ),
                 ],

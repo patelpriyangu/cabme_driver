@@ -7,6 +7,7 @@ import 'package:uniqcars_driver/controller/login_conroller.dart';
 import 'package:uniqcars_driver/model/user_model.dart';
 import 'package:uniqcars_driver/page/auth_screens/forgot_password.dart';
 import 'package:uniqcars_driver/page/auth_screens/mobile_number_screen.dart';
+import 'package:uniqcars_driver/page/auth_screens/signup_screen.dart';
 import 'package:uniqcars_driver/page/dashboard_screen.dart';
 import 'package:uniqcars_driver/page/owner_dashboard_screen.dart';
 import 'package:uniqcars_driver/service/api.dart';
@@ -409,7 +410,36 @@ class LoginScreen extends StatelessWidget {
                                   )
                                 : SizedBox(),
                           ],
-                        )
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 24),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Don't have an account?".tr,
+                                style: AppThemeData.mediumTextStyle(
+                                    fontSize: 14,
+                                    color: themeChange.getThem()
+                                        ? AppThemeData.neutralDark500
+                                        : AppThemeData.neutral500),
+                              ),
+                              const SizedBox(width: 4),
+                              InkWell(
+                                onTap: () {
+                                  Get.to(() => const SignupScreen(),
+                                      arguments: {'login_type': 'email'});
+                                },
+                                child: Text(
+                                  "Sign Up".tr,
+                                  style: AppThemeData.semiBoldTextStyle(
+                                      fontSize: 14,
+                                      color: AppThemeData.primaryDefault),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
