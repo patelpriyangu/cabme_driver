@@ -333,7 +333,10 @@ class SignupScreen extends StatelessWidget {
                       'country_code':
                           controller.countryCodeController.value.text,
                       'email': controller.emailController.value.text.trim(),
-                      'password': controller.passwordController.value.text,
+                      if (controller.loginType.value != "google" &&
+                          controller.loginType.value != "apple")
+                        'password':
+                            controller.passwordController.value.text,
                       'login_type': controller.loginType.value,
                       'tonotify': 'yes',
                       'account_type':
