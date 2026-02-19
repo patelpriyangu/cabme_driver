@@ -107,5 +107,18 @@
     <string>This identifier will be used to deliver personalized ads to you.</string>
     <key>NSLocalNetworkUsageDescription</key>
     <string>This app requires local network access for debugging and communication purposes.</string>
+	<key>GIDClientID</key>
+	<string>587441137020-avnf7n3lgg97ki1sdnug6m4neq5b6e2d.apps.googleusercontent.com</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+	<dict>
+		<key>CFBundleTypeRole</key>
+		<string>Editor</string>
+		<key>CFBundleURLSchemes</key>
+		<array>
+		<string>com.googleusercontent.apps.587441137020-avnf7n3lgg97ki1sdnug6m4neq5b6e2d</string>
+		</array>
+	</dict>
+	</array>
 </dict>
 </plist>
