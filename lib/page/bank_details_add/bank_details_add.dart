@@ -36,7 +36,7 @@ class BankDetailsAdd extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               child: Column(
                 children: [
-                  TextFieldWidget(
+                /*  TextFieldWidget(
                     controller: controller.bankNameController.value,
                     hintText: 'Enter Bank Name',
                     title: 'Bank Name',
@@ -45,7 +45,7 @@ class BankDetailsAdd extends StatelessWidget {
                     controller: controller.branchController.value,
                     hintText: 'Enter Branch Name',
                     title: 'Branch Name',
-                  ),
+                  ),*/
                   TextFieldWidget(
                     controller: controller.holderNameController.value,
                     hintText: 'Enter Bank Holder Name',
@@ -58,8 +58,8 @@ class BankDetailsAdd extends StatelessWidget {
                   ),
                   TextFieldWidget(
                     controller: controller.ifcsCodeController.value,
-                    hintText: 'Enter Bank IFSC Code',
-                    title: 'IFSC Code',
+                    hintText: 'Enter Bank Short Code',
+                    title: 'Short Code',
                   ),
                   TextFieldWidget(
                     controller: controller.informationController.value,

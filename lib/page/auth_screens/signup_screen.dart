@@ -216,13 +216,24 @@ class SignupScreen extends StatelessWidget {
                             ),
                           ),
                         ),
+                        TextFieldWidget(
+                          controller:
+                              controller.registrationNumberController.value,
+                          hintText: 'Enter Vehicle Registration Number',
+                          title: 'Registration Number',
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp('[a-zA-Z0-9 ]')),
+                          ],
+                        ),
                         if (controller.loginType.value != "google" &&
                             controller.loginType.value != "apple") ...[
                           TextFieldWidget(
-                            controller: controller.passwordController.value,
-                            hintText: 'Enter Password',
-                            title: 'Password',
-                            obscureText: controller.isPasswordShow.value,
+                            controller: controller.pinController.value,
+                            hintText: 'Enter PIN',
+                            title: 'PIN',
+                            obscureText: controller.isPinShow.value,
+                            textInputType: TextInputType.number,
                             prefix: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 18),
@@ -231,17 +242,14 @@ class SignupScreen extends StatelessWidget {
                             ),
                             suffix: InkWell(
                               onTap: () {
-                                if (controller.isPasswordShow.value) {
-                                  controller.isPasswordShow.value = false;
-                                } else {
-                                  controller.isPasswordShow.value = true;
-                                }
+                                controller.isPinShow.value =
+                                    !controller.isPinShow.value;
                               },
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 18),
                                 child: Obx(
-                                  () => controller.isPasswordShow.value
+                                  () => controller.isPinShow.value
                                       ? SvgPicture.asset(
                                           "assets/icons/ic_hide.svg")
                                       : SvgPicture.asset(
@@ -251,12 +259,11 @@ class SignupScreen extends StatelessWidget {
                             ),
                           ),
                           TextFieldWidget(
-                            controller:
-                                controller.conformPasswordController.value,
-                            hintText: 'Enter Confirm Password',
-                            title: 'Confirm Password',
-                            obscureText:
-                                controller.isConformPasswordShow.value,
+                            controller: controller.confirmPinController.value,
+                            hintText: 'Confirm PIN',
+                            title: 'Confirm PIN',
+                            obscureText: controller.isConfirmPinShow.value,
+                            textInputType: TextInputType.number,
                             prefix: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 18),
@@ -265,19 +272,14 @@ class SignupScreen extends StatelessWidget {
                             ),
                             suffix: InkWell(
                               onTap: () {
-                                if (controller.isConformPasswordShow.value) {
-                                  controller.isConformPasswordShow.value =
-                                      false;
-                                } else {
-                                  controller.isConformPasswordShow.value =
-                                      true;
-                                }
+                                controller.isConfirmPinShow.value =
+                                    !controller.isConfirmPinShow.value;
                               },
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 18),
                                 child: Obx(
-                                  () => controller.isConformPasswordShow.value
+                                  () => controller.isConfirmPinShow.value
                                       ? SvgPicture.asset(
                                           "assets/icons/ic_hide.svg")
                                       : SvgPicture.asset(
@@ -310,17 +312,19 @@ class SignupScreen extends StatelessWidget {
                     ShowToastDialog.showToast("Please enter a email");
                   } else if (controller.phoneNumber.value.text.isEmpty) {
                     ShowToastDialog.showToast("Please enter a phone number");
-                  } else if (controller.loginType.value != "google" &&
-                      controller.loginType.value != "apple" &&
-                      controller.passwordController.value.text.isEmpty) {
-                    ShowToastDialog.showToast("Please enter a password");
-                  } else if (controller.loginType.value != "google" &&
-                      controller.loginType.value != "apple" &&
-                      controller.passwordController.value.text.trim() !=
-                          controller.conformPasswordController.value.text
-                              .trim()) {
+                  } else if (controller
+                      .registrationNumberController.value.text.isEmpty) {
                     ShowToastDialog.showToast(
-                        "Password and confirm password do not match");
+                        "Please enter vehicle registration number");
+                  } else if (controller.loginType.value != "google" &&
+                      controller.loginType.value != "apple" &&
+                      controller.pinController.value.text.isEmpty) {
+                    ShowToastDialog.showToast("Please enter a PIN");
+                  } else if (controller.loginType.value != "google" &&
+                      controller.loginType.value != "apple" &&
+                      controller.pinController.value.text.trim() !=
+                          controller.confirmPinController.value.text.trim()) {
+                    ShowToastDialog.showToast("PIN and confirm PIN do not match");
                   } else {
                     Map<String, String> bodyParams = {
                       'firstname': controller.firstNameController.value.text
@@ -335,8 +339,7 @@ class SignupScreen extends StatelessWidget {
                       'email': controller.emailController.value.text.trim(),
                       if (controller.loginType.value != "google" &&
                           controller.loginType.value != "apple")
-                        'password':
-                            controller.passwordController.value.text,
+                        'pin': controller.pinController.value.text,
                       'login_type': controller.loginType.value,
                       'tonotify': 'yes',
                       'account_type':
@@ -344,6 +347,10 @@ class SignupScreen extends StatelessWidget {
                               ? "owner"
                               : 'driver',
                       'service_type': controller.selectedService.join(","),
+                      'registration_number': controller
+                          .registrationNumberController.value.text
+                          .trim()
+                          .toUpperCase(),
                     };
                     await controller.signUp(bodyParams).then((value) async {
                       if (value != null) {
@@ -355,9 +362,26 @@ class SignupScreen extends StatelessWidget {
                               controller.loginType.value,
                             );
                           } else {
-                            ShowToastDialog.showToast(
-                                "Account created successfully");
-                            Get.offAll(() => LoginScreen());
+                            final driverId = value.userData?.id ?? '';
+                            if (!context.mounted) return;
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (_) => AlertDialog(
+                                title: Text('Account Created'.tr),
+                                content: Text(
+                                  '${'Your account has been created. Your User ID is'.tr} $driverId. ${'Please use this ID along with your PIN to log in.'.tr}',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Get.offAll(() => LoginScreen());
+                                    },
+                                    child: Text('OK'.tr),
+                                  ),
+                                ],
+                              ),
+                            );
                           }
                         } else {
                           ShowToastDialog.showToast(value.message);

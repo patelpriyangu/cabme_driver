@@ -19,10 +19,11 @@ import 'package:http/http.dart' as http;
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginController extends GetxController {
-  Rx<TextEditingController> emailController = TextEditingController().obs;
-  Rx<TextEditingController> passwordController = TextEditingController().obs;
+  Rx<TextEditingController> userIdController = TextEditingController().obs;
+  Rx<TextEditingController> pinController = TextEditingController().obs;
+  Rx<TextEditingController> registrationController = TextEditingController().obs;
 
-  RxBool isPasswordShow = true.obs;
+  RxBool isPinShow = true.obs;
 
   Future<UserModel?> loginAPI(Map<String, String> bodyParams) async {
     print(bodyParams);

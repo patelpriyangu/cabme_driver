@@ -163,6 +163,12 @@ class VehicleInfoController extends GetxController {
               "${zoneNameController.value.text}${zoneNameController.value.text.isEmpty ? "" : ","} ${zoneList.where((p0) => p0.id == element).first.name}";
         }
       }
+    } else {
+      // Pre-populate registration number from driver profile if entered during signup
+      final regNumber = userModel.value.userData?.registrationNumber;
+      if (regNumber != null && regNumber.isNotEmpty) {
+        numberPlateController.value.text = regNumber;
+      }
     }
   }
 

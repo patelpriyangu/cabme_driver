@@ -123,7 +123,7 @@ class EditProfileScreen extends StatelessWidget {
                   TextFieldWidget(
                     controller: controller.firstNameController.value,
                     hintText: 'Enter First Name',
-                    title: 'First Name',
+                    title: 'Name',
                     prefix: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 18),
                       child: SvgPicture.asset("assets/icons/ic_user.svg"),

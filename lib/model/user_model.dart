@@ -95,9 +95,11 @@ class UserData {
 
   String? subscriptionTotalVehicle;
   String? subscriptionTotalDriver;
+  String? registrationNumber;
 
   UserData(
-      {this.id,
+      {this.registrationNumber,
+      this.id,
       this.nom,
       this.prenom,
       this.cnib,
@@ -229,6 +231,7 @@ class UserData {
     subscriptionTotalVehicle = json['subscriptionTotalVehicle'] ?? '0';
     subscriptionTotalDriver = json['subscriptionTotalDriver'] ?? '0';
     vehicleTypeId = json['id_type_vehicule'] ?? '0';
+    registrationNumber = json['registration_number']?.toString();
   }
 
   Map<String, dynamic> toJson() {
@@ -301,6 +304,7 @@ class UserData {
     data['subscriptionTotalVehicle'] = subscriptionTotalVehicle;
     data['subscriptionTotalDriver'] = subscriptionTotalDriver;
     data['id_type_vehicule'] = vehicleTypeId;
+    data['registration_number'] = registrationNumber;
     return data;
   }
 }

@@ -21,12 +21,13 @@ class SignUpController extends GetxController {
   Rx<TextEditingController> countryCodeController =
       TextEditingController(text: "+91").obs;
   Rx<TextEditingController> emailController = TextEditingController().obs;
-  Rx<TextEditingController> passwordController = TextEditingController().obs;
-  Rx<TextEditingController> conformPasswordController =
+  Rx<TextEditingController> pinController = TextEditingController().obs;
+  Rx<TextEditingController> confirmPinController = TextEditingController().obs;
+  Rx<TextEditingController> registrationNumberController =
       TextEditingController().obs;
 
-  RxBool isPasswordShow = true.obs;
-  RxBool isConformPasswordShow = true.obs;
+  RxBool isPinShow = true.obs;
+  RxBool isConfirmPinShow = true.obs;
 
   RxString loginType = "".obs;
   RxString selectedValue = "Individual".obs;

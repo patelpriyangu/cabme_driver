@@ -5,7 +5,6 @@ import 'package:uniqcars_driver/constant/constant.dart';
 import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
 import 'package:uniqcars_driver/controller/login_conroller.dart';
 import 'package:uniqcars_driver/model/user_model.dart';
-import 'package:uniqcars_driver/page/auth_screens/forgot_password.dart';
 import 'package:uniqcars_driver/page/auth_screens/signup_screen.dart';
 import 'package:uniqcars_driver/page/dashboard_screen.dart';
 import 'package:uniqcars_driver/page/owner_dashboard_screen.dart';
@@ -13,6 +12,7 @@ import 'package:uniqcars_driver/service/api.dart';
 import 'package:uniqcars_driver/utils/Preferences.dart';
 import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -67,7 +67,7 @@ class LoginScreen extends StatelessWidget {
                           height: 5,
                         ),
                         Text(
-                          'Login with your email address'.tr,
+                          'Login with your User ID and PIN'.tr,
                           textAlign: TextAlign.center,
                           style: AppThemeData.mediumTextStyle(
                               fontSize: 14,
@@ -79,9 +79,10 @@ class LoginScreen extends StatelessWidget {
                           height: 20,
                         ),
                         TextFieldWidget(
-                          controller: controller.emailController.value,
-                          hintText: 'Enter Email Address',
-                          title: 'Email Address',
+                          controller: controller.userIdController.value,
+                          hintText: 'Enter your User ID',
+                          title: 'User ID',
+                          textInputType: TextInputType.number,
                           prefix: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 18),
                             child: SvgPicture.asset(
@@ -89,10 +90,11 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ),
                         TextFieldWidget(
-                          controller: controller.passwordController.value,
-                          hintText: 'Enter Password',
-                          title: 'Password',
-                          obscureText: controller.isPasswordShow.value,
+                          controller: controller.pinController.value,
+                          hintText: 'Enter your PIN',
+                          title: 'PIN',
+                          obscureText: controller.isPinShow.value,
+                          textInputType: TextInputType.number,
                           prefix: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 18),
                             child: SvgPicture.asset(
@@ -100,17 +102,14 @@ class LoginScreen extends StatelessWidget {
                           ),
                           suffix: InkWell(
                             onTap: () {
-                              if (controller.isPasswordShow.value) {
-                                controller.isPasswordShow.value = false;
-                              } else {
-                                controller.isPasswordShow.value = true;
-                              }
+                              controller.isPinShow.value =
+                                  !controller.isPinShow.value;
                             },
                             child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 18),
                               child: Obx(
-                                () => controller.isPasswordShow.value
+                                () => controller.isPinShow.value
                                     ? SvgPicture.asset(
                                         "assets/icons/ic_hide.svg")
                                     : SvgPicture.asset(
@@ -119,21 +118,20 @@ class LoginScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: InkWell(
-                            onTap: () {
-                              Get.to(() => ForgotPasswordScreen());
-                            },
-                            child: Text(
-                              'Forgot Password'.tr,
-                              textAlign: TextAlign.center,
-                              style: AppThemeData.semiBoldTextStyle(
-                                  fontSize: 14,
-                                  color: themeChange.getThem()
-                                      ? AppThemeData.infoDarkDefault
-                                      : AppThemeData.infoDefault),
+                        TextFieldWidget(
+                          controller: controller.registrationController.value,
+                          hintText: 'Enter vehicle registration no',
+                          title: 'Registration No',
+                          inputFormatters: [
+                            TextInputFormatter.withFunction(
+                              (oldValue, newValue) => newValue.copyWith(
+                                  text: newValue.text.toUpperCase()),
                             ),
+                          ],
+                          prefix: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 18),
+                            child: SvgPicture.asset(
+                                "assets/icons/ic_lock_login.svg"),
                           ),
                         ),
                         SizedBox(
@@ -146,20 +144,23 @@ class LoginScreen extends StatelessWidget {
                           textColor: AppThemeData.neutral50,
                           onPress: () async {
                             FocusScope.of(context).unfocus();
-                            if (controller.emailController.value.text.isEmpty) {
+                            if (controller.userIdController.value.text.isEmpty) {
                               ShowToastDialog.showToast(
-                                  'Please enter the email address');
+                                  'Please enter your User ID');
                             } else if (controller
-                                .passwordController.value.text.isEmpty) {
+                                .pinController.value.text.isEmpty) {
                               ShowToastDialog.showToast(
-                                  'Please enter the password');
+                                  'Please enter your PIN');
+                            } else if (controller
+                                .registrationController.value.text.isEmpty) {
+                              ShowToastDialog.showToast(
+                                  'Please enter your vehicle registration number');
                             } else {
                               FocusScope.of(context).unfocus();
                               Map<String, String> bodyParams = {
-                                'email': controller.emailController.value.text
-                                    .trim(),
-                                'password':
-                                    controller.passwordController.value.text,
+                                'user_id': controller.userIdController.value.text.trim(),
+                                'pin': controller.pinController.value.text,
+                                'numberplate': controller.registrationController.value.text.trim().toUpperCase(),
                                 'user_cat': "driver",
                               };
                               await controller

@@ -419,7 +419,7 @@ class SubscriptionPlanScreen extends StatelessWidget {
                                             SizedBox(
                                               height: 8,
                                             ),
-                                            plan.id ==
+                                           /* plan.id ==
                                                     Constant
                                                         .commissionSubscriptionID
                                                 ? Padding(
@@ -528,7 +528,7 @@ class SubscriptionPlanScreen extends StatelessWidget {
                                                   );
                                                 },
                                               ),
-                                            ),
+                                            ),*/
                                             RoundedButtonFill(
                                               title: plan.status == true
                                                   ? "Renewal now"

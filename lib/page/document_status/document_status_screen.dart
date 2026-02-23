@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:uniqcars_driver/constant/constant.dart';
 import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
 import 'package:uniqcars_driver/controller/document_status_contoller.dart';
@@ -68,7 +69,7 @@ class DocumentStatusScreen extends StatelessWidget {
                         height: 20,
                       ),
                       ListView.builder(
-                        itemCount: controller.documentList.length,
+                        itemCount: controller.documentList.isNotEmpty ? 1 : 0,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                           UploadedDocumentData document =
@@ -114,6 +115,27 @@ class DocumentStatusScreen extends StatelessWidget {
                                           height: 10,
                                         ),
                                         Text(
+                                          "Upload Files",
+                                          textAlign: TextAlign.center,
+                                          style: AppThemeData.semiBoldTextStyle(
+                                              fontSize: 14,
+                                              color: themeChange.getThem()
+                                                  ? AppThemeData.neutralDark900
+                                                  : AppThemeData.neutral900),
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        Text(
+                                          "Take a clear picture of your document or choose an image from your gallery to ensure document verification.",
+                                          textAlign: TextAlign.center,
+                                          style: AppThemeData.mediumTextStyle(
+                                              fontSize: 12,
+                                              color: themeChange.getThem()
+                                                  ? AppThemeData.neutralDark500
+                                                  : AppThemeData.neutral500),
+                                        ),
+                                        /*  Text(
                                           'uploadDocument'.trParams({
                                             'title': document.title.toString(),
                                           }),
@@ -137,7 +159,7 @@ class DocumentStatusScreen extends StatelessWidget {
                                               color: themeChange.getThem()
                                                   ? AppThemeData.neutralDark500
                                                   : AppThemeData.neutral500),
-                                        ),
+                                        ),*/
                                       ],
                                     )
                                   : Column(
@@ -281,25 +303,22 @@ class DocumentStatusScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      // Camera
                       Padding(
                         padding: const EdgeInsets.all(18.0),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             IconButton(
-                                onPressed: () => pickFile(controller,
-                                    source: ImageSource.camera,
-                                    index: index,
-                                    documentId: documentId),
-                                icon: const Icon(
-                                  Icons.camera_alt,
-                                  size: 32,
-                                )),
+                              onPressed: () => pickFile(controller,
+                                  source: ImageSource.camera,
+                                  index: index,
+                                  documentId: documentId),
+                              icon: const Icon(Icons.camera_alt, size: 32),
+                            ),
                             Padding(
                               padding: const EdgeInsets.only(top: 3),
                               child: Text(
                                 'Camera'.tr,
-                                textAlign: TextAlign.center,
                                 style: AppThemeData.mediumTextStyle(
                                     fontSize: 16,
                                     color: themeChange.getThem()
@@ -310,28 +329,26 @@ class DocumentStatusScreen extends StatelessWidget {
                           ],
                         ),
                       ),
+
                       const SizedBox(width: 10),
+
+                      // Gallery
                       Padding(
                         padding: const EdgeInsets.all(18.0),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             IconButton(
                               onPressed: () => pickFile(controller,
                                   source: ImageSource.gallery,
                                   index: index,
                                   documentId: documentId),
-                              icon: Icon(
-                                Icons.photo_library_sharp,
-                                size: 32,
-                              ),
+                              icon: const Icon(Icons.photo_library_sharp,
+                                  size: 32),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 3),
                               child: Text(
                                 'Gallery'.tr,
-                                textAlign: TextAlign.center,
                                 style: AppThemeData.mediumTextStyle(
                                     fontSize: 16,
                                     color: themeChange.getThem()
@@ -341,9 +358,57 @@ class DocumentStatusScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                      )
+                      ),
+
+                      const SizedBox(width: 10),
+
+                      // Document
+                      Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Column(
+                          children: [
+                            IconButton(
+                              onPressed: () async {
+                                FilePickerResult? result =
+                                    await FilePicker.platform.pickFiles(
+                                  type: FileType.custom,
+                                  allowedExtensions: [
+                                    'pdf',
+                                    'doc',
+                                    'docx',
+                                    'jpg',
+                                    'png'
+                                  ],
+                                );
+
+                                if (result != null) {
+                                  String filePath = result.files.single.path!;
+                                  Get.back();
+                                  controller.updateDocument(
+                                      documentId, filePath);
+                                } else {
+                                  ShowToastDialog.showToast("No file selected");
+                                }
+                              },
+                              icon:
+                                  const Icon(Icons.insert_drive_file, size: 32),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 3),
+                              child: Text(
+                                "Document",
+                                style: AppThemeData.mediumTextStyle(
+                                    fontSize: 16,
+                                    color: themeChange.getThem()
+                                        ? AppThemeData.neutralDark500
+                                        : AppThemeData.neutral500),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
-                  ),
+                  )
                 ],
               ),
             );

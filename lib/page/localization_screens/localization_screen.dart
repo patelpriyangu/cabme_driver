@@ -102,11 +102,11 @@ class LocalizationScreens extends StatelessWidget {
                         padding: EdgeInsets.zero,
                         itemBuilder: (context, index) {
                           return Obx(
-                            () => InkWell(
+                                () => InkWell(
                               splashColor: Colors.transparent,
                               onTap: () {
                                 controller.selectedLanguage.value =
-                                    controller.languageList[index];
+                                controller.languageList[index];
                               },
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -120,7 +120,7 @@ class LocalizationScreens extends StatelessWidget {
                                             children: [
                                               ClipRRect(
                                                 borderRadius:
-                                                    BorderRadius.circular(6),
+                                                BorderRadius.circular(6),
                                                 child: Image.network(
                                                   controller
                                                       .languageList[index].flag
@@ -133,7 +133,7 @@ class LocalizationScreens extends StatelessWidget {
                                               const SizedBox(width: 16),
                                               Align(
                                                   alignment:
-                                                      Alignment.bottomRight,
+                                                  Alignment.bottomRight,
                                                   child: Text(
                                                     controller
                                                         .languageList[index]
@@ -141,26 +141,26 @@ class LocalizationScreens extends StatelessWidget {
                                                         .toString(),
                                                     style: AppThemeData
                                                         .mediumTextStyle(
-                                                            color: themeChange
-                                                                    .getThem()
-                                                                ? AppThemeData
-                                                                    .neutralDark900
-                                                                : AppThemeData
-                                                                    .neutral900,
-                                                            fontSize: 16),
+                                                        color: themeChange
+                                                            .getThem()
+                                                            ? AppThemeData
+                                                            .neutralDark900
+                                                            : AppThemeData
+                                                            .neutral900,
+                                                        fontSize: 16),
                                                   ))
                                             ],
                                           ),
                                         ),
                                         controller.languageList[index].code ==
-                                                controller
-                                                    .selectedLanguage.value.code
+                                            controller
+                                                .selectedLanguage.value.code
                                             ? SvgPicture.asset(
-                                                "assets/icons/ic_radio_selected.svg",
-                                              )
+                                          "assets/icons/ic_radio_selected.svg",
+                                        )
                                             : SvgPicture.asset(
-                                                "assets/icons/ic_radio_unselected.svg",
-                                              )
+                                          "assets/icons/ic_radio_unselected.svg",
+                                        )
                                       ],
                                     ),
                                   ],
@@ -215,3 +215,6 @@ class LocalizationScreens extends StatelessWidget {
     );
   }
 }
+
+
+
