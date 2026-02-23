@@ -6,7 +6,6 @@ import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
 import 'package:uniqcars_driver/controller/login_conroller.dart';
 import 'package:uniqcars_driver/model/user_model.dart';
 import 'package:uniqcars_driver/page/auth_screens/forgot_password.dart';
-import 'package:uniqcars_driver/page/auth_screens/mobile_number_screen.dart';
 import 'package:uniqcars_driver/page/auth_screens/signup_screen.dart';
 import 'package:uniqcars_driver/page/dashboard_screen.dart';
 import 'package:uniqcars_driver/page/owner_dashboard_screen.dart';
@@ -68,7 +67,7 @@ class LoginScreen extends StatelessWidget {
                           height: 5,
                         ),
                         Text(
-                          'Use phone or social account'.tr,
+                          'Login with your email address'.tr,
                           textAlign: TextAlign.center,
                           style: AppThemeData.mediumTextStyle(
                               fontSize: 14,
@@ -249,168 +248,82 @@ class LoginScreen extends StatelessWidget {
                             }
                           },
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 30, horizontal: 30),
-                          child: Row(
+                        if (Platform.isIOS) ...[
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 30, horizontal: 30),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                    child: Divider(
+                                  color: themeChange.getThem()
+                                      ? AppThemeData.neutralDark300
+                                      : AppThemeData.neutral300,
+                                )),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
+                                  child: Text(
+                                    'OR CONTINUE WITH'.tr,
+                                    textAlign: TextAlign.center,
+                                    style: AppThemeData.mediumTextStyle(
+                                        fontSize: 12,
+                                        color: themeChange.getThem()
+                                            ? AppThemeData.neutralDark500
+                                            : AppThemeData.neutral500),
+                                  ),
+                                ),
+                                Expanded(
+                                    child: Divider(
+                                  color: themeChange.getThem()
+                                      ? AppThemeData.neutralDark300
+                                      : AppThemeData.neutral300,
+                                )),
+                              ],
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Expanded(
-                                  child: Divider(
-                                color: themeChange.getThem()
-                                    ? AppThemeData.neutralDark300
-                                    : AppThemeData.neutral300,
-                              )),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                child: Text(
-                                  'OR CONTINUE WITH'.tr,
-                                  textAlign: TextAlign.center,
-                                  style: AppThemeData.mediumTextStyle(
-                                      fontSize: 12,
-                                      color: themeChange.getThem()
-                                          ? AppThemeData.neutralDark500
-                                          : AppThemeData.neutral500),
+                              InkWell(
+                                onTap: () {
+                                  FocusScope.of(context).unfocus();
+                                  controller.loginWithApple();
+                                },
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: themeChange.getThem()
+                                              ? AppThemeData.neutralDark200
+                                              : AppThemeData.neutral200,
+                                          borderRadius:
+                                              BorderRadius.circular(60)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(18),
+                                        child: SvgPicture.asset(
+                                            "assets/icons/ic_apple.svg"),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      'Apple'.tr,
+                                      textAlign: TextAlign.center,
+                                      style: AppThemeData.semiBoldTextStyle(
+                                          fontSize: 14,
+                                          color: themeChange.getThem()
+                                              ? AppThemeData.neutralDark900
+                                              : AppThemeData.neutral900),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              Expanded(
-                                  child: Divider(
-                                color: themeChange.getThem()
-                                    ? AppThemeData.neutralDark300
-                                    : AppThemeData.neutral300,
-                              )),
                             ],
                           ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Get.to(() => MobileNumberScreen());
-                              },
-                              child: Column(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        color: themeChange.getThem()
-                                            ? AppThemeData.neutralDark200
-                                            : AppThemeData.neutral200,
-                                        borderRadius:
-                                            BorderRadius.circular(60)),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(18),
-                                      child: SvgPicture.asset(
-                                          "assets/icons/ic_phone_login.svg"),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    'Phone Number'.tr,
-                                    textAlign: TextAlign.center,
-                                    style: AppThemeData.semiBoldTextStyle(
-                                        fontSize: 14,
-                                        color: themeChange.getThem()
-                                            ? AppThemeData.neutralDark900
-                                            : AppThemeData.neutral900),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              width: 40,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                FocusScope.of(context).unfocus();
-                                controller.loginWithGoogle();
-                              },
-                              child: Column(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        color: themeChange.getThem()
-                                            ? AppThemeData.neutralDark200
-                                            : AppThemeData.neutral200,
-                                        borderRadius:
-                                            BorderRadius.circular(60)),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(18),
-                                      child: SvgPicture.asset(
-                                          "assets/icons/ic_google.svg"),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    'Google'.tr,
-                                    textAlign: TextAlign.center,
-                                    style: AppThemeData.semiBoldTextStyle(
-                                        fontSize: 14,
-                                        color: themeChange.getThem()
-                                            ? AppThemeData.neutralDark900
-                                            : AppThemeData.neutral900),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Platform.isIOS
-                                ? Row(
-                                    children: [
-                                      SizedBox(
-                                        width: 40,
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          FocusScope.of(context).unfocus();
-                                          controller.loginWithApple();
-                                        },
-                                        child: Column(
-                                          children: [
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                  color: themeChange.getThem()
-                                                      ? AppThemeData
-                                                          .neutralDark200
-                                                      : AppThemeData.neutral200,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          60)),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(18),
-                                                child: SvgPicture.asset(
-                                                    "assets/icons/ic_apple.svg"),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text(
-                                              'Google'.tr,
-                                              textAlign: TextAlign.center,
-                                              style: AppThemeData
-                                                  .semiBoldTextStyle(
-                                                      fontSize: 14,
-                                                      color: themeChange
-                                                              .getThem()
-                                                          ? AppThemeData
-                                                              .neutralDark900
-                                                          : AppThemeData
-                                                              .neutral900),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : SizedBox(),
-                          ],
-                        ),
+                        ],
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 24),
                           child: Row(

@@ -217,96 +217,46 @@ class MobileNumberScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              SizedBox(
-                                width: 40,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  FocusScope.of(context).unfocus();
-                                  controller.loginWithGoogle();
-                                },
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          color: themeChange.getThem()
-                                              ? AppThemeData.neutralDark200
-                                              : AppThemeData.neutral200,
-                                          borderRadius:
-                                              BorderRadius.circular(60)),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(18),
-                                        child: SvgPicture.asset(
-                                            "assets/icons/ic_google.svg"),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      'Google'.tr,
-                                      textAlign: TextAlign.center,
-                                      style: AppThemeData.semiBoldTextStyle(
-                                          fontSize: 14,
-                                          color: themeChange.getThem()
-                                              ? AppThemeData.neutralDark900
-                                              : AppThemeData.neutral900),
-                                    ),
-                                  ],
+                              if (Platform.isIOS) ...[
+                                SizedBox(
+                                  width: 40,
                                 ),
-                              ),
-                              Platform.isIOS
-                                  ? Row(
-                                      children: [
-                                        SizedBox(
-                                          width: 40,
+                                InkWell(
+                                  onTap: () {
+                                    FocusScope.of(context).unfocus();
+                                    controller.loginWithApple();
+                                  },
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color: themeChange.getThem()
+                                                ? AppThemeData.neutralDark200
+                                                : AppThemeData.neutral200,
+                                            borderRadius:
+                                                BorderRadius.circular(60)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(18),
+                                          child: SvgPicture.asset(
+                                              "assets/icons/ic_apple.svg"),
                                         ),
-                                        InkWell(
-                                          onTap: () {
-                                            FocusScope.of(context).unfocus();
-                                            controller.loginWithApple();
-                                          },
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                    color: themeChange.getThem()
-                                                        ? AppThemeData
-                                                            .neutralDark200
-                                                        : AppThemeData
-                                                            .neutral200,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            60)),
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(18),
-                                                  child: SvgPicture.asset(
-                                                      "assets/icons/ic_apple.svg"),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 5,
-                                              ),
-                                              Text(
-                                                'Apple'.tr,
-                                                textAlign: TextAlign.center,
-                                                style: AppThemeData
-                                                    .semiBoldTextStyle(
-                                                        fontSize: 14,
-                                                        color: themeChange
-                                                                .getThem()
-                                                            ? AppThemeData
-                                                                .neutralDark900
-                                                            : AppThemeData
-                                                                .neutral900),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  : SizedBox(),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        'Apple'.tr,
+                                        textAlign: TextAlign.center,
+                                        style: AppThemeData.semiBoldTextStyle(
+                                            fontSize: 14,
+                                            color: themeChange.getThem()
+                                                ? AppThemeData.neutralDark900
+                                                : AppThemeData.neutral900),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ],
                           )
                         ],
