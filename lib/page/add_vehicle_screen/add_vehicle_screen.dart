@@ -380,8 +380,8 @@ class AddVehicleScreen extends StatelessWidget {
                           ),
                           TextFieldWidget(
                             controller: controller.numberPlateController.value,
-                            hintText: 'Enter Number Plate',
-                            title: 'Number Plate',
+                            hintText: 'Enter Vehicle Registration Number',
+                            title: 'Vehicle Registration Number',
                           ),
                           Row(
                             children: [

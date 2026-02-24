@@ -19,7 +19,7 @@ class SignUpController extends GetxController {
   Rx<TextEditingController> lastNameController = TextEditingController().obs;
   Rx<TextEditingController> phoneNumber = TextEditingController().obs;
   Rx<TextEditingController> countryCodeController =
-      TextEditingController(text: "+91").obs;
+      TextEditingController(text: "+44").obs;
   Rx<TextEditingController> emailController = TextEditingController().obs;
   Rx<TextEditingController> pinController = TextEditingController().obs;
   Rx<TextEditingController> confirmPinController = TextEditingController().obs;
@@ -31,8 +31,6 @@ class SignUpController extends GetxController {
 
   RxString loginType = "".obs;
   RxString selectedValue = "Individual".obs;
-
-  RxList<dynamic> selectedService = <dynamic>[].obs;
 
   @override
   void onInit() {

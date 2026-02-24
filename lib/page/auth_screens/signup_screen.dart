@@ -1,12 +1,10 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:uniqcars_driver/constant/constant.dart';
 import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
 import 'package:uniqcars_driver/controller/sign_up_controller.dart';
 import 'package:uniqcars_driver/page/auth_screens/login_screen.dart';
 import 'package:uniqcars_driver/themes/app_them_data.dart';
 import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
-import 'package:uniqcars_driver/widget/multi_select_dropdown.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -109,7 +107,7 @@ class SignupScreen extends StatelessWidget {
                           height: 20,
                         ),
                         Text(
-                          'Service',
+                          'Service Type',
                           style: AppThemeData.semiBoldTextStyle(
                             fontSize: 14,
                             color: themeChange.getThem()
@@ -117,21 +115,33 @@ class SignupScreen extends StatelessWidget {
                                 : AppThemeData.neutral700,
                           ),
                         ),
-                        const SizedBox(
-                          height: 5,
+                        const SizedBox(height: 5),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 14),
+                          decoration: BoxDecoration(
+                            color: themeChange.getThem()
+                                ? AppThemeData.neutralDark100
+                                : AppThemeData.neutral100,
+                            borderRadius: BorderRadius.circular(40),
+                            border: Border.all(
+                              color: themeChange.getThem()
+                                  ? AppThemeData.neutralDark300
+                                  : AppThemeData.neutral300,
+                            ),
+                          ),
+                          child: Text(
+                            'Ride',
+                            style: AppThemeData.mediumTextStyle(
+                              fontSize: 14,
+                              color: themeChange.getThem()
+                                  ? AppThemeData.neutralDark900
+                                  : AppThemeData.neutral900,
+                            ),
+                          ),
                         ),
-                        MultiSelectDropdown<dynamic>(
-                          items: Constant.activeServices,
-                          selectedItems: controller.selectedService,
-                          hintText: "Select Service Types",
-                          dialogTitle: 'Select Service Types',
-                          initialSelectedItems: controller.selectedService,
-                          labelSelector: (item) =>
-                              item.toString().capitalizeString(),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
+                        SizedBox(height: 10),
                         TextFieldWidget(
                           controller: controller.firstNameController.value,
                           hintText: 'Enter First Name',
@@ -346,7 +356,7 @@ class SignupScreen extends StatelessWidget {
                           controller.selectedValue.value == "Company"
                               ? "owner"
                               : 'driver',
-                      'service_type': controller.selectedService.join(","),
+                      'service_type': 'ride',
                       'registration_number': controller
                           .registrationNumberController.value.text
                           .trim()
