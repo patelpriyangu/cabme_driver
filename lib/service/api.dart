@@ -127,6 +127,7 @@ class API {
 
   static const logout = "${baseUrl}logout";
   static const getServiceJson = "${baseUrl}get-service-json";
+  static const worldpayAuthorize = "${baseUrl}payments/worldpay/authorize";
 
   static bool _isRedirectingToLogin = false; // Prevent multiple redirects
 

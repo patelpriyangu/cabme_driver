@@ -21,6 +21,7 @@ import 'package:uniqcars_driver/page/booking_details_screens/parcel_details_scre
 import 'package:uniqcars_driver/page/rental_details_screen/rental_details_screen.dart';
 import 'package:uniqcars_driver/page/wallet/mercadopago_screen.dart';
 import 'package:uniqcars_driver/page/wallet/midtrans_screen.dart';
+import 'package:uniqcars_driver/page/wallet/worldpay_screen.dart';
 import 'package:uniqcars_driver/page/wallet/orangePayScreen.dart';
 import 'package:uniqcars_driver/page/wallet/payStackScreen.dart';
 import 'package:uniqcars_driver/page/wallet/payfast_screen.dart';
@@ -1013,5 +1014,21 @@ class WalletController extends GetxController {
     } else {
       return '';
     }
+  }
+
+  Future<void> worldpayPayment({required String amount, required BuildContext context}) async {
+    Get.to(() => WorldpayScreen(
+      checkoutId: paymentSettingModel.value.worldpay!.key!,
+      amount: amount,
+      currency: Constant.currency ?? 'GBP',
+      isSandbox: paymentSettingModel.value.worldpay!.isSandboxEnabled == "true",
+    ))!.then((value) {
+      if (value == true) {
+        ShowToastDialog.showToast("Payment Successful!!");
+        setAmount();
+      } else {
+        ShowToastDialog.showToast("Payment Unsuccessful!!");
+      }
+    });
   }
 }
