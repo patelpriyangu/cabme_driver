@@ -153,7 +153,9 @@ class HomeScreen extends StatelessWidget {
                                 style: TextStyle(
                                     color: controller.status.value == 'yes'
                                         ? AppThemeData.successDefault
-                                        : AppThemeData.neutral900),
+                                        : themeChange.getThem()
+                                            ? AppThemeData.neutralDark900
+                                            : AppThemeData.neutral900),
                               ),
                             ),
                             PopupMenuItem<String>(
@@ -163,7 +165,9 @@ class HomeScreen extends StatelessWidget {
                                 style: TextStyle(
                                     color: controller.status.value == 'break'
                                         ? AppThemeData.warningDark
-                                        : AppThemeData.neutral900),
+                                        : themeChange.getThem()
+                                            ? AppThemeData.neutralDark900
+                                            : AppThemeData.neutral900),
                               ),
                             ),
                             PopupMenuItem<String>(
@@ -173,7 +177,9 @@ class HomeScreen extends StatelessWidget {
                                 style: TextStyle(
                                     color: controller.status.value == 'no'
                                         ? AppThemeData.errorDefault
-                                        : AppThemeData.neutral900),
+                                        : themeChange.getThem()
+                                            ? AppThemeData.neutralDark900
+                                            : AppThemeData.neutral900),
                               ),
                             ),
                           ],

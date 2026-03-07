@@ -1,16 +1,11 @@
 import 'package:uniqcars_driver/constant/constant.dart';
 import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
 import 'package:uniqcars_driver/controller/add_vehicle_controller.dart';
-import 'package:uniqcars_driver/model/brand_model.dart';
-import 'package:uniqcars_driver/model/get_vehicle_getegory.dart';
-import 'package:uniqcars_driver/model/model.dart';
 import 'package:uniqcars_driver/themes/app_them_data.dart';
 import 'package:uniqcars_driver/themes/text_field_widget.dart';
 import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../widget/round_button_fill.dart';
@@ -27,10 +22,9 @@ class AddVehicleScreen extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               leading: InkWell(
-                  onTap: () {
-                    Get.back();
-                  },
-                  child: Icon(Icons.arrow_back)),
+                onTap: () => Get.back(),
+                child: const Icon(Icons.arrow_back),
+              ),
             ),
             body: controller.isLoading.value
                 ? Constant.loader(context)
@@ -42,381 +36,77 @@ class AddVehicleScreen extends StatelessWidget {
                         children: [
                           Text(
                             'Tell Us About Your Vehicle'.tr,
-                            textAlign: TextAlign.center,
                             style: AppThemeData.boldTextStyle(
                                 fontSize: 22,
                                 color: themeChange.getThem()
                                     ? AppThemeData.neutralDark900
                                     : AppThemeData.neutral900),
                           ),
-                          SizedBox(
-                            height: 5,
-                          ),
+                          const SizedBox(height: 5),
                           Text(
                             'Enter your vehicle details accurately.'.tr,
-                            textAlign: TextAlign.center,
                             style: AppThemeData.mediumTextStyle(
                                 fontSize: 16,
                                 color: themeChange.getThem()
                                     ? AppThemeData.neutralDark500
                                     : AppThemeData.neutral500),
                           ),
-                          SizedBox(
-                            height: 20,
+                          const SizedBox(height: 20),
+                          TextFieldWidget(
+                            controller: controller.vehicleTypeController.value,
+                            hintText: 'Enter Vehicle Type'.tr,
+                            title: 'Vehicle Type'.tr,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 5),
-                            child: Text(
-                              'Vehicle Type'.tr,
-                              style: AppThemeData.semiBoldTextStyle(
-                                fontSize: 14,
-                                color: themeChange.getThem()
-                                    ? AppThemeData.neutralDark700
-                                    : AppThemeData.neutral700,
-                              ),
-                            ),
-                          ),
-                          DropdownButtonFormField<VehicleCategoryData>(
-                            hint: Text("Select Vehicle Type".tr),
-                            initialValue:
-                                controller.selectedVehicleCategory.value.id ==
-                                        null
-                                    ? null
-                                    : controller.selectedVehicleCategory.value,
-                            onChanged: (VehicleCategoryData? newValue) {
-                              controller.selectedVehicleCategory.value =
-                                  newValue!;
-                              controller.getModel();
-                            },
-                            items: controller.vehicleCategoryList
-                                .map((VehicleCategoryData reason) {
-                              return DropdownMenuItem<VehicleCategoryData>(
-                                value: reason,
-                                child: Text(reason.libelle.toString()),
-                              );
-                            }).toList(),
-                            style: TextStyle(
-                                color: themeChange.getThem()
-                                    ? AppThemeData.neutralDark900
-                                    : AppThemeData.neutral900,
-                                fontFamily: AppThemeData.medium),
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: themeChange.getThem()
-                                  ? AppThemeData.neutralDark100
-                                  : AppThemeData.neutral100,
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 14, horizontal: 10),
-                              disabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(40)),
-                                borderSide: BorderSide(
-                                    color: themeChange.getThem()
-                                        ? AppThemeData.neutralDark300
-                                        : AppThemeData.neutral300,
-                                    width: 1),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(40)),
-                                borderSide: BorderSide(
-                                    color: themeChange.getThem()
-                                        ? AppThemeData.primaryDarkDefault
-                                        : AppThemeData.primaryDefault,
-                                    width: 1),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(40)),
-                                borderSide: BorderSide(
-                                    color: themeChange.getThem()
-                                        ? AppThemeData.neutralDark300
-                                        : AppThemeData.neutral300,
-                                    width: 1),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(40)),
-                                borderSide: BorderSide(
-                                    color: themeChange.getThem()
-                                        ? AppThemeData.neutralDark300
-                                        : AppThemeData.neutral300,
-                                    width: 1),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(40)),
-                                borderSide: BorderSide(
-                                    color: themeChange.getThem()
-                                        ? AppThemeData.neutralDark300
-                                        : AppThemeData.neutral300,
-                                    width: 1),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 5, top: 12),
-                            child: Text(
-                              'Brand'.tr,
-                              style: AppThemeData.semiBoldTextStyle(
-                                fontSize: 14,
-                                color: themeChange.getThem()
-                                    ? AppThemeData.neutralDark700
-                                    : AppThemeData.neutral700,
-                              ),
-                            ),
-                          ),
-                          DropdownButtonFormField<BrandData>(
-                            hint: Text("Select Brand".tr),
-                            initialValue:
-                                controller.selectedBrand.value.id == null
-                                    ? null
-                                    : controller.selectedBrand.value,
-                            onChanged: (BrandData? newValue) async {
-                              controller.selectedBrand.value = newValue!;
-                              await controller.getModel();
-                            },
-                            items: controller.brandList.map((BrandData reason) {
-                              return DropdownMenuItem<BrandData>(
-                                value: reason,
-                                child: Text(reason.name.toString()),
-                              );
-                            }).toList(),
-                            style: TextStyle(
-                                color: themeChange.getThem()
-                                    ? AppThemeData.neutralDark900
-                                    : AppThemeData.neutral900,
-                                fontFamily: AppThemeData.medium),
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: themeChange.getThem()
-                                  ? AppThemeData.neutralDark100
-                                  : AppThemeData.neutral100,
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 14, horizontal: 10),
-                              disabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(40)),
-                                borderSide: BorderSide(
-                                    color: themeChange.getThem()
-                                        ? AppThemeData.neutralDark300
-                                        : AppThemeData.neutral300,
-                                    width: 1),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(40)),
-                                borderSide: BorderSide(
-                                    color: themeChange.getThem()
-                                        ? AppThemeData.primaryDarkDefault
-                                        : AppThemeData.primaryDefault,
-                                    width: 1),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(40)),
-                                borderSide: BorderSide(
-                                    color: themeChange.getThem()
-                                        ? AppThemeData.neutralDark300
-                                        : AppThemeData.neutral300,
-                                    width: 1),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(40)),
-                                borderSide: BorderSide(
-                                    color: themeChange.getThem()
-                                        ? AppThemeData.neutralDark300
-                                        : AppThemeData.neutral300,
-                                    width: 1),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(40)),
-                                borderSide: BorderSide(
-                                    color: themeChange.getThem()
-                                        ? AppThemeData.neutralDark300
-                                        : AppThemeData.neutral300,
-                                    width: 1),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 12,
+                          TextFieldWidget(
+                            controller: controller.brandController.value,
+                            hintText: 'Enter Brand'.tr,
+                            title: 'Brand'.tr,
                           ),
                           Row(
                             children: [
                               Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(bottom: 5),
-                                      child: Text(
-                                        'Model'.tr,
-                                        style: AppThemeData.semiBoldTextStyle(
-                                          fontSize: 14,
-                                          color: themeChange.getThem()
-                                              ? AppThemeData.neutralDark700
-                                              : AppThemeData.neutral700,
-                                        ),
-                                      ),
-                                    ),
-                                    DropdownButtonFormField<ModelData>(
-                                      hint: Text("Select Model"),
-                                      initialValue:
-                                          controller.selectedModel.value.id ==
-                                                  null
-                                              ? null
-                                              : controller.selectedModel.value,
-                                      onChanged: (ModelData? newValue) async {
-                                        controller.selectedModel.value =
-                                            newValue!;
-                                      },
-                                      items: controller.modelList
-                                          .map((ModelData reason) {
-                                        return DropdownMenuItem<ModelData>(
-                                          value: reason,
-                                          child: Text(reason.name.toString()),
-                                        );
-                                      }).toList(),
-                                      style: TextStyle(
-                                          color: themeChange.getThem()
-                                              ? AppThemeData.neutralDark900
-                                              : AppThemeData.neutral900,
-                                          fontFamily: AppThemeData.medium),
-                                      decoration: InputDecoration(
-                                        filled: true,
-                                        fillColor: themeChange.getThem()
-                                            ? AppThemeData.neutralDark100
-                                            : AppThemeData.neutral100,
-                                        contentPadding: EdgeInsets.symmetric(
-                                            vertical: 14, horizontal: 10),
-                                        disabledBorder: OutlineInputBorder(
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(40)),
-                                          borderSide: BorderSide(
-                                              color: themeChange.getThem()
-                                                  ? AppThemeData.neutralDark300
-                                                  : AppThemeData.neutral300,
-                                              width: 1),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(40)),
-                                          borderSide: BorderSide(
-                                              color: themeChange.getThem()
-                                                  ? AppThemeData
-                                                      .primaryDarkDefault
-                                                  : AppThemeData.primaryDefault,
-                                              width: 1),
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(40)),
-                                          borderSide: BorderSide(
-                                              color: themeChange.getThem()
-                                                  ? AppThemeData.neutralDark300
-                                                  : AppThemeData.neutral300,
-                                              width: 1),
-                                        ),
-                                        errorBorder: OutlineInputBorder(
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(40)),
-                                          borderSide: BorderSide(
-                                              color: themeChange.getThem()
-                                                  ? AppThemeData.neutralDark300
-                                                  : AppThemeData.neutral300,
-                                              width: 1),
-                                        ),
-                                        border: OutlineInputBorder(
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(40)),
-                                          borderSide: BorderSide(
-                                              color: themeChange.getThem()
-                                                  ? AppThemeData.neutralDark300
-                                                  : AppThemeData.neutral300,
-                                              width: 1),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                child: TextFieldWidget(
+                                  controller: controller.modelController.value,
+                                  hintText: 'Enter Model'.tr,
+                                  title: 'Model'.tr,
                                 ),
                               ),
-                              SizedBox(
-                                width: 12,
-                              ),
+                              const SizedBox(width: 12),
                               Expanded(
                                 child: TextFieldWidget(
                                   controller: controller.colorController.value,
-                                  hintText: 'Enter Color',
-                                  title: 'Color',
+                                  hintText: 'Enter Color'.tr,
+                                  title: 'Color'.tr,
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(height: 12),
-                          InkWell(
-                            onTap: () async {
-                              await selectYear(context).then(
-                                (value) {
-                                  if (value != null) {
-                                    controller.carMakeController.value.text =
-                                        value.toString();
-                                  }
-                                },
-                              );
-                            },
-                            child: TextFieldWidget(
-                              controller: controller.carMakeController.value,
-                              hintText: 'Enter Select Registration Year',
-                              title: 'Registration Year',
-                              readOnly: true,
-                              enable: false,
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.digitsOnly
-                              ], //,
-                            ),
+                          TextFieldWidget(
+                            controller: controller.councilCarBadgeNumberController.value,
+                            hintText: 'Enter Council Car Badge Number'.tr,
+                            title: 'Council Car Badge Number'.tr,
                           ),
                           TextFieldWidget(
                             controller: controller.numberPlateController.value,
-                            hintText: 'Enter Vehicle Registration Number',
-                            title: 'Vehicle Registration Number',
+                            hintText: 'Enter Vehicle Registration Number'.tr,
+                            title: 'Vehicle Registration Number'.tr,
                           ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: TextFieldWidget(
-                                  controller:
-                                      controller.millageController.value,
-                                  hintText: 'Enter Mileage',
-                                  title: 'Mileage',
-                                ),
-                              ),
-                              SizedBox(
-                                width: 12,
-                              ),
-                              Expanded(
-                                child: TextFieldWidget(
-                                  controller:
-                                      controller.kmDrivenController.value,
-                                  hintText: 'Enter KM',
-                                  title: 'KM Driven',
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp(r'^\d*\.?\d*')),
-                                  ],
-                                ),
-                              ),
-                            ],
+                          TextFieldWidget(
+                            controller: controller.councilDriverRegistrationNumberController.value,
+                            hintText: 'Enter Council Driver Registration Number'.tr,
+                            title: 'Council Driver Registration Number'.tr,
                           ),
-                          SizedBox(height: 12),
+                          TextFieldWidget(
+                            controller: controller.councilDriverBadgeNumberController.value,
+                            hintText: 'Enter Council Driver Badge Number'.tr,
+                            title: 'Council Driver Badge Number'.tr,
+                          ),
+                          const SizedBox(height: 12),
                           Row(
                             children: [
                               Expanded(
                                 child: Text(
                                   'Passenger Capacity'.tr,
-                                  textAlign: TextAlign.start,
                                   style: AppThemeData.semiBoldTextStyle(
                                       fontSize: 14,
                                       color: themeChange.getThem()
@@ -440,25 +130,24 @@ class AddVehicleScreen extends StatelessWidget {
                                   child: Row(
                                     children: [
                                       InkWell(
-                                          onTap: () {
-                                            if (controller.passenger.value >
-                                                1) {
-                                              controller.passenger.value -= 1;
-                                            } else {
-                                              ShowToastDialog.showToast(
-                                                  "Passenger capacity cannot be less than 1");
-                                            }
-                                          },
-                                          child: Icon(Icons.remove,
-                                              color: themeChange.getThem()
-                                                  ? AppThemeData.neutralDark700
-                                                  : AppThemeData.neutral700)),
+                                        onTap: () {
+                                          if (controller.passenger.value > 1) {
+                                            controller.passenger.value -= 1;
+                                          } else {
+                                            ShowToastDialog.showToast(
+                                                "Passenger capacity cannot be less than 1".tr);
+                                          }
+                                        },
+                                        child: Icon(Icons.remove,
+                                            color: themeChange.getThem()
+                                                ? AppThemeData.neutralDark700
+                                                : AppThemeData.neutral700),
+                                      ),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 10),
                                         child: Text(
                                           controller.passenger.value.toString(),
-                                          textAlign: TextAlign.start,
                                           style: AppThemeData.semiBoldTextStyle(
                                               fontSize: 14,
                                               color: themeChange.getThem()
@@ -467,19 +156,20 @@ class AddVehicleScreen extends StatelessWidget {
                                         ),
                                       ),
                                       InkWell(
-                                          onTap: () {
-                                            controller.passenger.value += 1;
-                                          },
-                                          child: Icon(Icons.add,
-                                              color: themeChange.getThem()
-                                                  ? AppThemeData.neutralDark700
-                                                  : AppThemeData.neutral700)),
+                                        onTap: () =>
+                                            controller.passenger.value += 1,
+                                        child: Icon(Icons.add,
+                                            color: themeChange.getThem()
+                                                ? AppThemeData.neutralDark700
+                                                : AppThemeData.neutral700),
+                                      ),
                                     ],
                                   ),
                                 ),
-                              )
+                              ),
                             ],
                           ),
+                          const SizedBox(height: 20),
                         ],
                       ),
                     ),
@@ -493,24 +183,22 @@ class AddVehicleScreen extends StatelessWidget {
                 color: AppThemeData.primaryDefault,
                 textColor: AppThemeData.neutral50,
                 onPress: () async {
-                  if (controller.selectedVehicleCategory.value.id == null) {
-                    ShowToastDialog.showToast("Please select vehicle type");
-                  } else if (controller.selectedBrand.value.id == null) {
-                    ShowToastDialog.showToast("Please select brand");
-                  } else if (controller.selectedModel.value.id == null) {
-                    ShowToastDialog.showToast("Please select model");
+                  if (controller.vehicleTypeController.value.text.isEmpty) {
+                    ShowToastDialog.showToast("Please enter vehicle type".tr);
+                  } else if (controller.brandController.value.text.isEmpty) {
+                    ShowToastDialog.showToast("Please enter brand".tr);
+                  } else if (controller.modelController.value.text.isEmpty) {
+                    ShowToastDialog.showToast("Please enter model".tr);
                   } else if (controller.colorController.value.text.isEmpty) {
-                    ShowToastDialog.showToast("Please enter color");
-                  } else if (controller.carMakeController.value.text.isEmpty) {
-                    ShowToastDialog.showToast(
-                        "Please select registration year");
-                  } else if (controller
-                      .numberPlateController.value.text.isEmpty) {
-                    ShowToastDialog.showToast("Please enter number plate");
-                  } else if (controller.millageController.value.text.isEmpty) {
-                    ShowToastDialog.showToast("Please enter mileage");
-                  } else if (controller.kmDrivenController.value.text.isEmpty) {
-                    ShowToastDialog.showToast("Please enter km driven");
+                    ShowToastDialog.showToast("Please enter color".tr);
+                  } else if (controller.councilCarBadgeNumberController.value.text.isEmpty) {
+                    ShowToastDialog.showToast("Please enter council car badge number".tr);
+                  } else if (controller.numberPlateController.value.text.isEmpty) {
+                    ShowToastDialog.showToast("Please enter vehicle registration number".tr);
+                  } else if (controller.councilDriverRegistrationNumberController.value.text.isEmpty) {
+                    ShowToastDialog.showToast("Please enter council driver registration number".tr);
+                  } else if (controller.councilDriverBadgeNumberController.value.text.isEmpty) {
+                    ShowToastDialog.showToast("Please enter council driver badge number".tr);
                   } else {
                     controller.saveVehicle();
                   }
@@ -519,21 +207,5 @@ class AddVehicleScreen extends StatelessWidget {
             ),
           );
         });
-  }
-
-  Future<String?> selectYear(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-      // Open in year mode
-      helpText: 'Select Year'.tr,
-    );
-
-    if (picked != null) {
-      return DateFormat('dd-MM-yyyy').format(picked);
-    }
-    return null;
   }
 }

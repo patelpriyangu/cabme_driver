@@ -2,12 +2,8 @@ import 'dart:convert';
 
 import 'package:uniqcars_driver/constant/constant.dart';
 import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
-import 'package:uniqcars_driver/model/brand_model.dart';
 import 'package:uniqcars_driver/model/get_vehicle_data_model.dart';
-import 'package:uniqcars_driver/model/get_vehicle_getegory.dart';
-import 'package:uniqcars_driver/model/model.dart';
 import 'package:uniqcars_driver/model/user_model.dart';
-import 'package:uniqcars_driver/model/zone_model.dart';
 import 'package:uniqcars_driver/service/api.dart';
 import 'package:uniqcars_driver/utils/Preferences.dart';
 import 'package:flutter/material.dart';
@@ -15,47 +11,37 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class VehicleInfoController extends GetxController {
+  Rx<TextEditingController> vehicleTypeController = TextEditingController().obs;
+  Rx<TextEditingController> brandController = TextEditingController().obs;
+  Rx<TextEditingController> modelController = TextEditingController().obs;
   Rx<TextEditingController> colorController = TextEditingController().obs;
-  Rx<TextEditingController> carMakeController = TextEditingController().obs;
-  Rx<TextEditingController> millageController = TextEditingController().obs;
-  Rx<TextEditingController> kmDrivenController = TextEditingController().obs;
   Rx<TextEditingController> numberPlateController = TextEditingController().obs;
+  Rx<TextEditingController> councilCarBadgeNumberController = TextEditingController().obs;
+  Rx<TextEditingController> councilDriverRegistrationNumberController = TextEditingController().obs;
+  Rx<TextEditingController> councilDriverBadgeNumberController = TextEditingController().obs;
   Rx<TextEditingController> pinNumberController = TextEditingController().obs;
   Rx<TextEditingController> councilRegistrationNumberController = TextEditingController().obs;
-  Rx<TextEditingController> zoneNameController = TextEditingController().obs;
 
   Rx<UserModel> userModel = UserModel().obs;
+  Rx<VehicleData> vehicleData = VehicleData().obs;
 
-  RxList selectedZone = <int>[].obs;
-  RxList<ZoneData> zoneList = <ZoneData>[].obs;
-  final RxInt passenger = 1.obs; // location,preferences,payment,conformRide
+  final RxInt passenger = 1.obs;
+
+  RxBool isLoading = true.obs;
 
   @override
   void onInit() {
     getUserdata();
-    // getVehicleDataAPI();
     super.onInit();
   }
 
-  RxBool isLoading = true.obs;
-
   Future<void> getUserdata() async {
     userModel.value = Constant.getUserData();
-    await getVehicleCategory();
+    await loadVehicleData();
     isLoading.value = false;
   }
 
-  Rx<VehicleData> vehicleData = VehicleData().obs;
-  RxList<VehicleCategoryData> vehicleCategoryList = <VehicleCategoryData>[].obs;
-  Rx<VehicleCategoryData> selectedVehicleCategory = VehicleCategoryData().obs;
-
-  RxList<BrandData> brandList = <BrandData>[].obs;
-  Rx<BrandData> selectedBrand = BrandData().obs;
-
-  RxList<ModelData> modelList = <ModelData>[].obs;
-  Rx<ModelData> selectedModel = ModelData().obs;
-
-  Future<void> getVehicleCategory() async {
+  Future<void> loadVehicleData() async {
     await API
         .handleApiRequest(
             request: () => http.get(
@@ -69,100 +55,31 @@ class VehicleInfoController extends GetxController {
           if (value['success'] == "failed" || value['success'] == "Failed") {
             return null;
           } else {
-            GetVehicleDataModel vehicleCategoryModel =
-                GetVehicleDataModel.fromJson(value);
-            vehicleData.value = vehicleCategoryModel.vehicleData!;
-          }
-        }
-      },
-    );
-
-    await API
-        .handleApiRequest(
-            request: () =>
-                http.get(Uri.parse(API.vehicleCategory), headers: API.headers),
-            showLoader: false)
-        .then(
-      (value) {
-        if (value != null) {
-          if (value['success'] == "failed" || value['success'] == "Failed") {
-            ShowToastDialog.showToast(value['message']);
-            return null;
-          } else {
-            VehicleCategoryModel vehicleCategoryModel =
-                VehicleCategoryModel.fromJson(value);
-            vehicleCategoryList.value = vehicleCategoryModel.data ?? [];
-          }
-        }
-      },
-    );
-
-    await API
-        .handleApiRequest(
-            request: () =>
-                http.get(Uri.parse(API.getZone), headers: API.headers),
-            showLoader: false)
-        .then(
-      (value) {
-        if (value != null) {
-          if (value['success'] == "failed" || value['success'] == "Failed") {
-            ShowToastDialog.showToast(value['message']);
-            return null;
-          } else {
-            ZoneModel zoneModel = ZoneModel.fromJson(value);
-            zoneList.value = zoneModel.data ?? [];
-          }
-        }
-      },
-    );
-
-    await API
-        .handleApiRequest(
-            request: () => http.get(Uri.parse(API.brand), headers: API.headers),
-            showLoader: false)
-        .then(
-      (value) {
-        if (value != null) {
-          if (value['success'] == "failed" || value['success'] == "Failed") {
-            ShowToastDialog.showToast(value['message']);
-            return null;
-          } else {
-            BrandModel brandModel = BrandModel.fromJson(value);
-            brandList.value = brandModel.data ?? [];
+            GetVehicleDataModel model = GetVehicleDataModel.fromJson(value);
+            vehicleData.value = model.vehicleData!;
           }
         }
       },
     );
 
     if (vehicleData.value.id != null) {
-      selectedVehicleCategory.value = vehicleCategoryList
-          .firstWhere((p0) => p0.id == vehicleData.value.idTypeVehicule);
-      selectedBrand.value =
-          brandList.firstWhere((p0) => p0.id == vehicleData.value.brand);
-      await getModel();
-      selectedModel.value =
-          modelList.firstWhere((p0) => p0.id == vehicleData.value.model);
-
-      colorController.value.text = vehicleData.value.color!;
-      carMakeController.value.text = vehicleData.value.carMake!;
-      numberPlateController.value.text = vehicleData.value.numberplate!;
-      passenger.value = vehicleData.value.passenger!.isEmpty
+      vehicleTypeController.value.text = vehicleData.value.vehicleTypeText ?? '';
+      brandController.value.text = vehicleData.value.brand ?? '';
+      modelController.value.text = vehicleData.value.model ?? '';
+      colorController.value.text = vehicleData.value.color ?? '';
+      numberPlateController.value.text = vehicleData.value.numberplate ?? '';
+      passenger.value = (vehicleData.value.passenger ?? '').isEmpty
           ? 1
-          : int.parse(vehicleData.value.passenger.toString());
-      kmDrivenController.value.text = vehicleData.value.km!;
-      millageController.value.text = vehicleData.value.milage!;
-      pinNumberController.value.text = vehicleData.value.pinNumber ?? "";
-      councilRegistrationNumberController.value.text = vehicleData.value.councilRegistrationNumber ?? "";
-
-      for (var element in vehicleData.value.zone_id!) {
-        selectedZone.add(int.parse(element.toString()));
-      }
-      for (var element in selectedZone) {
-        if (zoneList.where((p0) => p0.id == element).isNotEmpty) {
-          zoneNameController.value.text =
-              "${zoneNameController.value.text}${zoneNameController.value.text.isEmpty ? "" : ","} ${zoneList.where((p0) => p0.id == element).first.name}";
-        }
-      }
+          : int.tryParse(vehicleData.value.passenger.toString()) ?? 1;
+      councilCarBadgeNumberController.value.text =
+          vehicleData.value.councilCarBadgeNumber ?? '';
+      councilDriverRegistrationNumberController.value.text =
+          vehicleData.value.councilDriverRegistrationNumber ?? '';
+      councilDriverBadgeNumberController.value.text =
+          vehicleData.value.councilDriverBadgeNumber ?? '';
+      pinNumberController.value.text = vehicleData.value.pin ?? vehicleData.value.pinNumber ?? '';
+      councilRegistrationNumberController.value.text =
+          vehicleData.value.councilRegistrationNumber ?? '';
     } else {
       // Pre-populate registration number from driver profile if entered during signup
       final regNumber = userModel.value.userData?.registrationNumber;
@@ -172,48 +89,28 @@ class VehicleInfoController extends GetxController {
     }
   }
 
-  Future<void> getModel() async {
-    selectedModel.value = ModelData();
-    Map<String, String> bodyParams = {
-      'brand': selectedBrand.value.name.toString(),
-      'vehicle_type': selectedVehicleCategory.value.id.toString(),
-    };
-    await API
-        .handleApiRequest(
-            request: () => http.post(Uri.parse(API.model),
-                headers: API.headers, body: jsonEncode(bodyParams)),
-            showLoader: true)
-        .then(
-      (value) {
-        if (value != null) {
-          if (value['success'] == "failed" || value['success'] == "Failed") {
-            ShowToastDialog.showToast(value['error']);
-            return null;
-          } else {
-            Model brandModel = Model.fromJson(value);
-            modelList.value = brandModel.data ?? [];
-          }
-        }
-      },
-    );
-  }
-
   Future<void> saveVehicle() async {
     Map<String, dynamic> bodyParams = {
       'id_driver': userModel.value.userData?.id ?? '',
-      'id_categorie_vehicle': selectedVehicleCategory.value.id.toString(),
-      'brand': selectedBrand.value.id.toString(),
-      'model': selectedModel.value.id.toString(),
+      'vehicle_type_text': vehicleTypeController.value.text,
+      'brand': brandController.value.text,
+      'model': modelController.value.text,
       'color': colorController.value.text,
       'carregistration': numberPlateController.value.text,
-      'car_make': carMakeController.value.text,
-      'milage': millageController.value.text,
-      'km_driven': kmDrivenController.value.text,
+      'car_make': null,
+      'milage': null,
+      'km_driven': null,
       'passenger': passenger.value.toString(),
-      'pin_number': pinNumberController.value.text,
+      'council_car_badge_number': councilCarBadgeNumberController.value.text,
+      'council_driver_registration_number': councilDriverRegistrationNumberController.value.text,
+      'council_driver_badge_number': councilDriverBadgeNumberController.value.text,
+      'pin': pinNumberController.value.text,
       'council_registration_number': councilRegistrationNumberController.value.text,
-      "zone_id": selectedZone.join(",")
+      'zone_id': '',
     };
+    debugPrint("🚗 [saveVehicle] URL: ${API.vehicleRegister}");
+    debugPrint("🚗 [saveVehicle] Headers: ${API.headers}");
+    debugPrint("🚗 [saveVehicle] Body: ${jsonEncode(bodyParams)}");
     await API
         .handleApiRequest(
             request: () => http.post(Uri.parse(API.vehicleRegister),
