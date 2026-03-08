@@ -2,7 +2,6 @@ import 'package:uniqcars_driver/constant/constant.dart';
 import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
 import 'package:uniqcars_driver/controller/add_driver_controller.dart';
 import 'package:uniqcars_driver/model/get_vehicle_data_model.dart';
-import 'package:uniqcars_driver/model/zone_model.dart';
 import 'package:uniqcars_driver/themes/app_them_data.dart';
 import 'package:uniqcars_driver/themes/responsive.dart';
 import 'package:uniqcars_driver/themes/text_field_widget.dart';
@@ -312,24 +311,6 @@ class AddDriverScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          ),
-                          Text("Select Operating Zone".tr,
-                              style: AppThemeData.semiBoldTextStyle(
-                                  fontSize: 14,
-                                  color: themeChange.getThem()
-                                      ? AppThemeData.neutralDark700
-                                      : AppThemeData.neutral700)),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          MultiSelectDropdown<ZoneData>(
-                            items: controller.zoneList,
-                            selectedItems: controller.selectedZone,
-                            hintText: "Select Operating Zone".tr,
-                            dialogTitle: "Select Zone".tr,
-                            initialSelectedItems: controller.selectedZone,
-                            labelSelector: (item) =>
-                                item.name.toString().capitalizeString(),
                           ),
                           SizedBox(height: 12),
                           Text("Select driver service types".tr,

@@ -393,7 +393,7 @@ class HomeScreen extends StatelessWidget {
                       height: 20,
                     ),
                     Text(
-                      'No Booking requests available in your selected zone.'.tr,
+                      'No Booking requests available in your area.'.tr,
                       textAlign: TextAlign.center,
                       style: AppThemeData.mediumTextStyle(
                         fontSize: 18,
@@ -952,7 +952,7 @@ class HomeScreen extends StatelessWidget {
                       height: 20,
                     ),
                     Text(
-                      'No parcel requests available in your selected zone.'.tr,
+                      'No parcel requests available in your area.'.tr,
                       textAlign: TextAlign.center,
                       style: AppThemeData.mediumTextStyle(
                         fontSize: 18,
@@ -1311,7 +1311,7 @@ class HomeScreen extends StatelessWidget {
                       height: 20,
                     ),
                     Text(
-                      'No rental requests available in your selected zone.'.tr,
+                      'No rental requests available in your area.'.tr,
                       textAlign: TextAlign.center,
                       style: AppThemeData.mediumTextStyle(
                         fontSize: 18,

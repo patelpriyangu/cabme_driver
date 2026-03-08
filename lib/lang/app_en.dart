@@ -181,14 +181,14 @@ const Map<String, String> enUS = {
   'Cab Booking': "Cab Booking",
   'Parcel Delivery': "Parcel Delivery",
   'Rental': "Rental",
-  'No Booking requests available in your selected zone.':
-      "No Booking requests available in your selected zone.",
-  'No parcel requests available in your selected zone.':
-      "No parcel requests available in your selected zone.",
+  'No Booking requests available in your area.':
+      "No Booking requests available in your area.",
+  'No parcel requests available in your area.':
+      "No parcel requests available in your area.",
   'Try changing the location or date.': "Try changing the location or date.",
   'Search Parcel': "Search Parcel",
-  'No rental requests available in your selected zone.':
-      "No rental requests available in your selected zone.",
+  'No rental requests available in your area.':
+      "No rental requests available in your area.",
   'Search Rental Booking': "Search Rental Booking",
   'Package Details:': "Package Details:",
   'includingDistance': 'Including @unit:',

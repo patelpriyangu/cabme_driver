@@ -84,7 +84,7 @@ class AddDriverController extends GetxController {
       'email': emailController.value.text.trim(),
       'password': passwordController.value.text,
       'owner_id': Preferences.getInt(Preferences.userId).toString(),
-      'zoneIds': selectedZone.map((zone) => zone.id.toString()).join(','),
+      'zoneIds': '',
       'service_type': selectedService.join(","), // driver or customer or owner
       'vehicleId': selectedVehicle.value.id == null
           ? ''
