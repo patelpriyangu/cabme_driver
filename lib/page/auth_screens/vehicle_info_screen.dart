@@ -111,8 +111,8 @@ class VehicleInfoScreen extends StatelessWidget {
                           ),
                           TextFieldWidget(
                             controller: controller.councilDriverBadgeNumberController.value,
-                            hintText: 'Enter Council Driver Badge Number'.tr,
-                            title: 'Council Driver Badge Number'.tr,
+                            hintText: 'Enter Driving License Number'.tr,
+                            title: 'Driving License Number'.tr,
                             enable: editable,
                           ),
                           TextFieldWidget(
@@ -124,8 +124,8 @@ class VehicleInfoScreen extends StatelessWidget {
                           TextFieldWidget(
                             controller: controller
                                 .councilRegistrationNumberController.value,
-                            hintText: 'Enter Council Registration Number'.tr,
-                            title: 'Council Registration Number'.tr,
+                            hintText: 'Enter DBS Number'.tr,
+                            title: 'DBS Number'.tr,
                             enable: editable,
                           ),
                           const SizedBox(height: 12),
@@ -230,11 +230,11 @@ class VehicleInfoScreen extends StatelessWidget {
                         } else if (controller.councilDriverRegistrationNumberController.value.text.isEmpty) {
                           ShowToastDialog.showToast("Please enter council driver registration number".tr);
                         } else if (controller.councilDriverBadgeNumberController.value.text.isEmpty) {
-                          ShowToastDialog.showToast("Please enter council driver badge number".tr);
+                          ShowToastDialog.showToast("Please enter driving license number".tr);
                         } else if (controller.pinNumberController.value.text.isEmpty) {
                           ShowToastDialog.showToast("Please enter login PIN".tr);
                         } else if (controller.councilRegistrationNumberController.value.text.isEmpty) {
-                          ShowToastDialog.showToast("Please enter council registration number".tr);
+                          ShowToastDialog.showToast("Please enter DBS number".tr);
                         } else {
                           controller.saveVehicle();
                         }

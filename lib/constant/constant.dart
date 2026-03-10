@@ -74,6 +74,8 @@ class Constant {
   static String? placeholderUrl = "";
   static String? driverDocVerification = "no";
   static String? ownerDocVerification = "no";
+  static String driverLoginWarningEnabled = "no";
+  static String driverLoginWarningMessage = "";
 
   static PaymentSettingModel getPaymentSetting() {
     final String user = Preferences.getString(Preferences.paymentSetting);

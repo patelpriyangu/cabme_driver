@@ -2233,13 +2233,22 @@ class HomeScreen extends StatelessWidget {
 
   Future<void> showAlertDialog(themeChange, BuildContext context, String type,
       HomeController controller) async {
+    final bool isDocument = type == "document";
+    final String title = isDocument ? 'Documents Pending'.tr : 'Vehicle Info Required'.tr;
+    final String message = isDocument
+        ? 'Your documents have been submitted and are pending admin verification. You will be able to go online once approved. Please contact support if this is taking too long.'
+            .tr
+        : 'To start accepting rides, please complete your vehicle information first.'
+            .tr;
+    final String confirmLabel = isDocument ? 'View Documents'.tr : 'Add Vehicle Info'.tr;
+
     return showDialog(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Information'.tr,
+            title,
             style: AppThemeData.boldTextStyle(
                 fontSize: 20,
                 color: themeChange.getThem()
@@ -2250,8 +2259,7 @@ class HomeScreen extends StatelessWidget {
             child: ListBody(
               children: <Widget>[
                 Text(
-                  'To start earning with UniqCars you need to fill in your information'
-                      .tr,
+                  message,
                   style: AppThemeData.mediumTextStyle(
                       fontSize: 14,
                       color: themeChange.getThem()
@@ -2263,7 +2271,7 @@ class HomeScreen extends StatelessWidget {
           ),
           actions: <Widget>[
             RoundedButtonFill(
-              title: "No".tr,
+              title: "Cancel".tr,
               height: 5,
               width: 24,
               color: AppThemeData.neutral200,
@@ -2273,13 +2281,13 @@ class HomeScreen extends StatelessWidget {
               },
             ),
             RoundedButtonFill(
-              title: "Yes".tr,
+              title: confirmLabel,
               height: 5,
               width: 24,
               color: AppThemeData.primaryDefault,
               textColor: AppThemeData.neutral50,
               onPress: () async {
-                if (type == "document") {
+                if (isDocument) {
                   Get.back();
                   Get.to(() => DocumentStatusScreen())!.then(
                     (value) {

@@ -103,9 +103,9 @@ class VehicleInfoController extends GetxController {
       'passenger': passenger.value.toString(),
       'council_car_badge_number': councilCarBadgeNumberController.value.text,
       'council_driver_registration_number': councilDriverRegistrationNumberController.value.text,
-      'council_driver_badge_number': councilDriverBadgeNumberController.value.text,
+      'driving_license_number': councilDriverBadgeNumberController.value.text,
       'pin': pinNumberController.value.text,
-      'council_registration_number': councilRegistrationNumberController.value.text,
+      'dbs_number': councilRegistrationNumberController.value.text,
       'zone_id': '',
     };
     debugPrint("🚗 [saveVehicle] URL: ${API.vehicleRegister}");
@@ -124,6 +124,19 @@ class VehicleInfoController extends GetxController {
             return null;
           } else {
             ShowToastDialog.showToast(value['message']);
+            // Update cached user model so home screen sees statut_vehicule = 'yes'
+            final String storedUser = Preferences.getString(Preferences.user);
+            if (storedUser.isNotEmpty) {
+              try {
+                final Map<String, dynamic> userMap = jsonDecode(storedUser);
+                if (userMap['data'] != null) {
+                  userMap['data']['statut_vehicule'] = 'yes';
+                } else {
+                  userMap['statut_vehicule'] = 'yes';
+                }
+                Preferences.setString(Preferences.user, jsonEncode(userMap));
+              } catch (_) {}
+            }
             Get.back(result: true);
           }
         }

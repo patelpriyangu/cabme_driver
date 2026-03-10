@@ -66,7 +66,7 @@ class AddVehicleController extends GetxController {
       'council_car_badge_number': councilCarBadgeNumberController.value.text,
       'carregistration': numberPlateController.value.text,
       'council_driver_registration_number': councilDriverRegistrationNumberController.value.text,
-      'council_driver_badge_number': councilDriverBadgeNumberController.value.text,
+      'driving_license_number': councilDriverBadgeNumberController.value.text,
       'passenger': passenger.value.toString(),
     };
     await API
