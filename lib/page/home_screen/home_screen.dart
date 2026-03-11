@@ -33,6 +33,7 @@ import 'package:provider/provider.dart';
 import 'package:timelines_plus/timelines_plus.dart';
 
 import '../../widget/round_button_fill.dart';
+import 'upcoming_rides_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -293,6 +294,8 @@ class HomeScreen extends StatelessWidget {
                                           return 'Parcel Delivery'.tr;
                                         case 'rental':
                                           return 'Rental'.tr;
+                                        case 'upcoming':
+                                          return 'Upcoming'.tr;
                                         default:
                                           return '';
                                       }
@@ -339,6 +342,8 @@ class HomeScreen extends StatelessWidget {
                             return parcelView(themeChange, context, controller);
                           case 'rental':
                             return rentalView(themeChange, context, controller);
+                          case 'upcoming':
+                            return const UpcomingRidesScreen();
                           default:
                             return SizedBox();
                         }
@@ -373,6 +378,7 @@ class HomeScreen extends StatelessWidget {
     if (userServices.contains('rental')) {
       tabs.add('rental');
     }
+    tabs.add('upcoming');
 
     return tabs;
   }

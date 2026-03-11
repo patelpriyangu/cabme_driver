@@ -131,6 +131,9 @@ class API {
   static const getRentalBookingDetails = "${baseUrl}get-rental-booking-details";
   static const getDriverDetails = "${baseUrl}get-driver-details";
 
+  static const driverUpcomingRides = "${baseUrl}driver-upcoming-rides/";
+  static const acceptUpcomingRide = "${baseUrl}accept-upcoming-ride/";
+
   static const logout = "${baseUrl}logout";
   static const getServiceJson = "${baseUrl}get-service-json";
   static const worldpayAuthorize = "${baseUrl}payments/worldpay/authorize";

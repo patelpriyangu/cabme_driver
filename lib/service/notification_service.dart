@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
+import 'package:uniqcars_driver/controller/home_controller.dart';
 import 'package:uniqcars_driver/page/chats_screen/conversation_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -9,6 +11,11 @@ import 'package:get/get.dart';
 Future<void> firebaseMessageBackgroundHandle(RemoteMessage message) async {
   log("BackGround Message :: ${message.messageId}");
 }
+
+// Channel IDs
+const String _channelNewRide = 'new_ride_requests';
+const String _channelUpcoming = 'upcoming_rides';
+const String _channelGeneral = 'general';
 
 class NotificationService {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -42,6 +49,43 @@ class NotificationService {
               iOS: iosInitializationSettings);
       await flutterLocalNotificationsPlugin.initialize(initializationSettings,
           onDidReceiveNotificationResponse: (payload) {});
+
+      // Create notification channels
+      final androidPlugin = flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>();
+      if (androidPlugin != null) {
+        await androidPlugin.createNotificationChannel(
+          const AndroidNotificationChannel(
+            _channelNewRide,
+            'New Ride Requests',
+            description: 'Alerts for new ride requests',
+            importance: Importance.max,
+            playSound: true,
+            enableVibration: true,
+          ),
+        );
+        await androidPlugin.createNotificationChannel(
+          const AndroidNotificationChannel(
+            _channelUpcoming,
+            'Upcoming Rides',
+            description: 'Notifications for upcoming scheduled rides',
+            importance: Importance.high,
+            playSound: true,
+            enableVibration: true,
+          ),
+        );
+        await androidPlugin.createNotificationChannel(
+          const AndroidNotificationChannel(
+            _channelGeneral,
+            'General',
+            description: 'General notifications',
+            importance: Importance.defaultImportance,
+            playSound: true,
+          ),
+        );
+      }
+
       setupInteractedMessage();
     }
   }
@@ -59,6 +103,13 @@ class NotificationService {
       if (message.notification != null) {
         log(message.notification.toString());
         display(message);
+      }
+      if (message.data['tag'] == 'scheduled_ride_unassigned' ||
+          message.data['tag'] == 'scheduled_ride' ||
+          message.data['tag'] == 'scheduled_ride_cancelled') {
+        try {
+          Get.find<HomeController>().getUpcomingRides();
+        } catch (_) {}
       }
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
@@ -90,19 +141,71 @@ class NotificationService {
   void display(RemoteMessage message) async {
     log('Got a message whilst in the foreground!');
     log('Message data: ${message.notification!.body.toString()}');
+
+    final tag = message.data['tag'] ?? '';
+
+    // Play sound based on notification type
     try {
-      AndroidNotificationChannel channel = const AndroidNotificationChannel(
-        '0',
-        'UniqCars-driver',
-        description: 'Show UniqCars Notification',
-        importance: Importance.max,
-      );
+      if (tag == 'ridenewrider' || tag == 'ridenewriderparcel') {
+        // New ride request — loud ringtone to grab attention
+        FlutterRingtonePlayer().playRingtone(
+          looping: false,
+          volume: 1.0,
+          asAlarm: false,
+        );
+      } else if (tag == 'scheduled_ride') {
+        // New upcoming ride assigned
+        FlutterRingtonePlayer().playNotification(
+          looping: false,
+          volume: 0.8,
+          asAlarm: false,
+        );
+      } else if (tag == 'scheduled_ride_unassigned' ||
+          tag == 'scheduled_ride_cancelled') {
+        // Removed from / cancelled upcoming ride
+        FlutterRingtonePlayer().playNotification(
+          looping: false,
+          volume: 0.8,
+          asAlarm: false,
+        );
+      } else {
+        FlutterRingtonePlayer().playNotification(
+          looping: false,
+          volume: 0.7,
+          asAlarm: false,
+        );
+      }
+    } catch (e) {
+      log('Sound playback error: $e');
+    }
+
+    // Pick the right notification channel
+    String channelId;
+    String channelName;
+    if (tag == 'ridenewrider' || tag == 'ridenewriderparcel') {
+      channelId = _channelNewRide;
+      channelName = 'New Ride Requests';
+    } else if (tag == 'scheduled_ride' || tag == 'scheduled_ride_unassigned') {
+      channelId = _channelUpcoming;
+      channelName = 'Upcoming Rides';
+    } else {
+      channelId = _channelGeneral;
+      channelName = 'General';
+    }
+
+    try {
       AndroidNotificationDetails notificationDetails =
-          AndroidNotificationDetails(channel.id, channel.name,
-              channelDescription: 'your channel Description',
-              importance: Importance.high,
-              priority: Priority.high,
-              ticker: 'ticker');
+          AndroidNotificationDetails(
+        channelId,
+        channelName,
+        importance: channelId == _channelNewRide
+            ? Importance.max
+            : Importance.high,
+        priority: channelId == _channelNewRide ? Priority.max : Priority.high,
+        ticker: 'ticker',
+        playSound: true,
+        enableVibration: true,
+      );
       const DarwinNotificationDetails darwinNotificationDetails =
           DarwinNotificationDetails(
               presentAlert: true, presentBadge: true, presentSound: true);
