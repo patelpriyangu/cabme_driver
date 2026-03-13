@@ -74,6 +74,8 @@ class Constant {
   static String? placeholderUrl = "";
   static String? driverDocVerification = "no";
   static String? ownerDocVerification = "no";
+  static String driverLoginWarningEnabled = "no";
+  static String driverLoginWarningMessage = "";
 
   static PaymentSettingModel getPaymentSetting() {
     final String user = Preferences.getString(Preferences.paymentSetting);
@@ -489,6 +491,7 @@ class Constant {
       model.xendit!.libelle: model.xendit,
       model.orangePay!.libelle: model.orangePay,
       model.midtrans!.libelle: model.midtrans,
+      if (model.worldpay != null) model.worldpay!.libelle: model.worldpay,
     };
 
     final matched = map[key];

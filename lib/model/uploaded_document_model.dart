@@ -40,10 +40,23 @@ class UploadedDocumentData {
   String? documentStatus;
   String? comment;
   String? documentName;
+  List<String> documentFiles;
 
-  UploadedDocumentData({this.id, this.title, this.isEnabled, this.createdAt, this.updatedAt, this.documentPath, this.documentStatus, this.comment, this.documentName});
+  UploadedDocumentData({
+    this.id,
+    this.title,
+    this.isEnabled,
+    this.createdAt,
+    this.updatedAt,
+    this.documentPath,
+    this.documentStatus,
+    this.comment,
+    this.documentName,
+    this.documentFiles = const [],
+  });
 
-  UploadedDocumentData.fromJson(Map<String, dynamic> json) {
+  UploadedDocumentData.fromJson(Map<String, dynamic> json)
+      : documentFiles = [] {
     id = json['id'].toString();
     title = json['title'].toString();
     isEnabled = json['is_enabled'].toString();
@@ -53,6 +66,15 @@ class UploadedDocumentData {
     documentStatus = json['document_status'].toString();
     comment = json['comment'].toString();
     documentName = json['document_name'].toString();
+
+    if (json['document_files'] != null && json['document_files'] is List) {
+      documentFiles = List<String>.from(
+          (json['document_files'] as List).map((e) => e.toString()));
+    } else if (documentPath != null &&
+        documentPath!.isNotEmpty &&
+        documentPath != 'null') {
+      documentFiles = [documentPath!];
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -66,6 +88,13 @@ class UploadedDocumentData {
     data['document_status'] = documentStatus;
     data['comment'] = comment;
     data['document_name'] = documentName;
+    data['document_files'] = documentFiles;
     return data;
   }
+
+  bool get hasFiles =>
+      documentFiles.isNotEmpty ||
+      (documentPath != null &&
+          documentPath!.isNotEmpty &&
+          documentPath != 'null');
 }

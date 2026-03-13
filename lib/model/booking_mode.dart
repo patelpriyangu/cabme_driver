@@ -70,6 +70,9 @@ class BookingData {
   String? arrivedTime;
   String? pobTime;
   String? waitingDuration;
+  String? scheduledAt;
+  String? prepaidTransactionId;
+  bool? isPrepaid;
 
   BookingData(
       {this.id,
@@ -112,7 +115,10 @@ class BookingData {
       this.complainDetails,
       this.arrivedTime,
       this.pobTime,
-      this.waitingDuration});
+      this.waitingDuration,
+      this.scheduledAt,
+      this.prepaidTransactionId,
+      this.isPrepaid});
 
   BookingData.fromJson(Map<String, dynamic> json) {
     id = json['id'].toString();
@@ -125,7 +131,7 @@ class BookingData {
     longitudeDepart = json['longitude_depart'];
     latitudeArrivee = json['latitude_arrivee'];
     longitudeArrivee = json['longitude_arrivee'];
-    if (json['stops'] != null) {
+    if (json['stops'] != null && json['stops'] is List) {
       stops = <Stops>[];
       json['stops'].forEach((v) {
         stops!.add(Stops.fromJson(v));
@@ -136,7 +142,7 @@ class BookingData {
     distanceUnit = json['distance_unit'];
     duree = json['duree'];
     montant = json['montant'];
-    if (json['tax'] != null) {
+    if (json['tax'] != null && json['tax'] is List) {
       tax = <TaxModel>[];
       json['tax'].forEach((v) {
         tax!.add(TaxModel.fromJson(v));
@@ -172,6 +178,9 @@ class BookingData {
     arrivedTime = json['arrived_time'];
     pobTime = json['pob_time'];
     waitingDuration = json['waiting_duration'];
+    scheduledAt = json['scheduled_at'];
+    prepaidTransactionId = json['prepaid_transaction_id'];
+    isPrepaid = json['is_prepaid'] == 1 || json['is_prepaid'] == true;
   }
 
   Map<String, dynamic> toJson() {
@@ -232,6 +241,9 @@ class BookingData {
     data['arrived_time'] = arrivedTime;
     data['pob_time'] = pobTime;
     data['waiting_duration'] = waitingDuration;
+    data['scheduled_at'] = scheduledAt;
+    data['prepaid_transaction_id'] = prepaidTransactionId;
+    data['is_prepaid'] = isPrepaid;
     return data;
   }
 }

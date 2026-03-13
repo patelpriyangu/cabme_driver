@@ -17,12 +17,14 @@ class API {
 
   static Map<String, String> authheader = {
     HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
+    HttpHeaders.acceptHeader: 'application/json',
     'apikey': apiKey,
   };
 
   static Map<String, String> get headers {
     return {
       HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
+      HttpHeaders.acceptHeader: 'application/json',
       'apikey': apiKey,
       'accesstoken': Preferences.getString(Preferences.accesstoken) ?? "",
     };
@@ -50,6 +52,10 @@ class API {
 
   static const getDriverUploadedDocument = "${baseUrl}driver-documents";
   static const driverDocumentUpdate = "${baseUrl}driver-documents-update";
+
+  // Free-form driver uploads (no predefined document types)
+  static const driverUploadFiles = "${baseUrl}driver-upload-files";
+  static const driverGetUploads = "${baseUrl}driver-get-uploads";
 
   static const driverRecentRide = "${baseUrl}driver-recent-ride";
   static const conformRide = "${baseUrl}confirm-requete";
@@ -125,8 +131,12 @@ class API {
   static const getRentalBookingDetails = "${baseUrl}get-rental-booking-details";
   static const getDriverDetails = "${baseUrl}get-driver-details";
 
+  static const driverUpcomingRides = "${baseUrl}driver-upcoming-rides/";
+  static const acceptUpcomingRide = "${baseUrl}accept-upcoming-ride/";
+
   static const logout = "${baseUrl}logout";
   static const getServiceJson = "${baseUrl}get-service-json";
+  static const worldpayAuthorize = "${baseUrl}payments/worldpay/authorize";
 
   static bool _isRedirectingToLogin = false; // Prevent multiple redirects
 
@@ -145,9 +155,15 @@ class API {
       showLog("DEBUG: API Response Status: ${response.statusCode}");
       showLog("DEBUG: API Response Body: ${response.body}");
 
+      // Chunk-print full body so it isn't truncated in the console
+      const chunkSize = 800;
+      final fullBody = response.body;
+      for (var i = 0; i < fullBody.length; i += chunkSize) {
+        showLog("📥 BODY[${i ~/ chunkSize}]: ${fullBody.substring(i, i + chunkSize > fullBody.length ? fullBody.length : i + chunkSize)}");
+      }
+
       final decodedResponse = jsonDecode(response.body);
       showLog("✅ API :: Response Status :: ${response.statusCode}");
-      showLog("✅ API :: Response Body :: ${response.body}");
 
 
       if (showLoader) ShowToastDialog.closeLoader();
@@ -185,8 +201,8 @@ class API {
       showLog("🌐 No Internet / DNS Fail");
       CustomDialog.showErrorDialog(
           "No Internet", "Please check your connection.");
-    } on FormatException {
-      showLog("📦 JSON Decode Error");
+    } on FormatException catch (e) {
+      showLog("📦 JSON Decode Error: $e");
       ShowToastDialog.showToast("Invalid response format.");
     } catch (e) {
       showLog("🔥 Unexpected Error: $e");

@@ -36,6 +36,40 @@ class BankDetailsAdd extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               child: Column(
                 children: [
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 20),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: themeChange.getThem()
+                          ? AppThemeData.neutralDark200
+                          : const Color(0xFFFFF8E1),
+                      border: Border.all(
+                        color: const Color(0xFFFFB300),
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(Icons.info_outline,
+                            color: Color(0xFFFFB300), size: 20),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'Please ensure the account holder name matches exactly with your registered driver profile. Payments will only be processed to verified accounts with matching details.'
+                                .tr,
+                            style: AppThemeData.regularTextStyle(
+                              fontSize: 13,
+                              color: themeChange.getThem()
+                                  ? AppThemeData.neutralDark700
+                                  : const Color(0xFF5D4037),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 /*  TextFieldWidget(
                     controller: controller.bankNameController.value,
                     hintText: 'Enter Bank Name',

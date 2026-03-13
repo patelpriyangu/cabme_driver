@@ -74,6 +74,8 @@ class SettingsController extends GetxController {
             Constant.jsonNotificationFileURL = model.data!.serviceJson!;
             Constant.ownerDocVerification = model.data!.ownerDocVerification!;
             Constant.driverDocVerification = model.data!.driverDocVerification!;
+            Constant.driverLoginWarningEnabled = model.data!.driverLoginWarningEnabled ?? 'no';
+            Constant.driverLoginWarningMessage = model.data!.driverLoginWarningMessage ?? '';
 
             Constant.pusherApiKey = model.data!.pusherSettings!.pusherKey;
             Constant.cluster = model.data!.pusherSettings!.pusherCluster;

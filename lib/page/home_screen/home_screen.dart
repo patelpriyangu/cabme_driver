@@ -33,6 +33,7 @@ import 'package:provider/provider.dart';
 import 'package:timelines_plus/timelines_plus.dart';
 
 import '../../widget/round_button_fill.dart';
+import 'upcoming_rides_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -153,7 +154,9 @@ class HomeScreen extends StatelessWidget {
                                 style: TextStyle(
                                     color: controller.status.value == 'yes'
                                         ? AppThemeData.successDefault
-                                        : AppThemeData.neutral900),
+                                        : themeChange.getThem()
+                                            ? AppThemeData.neutralDark900
+                                            : AppThemeData.neutral900),
                               ),
                             ),
                             PopupMenuItem<String>(
@@ -163,7 +166,9 @@ class HomeScreen extends StatelessWidget {
                                 style: TextStyle(
                                     color: controller.status.value == 'break'
                                         ? AppThemeData.warningDark
-                                        : AppThemeData.neutral900),
+                                        : themeChange.getThem()
+                                            ? AppThemeData.neutralDark900
+                                            : AppThemeData.neutral900),
                               ),
                             ),
                             PopupMenuItem<String>(
@@ -173,7 +178,9 @@ class HomeScreen extends StatelessWidget {
                                 style: TextStyle(
                                     color: controller.status.value == 'no'
                                         ? AppThemeData.errorDefault
-                                        : AppThemeData.neutral900),
+                                        : themeChange.getThem()
+                                            ? AppThemeData.neutralDark900
+                                            : AppThemeData.neutral900),
                               ),
                             ),
                           ],
@@ -287,6 +294,8 @@ class HomeScreen extends StatelessWidget {
                                           return 'Parcel Delivery'.tr;
                                         case 'rental':
                                           return 'Rental'.tr;
+                                        case 'upcoming':
+                                          return 'Upcoming'.tr;
                                         default:
                                           return '';
                                       }
@@ -333,6 +342,8 @@ class HomeScreen extends StatelessWidget {
                             return parcelView(themeChange, context, controller);
                           case 'rental':
                             return rentalView(themeChange, context, controller);
+                          case 'upcoming':
+                            return const UpcomingRidesScreen();
                           default:
                             return SizedBox();
                         }
@@ -367,6 +378,7 @@ class HomeScreen extends StatelessWidget {
     if (userServices.contains('rental')) {
       tabs.add('rental');
     }
+    tabs.add('upcoming');
 
     return tabs;
   }
@@ -387,7 +399,7 @@ class HomeScreen extends StatelessWidget {
                       height: 20,
                     ),
                     Text(
-                      'No Booking requests available in your selected zone.'.tr,
+                      'No Booking requests available in your area.'.tr,
                       textAlign: TextAlign.center,
                       style: AppThemeData.mediumTextStyle(
                         fontSize: 18,
@@ -946,7 +958,7 @@ class HomeScreen extends StatelessWidget {
                       height: 20,
                     ),
                     Text(
-                      'No parcel requests available in your selected zone.'.tr,
+                      'No parcel requests available in your area.'.tr,
                       textAlign: TextAlign.center,
                       style: AppThemeData.mediumTextStyle(
                         fontSize: 18,
@@ -1305,7 +1317,7 @@ class HomeScreen extends StatelessWidget {
                       height: 20,
                     ),
                     Text(
-                      'No rental requests available in your selected zone.'.tr,
+                      'No rental requests available in your area.'.tr,
                       textAlign: TextAlign.center,
                       style: AppThemeData.mediumTextStyle(
                         fontSize: 18,
@@ -2227,13 +2239,22 @@ class HomeScreen extends StatelessWidget {
 
   Future<void> showAlertDialog(themeChange, BuildContext context, String type,
       HomeController controller) async {
+    final bool isDocument = type == "document";
+    final String title = isDocument ? 'Documents Pending'.tr : 'Vehicle Info Required'.tr;
+    final String message = isDocument
+        ? 'Your documents have been submitted and are pending admin verification. You will be able to go online once approved. Please contact support if this is taking too long.'
+            .tr
+        : 'To start accepting rides, please complete your vehicle information first.'
+            .tr;
+    final String confirmLabel = isDocument ? 'View Documents'.tr : 'Add Vehicle Info'.tr;
+
     return showDialog(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Information'.tr,
+            title,
             style: AppThemeData.boldTextStyle(
                 fontSize: 20,
                 color: themeChange.getThem()
@@ -2244,8 +2265,7 @@ class HomeScreen extends StatelessWidget {
             child: ListBody(
               children: <Widget>[
                 Text(
-                  'To start earning with UniqCars you need to fill in your information'
-                      .tr,
+                  message,
                   style: AppThemeData.mediumTextStyle(
                       fontSize: 14,
                       color: themeChange.getThem()
@@ -2257,7 +2277,7 @@ class HomeScreen extends StatelessWidget {
           ),
           actions: <Widget>[
             RoundedButtonFill(
-              title: "No".tr,
+              title: "Cancel".tr,
               height: 5,
               width: 24,
               color: AppThemeData.neutral200,
@@ -2267,13 +2287,13 @@ class HomeScreen extends StatelessWidget {
               },
             ),
             RoundedButtonFill(
-              title: "Yes".tr,
+              title: confirmLabel,
               height: 5,
               width: 24,
               color: AppThemeData.primaryDefault,
               textColor: AppThemeData.neutral50,
               onPress: () async {
-                if (type == "document") {
+                if (isDocument) {
                   Get.back();
                   Get.to(() => DocumentStatusScreen())!.then(
                     (value) {

@@ -724,6 +724,22 @@ class WalletScreen extends StatelessWidget {
                               "assets/images/midtrans.png",
                             ),
                           ),
+                          Visibility(
+                            visible:
+                                controller.paymentSettingModel.value.worldpay !=
+                                        null &&
+                                    controller.paymentSettingModel.value
+                                            .worldpay!.isEnabled ==
+                                        "true",
+                            child: cardDecoration(
+                              controller,
+                              controller
+                                  .paymentSettingModel.value.worldpay!.libelle
+                                  .toString(),
+                              themeChange,
+                              "assets/images/worldpay.png",
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -836,6 +852,13 @@ class WalletScreen extends StatelessWidget {
                                 controller.paymentSettingModel.value.midtrans!
                                     .libelle) {
                               controller.midtransMakePayment(
+                                  amount: controller.amountController.value.text
+                                      .toString(),
+                                  context: context);
+                            } else if (controller.paymentSettingModel.value.worldpay != null &&
+                                controller.selectedPaymentMethod.value ==
+                                    controller.paymentSettingModel.value.worldpay!.libelle) {
+                              controller.worldpayPayment(
                                   amount: controller.amountController.value.text
                                       .toString(),
                                   context: context);

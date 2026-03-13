@@ -67,6 +67,8 @@ class Data {
   List<String>? activeServices;
   String? driverDocVerification;
   String? ownerDocVerification;
+  String? driverLoginWarningEnabled;
+  String? driverLoginWarningMessage;
   PusherSettings? pusherSettings;
   String? currency;
   String? decimalDigit;
@@ -116,6 +118,8 @@ class Data {
         this.activeServices,
         this.driverDocVerification,
         this.ownerDocVerification,
+        this.driverLoginWarningEnabled,
+        this.driverLoginWarningMessage,
         this.pusherSettings,
         this.currency,
         this.decimalDigit,
@@ -165,6 +169,8 @@ class Data {
     activeServices = json['active_services'].cast<String>();
     driverDocVerification = json['driver_doc_verification'];
     ownerDocVerification = json['owner_doc_verification'];
+    driverLoginWarningEnabled = json['driver_login_warning_enabled'];
+    driverLoginWarningMessage = json['driver_login_warning_message'];
     pusherSettings = json['pusher_settings'] != null
         ? PusherSettings.fromJson(json['pusher_settings'])
         : null;
@@ -226,6 +232,8 @@ class Data {
     data['active_services'] = activeServices;
     data['driver_doc_verification'] = driverDocVerification;
     data['owner_doc_verification'] = ownerDocVerification;
+    data['driver_login_warning_enabled'] = driverLoginWarningEnabled;
+    data['driver_login_warning_message'] = driverLoginWarningMessage;
     if (pusherSettings != null) {
       data['pusher_settings'] = pusherSettings!.toJson();
     }

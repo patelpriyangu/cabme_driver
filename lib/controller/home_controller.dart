@@ -21,6 +21,8 @@ class HomeController extends GetxController {
   RxBool isLoading = true.obs;
   RxString status = "no".obs;
   RxList<ParcelBookingData> parcelList = <ParcelBookingData>[].obs;
+  RxList<BookingData> upcomingRidesList = <BookingData>[].obs;
+  RxBool isUpcomingLoading = false.obs;
 
   Rx<UserModel> userModel = UserModel().obs;
   Rx<TextEditingController> otpController = TextEditingController().obs;
@@ -54,6 +56,7 @@ class HomeController extends GetxController {
       await getParcelList();
       await getRentalSearchBooking();
     }
+    await getUpcomingRides();
 
     isLoading.value = false;
   }
@@ -522,6 +525,56 @@ class HomeController extends GetxController {
         }
       },
     );
+  }
+
+  Future<void> getUpcomingRides() async {
+    Map<String, dynamic> bodyParams = {
+      'driver_id': Preferences.getInt(Preferences.userId).toString(),
+    };
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.driverUpcomingRides),
+                headers: API.headers, body: jsonEncode(bodyParams)),
+            showLoader: false)
+        .then(
+      (value) async {
+        if (value != null) {
+          if (value['data'] != null && value['data'] is List) {
+            upcomingRidesList.value = (value['data'] as List)
+                .map((e) => BookingData.fromJson(e))
+                .toList();
+          } else {
+            upcomingRidesList.clear();
+          }
+        } else {
+          upcomingRidesList.clear();
+        }
+      },
+    );
+  }
+
+  Future<void> acceptUpcomingRide(String rideId) async {
+    final driverId = Preferences.getInt(Preferences.userId).toString();
+    await API
+        .handleApiRequest(
+            request: () => http.post(
+                  Uri.parse(API.acceptUpcomingRide),
+                  headers: API.headers,
+                  body: jsonEncode({'ride_id': rideId, 'driver_id': driverId}),
+                ),
+            showLoader: true)
+        .then((value) async {
+      if (value != null) {
+        if (value['success'] == true || value['success'] == 'success') {
+          ShowToastDialog.showToast(
+              "Ride accepted! It will be dispatched to you at the scheduled time.");
+          await getUpcomingRides(); // refresh the list
+        } else {
+          ShowToastDialog.showToast(
+              value['message'] ?? "Could not accept ride");
+        }
+      }
+    });
   }
 
   RxList<RentalBookingData> rentalBookingData = <RentalBookingData>[].obs;

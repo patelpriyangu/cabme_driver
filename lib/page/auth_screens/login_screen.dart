@@ -6,8 +6,6 @@ import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
 import 'package:uniqcars_driver/controller/login_conroller.dart';
 import 'package:uniqcars_driver/model/user_model.dart';
 import 'package:uniqcars_driver/page/auth_screens/signup_screen.dart';
-import 'package:uniqcars_driver/page/dashboard_screen.dart';
-import 'package:uniqcars_driver/page/owner_dashboard_screen.dart';
 import 'package:uniqcars_driver/service/api.dart';
 import 'package:uniqcars_driver/utils/Preferences.dart';
 import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
@@ -20,7 +18,6 @@ import 'package:provider/provider.dart';
 import '../../themes/app_them_data.dart';
 import '../../themes/round_button_fill.dart';
 import '../../themes/text_field_widget.dart';
-import '../subscription_plan_screen/subscription_plan_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -180,70 +177,19 @@ class LoginScreen extends StatelessWidget {
                                       int.parse(userData!.id.toString()));
                                   bool isPlanExpired = false;
 
-                                  /// Case 1: Admin Commission = 'no' and Subscription model = false
-                                  if (Constant.adminCommission?.statut ==
-                                          "no" &&
-                                      Constant.subscriptionModel == false) {
-                                    if (userData.isOwner == "true") {
-                                      Get.offAll(() => OwnerDashboardScreen(),
-                                          transition: Transition.rightToLeft);
+                                  if (userData.subscriptionPlanId != null) {
+                                    if (userData.subscriptionExpiryDate == null) {
+                                      isPlanExpired = userData.subscriptionPlan?.expiryDay != '-1';
                                     } else {
-                                      Get.offAll(() => DashboardScreen(),
-                                          transition: Transition.rightToLeft);
+                                      final expiryDate = DateTime.tryParse(userData.subscriptionExpiryDate!);
+                                      isPlanExpired = expiryDate != null && expiryDate.isBefore(DateTime.now());
                                     }
-                                    return;
+                                  } else {
+                                    isPlanExpired = true;
                                   }
 
-                                  /// Case 3: Owner’s Driver (driver under an owner)
-                                  bool isOwnerDriver =
-                                      userData.isOwner == "false" &&
-                                          userData.ownerId != null &&
-                                          userData.ownerId!.isNotEmpty;
-                                  if (isOwnerDriver) {
-                                    Get.offAll(() => DashboardScreen(),
-                                        transition: Transition.rightToLeft);
-                                    return;
-                                  }
-
-                                  /// Case 2: Individual Driver (no ownerId) → Check subscription
-                                  bool isIndividualDriver =
-                                      userData.isOwner == "false" &&
-                                          (userData.ownerId == null ||
-                                              userData.ownerId!.isEmpty);
-
-                                  if (isIndividualDriver ||
-                                      userData.isOwner == "true") {
-                                    // Check subscription for Owner OR Individual Driver
-                                    if (userData.subscriptionPlanId != null) {
-                                      if (userData.subscriptionExpiryDate ==
-                                          null) {
-                                        isPlanExpired = userData
-                                                .subscriptionPlan?.expiryDay !=
-                                            '-1';
-                                      } else {
-                                        final expiryDate = DateTime.tryParse(
-                                            userData.subscriptionExpiryDate!);
-                                        isPlanExpired = expiryDate != null &&
-                                            expiryDate.isBefore(DateTime.now());
-                                      }
-                                    } else {
-                                      isPlanExpired = true;
-                                    }
-
-                                    if (userData.subscriptionPlanId == null ||
-                                        isPlanExpired) {
-                                      Get.to(() => SubscriptionPlanScreen(),
-                                          arguments: {'isSplashScreen': true});
-                                    } else {
-                                      if (userData.isOwner == "true") {
-                                        Get.offAll(() => OwnerDashboardScreen(),
-                                            transition: Transition.rightToLeft);
-                                      } else {
-                                        Get.offAll(() => DashboardScreen(),
-                                            transition: Transition.rightToLeft);
-                                      }
-                                    }
-                                  }
+                                  showLoginWarningIfNeeded(() =>
+                                      LoginController.navigateAfterLogin(userData, isPlanExpired));
                                 }
                               });
                             }

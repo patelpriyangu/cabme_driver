@@ -47,8 +47,13 @@ class VehicleData {
   String? deliveryCharges;
   String? minimumDeliveryCharges;
   String? minimumDeliveryChargesWithin;
+  String? pin;
   String? pinNumber;
   String? councilRegistrationNumber;
+  String? vehicleTypeText;
+  String? councilCarBadgeNumber;
+  String? councilDriverRegistrationNumber;
+  String? councilDriverBadgeNumber;
   List<dynamic>? zone_id;
 
   VehicleData(
@@ -74,8 +79,13 @@ class VehicleData {
       this.zone_id,
       this.minimumDeliveryCharges,
       this.minimumDeliveryChargesWithin,
+      this.pin,
       this.pinNumber,
-      this.councilRegistrationNumber});
+      this.councilRegistrationNumber,
+      this.vehicleTypeText,
+      this.councilCarBadgeNumber,
+      this.councilDriverRegistrationNumber,
+      this.councilDriverBadgeNumber});
 
   VehicleData.fromJson(Map<String, dynamic> json) {
     id = json['id'].toString();
@@ -99,8 +109,13 @@ class VehicleData {
     deliveryCharges = json['delivery_charges_per_km'].toString();
     minimumDeliveryCharges = json['minimum_delivery_charges'].toString();
     minimumDeliveryChargesWithin = json['minimum_delivery_charges_within_km'].toString();
-    pinNumber = json['pin_number'].toString();
-    councilRegistrationNumber = json['council_registration_number'].toString();
+    pin = json['pin']?.toString() ?? '';
+    pinNumber = json['pin_number']?.toString() ?? '';
+    councilRegistrationNumber = json['dbs_number']?.toString() ?? json['council_registration_number']?.toString() ?? '';
+    vehicleTypeText = json['vehicle_type_text']?.toString() ?? '';
+    councilCarBadgeNumber = json['council_car_badge_number']?.toString() ?? '';
+    councilDriverRegistrationNumber = json['council_driver_registration_number']?.toString() ?? '';
+    councilDriverBadgeNumber = json['driving_license_number']?.toString() ?? json['council_driver_badge_number']?.toString() ?? '';
     zone_id = json['zone_id'] ?? [];
   }
 
@@ -127,8 +142,13 @@ class VehicleData {
     data['delivery_charges_per_km'] = deliveryCharges;
     data['minimum_delivery_charges'] = minimumDeliveryCharges;
     data['minimum_delivery_charges_within_km'] = minimumDeliveryChargesWithin;
+    data['pin'] = pin;
     data['pin_number'] = pinNumber;
-    data['council_registration_number'] = councilRegistrationNumber;
+    data['dbs_number'] = councilRegistrationNumber;
+    data['vehicle_type_text'] = vehicleTypeText;
+    data['council_car_badge_number'] = councilCarBadgeNumber;
+    data['council_driver_registration_number'] = councilDriverRegistrationNumber;
+    data['driving_license_number'] = councilDriverBadgeNumber;
     data['zone_id'] = zone_id;
     return data;
   }

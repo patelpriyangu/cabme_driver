@@ -16,6 +16,7 @@ class PaymentSettingModel {
   Xendit? xendit;
   OrangePay? orangePay;
   Midtrans? midtrans;
+  WorldpayModel? worldpay;
 
   PaymentSettingModel({
     this.success,
@@ -33,6 +34,7 @@ class PaymentSettingModel {
     this.midtrans,
     this.orangePay,
     this.xendit,
+    this.worldpay,
   });
 
   PaymentSettingModel.fromJson(Map<String, dynamic> json) {
@@ -63,6 +65,8 @@ class PaymentSettingModel {
         : null;
     midtrans =
         json['Midtrans'] != null ? Midtrans.fromJson(json['Midtrans']) : null;
+    worldpay =
+        json['Worldpay'] != null ? WorldpayModel.fromJson(json['Worldpay']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -105,6 +109,9 @@ class PaymentSettingModel {
     }
     if (xendit != null) {
       data['Xendit'] = xendit!.toJson();
+    }
+    if (worldpay != null) {
+      data['Worldpay'] = worldpay!.toJson();
     }
 
     return data;
@@ -622,6 +629,53 @@ class OrangePay implements PaymentGatewayConfig {
     data['libelle'] = libelle;
     data['id_payment_method'] = idPaymentMethod;
 
+    return data;
+  }
+}
+
+class WorldpayModel implements PaymentGatewayConfig {
+  String? id;
+  String? key;
+  String? clientpublishableKey;
+  String? secretKey;
+  String? isEnabled;
+  String? isSandboxEnabled;
+  String? idPaymentMethod;
+  String? libelle;
+
+  WorldpayModel({
+    this.id,
+    this.key,
+    this.clientpublishableKey,
+    this.secretKey,
+    this.isEnabled,
+    this.isSandboxEnabled,
+    this.idPaymentMethod,
+    this.libelle,
+  });
+
+  WorldpayModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'].toString();
+    key = json['key'].toString();
+    clientpublishableKey = json['clientpublishableKey'].toString();
+    secretKey = json['secret_key'].toString();
+    isEnabled = json['isEnabled'].toString();
+    isSandboxEnabled = json['isSandboxEnabled'].toString();
+    idPaymentMethod = json['id_payment_method'].toString();
+    libelle = json['libelle'].toString();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['key'] = key;
+    data['clientpublishableKey'] = clientpublishableKey;
+    data['secret_key'] = secretKey;
+    data['isEnabled'] = isEnabled;
+    data['isSandboxEnabled'] = isSandboxEnabled;
+    data['id_payment_method'] = idPaymentMethod;
+    data['libelle'] = libelle;
     return data;
   }
 }
