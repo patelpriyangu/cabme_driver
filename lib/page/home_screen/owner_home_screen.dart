@@ -799,6 +799,8 @@ class OwnerHomeScreen extends StatelessWidget {
   }
 
   void showOverlay(BuildContext context, OwnerHomeController controller) {
+    final themeChangeOverlay = Provider.of<DarkThemeProvider>(context, listen: false);
+    final isDarkOverlay = themeChangeOverlay.getThem();
     final OverlayState overlayState = Overlay.of(context);
     final RenderBox renderBox =
         controller.overlayKey.currentContext!.findRenderObject() as RenderBox;
@@ -826,11 +828,13 @@ class OwnerHomeScreen extends StatelessWidget {
                 width: 200,
                 padding: EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: isDarkOverlay
+                      ? AppThemeData.neutralDark100
+                      : AppThemeData.neutral50,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black12,
+                      color: isDarkOverlay ? Colors.white10 : Colors.black12,
                       blurRadius: 10,
                       offset: Offset(0, 4),
                     ),

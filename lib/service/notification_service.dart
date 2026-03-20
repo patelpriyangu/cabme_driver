@@ -1,15 +1,44 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:uniqcars_driver/controller/home_controller.dart';
+import 'package:uniqcars_driver/firebase_options.dart';
 import 'package:uniqcars_driver/page/chats_screen/conversation_screen.dart';
+import 'package:uniqcars_driver/page/dashboard_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 
+@pragma('vm:entry-point')
 Future<void> firebaseMessageBackgroundHandle(RemoteMessage message) async {
   log("BackGround Message :: ${message.messageId}");
+  // FCM automatically shows notification for messages with a notification payload.
+  // For data-only messages (no notification field), we manually show a local
+  // notification so the driver still gets sound/vibration in background/killed state.
+  if (message.notification == null && message.data.isNotEmpty) {
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    final FlutterLocalNotificationsPlugin plugin = FlutterLocalNotificationsPlugin();
+    const AndroidInitializationSettings initSettings =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    await plugin.initialize(const InitializationSettings(android: initSettings));
+    await plugin.show(
+      0,
+      message.data['title'] ?? 'New Ride Request',
+      message.data['body'] ?? 'A new ride is available',
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'new_ride_requests',
+          'New Ride Requests',
+          importance: Importance.max,
+          priority: Priority.max,
+          playSound: true,
+          enableVibration: true,
+        ),
+      ),
+    );
+  }
 }
 
 // Channel IDs
@@ -48,7 +77,21 @@ class NotificationService {
               android: initializationSettingsAndroid,
               iOS: iosInitializationSettings);
       await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-          onDidReceiveNotificationResponse: (payload) {});
+          onDidReceiveNotificationResponse:
+              (NotificationResponse notificationResponse) async {
+        final payload = notificationResponse.payload;
+        if (payload != null && payload.isNotEmpty) {
+          try {
+            final data = jsonDecode(payload) as Map<String, dynamic>;
+            final tag = data['tag'] ?? '';
+            if (tag == 'ridenewrider' || tag == 'ridenewriderparcel') {
+              Get.offAll(() => DashboardScreen());
+            }
+          } catch (e) {
+            log('Notification tap handler error: $e');
+          }
+        }
+      });
 
       // Create notification channels
       final androidPlugin = flutterLocalNotificationsPlugin

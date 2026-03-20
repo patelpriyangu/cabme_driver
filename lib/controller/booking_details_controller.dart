@@ -105,7 +105,6 @@ class BookingDetailsController extends GetxController {
         latitude: booking.latitudeArrivee,
         longitude: booking.longitudeArrivee));
     calculateTotalAmount();
-    calculateTotalAmount();
     if (Constant.selectedMapType == 'osm') {
       fetchRoute();
     } else {
@@ -342,7 +341,6 @@ class BookingDetailsController extends GetxController {
       );
 
       if (result.points.isEmpty) {
-        print("Polyline error: ${result.errorMessage}");
         return;
       }
 
@@ -352,7 +350,7 @@ class BookingDetailsController extends GetxController {
 
       _addPolyLine(polylineCoordinates);
     } catch (e) {
-      print("Exception while fetching polyline: $e");
+      // ignore polyline fetch errors silently
     }
   }
 
@@ -447,10 +445,9 @@ class BookingDetailsController extends GetxController {
         }
         update();
       } else {
-        print("Failed to get route: ${response.body}");
       }
     } catch (e) {
-      print("Error fetching route: $e");
+      // ignore route fetch errors silently
     }
   }
 

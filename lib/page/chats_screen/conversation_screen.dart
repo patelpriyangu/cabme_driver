@@ -28,10 +28,10 @@ class ConversationScreen extends StatelessWidget {
     return GetX<ConversationController>(
       init: ConversationController(),
       initState: (controller) {
-        if (controller.controller!.scrollController.hasClients) {
+        if (controller.controller?.scrollController.hasClients == true) {
           Timer(
               const Duration(milliseconds: 500),
-              () => controller.controller!.scrollController.jumpTo(controller
+              () => controller.controller?.scrollController.jumpTo(controller
                   .controller!.scrollController.position.maxScrollExtent));
         }
       },
@@ -134,10 +134,7 @@ class ConversationScreen extends StatelessWidget {
                               child: Text(
                                 data['message'].toString(),
                                 style: AppThemeData.semiBoldTextStyle(
-                                    color: data['senderId'] ==
-                                            controller.senderId.value
-                                        ? Colors.white
-                                        : Colors.black),
+                                    color: Colors.white),
                               ),
                             )
                           : data['type'] == "image"

@@ -20,8 +20,7 @@ class VehicleInfoScreen extends StatelessWidget {
         init: VehicleInfoController(),
         builder: (controller) {
           final bool isOwnerDriver =
-              controller.userModel.value.userData?.ownerId != null &&
-                  controller.userModel.value.userData!.ownerId!.isNotEmpty;
+              (controller.userModel.value.userData?.ownerId?.isNotEmpty ?? false);
           final bool editable = !isOwnerDriver;
 
           return Scaffold(

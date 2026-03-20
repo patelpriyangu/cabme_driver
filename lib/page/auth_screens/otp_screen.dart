@@ -198,8 +198,7 @@ class OtpScreen extends StatelessWidget {
                                           /// ✅ Updated: User is a driver *under an owner*
                                           bool isOwnerDriver =
                                               userData.isOwner == "false" &&
-                                                  userData.ownerId != null &&
-                                                  userData.ownerId!.isNotEmpty;
+                                                  (userData.ownerId?.isNotEmpty ?? false);
 
                                           if (isOwnerDriver) {
                                             Get.offAll(() => DashboardScreen(),

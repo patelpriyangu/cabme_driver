@@ -94,9 +94,7 @@ class ProfileScreen extends StatelessWidget {
                               : AppThemeData.neutral900),
                     ),
                     const SizedBox(height: 20),
-                    controller.userModel.value.userData!.ownerId != null &&
-                            controller
-                                .userModel.value.userData!.ownerId!.isNotEmpty
+                    (controller.userModel.value.userData?.ownerId?.isNotEmpty ?? false)
                         ? SizedBox()
                         : controller.userModel.value.userData!
                                     .subscriptionPlan ==
@@ -271,7 +269,7 @@ class ProfileScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            controller.userModel.value.userData!.isOwner ==
+                            controller.userModel.value.userData?.isOwner ==
                                     "true"
                                 ? SizedBox()
                                 : InkWell(
@@ -357,13 +355,9 @@ class ProfileScreen extends StatelessWidget {
                                     ),
                                   )
                                 : SizedBox(),
-                            controller.userModel.value.userData!.isOwner ==
+                            controller.userModel.value.userData?.isOwner ==
                                         "false" &&
-                                    (controller.userModel.value.userData!
-                                                .ownerId !=
-                                            null &&
-                                        controller.userModel.value.userData!
-                                            .ownerId!.isNotEmpty)
+                                    (controller.userModel.value.userData?.ownerId?.isNotEmpty ?? false)
                                 ? SizedBox()
                                 : Constant.subscriptionModel == false
                                     ? SizedBox()
@@ -415,13 +409,9 @@ class ProfileScreen extends StatelessWidget {
                                           ),
                                         ),
                                       ),
-                            controller.userModel.value.userData!.isOwner ==
+                            controller.userModel.value.userData?.isOwner ==
                                         "false" &&
-                                    (controller.userModel.value.userData!
-                                                .ownerId !=
-                                            null &&
-                                        controller.userModel.value.userData!
-                                            .ownerId!.isNotEmpty)
+                                    (controller.userModel.value.userData?.ownerId?.isNotEmpty ?? false)
                                 ? SizedBox()
                                 : InkWell(
                                     onTap: () {
@@ -467,13 +457,9 @@ class ProfileScreen extends StatelessWidget {
                                     ),
                                   ),
 
-                            controller.userModel.value.userData!.isOwner ==
+                            controller.userModel.value.userData?.isOwner ==
                                         "false" &&
-                                    (controller.userModel.value.userData!
-                                                .ownerId !=
-                                            null &&
-                                        controller.userModel.value.userData!
-                                            .ownerId!.isNotEmpty)
+                                    (controller.userModel.value.userData?.ownerId?.isNotEmpty ?? false)
                                 ? SizedBox()
                                 : InkWell(
                                     onTap: () {

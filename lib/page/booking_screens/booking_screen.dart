@@ -100,7 +100,7 @@ class BookingScreen extends StatelessWidget {
                     child: InkWell(
                       key: controller.overlayKey,
                       onTap: () {
-                        showOverlay(context, controller);
+                        showOverlay(context, controller, themeChange);
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -1145,7 +1145,7 @@ class BookingScreen extends StatelessWidget {
                                     height: 5,
                                   ),
                                   DottedLine(
-                                    dashColor: Colors.grey,
+                                    dashColor: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
                                     lineThickness: 1.0,
                                     dashLength: 4.0,
                                     dashGapLength: 3.0,
@@ -1795,7 +1795,7 @@ class BookingScreen extends StatelessWidget {
     );
   }
 
-  void showOverlay(BuildContext context, BookingController controller) {
+  void showOverlay(BuildContext context, BookingController controller, DarkThemeProvider themeChange) {
     final OverlayState overlayState = Overlay.of(context);
     final RenderBox renderBox =
         controller.overlayKey.currentContext!.findRenderObject() as RenderBox;
@@ -1821,7 +1821,7 @@ class BookingScreen extends StatelessWidget {
                 width: 200,
                 padding: EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: themeChange.getThem() ? AppThemeData.neutralDark100 : AppThemeData.neutral50,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
@@ -1854,8 +1854,7 @@ class BookingScreen extends StatelessWidget {
                                     fontWeight: selected
                                         ? FontWeight.bold
                                         : FontWeight.normal,
-                                    color:
-                                        selected ? Colors.amber : Colors.black,
+                                    color: selected ? AppThemeData.primaryDefault : (themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
                                   ),
                                 ),
                               ),
@@ -1863,7 +1862,7 @@ class BookingScreen extends StatelessWidget {
                                 selected
                                     ? Icons.radio_button_checked
                                     : Icons.radio_button_off,
-                                color: selected ? Colors.amber : Colors.grey,
+                                color: selected ? AppThemeData.primaryDefault : (themeChange.getThem() ? AppThemeData.neutralDark500 : AppThemeData.neutral500),
                               ),
                             ],
                           ),

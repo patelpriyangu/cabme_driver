@@ -139,9 +139,9 @@ class WalletScreen extends StatelessWidget {
                           ),
                         ),
                         TabBar(
-                          labelColor: Colors.blue,
-                          unselectedLabelColor: Colors.grey,
-                          indicatorColor: Colors.blue,
+                          labelColor: AppThemeData.primaryDefault,
+                          unselectedLabelColor: themeChange.getThem() ? AppThemeData.neutralDark500 : AppThemeData.neutral500,
+                          indicatorColor: AppThemeData.primaryDefault,
                           tabs: [
                             Tab(text: 'Transaction History'.tr),
                             Tab(text: 'Withdrawal History'.tr),

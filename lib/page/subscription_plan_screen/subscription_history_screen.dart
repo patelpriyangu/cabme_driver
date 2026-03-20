@@ -21,10 +21,13 @@ class SubscriptionHistoryScreen extends StatelessWidget {
         builder: (controller) {
           return Scaffold(
             appBar: AppBar(
-              backgroundColor:
-                  themeChange.getThem() ? Colors.black : Colors.white,
+              backgroundColor: themeChange.getThem()
+                  ? AppThemeData.neutralDark100
+                  : AppThemeData.neutral50,
               iconTheme: IconThemeData(
-                  color: themeChange.getThem() ? Colors.white : Colors.black),
+                  color: themeChange.getThem()
+                      ? AppThemeData.neutralDark900
+                      : AppThemeData.neutral900),
             ),
             body: controller.isLoading.value
                 ? Center(child: CircularProgressIndicator())

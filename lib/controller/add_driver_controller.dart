@@ -91,8 +91,6 @@ class AddDriverController extends GetxController {
           : selectedVehicle.value.id.toString(),
     };
 
-    print("Body Params: $bodyParams");
-
     await API
         .handleApiRequest(
             request: () => http.post(Uri.parse(API.createOwnerDriver),

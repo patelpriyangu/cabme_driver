@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:uniqcars_driver/constant/constant.dart';
 import 'package:uniqcars_driver/themes/app_them_data.dart';
+import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
 import 'package:uniqcars_driver/utils/Preferences.dart';
 import '../../controller/home_controller.dart';
 import '../../model/booking_mode.dart';
@@ -11,6 +13,7 @@ class UpcomingRidesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeChange = Provider.of<DarkThemeProvider>(context);
     final controller = Get.find<HomeController>();
     return Obx(() {
       if (controller.isUpcomingLoading.value) {
@@ -24,13 +27,21 @@ class UpcomingRidesScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.event_available, size: 64, color: Colors.grey[400]),
+                Icon(
+                  Icons.event_available,
+                  size: 64,
+                  color: themeChange.getThem()
+                      ? AppThemeData.neutralDark500
+                      : AppThemeData.neutral500,
+                ),
                 const SizedBox(height: 16),
                 Text(
                   "No upcoming scheduled rides",
                   style: AppThemeData.mediumTextStyle(
                     fontSize: 16,
-                    color: AppThemeData.neutral500,
+                    color: themeChange.getThem()
+                        ? AppThemeData.neutralDark500
+                        : AppThemeData.neutral500,
                   ),
                 ),
               ],
@@ -93,6 +104,9 @@ class _UpcomingRideCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeChange = Provider.of<DarkThemeProvider>(context);
+    final isDark = themeChange.getThem();
+
     final myDriverId = Preferences.getInt(Preferences.userId).toString();
     final assignedId = ride.assignedDriverId;
     final isAssignedToMe = assignedId != null &&
@@ -145,7 +159,9 @@ class _UpcomingRideCard extends StatelessWidget {
                     fareStr,
                     style: AppThemeData.boldTextStyle(
                       fontSize: 18,
-                      color: AppThemeData.neutral900,
+                      color: isDark
+                          ? AppThemeData.neutralDark900
+                          : AppThemeData.neutral900,
                     ),
                   ),
               ],
@@ -157,14 +173,19 @@ class _UpcomingRideCard extends StatelessWidget {
               Row(
                 children: [
                   if (distanceStr != null) ...[
-                    const Icon(Icons.straighten,
-                        size: 14, color: AppThemeData.neutral500),
+                    Icon(Icons.straighten,
+                        size: 14,
+                        color: isDark
+                            ? AppThemeData.neutralDark500
+                            : AppThemeData.neutral500),
                     const SizedBox(width: 4),
                     Text(
                       distanceStr,
                       style: AppThemeData.regularTextStyle(
                         fontSize: 12,
-                        color: AppThemeData.neutral500,
+                        color: isDark
+                            ? AppThemeData.neutralDark500
+                            : AppThemeData.neutral500,
                       ),
                     ),
                   ],
@@ -172,17 +193,25 @@ class _UpcomingRideCard extends StatelessWidget {
                     Text(
                       '  ·  ',
                       style: AppThemeData.regularTextStyle(
-                          fontSize: 12, color: AppThemeData.neutral500),
+                          fontSize: 12,
+                          color: isDark
+                              ? AppThemeData.neutralDark500
+                              : AppThemeData.neutral500),
                     ),
                   if (durationStr != null) ...[
-                    const Icon(Icons.timer_outlined,
-                        size: 14, color: AppThemeData.neutral500),
+                    Icon(Icons.timer_outlined,
+                        size: 14,
+                        color: isDark
+                            ? AppThemeData.neutralDark500
+                            : AppThemeData.neutral500),
                     const SizedBox(width: 4),
                     Text(
                       '~$durationStr min',
                       style: AppThemeData.regularTextStyle(
                         fontSize: 12,
-                        color: AppThemeData.neutral500,
+                        color: isDark
+                            ? AppThemeData.neutralDark500
+                            : AppThemeData.neutral500,
                       ),
                     ),
                   ],
@@ -196,12 +225,17 @@ class _UpcomingRideCard extends StatelessWidget {
             Row(
               children: [
                 const Icon(Icons.radio_button_checked,
-                    color: Colors.green, size: 16),
+                    color: AppThemeData.successDefault, size: 16),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     ride.departName ?? '',
-                    style: AppThemeData.mediumTextStyle(fontSize: 13),
+                    style: AppThemeData.mediumTextStyle(
+                      fontSize: 13,
+                      color: isDark
+                          ? AppThemeData.neutralDark900
+                          : AppThemeData.neutral900,
+                    ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -213,12 +247,18 @@ class _UpcomingRideCard extends StatelessWidget {
             // ── Dropoff ────────────────────────────────────────────────
             Row(
               children: [
-                const Icon(Icons.location_on, color: Colors.red, size: 16),
+                const Icon(Icons.location_on,
+                    color: AppThemeData.errorDefault, size: 16),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     ride.destinationName ?? '',
-                    style: AppThemeData.mediumTextStyle(fontSize: 13),
+                    style: AppThemeData.mediumTextStyle(
+                      fontSize: 13,
+                      color: isDark
+                          ? AppThemeData.neutralDark900
+                          : AppThemeData.neutral900,
+                    ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -231,28 +271,38 @@ class _UpcomingRideCard extends StatelessWidget {
             // ── Customer + meta row ────────────────────────────────────
             Row(
               children: [
-                const Icon(Icons.person_outline,
-                    size: 15, color: AppThemeData.neutral500),
+                Icon(Icons.person_outline,
+                    size: 15,
+                    color: isDark
+                        ? AppThemeData.neutralDark500
+                        : AppThemeData.neutral500),
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
                     customerName.isNotEmpty ? customerName : 'Customer',
                     style: AppThemeData.mediumTextStyle(
                       fontSize: 13,
-                      color: AppThemeData.neutral900,
+                      color: isDark
+                          ? AppThemeData.neutralDark900
+                          : AppThemeData.neutral900,
                     ),
                   ),
                 ),
                 if (passengers > 1) ...[
                   const SizedBox(width: 8),
-                  const Icon(Icons.group_outlined,
-                      size: 15, color: AppThemeData.neutral500),
+                  Icon(Icons.group_outlined,
+                      size: 15,
+                      color: isDark
+                          ? AppThemeData.neutralDark500
+                          : AppThemeData.neutral500),
                   const SizedBox(width: 4),
                   Text(
                     '$passengers',
                     style: AppThemeData.regularTextStyle(
                       fontSize: 12,
-                      color: AppThemeData.neutral500,
+                      color: isDark
+                          ? AppThemeData.neutralDark500
+                          : AppThemeData.neutral500,
                     ),
                   ),
                 ],
@@ -269,7 +319,9 @@ class _UpcomingRideCard extends StatelessWidget {
                   "Booking #${ride.bookingNumber ?? ride.id}",
                   style: AppThemeData.regularTextStyle(
                     fontSize: 12,
-                    color: AppThemeData.neutral500,
+                    color: isDark
+                        ? AppThemeData.neutralDark500
+                        : AppThemeData.neutral500,
                   ),
                 ),
                 Row(
@@ -280,15 +332,17 @@ class _UpcomingRideCard extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(
-                          color: Colors.blue.shade50,
+                          color: AppThemeData.infoDefault.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Colors.blue.shade300),
+                          border: Border.all(
+                              color:
+                                  AppThemeData.infoDefault.withValues(alpha: 0.4)),
                         ),
                         child: Text(
                           "Prepaid",
                           style: AppThemeData.semiBoldTextStyle(
                             fontSize: 11,
-                            color: Colors.blue.shade700,
+                            color: AppThemeData.infoDefault,
                           ),
                         ),
                       ),
@@ -296,15 +350,18 @@ class _UpcomingRideCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 3),
                       decoration: BoxDecoration(
-                        color: Colors.orange.shade50,
+                        color:
+                            AppThemeData.warningDefault.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.orange.shade300),
+                        border: Border.all(
+                            color: AppThemeData.warningDefault
+                                .withValues(alpha: 0.4)),
                       ),
                       child: Text(
                         "Scheduled",
                         style: AppThemeData.semiBoldTextStyle(
                           fontSize: 11,
-                          color: Colors.orange.shade700,
+                          color: AppThemeData.warningDefault,
                         ),
                       ),
                     ),
@@ -324,21 +381,24 @@ class _UpcomingRideCard extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: Colors.green.shade50,
+                      color:
+                          AppThemeData.successDefault.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.green.shade400),
+                      border: Border.all(
+                          color: AppThemeData.successDefault
+                              .withValues(alpha: 0.5)),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(Icons.check_circle,
-                            size: 14, color: Colors.green.shade700),
+                            size: 14, color: AppThemeData.successDefault),
                         const SizedBox(width: 4),
                         Text(
                           "You accepted",
                           style: AppThemeData.semiBoldTextStyle(
                             fontSize: 12,
-                            color: Colors.green.shade700,
+                            color: AppThemeData.successDefault,
                           ),
                         ),
                       ],
@@ -349,15 +409,22 @@ class _UpcomingRideCard extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
+                      color: isDark
+                          ? AppThemeData.neutralDark100
+                          : AppThemeData.neutral100,
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.grey.shade400),
+                      border: Border.all(
+                          color: isDark
+                              ? AppThemeData.neutralDark500
+                              : AppThemeData.neutral500),
                     ),
                     child: Text(
                       "Taken",
                       style: AppThemeData.semiBoldTextStyle(
                         fontSize: 12,
-                        color: Colors.grey.shade600,
+                        color: isDark
+                            ? AppThemeData.neutralDark500
+                            : AppThemeData.neutral500,
                       ),
                     ),
                   )

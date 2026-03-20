@@ -68,7 +68,6 @@ class ProfileController extends GetxController {
       'user_cat': "driver",
     };
 
-    print("===>$bodyParams");
     await API
         .handleApiRequest(
             request: () => http.post(Uri.parse(API.deleteUser),

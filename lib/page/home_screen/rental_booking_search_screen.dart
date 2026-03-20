@@ -281,7 +281,7 @@ class RentalBookingSearchScreen extends StatelessWidget {
                                                 height: 5,
                                               ),
                                               DottedLine(
-                                                dashColor: Colors.grey,
+                                                dashColor: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
                                                 lineThickness: 1.0,
                                                 dashLength: 4.0,
                                                 dashGapLength: 3.0,

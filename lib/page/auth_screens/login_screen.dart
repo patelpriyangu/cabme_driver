@@ -167,13 +167,14 @@ class LoginScreen extends StatelessWidget {
                                       Preferences.user, jsonEncode(value));
                                   await Preferences.setBoolean(
                                       Preferences.isLogin, true);
-                                  Preferences.setString(Preferences.accesstoken,
-                                      value.userData!.accesstoken.toString());
-                                  API.headers['accesstoken'] =
-                                      value.userData!.accesstoken.toString();
                                   UserData? userData = value.userData;
+                                  if (userData == null) return;
+                                  Preferences.setString(Preferences.accesstoken,
+                                      userData.accesstoken.toString());
+                                  API.headers['accesstoken'] =
+                                      userData.accesstoken.toString();
                                   await Preferences.setInt(Preferences.userId,
-                                      int.parse(userData!.id.toString()));
+                                      int.parse(userData.id.toString()));
                                   bool isPlanExpired = false;
 
                                   if (userData.subscriptionPlanId != null) {

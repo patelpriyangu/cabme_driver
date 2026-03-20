@@ -266,7 +266,7 @@ class DocumentStatusScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       showDialog(
-                        barrierColor: Colors.black26,
+                        barrierColor: Colors.black.withValues(alpha: 0.5),
                         context: context,
                         builder: (_) => CustomAlertDialog(
                           title:
