@@ -22,7 +22,6 @@ import 'package:uniqcars_driver/themes/text_field_widget.dart';
 import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
 import 'package:uniqcars_driver/utils/network_image_widget.dart';
 import 'package:uniqcars_driver/widget/dotted_line.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -110,8 +109,12 @@ class HomeScreen extends StatelessWidget {
                       SizedBox(
                         height: 34, // smaller than default
                         child: PopupMenuButton<String>(
-                          onSelected: (String value) {
+                          onSelected: (String value) async {
                             if (value == "yes") {
+                              // Refresh user data from server before checking
+                              // verification status, to avoid stale cache issues.
+                              await controller.getUserData();
+                              if (!context.mounted) return;
                               if (controller.userModel.value.userData?.ownerId !=
                                       null &&
                                   controller.userModel.value.userData!.ownerId!
@@ -256,6 +259,37 @@ class HomeScreen extends StatelessWidget {
                               ),
                             )
                           : SizedBox(),
+                      // Near-expiry document banner
+                      if (controller.nearExpiryDocs.isNotEmpty)
+                        GestureDetector(
+                          onTap: () => Get.to(() => DocumentStatusScreen()),
+                          child: Container(
+                            margin: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: AppThemeData.warningLight,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(Icons.warning_amber_rounded,
+                                    color: AppThemeData.warningDark, size: 18),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    '${controller.nearExpiryDocs.length} document${controller.nearExpiryDocs.length == 1 ? '' : 's'} expiring within 30 days. Tap to view.',
+                                    style: AppThemeData.mediumTextStyle(
+                                        fontSize: 13,
+                                        color: AppThemeData.warningDark),
+                                  ),
+                                ),
+                                Icon(Icons.chevron_right,
+                                    color: AppThemeData.warningDark, size: 18),
+                              ],
+                            ),
+                          ),
+                        ),
                       availableTabs.isNotEmpty
                           ? Container(
                               height: 55,

@@ -9,7 +9,6 @@ import 'package:uniqcars_driver/model/parcel_bokking_model.dart';
 import 'package:uniqcars_driver/model/rental_booking_model.dart';
 import 'package:uniqcars_driver/page/booking_details_screens/booking_details_screen.dart';
 import 'package:uniqcars_driver/page/booking_details_screens/parcel_details_screen.dart';
-import 'package:uniqcars_driver/page/live_tracking_screen/live_tracking_screen.dart';
 import 'package:uniqcars_driver/page/rental_details_screen/rental_details_screen.dart';
 import 'package:uniqcars_driver/themes/responsive.dart';
 import 'package:uniqcars_driver/themes/text_field_widget.dart';

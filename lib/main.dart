@@ -5,7 +5,6 @@ import 'package:uniqcars_driver/controller/settings_controller.dart';
 import 'package:uniqcars_driver/firebase_options.dart';
 import 'package:uniqcars_driver/model/language_model.dart';
 import 'package:uniqcars_driver/page/splash_screen.dart';
-import 'package:uniqcars_driver/service/pusher_service.dart';
 import 'package:uniqcars_driver/themes/styles.dart';
 import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
 import 'package:firebase_core/firebase_core.dart';

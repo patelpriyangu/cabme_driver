@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:uniqcars_driver/constant/constant.dart';
 import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
 import 'package:uniqcars_driver/controller/login_conroller.dart';
 import 'package:uniqcars_driver/model/user_model.dart';

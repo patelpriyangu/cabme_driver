@@ -1,6 +1,5 @@
 import 'package:uniqcars_driver/constant/constant.dart';
 import 'package:uniqcars_driver/constant/ride_satatus.dart';
-import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
 import 'package:uniqcars_driver/controller/booking_details_controller.dart';
 import 'package:uniqcars_driver/model/tax_model.dart';
 import 'package:uniqcars_driver/page/chats_screen/conversation_screen.dart';

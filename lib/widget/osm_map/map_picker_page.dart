@@ -110,8 +110,9 @@ class MapPickerPage extends StatelessWidget {
                   ),
                 ),
                 Obx(() {
-                  if (controller.searchResults.isEmpty)
+                  if (controller.searchResults.isEmpty) {
                     return const SizedBox.shrink();
+                  }
 
                   return Container(
                     margin: const EdgeInsets.only(top: 4),

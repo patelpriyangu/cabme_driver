@@ -25,6 +25,7 @@ class DriverUploadData {
   String? fileName;
   String? documentStatus;
   String? comment;
+  String? expiryDate;
   String? createdAt;
 
   DriverUploadData({
@@ -33,6 +34,7 @@ class DriverUploadData {
     this.fileName,
     this.documentStatus,
     this.comment,
+    this.expiryDate,
     this.createdAt,
   });
 
@@ -42,6 +44,18 @@ class DriverUploadData {
     fileName = json['file_name']?.toString();
     documentStatus = json['document_status']?.toString();
     comment = json['comment']?.toString();
+    expiryDate = json['expiry_date']?.toString();
     createdAt = json['created_at']?.toString();
+  }
+
+  /// Returns days until expiry (negative if already expired), null if no expiry set.
+  int? get daysUntilExpiry {
+    if (expiryDate == null || expiryDate == 'null') return null;
+    try {
+      final expiry = DateTime.parse(expiryDate!);
+      return expiry.difference(DateTime.now()).inDays;
+    } catch (_) {
+      return null;
+    }
   }
 }

@@ -68,11 +68,22 @@ class DocumentStatusScreen extends StatelessWidget {
                             : ListView.builder(
                                 itemCount: controller.uploadList.length,
                                 itemBuilder: (context, index) {
+                                  // Sort: documents with soonest expiry first,
+                                  // then documents without expiry.
+                                  final sorted = [...controller.uploadList]
+                                    ..sort((a, b) {
+                                      final da = a.daysUntilExpiry;
+                                      final db = b.daysUntilExpiry;
+                                      if (da == null && db == null) return 0;
+                                      if (da == null) return 1;
+                                      if (db == null) return -1;
+                                      return da.compareTo(db);
+                                    });
                                   return _buildUploadCard(
                                     context,
                                     themeChange,
                                     controller,
-                                    controller.uploadList[index],
+                                    sorted[index],
                                   );
                                 },
                               ),
@@ -220,9 +231,9 @@ class DocumentStatusScreen extends StatelessWidget {
               ),
             ),
 
-          // Footer row: file name + status badge
+          // Footer: file name + status badge
           Padding(
-            padding: const EdgeInsets.fromLTRB(12, 8, 12, 10),
+            padding: const EdgeInsets.fromLTRB(12, 8, 12, 4),
             child: Row(
               children: [
                 Expanded(
@@ -279,6 +290,57 @@ class DocumentStatusScreen extends StatelessWidget {
                 ],
               ],
             ),
+          ),
+          // Expiry date badge row
+          if (upload.daysUntilExpiry != null)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+              child: _buildExpiryBadge(upload.daysUntilExpiry!, upload.expiryDate!),
+            )
+          else
+            const SizedBox(height: 6),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildExpiryBadge(int daysLeft, String expiryDate) {
+    final Color bg;
+    final Color fg;
+    final String label;
+
+    if (daysLeft < 0) {
+      bg = AppThemeData.errorLight;
+      fg = AppThemeData.errorDefault;
+      label = 'Expired';
+    } else if (daysLeft <= 7) {
+      bg = AppThemeData.errorLight;
+      fg = AppThemeData.errorDefault;
+      label = 'Expires in $daysLeft day${daysLeft == 1 ? '' : 's'}';
+    } else if (daysLeft <= 30) {
+      bg = AppThemeData.warningLight;
+      fg = AppThemeData.warningDark;
+      label = 'Expires in $daysLeft days';
+    } else {
+      bg = AppThemeData.successLight;
+      fg = AppThemeData.successDefault;
+      label = 'Expires $expiryDate';
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.schedule, size: 12, color: fg),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: AppThemeData.mediumTextStyle(fontSize: 11, color: fg),
           ),
         ],
       ),

@@ -5,6 +5,7 @@ import 'package:uniqcars_driver/constant/constant.dart';
 import 'package:uniqcars_driver/constant/ride_satatus.dart';
 import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
 import 'package:uniqcars_driver/model/booking_mode.dart';
+import 'package:uniqcars_driver/model/driver_upload_model.dart';
 import 'package:uniqcars_driver/model/parcel_bokking_model.dart';
 import 'package:uniqcars_driver/model/rental_booking_model.dart';
 import 'package:uniqcars_driver/model/user_model.dart';
@@ -23,6 +24,9 @@ class HomeController extends GetxController {
   RxList<ParcelBookingData> parcelList = <ParcelBookingData>[].obs;
   RxList<BookingData> upcomingRidesList = <BookingData>[].obs;
   RxBool isUpcomingLoading = false.obs;
+
+  /// Documents expiring within 30 days (for home screen banner).
+  RxList<DriverUploadData> nearExpiryDocs = <DriverUploadData>[].obs;
 
   Rx<UserModel> userModel = UserModel().obs;
   Rx<TextEditingController> otpController = TextEditingController().obs;
@@ -57,8 +61,30 @@ class HomeController extends GetxController {
       await getRentalSearchBooking();
     }
     await getUpcomingRides();
+    await checkNearExpiryDocs();
 
     isLoading.value = false;
+  }
+
+  Future<void> checkNearExpiryDocs() async {
+    final driverId = Preferences.getInt(Preferences.userId);
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.driverGetUploads),
+                headers: API.headers,
+                body: jsonEncode({'driver_id': driverId})),
+            showLoader: false)
+        .then((value) {
+      if (value != null && value['success'] == 'success') {
+        final model = DriverUploadModel.fromJson(value);
+        nearExpiryDocs.value = (model.data ?? [])
+            .where((doc) {
+              final days = doc.daysUntilExpiry;
+              return days != null && days >= 0 && days <= 30;
+            })
+            .toList();
+      }
+    });
   }
 
   void updateTabType(String type) {
@@ -334,13 +360,15 @@ class HomeController extends GetxController {
     );
   }
 
-  Future<void> changeStatus(String value) async {
+  Future<bool> changeStatus(String value) async {
+    final previousStatus = status.value;
     status.value = value;
     Map<String, dynamic> bodyParams = {
       'id_driver': Preferences.getInt(Preferences.userId),
       'online': status.value,
     };
 
+    bool success = false;
     await API
         .handleApiRequest(
             request: () => http.post(Uri.parse(API.changeStatus),
@@ -350,9 +378,16 @@ class HomeController extends GetxController {
       (value) async {
         if (value != null) {
           if (value['success'] == "Failed" || value['success'] == "failed") {
-            ShowToastDialog.showToast(value['error']);
+            // Revert local status on failure
+            status.value = previousStatus;
+            if (value['error'] == 'document_verification_required') {
+              // Handled by caller (home_screen) — silently revert
+            } else {
+              ShowToastDialog.showToast(value['error']);
+            }
             return null;
           } else {
+            success = true;
             await getData();
             ShowToastDialog.showToast(
                 status.value == "yes" ? "You are online now" : status.value == "break" ? "You are on break" : "You are offline now");
@@ -361,6 +396,7 @@ class HomeController extends GetxController {
         }
       },
     );
+    return success;
   }
 
   Future<void> getUserData() async {

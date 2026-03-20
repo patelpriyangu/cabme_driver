@@ -56,35 +56,45 @@ class Utils {
     List<String> parts = [];
 
     if (selectedLocation.address!.name != null &&
-        selectedLocation.address!.name!.isNotEmpty)
+        selectedLocation.address!.name!.isNotEmpty) {
       parts.add(selectedLocation.address!.name!);
+    }
     if (selectedLocation.address!.subThoroughfare != null &&
-        selectedLocation.address!.subThoroughfare!.isNotEmpty)
+        selectedLocation.address!.subThoroughfare!.isNotEmpty) {
       parts.add(selectedLocation.address!.subThoroughfare!);
+    }
     if (selectedLocation.address!.thoroughfare != null &&
-        selectedLocation.address!.thoroughfare!.isNotEmpty)
+        selectedLocation.address!.thoroughfare!.isNotEmpty) {
       parts.add(selectedLocation.address!.thoroughfare!);
+    }
     if (selectedLocation.address!.subLocality != null &&
-        selectedLocation.address!.subLocality!.isNotEmpty)
+        selectedLocation.address!.subLocality!.isNotEmpty) {
       parts.add(selectedLocation.address!.subLocality!);
+    }
     if (selectedLocation.address!.locality != null &&
-        selectedLocation.address!.locality!.isNotEmpty)
+        selectedLocation.address!.locality!.isNotEmpty) {
       parts.add(selectedLocation.address!.locality!);
+    }
     if (selectedLocation.address!.subAdministrativeArea != null &&
-        selectedLocation.address!.subAdministrativeArea!.isNotEmpty)
+        selectedLocation.address!.subAdministrativeArea!.isNotEmpty) {
       parts.add(selectedLocation.address!.subAdministrativeArea!);
+    }
     if (selectedLocation.address!.administrativeArea != null &&
-        selectedLocation.address!.administrativeArea!.isNotEmpty)
+        selectedLocation.address!.administrativeArea!.isNotEmpty) {
       parts.add(selectedLocation.address!.administrativeArea!);
+    }
     if (selectedLocation.address!.postalCode != null &&
-        selectedLocation.address!.postalCode!.isNotEmpty)
+        selectedLocation.address!.postalCode!.isNotEmpty) {
       parts.add(selectedLocation.address!.postalCode!);
+    }
     if (selectedLocation.address!.country != null &&
-        selectedLocation.address!.country!.isNotEmpty)
+        selectedLocation.address!.country!.isNotEmpty) {
       parts.add(selectedLocation.address!.country!);
+    }
     if (selectedLocation.address!.isoCountryCode != null &&
-        selectedLocation.address!.isoCountryCode!.isNotEmpty)
+        selectedLocation.address!.isoCountryCode!.isNotEmpty) {
       parts.add(selectedLocation.address!.isoCountryCode!);
+    }
 
     return parts.join(', ');
   }

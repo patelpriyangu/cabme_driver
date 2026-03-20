@@ -36,6 +36,8 @@ target 'Runner' do
 end
 
 post_install do |installer|
+  require 'fileutils'
+
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
     target.build_configurations.each do |config|
@@ -51,11 +53,39 @@ post_install do |installer|
         config.build_settings['SWIFT_COMPILATION_MODE'] = 'wholemodule'
       end
 
+      # Fix ctweetnacl.h not found
+      #
+      # On some CocoaPods + Xcode combos, `PusherTweetNacl` compiles the C file
+      # from `TweetNacl` (`ctweetnacl.c`) but does not inherit the header search
+      # path that points at `ctweetnacl.h` (which lives under
+      # `TweetNacl/Sources/CTweetNacl/include`).
+      #
+      # Ensure both the `TweetNacl` target and the target that compiles it
+      # (commonly `PusherTweetNacl`) can see that include folder.
+      if ['TweetNacl', 'PusherTweetNacl'].include?(target.name)
+        config.build_settings['HEADER_SEARCH_PATHS'] ||= '$(inherited)'
+        config.build_settings['USER_HEADER_SEARCH_PATHS'] ||= '$(inherited)'
+
+        tweetnacl_include = '"$(PODS_ROOT)/TweetNacl/Sources/CTweetNacl/include"'
+        config.build_settings['HEADER_SEARCH_PATHS'] = "#{config.build_settings['HEADER_SEARCH_PATHS']} #{tweetnacl_include}"
+        config.build_settings['USER_HEADER_SEARCH_PATHS'] = "#{config.build_settings['USER_HEADER_SEARCH_PATHS']} #{tweetnacl_include}"
+      end
+
 
     end
   end
   # Additional project-level settings for all targets
   installer.pods_project.build_configurations.each do |config|
     config.build_settings['SWIFT_ENABLE_EXPLICIT_MODULES'] = 'NO'
+  end
+
+  # Last-resort guard: some builds still fail to locate `ctweetnacl.h` when
+  # compiling `ctweetnacl.c` (from the `TweetNacl` pod). The source includes
+  # `"ctweetnacl.h"` from its own folder, but the header is nested under
+  # `CTweetNacl/include/`. Create a local copy next to the C file.
+  tweetnacl_header = File.join(installer.sandbox.root.to_s, 'TweetNacl', 'Sources', 'CTweetNacl', 'include', 'ctweetnacl.h')
+  tweetnacl_header_dest = File.join(installer.sandbox.root.to_s, 'TweetNacl', 'Sources', 'CTweetNacl', 'ctweetnacl.h')
+  if File.exist?(tweetnacl_header) && !File.exist?(tweetnacl_header_dest)
+    FileUtils.cp(tweetnacl_header, tweetnacl_header_dest)
   end
 end
