@@ -181,7 +181,7 @@ class ParcelSearchScreen extends StatelessWidget {
                           title: "Search Parcel".tr,
                           height: 5.5,
                           color: AppThemeData.primaryDefault,
-                          textColor: AppThemeData.neutral50,
+                          textColor: AppThemeData.neutral900,
                           onPress: () async {
                             FocusScope.of(context).unfocus();
                             controller.searchParcel();

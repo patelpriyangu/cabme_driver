@@ -212,7 +212,7 @@ class VehicleInfoScreen extends StatelessWidget {
                       title: "Save".tr,
                       height: 5.5,
                       color: AppThemeData.primaryDefault,
-                      textColor: AppThemeData.neutral50,
+                      textColor: AppThemeData.neutral900,
                       onPress: () async {
                         if (controller.vehicleTypeController.value.text.isEmpty) {
                           ShowToastDialog.showToast("Please enter vehicle type".tr);

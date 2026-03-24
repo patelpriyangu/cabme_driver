@@ -106,7 +106,7 @@ class BankDetailsAdd extends StatelessWidget {
                       title: "Add Account".tr,
                       height: 5.5,
                       color: AppThemeData.primaryDefault,
-                      textColor: AppThemeData.neutral50,
+                      textColor: AppThemeData.neutral900,
                       onPress: () async {
                         if (controller.bankNameController.value.text.isEmpty) {
                           ShowToastDialog.showToast("Please enter bank name");

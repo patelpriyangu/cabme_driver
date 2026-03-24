@@ -749,7 +749,7 @@ class WalletScreen extends StatelessWidget {
                         title: "Confirm".tr,
                         height: 5.5,
                         color: AppThemeData.primaryDefault,
-                        textColor: AppThemeData.neutral50,
+                        textColor: AppThemeData.neutral900,
                         onPress: () async {
                           FocusScope.of(context).unfocus();
                           if (controller.amountController.value.text.isEmpty) {
@@ -1002,7 +1002,7 @@ class WalletScreen extends StatelessWidget {
                         title: "Withdraw".tr,
                         height: 5.5,
                         color: AppThemeData.primaryDefault,
-                        textColor: AppThemeData.neutral50,
+                        textColor: AppThemeData.neutral900,
                         onPress: () async {
                           FocusScope.of(context).unfocus();
                           if (controller
@@ -1119,7 +1119,7 @@ class WalletScreen extends StatelessWidget {
                           title: "Add Account".tr,
                           height: 5.5,
                           color: AppThemeData.primaryDefault,
-                          textColor: AppThemeData.neutral50,
+                          textColor: AppThemeData.neutral900,
                           onPress: () async {
                             if (controller
                                 .bankNameController.value.text.isEmpty) {

@@ -47,21 +47,26 @@ class LocationPermissionScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 30),
                   RoundedButtonFill(
-                    title: 'Allow Access'.tr,
+                    title: 'Continue'.tr,
                     width: 50,
-                    textColor: themeChange.getThem()
-                        ? AppThemeData.neutral50
-                        : AppThemeData.neutral50,
-                    color: themeChange.getThem()
-                        ? AppThemeData.primaryDefault
-                        : AppThemeData.primaryDefault,
+                    textColor: AppThemeData.neutral900,
+                    color: AppThemeData.primaryDefault,
                     onPress: () {
                       controller.requestPermission();
                     },
                   ),
-                  SizedBox(
-                    height: 10,
+                  const SizedBox(height: 10),
+                  TextButton(
+                    onPressed: () => controller.proceedWithoutLocation(),
+                    child: Text(
+                      'Not Now'.tr,
+                      style: AppThemeData.mediumTextStyle(
+                        fontSize: 14,
+                        color: themeChange.getThem() ? AppThemeData.neutralDark500 : AppThemeData.neutral500,
+                      ),
+                    ),
                   ),
+                  const SizedBox(height: 10),
                 ],
               ),
             ),

@@ -346,7 +346,7 @@ class AddDriverScreen extends StatelessWidget {
                 title: "Saves driver profile".tr,
                 height: 5.5,
                 color: AppThemeData.primaryDefault,
-                textColor: AppThemeData.neutral50,
+                textColor: AppThemeData.neutral900,
                 onPress: () async {
                   if (controller.firstNameController.value.text.isEmpty) {
                     ShowToastDialog.showToast("Please enter a first name");
@@ -391,7 +391,7 @@ class AddDriverScreen extends StatelessWidget {
       title: "Add".tr,
       height: 5,
       color: AppThemeData.primaryDefault,
-      textColor: AppThemeData.neutral50,
+      textColor: AppThemeData.neutral900,
       onPress: () async {
         FocusScope.of(context).unfocus();
         if (vehicleInfoController.selectedZone.isEmpty) {

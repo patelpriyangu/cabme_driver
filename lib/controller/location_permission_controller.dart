@@ -107,22 +107,54 @@ class LocationPermissionController extends GetxController {
     }
   }
 
+  /// Navigate to the normal app flow without location
+  void proceedWithoutLocation() {
+    if (Preferences.getString(Preferences.languageCodeKey)
+        .toString()
+        .isEmpty) {
+      Get.offAll(LocalizationScreens(intentType: "main"));
+    } else if (Preferences.getBoolean(Preferences.isFinishOnBoardingKey)) {
+      if (Preferences.getBoolean(Preferences.isLogin) == false) {
+        Get.offAll(LoginScreen());
+      } else {
+        UserModel value = Constant.getUserData();
+        UserData? userData = value.userData;
+        if (userData?.isOwner == "true") {
+          Get.offAll(() => OwnerDashboardScreen(),
+              transition: Transition.rightToLeft);
+        } else {
+          Get.offAll(() => DashboardScreen(),
+              transition: Transition.rightToLeft);
+        }
+      }
+    } else {
+      Get.offAll(OnBoardingScreen());
+    }
+  }
+
   /// Show Permission Denied Dialog
   void _showPermissionDeniedDialog() {
     Get.defaultDialog(
-      title: "Permission Required",
+      title: "Location Not Available",
       middleText:
-          "We need your location to show nearby businesses and ensure accurate results. Please allow access when prompted.",
-      barrierDismissible: false,
+          "You can still browse the app, but you'll need location access enabled to accept rides. You can enable location access anytime from your device Settings.",
+      barrierDismissible: true,
       confirm: RoundedButtonFill(
-        onPress: () async {
-          Get.back(); // Close dialog
-          await Geolocator.openAppSettings();
-          Future.delayed(Duration(seconds: 3), () async {
-            await requestPermission(); // Recheck when returning from settings
-          });
+        onPress: () {
+          Get.back();
+          requestPermission();
         },
-        title: 'Allow Location',
+        title: 'Try Again',
+        width: 40,
+        height: 5,
+        color: AppThemeData.primaryDefault,
+      ),
+      cancel: RoundedButtonFill(
+        onPress: () {
+          Get.back();
+          proceedWithoutLocation();
+        },
+        title: 'Continue',
         width: 40,
         height: 5,
         color: AppThemeData.primaryDefault,
@@ -130,22 +162,29 @@ class LocationPermissionController extends GetxController {
     );
   }
 
-  /// Show Dialog to Enable GPS
+  /// Show Dialog when GPS is disabled
   void _showEnableGPSDialog() {
     Get.defaultDialog(
-      title: "Enable GPS",
+      title: "Location Services Disabled",
       middleText:
-          "GPS is required for this app. Please enable location services.",
-      barrierDismissible: false,
+          "Location services are turned off. You can still use the app, but you'll need location enabled to accept rides. Enable location services in your device Settings for full functionality.",
+      barrierDismissible: true,
       confirm: RoundedButtonFill(
-        onPress: () async {
-          Get.back(); // Close dialog
-          await Geolocator.openLocationSettings();
-          Future.delayed(Duration(seconds: 3), () {
-            requestPermission(); // Recheck when returning from settings
-          });
+        onPress: () {
+          Get.back();
+          requestPermission();
         },
-        title: 'Enable GPS',
+        title: 'Try Again',
+        width: 40,
+        height: 5,
+        color: AppThemeData.primaryDefault,
+      ),
+      cancel: RoundedButtonFill(
+        onPress: () {
+          Get.back();
+          proceedWithoutLocation();
+        },
+        title: 'Continue',
         width: 40,
         height: 5,
         color: AppThemeData.primaryDefault,

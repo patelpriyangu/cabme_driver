@@ -845,9 +845,7 @@ class HomeScreen extends StatelessWidget {
                                             color: themeChange.getThem()
                                                 ? AppThemeData.primaryDefault
                                                 : AppThemeData.primaryDefault,
-                                            textColor: themeChange.getThem()
-                                                ? AppThemeData.neutral50
-                                                : AppThemeData.neutral50,
+                                            textColor: AppThemeData.neutral900,
                                             onPress: () async {
                                               showVerifyPassengerDialog(context,
                                                   themeChange, controller);
@@ -887,9 +885,7 @@ class HomeScreen extends StatelessWidget {
                                             color: themeChange.getThem()
                                                 ? AppThemeData.errorDefault
                                                 : AppThemeData.errorDefault,
-                                            textColor: themeChange.getThem()
-                                                ? AppThemeData.neutral50
-                                                : AppThemeData.neutral50,
+                                            textColor: AppThemeData.neutral900,
                                             onPress: () async {
                                               if (controller.bookingModel.value
                                                       .data!.paymentMethod ==
@@ -913,9 +909,7 @@ class HomeScreen extends StatelessWidget {
                                             color: themeChange.getThem()
                                                 ? AppThemeData.primaryDefault
                                                 : AppThemeData.primaryDefault,
-                                            textColor: themeChange.getThem()
-                                                ? AppThemeData.neutral50
-                                                : AppThemeData.neutral50,
+                                            textColor: AppThemeData.neutral900,
                                             onPress: () async {
                                               Get.to(LiveTrackingScreen(),
                                                   arguments: {
@@ -1021,7 +1015,7 @@ class HomeScreen extends StatelessWidget {
                       title: "Search Parcel".tr,
                       height: 5.5,
                       color: AppThemeData.primaryDefault,
-                      textColor: AppThemeData.neutral50,
+                      textColor: AppThemeData.neutral900,
                       onPress: () {
                         Get.to(ParcelSearchScreen())!.then((value) {
                           if (value != null && value is bool && value) {
@@ -1380,7 +1374,7 @@ class HomeScreen extends StatelessWidget {
                       title: "Search Rental Booking".tr,
                       height: 5.5,
                       color: AppThemeData.primaryDefault,
-                      textColor: AppThemeData.neutral50,
+                      textColor: AppThemeData.neutral900,
                       onPress: () {
                         Get.to(RentalBookingSearchScreen())!.then((value) {
                           if (value != null && value is bool && value) {
@@ -1940,7 +1934,7 @@ class HomeScreen extends StatelessWidget {
                   title: "Start Ride".tr,
                   height: 5.5,
                   color: AppThemeData.primaryDefault,
-                  textColor: AppThemeData.neutral50,
+                  textColor: AppThemeData.neutral900,
                   onPress: () async {
                     controller.onRideStatus();
                   },
@@ -2046,7 +2040,7 @@ class HomeScreen extends StatelessWidget {
                   title: "Start Ride".tr,
                   height: 5.5,
                   color: AppThemeData.primaryDefault,
-                  textColor: AppThemeData.neutral50,
+                  textColor: AppThemeData.neutral900,
                   onPress: () async {
                     controller
                         .onRideStatusRental(rentalBookingData.id.toString());
@@ -2107,7 +2101,7 @@ class HomeScreen extends StatelessWidget {
                   title: "Save".tr,
                   height: 5.5,
                   color: AppThemeData.primaryDefault,
-                  textColor: AppThemeData.neutral50,
+                  textColor: AppThemeData.neutral900,
                   onPress: () async {
                     controller.setFinalKilometerOfRental(
                         rentalBookingData.id.toString());
@@ -2325,7 +2319,7 @@ class HomeScreen extends StatelessWidget {
               height: 5,
               width: 24,
               color: AppThemeData.primaryDefault,
-              textColor: AppThemeData.neutral50,
+              textColor: AppThemeData.neutral900,
               onPress: () async {
                 if (isDocument) {
                   Get.back();

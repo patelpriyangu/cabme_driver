@@ -77,7 +77,7 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
                       title: "Ok".tr,
                       height: 5.5,
                       color: AppThemeData.primaryDefault,
-                      textColor: AppThemeData.neutral50,
+                      textColor: AppThemeData.neutral900,
                       onPress: widget.onPressPositive,
                     ),
                   ),
@@ -90,7 +90,7 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
                             title: "Yes".tr,
                             height: 5.5,
                             color: AppThemeData.neutral200,
-                            textColor: AppThemeData.neutral50,
+                            textColor: AppThemeData.neutral900,
                             onPress: widget.onPressNegative,
                           ),
                         )

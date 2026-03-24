@@ -55,12 +55,14 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Camera access is necessary to review order and also for profile picture.</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>UniqCars Driver would like permission to use your activity data to provide a personalised experience and show relevant promotions.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Your location is required for map benefits for you</string>
+	<string>UniqCars Driver uses your location in the background to share your real-time position with passengers, provide accurate navigation to pickup and drop-off points, and keep ride tracking active even when the app is not in the foreground.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Your location is required for map benefits for you</string>
+	<string>UniqCars Driver uses your background location to share your real-time position with passengers and provide continuous ride tracking and navigation to pickup and drop-off locations.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Your location is required for map benefits for you</string>
+	<string>UniqCars Driver uses your location to show your position on the map, navigate to passenger pickup points, and provide real-time ride tracking with estimated arrival times.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>We need this to provide voice communication.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
