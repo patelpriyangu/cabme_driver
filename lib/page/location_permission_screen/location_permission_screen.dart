@@ -47,7 +47,7 @@ class LocationPermissionScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 30),
                   RoundedButtonFill(
-                    title: 'Continue'.tr,
+                    title: 'Allow Location Access'.tr,
                     width: 50,
                     textColor: AppThemeData.neutral900,
                     color: AppThemeData.primaryDefault,

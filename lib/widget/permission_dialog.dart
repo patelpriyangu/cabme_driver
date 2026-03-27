@@ -1,6 +1,5 @@
 import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:location/location.dart';
 
@@ -16,11 +15,11 @@ class LocationPermissionDisclosureDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              'We need access to your location to assign for booking feature.',
+              'UniqCars Driver needs your location to navigate to passenger pickup points and share your position with riders.',
             ),
             SizedBox(height: 10),
             Text(
-              'This information will only be used for booking purpose and will not be shared with any third parties.',
+              'Your location is only used to enable ride services and will not be shared with third parties.',
             ),
           ],
         ),
@@ -31,15 +30,15 @@ class LocationPermissionDisclosureDialog extends StatelessWidget {
             _requestLocationPermission();
           },
           child: const Text(
-            'Accept',
+            'Allow Location Access',
             style: TextStyle(color: Colors.green),
           ),
         ),
         MaterialButton(
           onPressed: () {
-            SystemNavigator.pop();
+            Get.back();
           },
-          child: const Text('Decline', style: TextStyle(color: Colors.red)),
+          child: const Text('Not Now', style: TextStyle(color: Colors.red)),
         ),
       ],
     );

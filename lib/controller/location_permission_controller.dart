@@ -137,24 +137,14 @@ class LocationPermissionController extends GetxController {
     Get.defaultDialog(
       title: "Location Not Available",
       middleText:
-          "You can still browse the app, but you'll need location access enabled to accept rides. You can enable location access anytime from your device Settings.",
+          "You can still browse the app, but you'll need location access enabled to accept rides.",
       barrierDismissible: true,
       confirm: RoundedButtonFill(
         onPress: () {
           Get.back();
-          requestPermission();
-        },
-        title: 'Try Again',
-        width: 40,
-        height: 5,
-        color: AppThemeData.primaryDefault,
-      ),
-      cancel: RoundedButtonFill(
-        onPress: () {
-          Get.back();
           proceedWithoutLocation();
         },
-        title: 'Continue',
+        title: 'Continue Without Location',
         width: 40,
         height: 5,
         color: AppThemeData.primaryDefault,
@@ -167,24 +157,14 @@ class LocationPermissionController extends GetxController {
     Get.defaultDialog(
       title: "Location Services Disabled",
       middleText:
-          "Location services are turned off. You can still use the app, but you'll need location enabled to accept rides. Enable location services in your device Settings for full functionality.",
+          "Location services are turned off. You can still use the app, but you'll need location enabled to accept rides.",
       barrierDismissible: true,
       confirm: RoundedButtonFill(
         onPress: () {
           Get.back();
-          requestPermission();
-        },
-        title: 'Try Again',
-        width: 40,
-        height: 5,
-        color: AppThemeData.primaryDefault,
-      ),
-      cancel: RoundedButtonFill(
-        onPress: () {
-          Get.back();
           proceedWithoutLocation();
         },
-        title: 'Continue',
+        title: 'Continue Without Location',
         width: 40,
         height: 5,
         color: AppThemeData.primaryDefault,
