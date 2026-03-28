@@ -38,6 +38,7 @@ class Constant {
   static String? pusherApiKey = "64e0aa5b6b368b57ce56";
   static String? cluster = "eu";
 
+  static String agoraAppId = "0e54560d38a14f67b7ee0e71b8618cda"; // Set from Agora Console
   static String? kGoogleApiKey = "";
   static String? rideOtp = "no";
   static String? appVersion = "0.0";

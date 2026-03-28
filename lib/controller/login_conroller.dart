@@ -252,7 +252,12 @@ class LoginController extends GetxController {
     ShowToastDialog.showLoader("please wait...".tr);
     await signInWithApple().then((value) async {
       ShowToastDialog.closeLoader();
-      if (value != null) {
+      if (value == null) {
+        ShowToastDialog.showToast(
+            'Apple sign-in failed. Please try again.'.tr);
+        return;
+      }
+      {
         Map<String, dynamic> map = value;
         AuthorizationCredentialAppleID appleCredential = map['appleCredential'];
         UserCredential userCredential = map['userCredential'];
@@ -380,7 +385,6 @@ class LoginController extends GetxController {
       final oauthCredential = OAuthProvider("apple.com").credential(
         idToken: appleCredential.identityToken,
         rawNonce: rawNonce,
-        accessToken: appleCredential.authorizationCode,
       );
 
       // Sign in the user with Firebase. If the nonce we generated earlier does

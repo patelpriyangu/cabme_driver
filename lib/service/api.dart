@@ -134,6 +134,15 @@ class API {
   static const driverUpcomingRides = "${baseUrl}driver-upcoming-rides/";
   static const acceptUpcomingRide = "${baseUrl}accept-upcoming-ride/";
 
+  // Agora Voice Calling
+  static const agoraToken = "${baseUrl}agora/token";
+  static const callInitiate = "${baseUrl}call/initiate";
+  static const callAccept = "${baseUrl}call/accept";
+  static const callReject = "${baseUrl}call/reject";
+  static const callEnd = "${baseUrl}call/end";
+  static const callMissed = "${baseUrl}call/missed";
+  static const callHistory = "${baseUrl}call/history";
+
   static const logout = "${baseUrl}logout";
   static const getServiceJson = "${baseUrl}get-service-json";
   static const worldpayAuthorize = "${baseUrl}payments/worldpay/authorize";

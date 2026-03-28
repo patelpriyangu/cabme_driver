@@ -1,6 +1,7 @@
 import 'package:uniqcars_driver/constant/constant.dart';
 import 'package:uniqcars_driver/constant/ride_satatus.dart';
 import 'package:uniqcars_driver/controller/booking_details_controller.dart';
+import 'package:uniqcars_driver/controller/call_controller.dart';
 import 'package:uniqcars_driver/model/tax_model.dart';
 import 'package:uniqcars_driver/page/chats_screen/conversation_screen.dart';
 import 'package:uniqcars_driver/page/live_tracking_screen/live_tracking_screen.dart';
@@ -417,12 +418,14 @@ class BookingDetailsScreen extends StatelessWidget {
                                                       children: [
                                                         InkWell(
                                                           onTap: () {
-                                                            Constant.makePhoneCall(
-                                                                controller
-                                                                    .bookingModel
-                                                                    .value
-                                                                    .user!
-                                                                    .phone!);
+                                                            final callCtrl = Get.find<CallController>();
+                                                            callCtrl.initiateCall(
+                                                              receiverId: int.parse(controller.bookingModel.value.user!.id.toString()),
+                                                              receiverType: 'customer',
+                                                              rideId: int.tryParse(controller.bookingModel.value.id.toString()),
+                                                              receiverName: "${controller.bookingModel.value.user!.prenom} ${controller.bookingModel.value.user!.nom}",
+                                                              receiverPhoto: controller.bookingModel.value.user!.image,
+                                                            );
                                                           },
                                                           child:
                                                               SvgPicture.asset(

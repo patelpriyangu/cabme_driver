@@ -167,7 +167,12 @@ class PhoneNumberController extends GetxController {
     ShowToastDialog.showLoader("please wait...".tr);
     await signInWithApple().then((value) async {
       ShowToastDialog.closeLoader();
-      if (value != null) {
+      if (value == null) {
+        ShowToastDialog.showToast(
+            'Apple sign-in failed. Please try again.'.tr);
+        return;
+      }
+      {
         Map<String, dynamic> map = value;
         AuthorizationCredentialAppleID appleCredential = map['appleCredential'];
         UserCredential userCredential = map['userCredential'];
@@ -175,7 +180,6 @@ class PhoneNumberController extends GetxController {
         final String? appleEmail =
             userCredential.user?.email ?? appleCredential.email;
         if (appleEmail == null || appleEmail.isEmpty) {
-          ShowToastDialog.closeLoader();
           ShowToastDialog.showToast(
               'Could not retrieve Apple account email. Please try another sign-in method.'
                   .tr);
@@ -228,6 +232,9 @@ class PhoneNumberController extends GetxController {
                 'login_type': "apple",
               });
             }
+          } else {
+            ShowToastDialog.showToast(
+                'Something went wrong, please try again'.tr);
           }
         });
       }
@@ -275,7 +282,6 @@ class PhoneNumberController extends GetxController {
       final oauthCredential = OAuthProvider("apple.com").credential(
         idToken: appleCredential.identityToken,
         rawNonce: rawNonce,
-        accessToken: appleCredential.authorizationCode,
       );
 
       // Sign in the user with Firebase. If the nonce we generated earlier does

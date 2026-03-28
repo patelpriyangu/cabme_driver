@@ -11,6 +11,7 @@ import 'package:uniqcars_driver/model/rental_booking_model.dart';
 import 'package:uniqcars_driver/model/user_model.dart';
 import 'package:uniqcars_driver/page/auth_screens/login_screen.dart';
 import 'package:uniqcars_driver/service/api.dart';
+import 'package:uniqcars_driver/controller/call_controller.dart';
 import 'package:uniqcars_driver/service/pusher_service.dart';
 import 'package:uniqcars_driver/utils/Preferences.dart';
 import 'package:flutter/material.dart';
@@ -39,8 +40,22 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     getData();
+    _subscribeToCallEvents();
     update();
     super.onInit();
+  }
+
+  void _subscribeToCallEvents() {
+    final userId = Preferences.getInt(Preferences.userId).toString();
+    final callController = Get.find<CallController>();
+    PusherService().subscribeToCallEvent(
+      userId: userId,
+      userType: 'driver',
+      onIncomingCall: (data) => callController.handleIncomingCall(data),
+      onCallEnded: (data) => callController.handleCallEnded(data),
+      onCallRejected: (data) => callController.handleCallRejected(data),
+      onCallAccepted: (data) {},
+    );
   }
 
   void setAvailableTabs(List<String> tabs) {

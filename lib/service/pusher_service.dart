@@ -162,6 +162,66 @@ class PusherService {
   }
 
   // -----------------------------
+  // 📞 Call Channel
+  // -----------------------------
+  Future<void> subscribeToCallEvent({
+    required String userId,
+    required String userType,
+    required void Function(Map<String, dynamic>) onIncomingCall,
+    required void Function(Map<String, dynamic>) onCallEnded,
+    required void Function(Map<String, dynamic>) onCallRejected,
+    required void Function(Map<String, dynamic>) onCallAccepted,
+  }) async {
+    final channelName = 'call.$userType.$userId';
+
+    _eventCallbacks['$channelName:incoming'] = (data) {
+      try {
+        final parsed = data is String ? jsonDecode(data) : Map<String, dynamic>.from(data);
+        onIncomingCall(parsed);
+      } catch (e) {
+        debugPrint("Error parsing incoming call: $e");
+      }
+    };
+
+    _eventCallbacks['$channelName:ended'] = (data) {
+      try {
+        final parsed = data is String ? jsonDecode(data) : Map<String, dynamic>.from(data);
+        onCallEnded(parsed);
+      } catch (e) {
+        debugPrint("Error parsing call ended: $e");
+      }
+    };
+
+    _eventCallbacks['$channelName:rejected'] = (data) {
+      try {
+        final parsed = data is String ? jsonDecode(data) : Map<String, dynamic>.from(data);
+        onCallRejected(parsed);
+      } catch (e) {
+        debugPrint("Error parsing call rejected: $e");
+      }
+    };
+
+    _eventCallbacks['$channelName:accepted'] = (data) {
+      try {
+        final parsed = data is String ? jsonDecode(data) : Map<String, dynamic>.from(data);
+        onCallAccepted(parsed);
+      } catch (e) {
+        debugPrint("Error parsing call accepted: $e");
+      }
+    };
+
+    if (!_subscribedChannels.contains(channelName)) {
+      try {
+        await pusher.subscribe(channelName: channelName);
+        _subscribedChannels.add(channelName);
+        debugPrint("Subscribed to call channel: $channelName");
+      } catch (e) {
+        debugPrint("Subscription error (Call): $e");
+      }
+    }
+  }
+
+  // -----------------------------
   // 🧑‍✈️ Driver Channel
   // -----------------------------
   Future<void> subscribeToDriverEvent<T>({

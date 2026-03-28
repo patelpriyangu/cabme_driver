@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:uniqcars_driver/controller/call_controller.dart';
 import 'package:uniqcars_driver/controller/settings_controller.dart';
 import 'package:uniqcars_driver/firebase_options.dart';
 import 'package:uniqcars_driver/model/language_model.dart';
@@ -29,6 +30,7 @@ void main() async {
   );
   await GoogleSignIn.instance.initialize();
   await Preferences.initPref();
+  Get.put(CallController(), permanent: true);
   runApp(const MyApp());
 }
 
