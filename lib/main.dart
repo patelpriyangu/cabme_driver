@@ -8,6 +8,7 @@ import 'package:uniqcars_driver/model/language_model.dart';
 import 'package:uniqcars_driver/page/splash_screen.dart';
 import 'package:uniqcars_driver/themes/styles.dart';
 import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
+import 'package:uniqcars_driver/themes/app_them_data.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -94,10 +95,24 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         fallbackLocale: LocalizationService.locale,
         translations: LocalizationService(),
         builder: (context, child) {
-          return SafeArea(
-            bottom: true,
-            top: false,
-            child: EasyLoading.init()(context, child),
+          bool isDarkTheme = themeChangeProvider.darkTheme == 0 
+                  ? true 
+                  : themeChangeProvider.darkTheme == 1 
+                      ? false 
+                      : MediaQuery.of(context).platformBrightness == Brightness.dark;
+          
+          return Container(
+            color: isDarkTheme ? AppThemeData.neutralDark50 : AppThemeData.neutral50,
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 600),
+                child: SafeArea(
+                  bottom: true,
+                  top: false,
+                  child: EasyLoading.init()(context, child),
+                ),
+              ),
+            ),
           );
         },
         home: GetX(
