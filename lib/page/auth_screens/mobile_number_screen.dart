@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
 import 'package:uniqcars_driver/controller/phone_number_controller.dart';
@@ -217,46 +216,6 @@ class MobileNumberScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              if (Platform.isIOS) ...[
-                                SizedBox(
-                                  width: 40,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    FocusScope.of(context).unfocus();
-                                    controller.loginWithApple();
-                                  },
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            color: themeChange.getThem()
-                                                ? AppThemeData.neutralDark200
-                                                : AppThemeData.neutral200,
-                                            borderRadius:
-                                                BorderRadius.circular(60)),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(18),
-                                          child: SvgPicture.asset(
-                                              "assets/icons/ic_apple.svg"),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        'Apple'.tr,
-                                        textAlign: TextAlign.center,
-                                        style: AppThemeData.semiBoldTextStyle(
-                                            fontSize: 14,
-                                            color: themeChange.getThem()
-                                                ? AppThemeData.neutralDark900
-                                                : AppThemeData.neutral900),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
                             ],
                           )
                         ],

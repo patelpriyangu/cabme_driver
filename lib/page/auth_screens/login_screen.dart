@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
 import 'package:uniqcars_driver/controller/login_conroller.dart';
@@ -195,82 +194,6 @@ class LoginScreen extends StatelessWidget {
                             }
                           },
                         ),
-                        if (Platform.isIOS) ...[
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 30, horizontal: 30),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                    child: Divider(
-                                  color: themeChange.getThem()
-                                      ? AppThemeData.neutralDark300
-                                      : AppThemeData.neutral300,
-                                )),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16),
-                                  child: Text(
-                                    'OR CONTINUE WITH'.tr,
-                                    textAlign: TextAlign.center,
-                                    style: AppThemeData.mediumTextStyle(
-                                        fontSize: 12,
-                                        color: themeChange.getThem()
-                                            ? AppThemeData.neutralDark500
-                                            : AppThemeData.neutral500),
-                                  ),
-                                ),
-                                Expanded(
-                                    child: Divider(
-                                  color: themeChange.getThem()
-                                      ? AppThemeData.neutralDark300
-                                      : AppThemeData.neutral300,
-                                )),
-                              ],
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  FocusScope.of(context).unfocus();
-                                  controller.loginWithApple();
-                                },
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          color: themeChange.getThem()
-                                              ? AppThemeData.neutralDark200
-                                              : AppThemeData.neutral200,
-                                          borderRadius:
-                                              BorderRadius.circular(60)),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(18),
-                                        child: SvgPicture.asset(
-                                            "assets/icons/ic_apple.svg"),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      'Apple'.tr,
-                                      textAlign: TextAlign.center,
-                                      style: AppThemeData.semiBoldTextStyle(
-                                          fontSize: 14,
-                                          color: themeChange.getThem()
-                                              ? AppThemeData.neutralDark900
-                                              : AppThemeData.neutral900),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 24),
                           child: Row(

@@ -10,13 +10,11 @@ import 'package:uniqcars_driver/page/owner_dashboard_screen.dart';
 import 'package:uniqcars_driver/page/subscription_plan_screen/subscription_plan_screen.dart';
 import 'package:uniqcars_driver/service/api.dart';
 import 'package:uniqcars_driver/utils/Preferences.dart';
-import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 Future<void> showLoginWarningIfNeeded(VoidCallback onConfirmed) async {
   if (Constant.driverLoginWarningEnabled != 'yes' ||
@@ -248,102 +246,6 @@ class LoginController extends GetxController {
     });
   }
 
-  Future<void> loginWithApple() async {
-    ShowToastDialog.showLoader("please wait...".tr);
-    await signInWithApple().then((value) async {
-      ShowToastDialog.closeLoader();
-      if (value == null) {
-        ShowToastDialog.showToast(
-            'Apple sign-in failed. Please try again.'.tr);
-        return;
-      }
-      {
-        Map<String, dynamic> map = value;
-        AuthorizationCredentialAppleID appleCredential = map['appleCredential'];
-        UserCredential userCredential = map['userCredential'];
-        // Apple only sends email on first sign-in; use Firebase cached email as fallback
-        final String? appleEmail =
-            userCredential.user?.email ?? appleCredential.email;
-        if (appleEmail == null || appleEmail.isEmpty) {
-          ShowToastDialog.closeLoader();
-          ShowToastDialog.showToast(
-              'Could not retrieve Apple account email. Please try another sign-in method.'
-                  .tr);
-          return;
-        }
-        Map<String, String> bodyParams = {
-          'user_cat': "driver",
-          'email': appleEmail,
-          'login_type': "apple",
-        };
-        await phoneNumberIsExit(bodyParams).then((value) async {
-          if (value != null) {
-            if (value == true) {
-              Map<String, String> bodyParams = {
-                'email': appleEmail,
-                'user_cat': "driver",
-                'login_type': "apple",
-              };
-              await getDataByPhoneNumber(bodyParams).then((value) {
-                if (value != null) {
-                  if (value.success == "success") {
-                    ShowToastDialog.closeLoader();
-
-                    Preferences.setInt(Preferences.userId,
-                        int.parse(value.userData!.id.toString()));
-                    Preferences.setString(Preferences.user, jsonEncode(value));
-                    Preferences.setString(Preferences.accesstoken,
-                        value.userData!.accesstoken.toString());
-                    API.headers['accesstoken'] =
-                        value.userData!.accesstoken.toString();
-                    Preferences.setBoolean(Preferences.isLogin, true);
-
-                    UserData userData = value.userData!;
-                    bool isPlanExpired = false;
-
-                    if (userData.subscriptionPlanId != null) {
-                      if (userData.subscriptionExpiryDate == null) {
-                        isPlanExpired =
-                            userData.subscriptionPlan?.expiryDay != '-1';
-                      } else {
-                        final expiryDate = DateTime.tryParse(
-                            userData.subscriptionExpiryDate!);
-                        isPlanExpired = expiryDate != null &&
-                            expiryDate.isBefore(DateTime.now());
-                      }
-                    } else {
-                      isPlanExpired = true;
-                    }
-
-                    showLoginWarningIfNeeded(() =>
-                        LoginController.navigateAfterLogin(userData, isPlanExpired));
-                  } else {
-                    ShowToastDialog.showToast(
-                        value.error ?? 'Something went wrong'.tr);
-                  }
-                } else {
-                  ShowToastDialog.showToast(
-                      'Something went wrong, please try again'.tr);
-                }
-              });
-            } else if (value == false) {
-              ShowToastDialog.closeLoader();
-              Get.to(() => SignupScreen(), arguments: {
-                'email': appleEmail,
-                'firstName': appleCredential.givenName,
-                'lastname': appleCredential.familyName,
-                'login_type': "apple",
-              });
-            }
-          } else {
-            ShowToastDialog.showToast(
-                'Something went wrong, please try again'.tr);
-          }
-        });
-      }
-    });
-  }
-
   Future<UserCredential?> signInWithGoogle() async {
     try {
       final GoogleSignInAccount googleUser =
@@ -356,49 +258,6 @@ class LoginController extends GetxController {
       print('Google Sign-In error: $e');
       return null;
     }
-  }
-
-  /// Returns the sha256 hash of [input] in hex notation.
-  String sha256ofString(String input) {
-    final bytes = utf8.encode(input);
-    final digest = sha256.convert(bytes);
-    return digest.toString();
-  }
-
-  Future<Map<String, dynamic>?> signInWithApple() async {
-    try {
-      final rawNonce = generateNonce();
-      final nonce = sha256ofString(rawNonce);
-
-      // Request credential for the currently signed in Apple account.
-      AuthorizationCredentialAppleID appleCredential =
-          await SignInWithApple.getAppleIDCredential(
-        scopes: [
-          AppleIDAuthorizationScopes.email,
-          AppleIDAuthorizationScopes.fullName,
-        ],
-        nonce: nonce,
-        // webAuthenticationOptions: WebAuthenticationOptions(clientId: clientID, redirectUri: Uri.parse(redirectURL)),
-      );
-
-      // Create an `OAuthCredential` from the credential returned by Apple.
-      final oauthCredential = OAuthProvider("apple.com").credential(
-        idToken: appleCredential.identityToken,
-        rawNonce: rawNonce,
-      );
-
-      // Sign in the user with Firebase. If the nonce we generated earlier does
-      // not match the nonce in `appleCredential.identityToken`, sign in will fail.
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithCredential(oauthCredential);
-      return {
-        "appleCredential": appleCredential,
-        "userCredential": userCredential
-      };
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-    return null;
   }
 
   @override
