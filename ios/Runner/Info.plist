@@ -53,6 +53,8 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>UniqCars Driver uses this identifier to provide you with a personalised experience and to improve our services.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>UniqCars Driver uses your camera to let you upload a profile photo and capture images related to a ride or parcel delivery.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>

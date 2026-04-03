@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:uniqcars_driver/constant/constant.dart';
 import 'package:uniqcars_driver/model/user_model.dart';
 import 'package:uniqcars_driver/on_boarding_screen.dart';
@@ -21,6 +23,14 @@ class SplashController extends GetxController {
   }
 
   Future<void> redirectScreen() async {
+    // Request App Tracking Transparency permission on iOS
+    if (Platform.isIOS) {
+      final status = await AppTrackingTransparency.trackingAuthorizationStatus;
+      if (status == TrackingStatus.notDetermined) {
+        await AppTrackingTransparency.requestTrackingAuthorization();
+      }
+    }
+
     // Attempt to get location silently without blocking the user
     _tryGetLocationSilently();
 
