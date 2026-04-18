@@ -188,18 +188,51 @@ class LiveTrackingController extends GetxController {
   }
 
   RxList<latlong.LatLng> routePoints = <latlong.LatLng>[].obs;
+  RxString routeDistance = "".obs;
+  RxString routeDuration = "".obs;
 
   Future<void> fetchRoute(
       location.LatLng source, location.LatLng destination) async {
     final url = Uri.parse(
-      'https://router.project-osrm.org/route/v1/driving/${source.longitude},${source.latitude};${destination.longitude},${destination.latitude}?overview=full&geometries=geojson',
+      'https://router.project-osrm.org/route/v1/driving/${source.longitude},${source.latitude};${destination.longitude},${destination.latitude}?overview=full&geometries=geojson&alternatives=true',
     );
 
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
       final decoded = json.decode(response.body);
-      final geometry = decoded['routes'][0]['geometry']['coordinates'];
+      final routes = decoded['routes'] as List;
+
+      if (routes.isEmpty) return;
+
+      // Auto-select the fastest route (shortest duration)
+      var fastestRoute = routes[0];
+      for (var route in routes) {
+        if ((route['duration'] as num) < (fastestRoute['duration'] as num)) {
+          fastestRoute = route;
+        }
+      }
+
+      final geometry = fastestRoute['geometry']['coordinates'];
+
+      // Update distance from the fastest route
+      final distanceInMeters = fastestRoute['distance'] as num;
+      final durationInSeconds = fastestRoute['duration'] as num;
+
+      if (Constant.distanceUnit?.toLowerCase() == "km") {
+        routeDistance.value = (distanceInMeters / 1000).toStringAsFixed(2);
+      } else {
+        routeDistance.value = (distanceInMeters / 1609.344).toStringAsFixed(2);
+      }
+
+      final durationInMinutes = (durationInSeconds / 60).round();
+      if (durationInMinutes >= 60) {
+        final hours = durationInMinutes ~/ 60;
+        final mins = durationInMinutes % 60;
+        routeDuration.value = "${hours}h ${mins}m";
+      } else {
+        routeDuration.value = "${durationInMinutes} min";
+      }
 
       routePoints.clear();
       for (var coord in geometry) {
@@ -207,6 +240,7 @@ class LiveTrackingController extends GetxController {
         final lat = coord[1];
         routePoints.add(location.LatLng(lat, lon));
       }
+      update();
     } else {
       print("Failed to get route: ${response.body}");
     }

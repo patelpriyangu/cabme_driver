@@ -591,6 +591,60 @@ class BookingDetailsScreen extends StatelessWidget {
                                       ),
                                     ],
                                   ),
+                                  SizedBox(height: 10),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          "Total Distance:".tr,
+                                          style: AppThemeData.mediumTextStyle(
+                                              fontSize: 14,
+                                              color: themeChange.getThem()
+                                                  ? AppThemeData.neutralDark900
+                                                  : AppThemeData.neutral900),
+                                        ),
+                                      ),
+                                      SizedBox(width: 10),
+                                      Expanded(
+                                        child: Text(
+                                          "${controller.bookingModel.value.distance ?? '--'} ${controller.bookingModel.value.distanceUnit ?? Constant.distanceUnit ?? 'Miles'}",
+                                          style: AppThemeData.boldTextStyle(
+                                              fontSize: 14,
+                                              color: themeChange.getThem()
+                                                  ? AppThemeData.primaryDefault
+                                                  : AppThemeData.primaryDefault),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  if (controller.routeDuration.value.isNotEmpty) ...[
+                                    SizedBox(height: 10),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            "Estimated Duration:".tr,
+                                            style: AppThemeData.mediumTextStyle(
+                                                fontSize: 14,
+                                                color: themeChange.getThem()
+                                                    ? AppThemeData.neutralDark900
+                                                    : AppThemeData.neutral900),
+                                          ),
+                                        ),
+                                        SizedBox(width: 10),
+                                        Expanded(
+                                          child: Text(
+                                            controller.routeDuration.value,
+                                            style: AppThemeData.boldTextStyle(
+                                                fontSize: 14,
+                                                color: themeChange.getThem()
+                                                    ? AppThemeData.primaryDefault
+                                                    : AppThemeData.primaryDefault),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                   if (controller.bookingModel.value.statut ==
                                           RideStatus.onRide ||
                                       controller.bookingModel.value.statut ==

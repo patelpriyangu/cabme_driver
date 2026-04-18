@@ -50,11 +50,17 @@ class PusherService {
       onConnectionStateChange: (currentState, previousState) {
         debugPrint("🔌 Connection state changed: $previousState → $currentState");
 
-        // ✅ Re-subscribe to all channels on reconnect
+        // Re-subscribe to all channels on reconnect.
+        // Wrapped in try-catch because the native Pusher SDK may already
+        // have restored the subscription, throwing "Already subscribed".
         if (currentState == 'CONNECTED') {
           for (final channel in _subscribedChannels) {
-            pusher.subscribe(channelName: channel);
-            debugPrint("🔄 Re-subscribed to $channel after reconnect");
+            try {
+              pusher.subscribe(channelName: channel);
+              debugPrint("🔄 Re-subscribed to $channel after reconnect");
+            } catch (_) {
+              // Already subscribed natively — safe to ignore
+            }
           }
         }
       },

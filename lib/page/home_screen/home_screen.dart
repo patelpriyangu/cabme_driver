@@ -28,6 +28,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:pinput/pinput.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:provider/provider.dart';
 import 'package:timelines_plus/timelines_plus.dart';
 
@@ -721,24 +722,32 @@ class HomeScreen extends StatelessWidget {
                           Row(
                             children: [
                               Expanded(
-                                child: Column(
-                                  children: [
-                                    SvgPicture.asset(
-                                        "assets/icons/ic_distance.svg"),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      '${double.parse(controller.bookingModel.value.data!.distance.toString()).toStringAsFixed(2)}${controller.bookingModel.value.data!.distanceUnit}  '
-                                          .tr,
-                                      textAlign: TextAlign.start,
-                                      style: AppThemeData.boldTextStyle(
-                                          fontSize: 16,
-                                          color: themeChange.getThem()
-                                              ? AppThemeData.neutralDark900
-                                              : AppThemeData.neutral900),
-                                    )
-                                  ],
+                                child: GestureDetector(
+                                  onTap: () {
+                                    final data = controller.bookingModel.value.data!;
+                                    final destLat = data.latitudeDepart;
+                                    final destLng = data.longitudeDepart;
+                                    if (destLat != null && destLng != null) {
+                                      _showNavigationPicker(context, themeChange, destLat, destLng);
+                                    }
+                                  },
+                                  child: Column(
+                                    children: [
+                                      SvgPicture.asset(
+                                          "assets/icons/ic_distance.svg"),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        '${double.parse(controller.bookingModel.value.data!.distance.toString()).toStringAsFixed(2)}${controller.bookingModel.value.data!.distanceUnit}  '
+                                            .tr,
+                                        textAlign: TextAlign.start,
+                                        style: AppThemeData.boldTextStyle(
+                                            fontSize: 16,
+                                            color: AppThemeData.primaryDefault),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                               Expanded(
@@ -2116,6 +2125,91 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  void _showNavigationPicker(BuildContext context, DarkThemeProvider themeChange,
+      String lat, String lng) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      backgroundColor:
+          themeChange.getThem() ? AppThemeData.neutralDark50 : Colors.white,
+      builder: (ctx) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  child: Text(
+                    "Open Directions In".tr,
+                    style: AppThemeData.boldTextStyle(
+                        fontSize: 18,
+                        color: themeChange.getThem()
+                            ? AppThemeData.neutralDark900
+                            : AppThemeData.neutral900),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                ListTile(
+                  leading: const Icon(Icons.map, color: Colors.green),
+                  title: Text("Google Maps",
+                      style: AppThemeData.mediumTextStyle(
+                          fontSize: 16,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark900
+                              : AppThemeData.neutral900)),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    launchUrl(
+                        Uri.parse(
+                            'https://www.google.com/maps/dir/?api=1&destination=$lat,$lng&travelmode=driving'),
+                        mode: LaunchMode.externalApplication);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.directions, color: Colors.blue),
+                  title: Text("Apple Maps",
+                      style: AppThemeData.mediumTextStyle(
+                          fontSize: 16,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark900
+                              : AppThemeData.neutral900)),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    launchUrl(
+                        Uri.parse(
+                            'https://maps.apple.com/?daddr=$lat,$lng&dirflg=d'),
+                        mode: LaunchMode.externalApplication);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.navigation, color: Colors.lightBlue),
+                  title: Text("Waze",
+                      style: AppThemeData.mediumTextStyle(
+                          fontSize: 16,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark900
+                              : AppThemeData.neutral900)),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    launchUrl(
+                        Uri.parse(
+                            'https://waze.com/ul?ll=$lat,$lng&navigate=yes'),
+                        mode: LaunchMode.externalApplication);
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   void conformCashPayment(BuildContext context, DarkThemeProvider themeChange,
       HomeController controller) {
     Get.dialog(
@@ -2147,7 +2241,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  "Please confirm that you have received the full cash amount from the customer before continuing.",
+                  "Are you sure you have collected the full cash amount from the customer?",
                   textAlign: TextAlign.start,
                   style: AppThemeData.mediumTextStyle(
                       color: themeChange.getThem()
@@ -2155,16 +2249,18 @@ class HomeScreen extends StatelessWidget {
                           : AppThemeData.neutral500,
                       fontSize: 14),
                 ),
+                SizedBox(height: 10),
+                Text(
+                  "Amount: ${Constant().amountShow(amount: controller.totalAmount.value)}",
+                  textAlign: TextAlign.center,
+                  style: AppThemeData.boldTextStyle(
+                      fontSize: 22,
+                      color: themeChange.getThem()
+                          ? AppThemeData.neutralDark900
+                          : AppThemeData.neutral900),
+                ),
                 SizedBox(height: 25),
-                RoundedButtonFill(
-                  title: "Ride Completed".tr,
-                  height: 5.5,
-                  color: AppThemeData.successDefault,
-                  textColor: AppThemeData.neutral50,
-                  onPress: () async {
-                    controller.completeBooking();
-                  },
-                )
+                _buildSlideToConfirm(themeChange, controller),
               ],
             ),
           ),
@@ -2172,6 +2268,94 @@ class HomeScreen extends StatelessWidget {
       ),
       barrierDismissible: true,
     );
+  }
+
+  Widget _buildSlideToConfirm(
+      DarkThemeProvider themeChange, HomeController controller) {
+    final RxDouble dragPosition = 0.0.obs;
+    const double trackHeight = 56.0;
+    const double thumbSize = 50.0;
+
+    return LayoutBuilder(builder: (context, constraints) {
+      final trackWidth = constraints.maxWidth;
+      final maxDrag = trackWidth - thumbSize - 6;
+
+      return Obx(() {
+        final completed = dragPosition.value >= maxDrag;
+        return Container(
+          height: trackHeight,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(trackHeight / 2),
+            color: completed
+                ? AppThemeData.successDefault
+                : (themeChange.getThem()
+                    ? AppThemeData.neutralDark200
+                    : AppThemeData.neutral200),
+          ),
+          child: Stack(
+            alignment: Alignment.centerLeft,
+            children: [
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 40),
+                  child: Text(
+                    completed ? "Confirmed!".tr : "Slide to Confirm".tr,
+                    style: AppThemeData.mediumTextStyle(
+                        fontSize: 15,
+                        color: completed
+                            ? Colors.white
+                            : (themeChange.getThem()
+                                ? AppThemeData.neutralDark500
+                                : AppThemeData.neutral500)),
+                  ),
+                ),
+              ),
+              Positioned(
+                left: dragPosition.value + 3,
+                child: GestureDetector(
+                  onHorizontalDragUpdate: (details) {
+                    dragPosition.value =
+                        (dragPosition.value + details.delta.dx)
+                            .clamp(0.0, maxDrag);
+                  },
+                  onHorizontalDragEnd: (details) {
+                    if (dragPosition.value >= maxDrag * 0.85) {
+                      dragPosition.value = maxDrag;
+                      controller.completeBooking();
+                    } else {
+                      dragPosition.value = 0.0;
+                    }
+                  },
+                  child: Container(
+                    width: thumbSize,
+                    height: thumbSize,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: completed
+                          ? Colors.white
+                          : AppThemeData.successDefault,
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 4,
+                            offset: Offset(2, 2))
+                      ],
+                    ),
+                    child: Icon(
+                      completed ? Icons.check : Icons.chevron_right,
+                      color: completed
+                          ? AppThemeData.successDefault
+                          : Colors.white,
+                      size: 28,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      });
+    });
   }
 
   void conformCashRentalPayment(

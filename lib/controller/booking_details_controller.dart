@@ -16,6 +16,7 @@ import 'package:latlong2/latlong.dart' as location;
 
 import '../model/booking_mode.dart';
 import '../service/api.dart';
+import '../service/ride_alert_service.dart';
 
 class BookingDetailsController extends GetxController {
   RxBool isLoading = true.obs;
@@ -168,6 +169,8 @@ class BookingDetailsController extends GetxController {
   }
 
   Future<void> acceptBooking(String rideId) async {
+    RideAlertService().stop();
+
     Map<String, dynamic> bodyParams = {
       'id_driver': Preferences.getInt(Preferences.userId),
       'id_ride': rideId,
@@ -248,6 +251,8 @@ class BookingDetailsController extends GetxController {
   }
 
   Future<void> rejectBooking(String rideId) async {
+    RideAlertService().stop();
+
     Map<String, dynamic> bodyParams = {
       'id_driver': Preferences.getInt(Preferences.userId),
       'id_ride': rideId,
@@ -333,6 +338,7 @@ class BookingDetailsController extends GetxController {
       destination: PointLatLng(destination.latitude, destination.longitude),
       wayPoints: wayPoints,
       mode: TravelMode.driving,
+      alternatives: true,
     );
 
     try {
@@ -344,13 +350,76 @@ class BookingDetailsController extends GetxController {
         return;
       }
 
+      // Use the first route returned (Google Directions API returns fastest by default)
       final polylineCoordinates = result.points
           .map((point) => gmaps.LatLng(point.latitude, point.longitude))
           .toList();
 
+      // Calculate distance from the polyline using Google Directions API response
+      // Also fetch distance via OSRM as fallback for accurate distance
+      _fetchGoogleRouteDistance(source, destination, wayPoints);
+
       _addPolyLine(polylineCoordinates);
     } catch (e) {
       // ignore polyline fetch errors silently
+    }
+  }
+
+  Future<void> _fetchGoogleRouteDistance(gmaps.LatLng source,
+      gmaps.LatLng destination, List<PolylineWayPoint> wayPoints) async {
+    try {
+      final allCoordinates = [
+        '${source.longitude},${source.latitude}',
+        ...wayPoints.map((wp) {
+          final parts = wp.location.split(',');
+          return '${parts[1]},${parts[0]}';
+        }),
+        '${destination.longitude},${destination.latitude}',
+      ];
+
+      final url = Uri.parse(
+        'https://router.project-osrm.org/route/v1/driving/${allCoordinates.join(';')}?overview=false&alternatives=true',
+      );
+
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final decoded = json.decode(response.body);
+        final routes = decoded['routes'] as List;
+
+        if (routes.isEmpty) return;
+
+        // Auto-select the fastest route
+        var fastestRoute = routes[0];
+        for (var route in routes) {
+          if ((route['duration'] as num) < (fastestRoute['duration'] as num)) {
+            fastestRoute = route;
+          }
+        }
+
+        final distanceInMeters = fastestRoute['distance'] as num;
+        final durationInSeconds = fastestRoute['duration'] as num;
+
+        if (Constant.distanceUnit?.toLowerCase() == "km") {
+          routeDistance.value = (distanceInMeters / 1000).toStringAsFixed(2);
+        } else {
+          routeDistance.value =
+              (distanceInMeters / 1609.344).toStringAsFixed(2);
+        }
+
+        final durationInMinutes = (durationInSeconds / 60).round();
+        if (durationInMinutes >= 60) {
+          final hours = durationInMinutes ~/ 60;
+          final mins = durationInMinutes % 60;
+          routeDuration.value = "${hours}h ${mins}m";
+        } else {
+          routeDuration.value = "${durationInMinutes} min";
+        }
+
+        update();
+      }
+    } catch (e) {
+      // ignore distance fetch errors silently
     }
   }
 
@@ -421,6 +490,9 @@ class BookingDetailsController extends GetxController {
       .toList();
 
   RxList<location.LatLng> routePoints = <location.LatLng>[].obs;
+  RxString routeDistance = "".obs;
+  RxString routeDuration = "".obs;
+
   Future<void> fetchRoute() async {
     try {
       final allCoordinates = [
@@ -428,14 +500,45 @@ class BookingDetailsController extends GetxController {
       ];
 
       final url = Uri.parse(
-        'https://router.project-osrm.org/route/v1/driving/${allCoordinates.join(';')}?overview=full&geometries=geojson',
+        'https://router.project-osrm.org/route/v1/driving/${allCoordinates.join(';')}?overview=full&geometries=geojson&alternatives=true',
       );
 
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
         final decoded = json.decode(response.body);
-        final geometry = decoded['routes'][0]['geometry']['coordinates'];
+        final routes = decoded['routes'] as List;
+
+        if (routes.isEmpty) return;
+
+        // Auto-select the fastest route (shortest duration)
+        var fastestRoute = routes[0];
+        for (var route in routes) {
+          if ((route['duration'] as num) < (fastestRoute['duration'] as num)) {
+            fastestRoute = route;
+          }
+        }
+
+        final geometry = fastestRoute['geometry']['coordinates'];
+
+        // Update distance from the fastest route
+        final distanceInMeters = fastestRoute['distance'] as num;
+        final durationInSeconds = fastestRoute['duration'] as num;
+
+        if (Constant.distanceUnit?.toLowerCase() == "km") {
+          routeDistance.value = (distanceInMeters / 1000).toStringAsFixed(2);
+        } else {
+          routeDistance.value = (distanceInMeters / 1609.344).toStringAsFixed(2);
+        }
+
+        final durationInMinutes = (durationInSeconds / 60).round();
+        if (durationInMinutes >= 60) {
+          final hours = durationInMinutes ~/ 60;
+          final mins = durationInMinutes % 60;
+          routeDuration.value = "${hours}h ${mins}m";
+        } else {
+          routeDuration.value = "${durationInMinutes} min";
+        }
 
         routePoints.clear();
         for (var coord in geometry) {
@@ -444,7 +547,6 @@ class BookingDetailsController extends GetxController {
           routePoints.add(location.LatLng(lat, lon));
         }
         update();
-      } else {
       }
     } catch (e) {
       // ignore route fetch errors silently

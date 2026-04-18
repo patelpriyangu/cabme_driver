@@ -1105,8 +1105,8 @@ class WalletScreen extends StatelessWidget {
                       ),
                       TextFieldWidget(
                         controller: controller.ifcsCodeController.value,
-                        hintText: 'Enter Bank IFSC Code',
-                        title: 'IFSC Code',
+                        hintText: 'Enter Bank Short Code',
+                        title: 'Bank Short Code',
                       ),
                       TextFieldWidget(
                         controller: controller.informationController.value,
@@ -1140,7 +1140,7 @@ class WalletScreen extends StatelessWidget {
                             } else if (controller
                                 .ifcsCodeController.value.text.isEmpty) {
                               ShowToastDialog.showToast(
-                                  "Please enter IFSC code");
+                                  "Please enter bank short code");
                             } else if (controller
                                 .informationController.value.text.isEmpty) {
                               ShowToastDialog.showToast(

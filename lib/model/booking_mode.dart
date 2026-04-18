@@ -125,44 +125,44 @@ class BookingData {
     bookingNumber = json['booking_number'].toString();
     idUserApp = json['id_user_app'].toString();
     idConducteur = json['id_conducteur'].toString();
-    departName = json['depart_name'];
-    destinationName = json['destination_name'];
-    latitudeDepart = json['latitude_depart'];
-    longitudeDepart = json['longitude_depart'];
-    latitudeArrivee = json['latitude_arrivee'];
-    longitudeArrivee = json['longitude_arrivee'];
+    departName = json['depart_name']?.toString();
+    destinationName = json['destination_name']?.toString();
+    latitudeDepart = json['latitude_depart']?.toString();
+    longitudeDepart = json['longitude_depart']?.toString();
+    latitudeArrivee = json['latitude_arrivee']?.toString();
+    longitudeArrivee = json['longitude_arrivee']?.toString();
     if (json['stops'] != null && json['stops'] is List) {
       stops = <Stops>[];
       json['stops'].forEach((v) {
         stops!.add(Stops.fromJson(v));
       });
     }
-    numberPoeple = json['number_poeple'];
-    distance = json['distance'];
-    distanceUnit = json['distance_unit'];
-    duree = json['duree'];
-    montant = json['montant'];
+    numberPoeple = json['number_poeple']?.toString();
+    distance = json['distance']?.toString();
+    distanceUnit = json['distance_unit']?.toString();
+    duree = json['duree']?.toString();
+    montant = json['montant']?.toString();
     if (json['tax'] != null && json['tax'] is List) {
       tax = <TaxModel>[];
       json['tax'].forEach((v) {
         tax!.add(TaxModel.fromJson(v));
       });
     }
-    discount = json['discount'].toString();
-    statutPaiement = json['statut_paiement'];
-    idPaymentMethod = json['id_payment_method'].toString();
-    creer = json['creer'];
-    feelSafe = json['feel_safe'];
-    feelSafeDriver = json['feel_safe_driver'];
-    otp = json['otp'];
-    otpCreated = json['otp_created'];
-    rideType = json['ride_type'];
-    statut = json['statut'];
-    vehicleTypeId = json['vehicle_type_id'].toString();
-    assignedDriverId = json['assigned_driver_id'];
-    totalChildren = json['total_children'];
-    paymentMethod = json['payment_method'];
-    adminCommission = json['admin_commission'];
+    discount = json['discount']?.toString();
+    statutPaiement = json['statut_paiement']?.toString();
+    idPaymentMethod = json['id_payment_method']?.toString();
+    creer = json['creer']?.toString();
+    feelSafe = json['feel_safe']?.toString();
+    feelSafeDriver = json['feel_safe_driver']?.toString();
+    otp = json['otp']?.toString();
+    otpCreated = json['otp_created']?.toString();
+    rideType = json['ride_type']?.toString();
+    statut = json['statut']?.toString();
+    vehicleTypeId = json['vehicle_type_id']?.toString();
+    assignedDriverId = json['assigned_driver_id']?.toString();
+    totalChildren = json['total_children']?.toString();
+    paymentMethod = json['payment_method']?.toString();
+    adminCommission = json['admin_commission']?.toString();
     driver = json['driver'] != null ? Driver.fromJson(json['driver']) : null;
     user = json['user'] != null ? User.fromJson(json['user']) : null;
     adminCommissionType = json['admin_commission_type'] != null
@@ -175,11 +175,11 @@ class BookingData {
         ? ComplainDetails.fromJson(json['complaint_detail'])
         : null;
     complaint = json['complaint'];
-    arrivedTime = json['arrived_time'];
-    pobTime = json['pob_time'];
-    waitingDuration = json['waiting_duration'];
-    scheduledAt = json['scheduled_at'];
-    prepaidTransactionId = json['prepaid_transaction_id'];
+    arrivedTime = json['arrived_time']?.toString();
+    pobTime = json['pob_time']?.toString();
+    waitingDuration = json['waiting_duration']?.toString();
+    scheduledAt = json['scheduled_at']?.toString();
+    prepaidTransactionId = json['prepaid_transaction_id']?.toString();
     isPrepaid = json['is_prepaid'] == 1 || json['is_prepaid'] == true;
   }
 

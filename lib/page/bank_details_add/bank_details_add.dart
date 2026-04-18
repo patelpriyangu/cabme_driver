@@ -123,7 +123,7 @@ class BankDetailsAdd extends StatelessWidget {
                               "Please enter bank account number");
                         } else if (controller
                             .ifcsCodeController.value.text.isEmpty) {
-                          ShowToastDialog.showToast("Please enter IFSC code");
+                          ShowToastDialog.showToast("Please enter bank short code");
                         } else if (controller
                             .informationController.value.text.isEmpty) {
                           ShowToastDialog.showToast("Please enter information");

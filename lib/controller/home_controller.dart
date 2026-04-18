@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
+import 'package:uniqcars_driver/service/ride_alert_service.dart';
 
 class HomeController extends GetxController {
   RxBool isLoading = true.obs;
@@ -43,6 +44,12 @@ class HomeController extends GetxController {
     _subscribeToCallEvents();
     update();
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    RideAlertService().stop();
+    super.onClose();
   }
 
   void _subscribeToCallEvents() {
@@ -159,6 +166,14 @@ class HomeController extends GetxController {
           booking.data!.statut == RideStatus.confirmed ||
           booking.data!.statut == RideStatus.arrived ||
           booking.data!.statut == RideStatus.onRide) {
+        // Play alert sound for new ride requests
+        if (booking.data!.statut == RideStatus.newRide) {
+          RideAlertService().play();
+        } else {
+          // Stop alert for any other active status (driver already interacted)
+          RideAlertService().stop();
+        }
+
         locationData.clear();
         locationData.add(Stops(
             location: booking.data!.departName,
@@ -178,9 +193,9 @@ class HomeController extends GetxController {
       } else if (booking.data!.statut == RideStatus.canceled ||
           booking.data!.statut == RideStatus.completed ||
           booking.data!.statut == RideStatus.rejected) {
+        RideAlertService().stop();
         bookingModel.value = BookingModel();
         update();
-        // PusherService().unsubscribeDriverOrder(booking.data!.id.toString());
       }
     }
     update();
@@ -212,6 +227,8 @@ class HomeController extends GetxController {
   }
 
   Future<void> acceptBooking(String rideId) async {
+    RideAlertService().stop();
+
     Map<String, dynamic> bodyParams = {
       'id_driver': Preferences.getInt(Preferences.userId),
       'id_ride': rideId,
@@ -349,6 +366,8 @@ class HomeController extends GetxController {
   }
 
   Future<void> rejectBooking(String rideId) async {
+    RideAlertService().stop();
+
     Map<String, dynamic> bodyParams = {
       'id_driver': Preferences.getInt(Preferences.userId),
       'id_ride': rideId,
