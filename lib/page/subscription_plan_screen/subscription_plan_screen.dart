@@ -836,7 +836,7 @@ class SubscriptionPlanScreen extends StatelessWidget {
                         title: "Confirm".tr,
                         height: 5.5,
                         color: AppThemeData.primaryDefault,
-                        textColor: AppThemeData.neutral900,
+                        textColor: Colors.white,
                         onPress: () async {
                           if (controller.selectedPaymentMethod.value.isEmpty) {
                             ShowToastDialog.showToast(

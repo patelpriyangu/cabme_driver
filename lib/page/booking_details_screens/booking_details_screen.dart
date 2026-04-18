@@ -1265,7 +1265,7 @@ class BookingDetailsScreen extends StatelessWidget {
                   title: "Start Ride".tr,
                   height: 5.5,
                   color: AppThemeData.primaryDefault,
-                  textColor: AppThemeData.neutral900,
+                  textColor: Colors.white,
                   onPress: () async {
                     controller.onRideStatus();
                   },

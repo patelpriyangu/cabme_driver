@@ -61,7 +61,7 @@ class RoundedButtonFill extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: AppThemeData.boldTextStyle(
                         fontSize: fontSizes ?? 14,
-                        color: textColor ?? AppThemeData.neutral900),
+                        color: textColor ?? Colors.white),
                   )
                 : Expanded(
                     child: Text(
@@ -69,7 +69,7 @@ class RoundedButtonFill extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: AppThemeData.boldTextStyle(
                           fontSize: fontSizes ?? 14,
-                          color: textColor ?? AppThemeData.neutral900),
+                          color: textColor ?? Colors.white),
                     ),
                   ),
             (isRight == true)

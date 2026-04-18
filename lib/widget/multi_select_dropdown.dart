@@ -123,7 +123,7 @@ class MultiSelectDropdown<T> extends StatelessWidget {
               title: "Save".tr,
               height: 5.5,
               color: AppThemeData.primaryDefault,
-              textColor: AppThemeData.neutral900,
+              textColor: Colors.white,
               onPress: () async {
                 FocusScope.of(context).unfocus();
                 Navigator.pop(context);

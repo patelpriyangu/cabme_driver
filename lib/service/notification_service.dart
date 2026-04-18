@@ -29,20 +29,22 @@ Future<void> firebaseMessageBackgroundHandle(RemoteMessage message) async {
       message.data['body'] ?? 'A new ride is available',
       const NotificationDetails(
         android: AndroidNotificationDetails(
-          'new_ride_requests',
+          'new_ride_requests_v2',
           'New Ride Requests',
           importance: Importance.max,
           priority: Priority.max,
           playSound: true,
           enableVibration: true,
+          sound: RawResourceAndroidNotificationSound('new_ride_alert'),
         ),
       ),
     );
   }
 }
 
-// Channel IDs
-const String _channelNewRide = 'new_ride_requests';
+// Channel IDs — bump version suffix when changing sound to force Android
+// to recreate the channel (Android caches channel settings permanently).
+const String _channelNewRide = 'new_ride_requests_v2';
 const String _channelUpcoming = 'upcoming_rides';
 const String _channelGeneral = 'general';
 
@@ -106,6 +108,7 @@ class NotificationService {
             importance: Importance.max,
             playSound: true,
             enableVibration: true,
+            sound: RawResourceAndroidNotificationSound('new_ride_alert'),
           ),
         );
         await androidPlugin.createNotificationChannel(
@@ -134,46 +137,75 @@ class NotificationService {
   }
 
   Future<void> setupInteractedMessage() async {
+    // Handle the case where the app was launched from a notification tap
     RemoteMessage? initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
-      FirebaseMessaging.onBackgroundMessage(
-          (message) => firebaseMessageBackgroundHandle(message));
+      log("::::::::::::initialMessage:::::::::::::::::");
+      _handleNotificationTap(initialMessage);
     }
 
+    // Foreground notifications
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       log("::::::::::::onMessage:::::::::::::::::");
       if (message.notification != null) {
         log(message.notification.toString());
         display(message);
       }
-      if (message.data['tag'] == 'scheduled_ride_unassigned' ||
-          message.data['tag'] == 'scheduled_ride' ||
-          message.data['tag'] == 'scheduled_ride_cancelled') {
+
+      // Refresh ride data for ride-related notifications
+      final tag = message.data['tag'] ?? '';
+      if (tag == 'ridenewrider' || tag == 'ridenewriderparcel') {
+        try {
+          Get.find<HomeController>().getBooking();
+        } catch (_) {}
+      }
+      if (tag == 'scheduled_ride_unassigned' ||
+          tag == 'scheduled_ride' ||
+          tag == 'scheduled_ride_cancelled') {
         try {
           Get.find<HomeController>().getUpcomingRides();
         } catch (_) {}
       }
     });
+
+    // When the user taps on a notification while app is in background
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
       log("::::::::::::onMessageOpenedApp:::::::::::::::::");
-      if (message.notification != null) {
-        if (message.data['status'] == "done") {
-          await Get.to(ConversationScreen(), arguments: {
-            'receiverId': int.parse(
-                json.decode(message.data['message'])['senderId'].toString()),
-            'orderId': int.parse(
-                json.decode(message.data['message'])['orderId'].toString()),
-            'receiverName':
-                json.decode(message.data['message'])['senderName'].toString(),
-            'receiverPhoto':
-                json.decode(message.data['message'])['senderPhoto'].toString(),
-          });
-        }
-      }
+      _handleNotificationTap(message);
     });
+
     log("::::::::::::Permission authorized:::::::::::::::::");
     await FirebaseMessaging.instance.subscribeToTopic("uniqcars_driver");
+  }
+
+  void _handleNotificationTap(RemoteMessage message) {
+    final tag = message.data['tag'] ?? '';
+
+    if (tag == 'ridenewrider' || tag == 'ridenewriderparcel' ||
+        tag == 'ridearrived' || tag == 'rideonride' || tag == 'ridecompleted') {
+      // Navigate to home/dashboard and refresh ride data
+      try {
+        Get.find<HomeController>().getBooking();
+      } catch (_) {}
+      Get.offAll(() => DashboardScreen());
+    } else if (message.data['status'] == "done") {
+      // Chat message notification
+      try {
+        Get.to(ConversationScreen(), arguments: {
+          'receiverId': int.parse(
+              json.decode(message.data['message'])['senderId'].toString()),
+          'orderId': int.parse(
+              json.decode(message.data['message'])['orderId'].toString()),
+          'receiverName':
+              json.decode(message.data['message'])['senderName'].toString(),
+          'receiverPhoto':
+              json.decode(message.data['message'])['senderPhoto'].toString(),
+        });
+      } catch (e) {
+        log('Notification tap handler error: $e');
+      }
+    }
   }
 
   static Future<String?>? getToken() async {
@@ -187,14 +219,28 @@ class NotificationService {
 
     final tag = message.data['tag'] ?? '';
 
+    // Skip notifications for the driver's own actions — the driver already
+    // sees the result in-app via Pusher, no need for a redundant FCM alert.
+    const driverOwnActionTags = {
+      'ridearrived',
+      'rideonride',
+      'rideconfirmed',
+      'ridecompleted',
+    };
+    if (driverOwnActionTags.contains(tag)) {
+      log('Skipping notification for driver own action: $tag');
+      return;
+    }
+
     // Play sound based on notification type
     try {
       if (tag == 'ridenewrider' || tag == 'ridenewriderparcel') {
-        // New ride request — loud ringtone to grab attention
-        FlutterRingtonePlayer().playRingtone(
+        // New ride request — custom UniqCars alert sound
+        FlutterRingtonePlayer().play(
+          fromAsset: 'assets/sounds/new_ride_alert.wav',
           looping: false,
           volume: 1.0,
-          asAlarm: false,
+          asAlarm: true,
         );
       } else if (tag == 'scheduled_ride') {
         // New upcoming ride assigned
@@ -248,6 +294,9 @@ class NotificationService {
         ticker: 'ticker',
         playSound: true,
         enableVibration: true,
+        sound: channelId == _channelNewRide
+            ? const RawResourceAndroidNotificationSound('new_ride_alert')
+            : null,
       );
       const DarwinNotificationDetails darwinNotificationDetails =
           DarwinNotificationDetails(

@@ -174,7 +174,7 @@ class ProfileScreen extends StatelessWidget {
                                         title: "Activated".tr,
                                         height: 5.5,
                                         color: AppThemeData.primaryDefault,
-                                        textColor: AppThemeData.neutral900,
+                                        textColor: Colors.white,
                                         onPress: () async {},
                                       ),
                                     ],

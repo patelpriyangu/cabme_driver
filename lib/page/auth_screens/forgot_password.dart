@@ -77,7 +77,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                       title: "Send Otp".tr,
                       height: 5.5,
                       color: AppThemeData.primaryDefault,
-                      textColor: AppThemeData.neutral900,
+                      textColor: Colors.white,
                       onPress: () async {
                         if (controller
                             .emailTextEditController.value.text.isEmpty) {

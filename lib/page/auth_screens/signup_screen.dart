@@ -311,7 +311,7 @@ class SignupScreen extends StatelessWidget {
                 title: "Create Account".tr,
                 height: 5.5,
                 color: AppThemeData.primaryDefault,
-                textColor: AppThemeData.neutral900,
+                textColor: Colors.white,
                 onPress: () async {
                   FocusScope.of(context).unfocus();
                   if (controller.firstNameController.value.text.isEmpty) {

@@ -112,7 +112,7 @@ class RatingScreen extends StatelessWidget {
                                     const SizedBox(height: 20),
                                     RoundedButtonFill(
                                       color: AppThemeData.primaryDefault,
-                                      textColor: AppThemeData.neutral900,
+                                      textColor: Colors.white,
                                       width: 100,
                                       height: 5.5,
                                       title: 'Submit'.tr,

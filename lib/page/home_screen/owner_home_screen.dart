@@ -105,7 +105,7 @@ class OwnerHomeScreen extends StatelessWidget {
                               title: "Upload Documents".tr,
                               height: 5.5,
                               color: AppThemeData.primaryDefault,
-                              textColor: AppThemeData.neutral900,
+                              textColor: Colors.white,
                               onPress: () async {
                                 Get.to(DocumentStatusScreen())!.then((value) {
                                   if (value == true) {

@@ -130,7 +130,7 @@ class ChangePasswordScreen extends StatelessWidget {
                 title: "Save Changes".tr,
                 height: 5.5,
                 color: AppThemeData.primaryDefault,
-                textColor: AppThemeData.neutral900,
+                textColor: Colors.white,
                 onPress: () async {
                   if (controller.currentPasswordController.value.text.isEmpty) {
                     ShowToastDialog.showToast(

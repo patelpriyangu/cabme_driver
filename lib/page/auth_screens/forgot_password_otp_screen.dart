@@ -178,7 +178,7 @@ class ForgotPasswordOtpScreen extends StatelessWidget {
                       title: "Resent Password".tr,
                       height: 5.5,
                       color: AppThemeData.primaryDefault,
-                      textColor: AppThemeData.neutral900,
+                      textColor: Colors.white,
                       onPress: () async {
                         if (controller.otpEditingController.value.text
                             .trim()

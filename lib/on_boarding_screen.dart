@@ -191,7 +191,7 @@ class OnBoardingScreen extends StatelessWidget {
                                     ? "Lets Get Started".tr
                                     : "Continue".tr,
                                 color: AppThemeData.primaryDefault,
-                                textColor: AppThemeData.neutral900,
+                                textColor: Colors.white,
                                 onPress: () {
                                   if (controller.selectedPageIndex.value ==
                                       (controller.onboardingModel.value.data

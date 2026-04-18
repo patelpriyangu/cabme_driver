@@ -1478,7 +1478,7 @@ class BookingScreen extends StatelessWidget {
                   title: "Start Ride".tr,
                   height: 5.5,
                   color: AppThemeData.primaryDefault,
-                  textColor: AppThemeData.neutral900,
+                  textColor: Colors.white,
                   onPress: () async {
                     controller
                         .onRideStatusRental(rentalBookingData.id.toString());
@@ -1630,7 +1630,7 @@ class BookingScreen extends StatelessWidget {
                   title: "Save".tr,
                   height: 5.5,
                   color: AppThemeData.primaryDefault,
-                  textColor: AppThemeData.neutral900,
+                  textColor: Colors.white,
                   onPress: () async {
                     controller.setFinalKilometerOfRental(
                         rentalBookingData.id.toString());
@@ -1723,7 +1723,7 @@ class BookingScreen extends StatelessWidget {
                   title: "Start Ride".tr,
                   height: 5.5,
                   color: AppThemeData.primaryDefault,
-                  textColor: AppThemeData.neutral900,
+                  textColor: Colors.white,
                   onPress: () async {
                     controller.onRideStatus(bookingData);
                   },

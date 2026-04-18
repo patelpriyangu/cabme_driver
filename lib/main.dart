@@ -16,8 +16,11 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'constant/constant.dart';
 import 'service/localization_service.dart';
+import 'service/notification_service.dart';
 import 'utils/Preferences.dart';
 
 void main() async {
@@ -26,6 +29,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Register background message handler BEFORE runApp —
+  // this is required by Firebase so notifications are handled
+  // even when the app is in background or killed.
+  FirebaseMessaging.onBackgroundMessage(firebaseMessageBackgroundHandle);
+
   await FirebaseAppCheck.instance.activate(
     androidProvider: AndroidProvider.playIntegrity,
   );

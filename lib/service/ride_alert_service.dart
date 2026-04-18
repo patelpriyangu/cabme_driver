@@ -20,14 +20,15 @@ class RideAlertService {
   /// Whether an alert is currently active.
   bool get isPlaying => _isPlaying;
 
-  /// Start the ride alert: looping ringtone + periodic vibration.
+  /// Start the ride alert: custom sound + periodic vibration.
   /// Safe to call multiple times — will not stack alerts.
   void play() {
     if (_isPlaying) return;
     _isPlaying = true;
 
-    // Play alarm-style looping ringtone at max volume
-    FlutterRingtonePlayer().playRingtone(
+    // Play custom UniqCars alert sound
+    FlutterRingtonePlayer().play(
+      fromAsset: 'assets/sounds/new_ride_alert.wav',
       looping: true,
       volume: 1.0,
       asAlarm: true,

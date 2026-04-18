@@ -135,7 +135,7 @@ class MobileNumberScreen extends StatelessWidget {
                             title: "Send OTP".tr,
                             height: 5.5,
                             color: AppThemeData.primaryDefault,
-                            textColor: AppThemeData.neutral900,
+                            textColor: Colors.white,
                             onPress: () {
                               FocusScope.of(context).unfocus();
                               if (controller

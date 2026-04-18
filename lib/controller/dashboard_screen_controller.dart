@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:uniqcars_driver/constant/constant.dart';
+import 'package:uniqcars_driver/controller/home_controller.dart';
 import 'package:uniqcars_driver/model/user_model.dart';
 import 'package:uniqcars_driver/page/booking_screens/booking_screen.dart';
 import 'package:uniqcars_driver/page/home_screen/home_screen.dart';
@@ -24,6 +26,10 @@ class DashBoardScreenController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     userModel.value = Constant.getUserData();
+    // Register HomeController early so it's available for all tabs
+    if (!Get.isRegistered<HomeController>()) {
+      Get.put(HomeController());
+    }
     pageList.value = [
       const HomeScreen(),
       BookingScreen(),
@@ -44,8 +50,11 @@ class DashBoardScreenController extends GetxController {
 
   Future<void> updateToken() async {
     String? token = await NotificationService.getToken();
+    debugPrint("🔑 FCM Token: ${token != null ? '${token.substring(0, 20)}...(${token.length} chars)' : 'NULL'}");
     if (token != null) {
       updateFCMToken(token);
+    } else {
+      debugPrint("⚠️ FCM token is null - notifications will not work!");
     }
   }
 

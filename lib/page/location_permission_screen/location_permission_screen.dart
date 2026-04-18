@@ -49,7 +49,7 @@ class LocationPermissionScreen extends StatelessWidget {
                   RoundedButtonFill(
                     title: 'Allow Location Access'.tr,
                     width: 50,
-                    textColor: AppThemeData.neutral900,
+                    textColor: Colors.white,
                     color: AppThemeData.primaryDefault,
                     onPress: () {
                       controller.requestPermission();

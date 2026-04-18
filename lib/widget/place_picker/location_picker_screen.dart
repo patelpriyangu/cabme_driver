@@ -164,7 +164,7 @@ class LocationPickerScreen extends StatelessWidget {
                           title: "Confirm Location".tr,
                           height: 5.5,
                           color: AppThemeData.primaryDefault,
-                          textColor: AppThemeData.neutral900,
+                          textColor: Colors.white,
                           onPress: () => controller.confirmLocation(),
                         )
                       ],

@@ -136,7 +136,7 @@ class LoginScreen extends StatelessWidget {
                           title: "Log in".tr,
                           height: 5.5,
                           color: AppThemeData.primaryDefault,
-                          textColor: AppThemeData.neutral900,
+                          textColor: Colors.white,
                           onPress: () async {
                             FocusScope.of(context).unfocus();
                             if (controller.userIdController.value.text.isEmpty) {
