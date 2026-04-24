@@ -746,7 +746,9 @@ class HomeScreen extends StatelessWidget {
                                         textAlign: TextAlign.start,
                                         style: AppThemeData.boldTextStyle(
                                             fontSize: 16,
-                                            color: AppThemeData.primaryDefault),
+                                            color: themeChange.getThem()
+                                                ? AppThemeData.neutralDark900
+                                                : AppThemeData.neutral900),
                                       )
                                     ],
                                   ),

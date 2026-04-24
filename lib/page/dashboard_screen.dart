@@ -38,7 +38,7 @@ class DashboardScreen extends StatelessWidget {
                   ? AppThemeData.neutralDark50
                   : AppThemeData.neutral50,
               selectedItemColor: themeChange.getThem()
-                  ? AppThemeData.primaryDefault
+                  ? AppThemeData.neutralDark900
                   : AppThemeData.primaryDefault,
               unselectedItemColor: themeChange.getThem()
                   ? AppThemeData.neutralDark500
@@ -123,7 +123,9 @@ class DashboardScreen extends StatelessWidget {
     bool showBadge = false,
   }) {
     final iconColor = controller.selectedIndex.value == index
-        ? AppThemeData.primaryDefault
+        ? (themeChange.getThem()
+            ? AppThemeData.neutralDark900
+            : AppThemeData.primaryDefault)
         : themeChange.getThem()
             ? AppThemeData.neutralDark500
             : AppThemeData.neutral500;
