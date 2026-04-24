@@ -25,6 +25,7 @@ class HomeController extends GetxController {
   RxString status = "no".obs;
   RxList<ParcelBookingData> parcelList = <ParcelBookingData>[].obs;
   RxList<BookingData> upcomingRidesList = <BookingData>[].obs;
+  RxList<BookingData> recentlyCancelledRides = <BookingData>[].obs;
   RxBool isUpcomingLoading = false.obs;
 
   /// Documents expiring within 30 days (for home screen banner).
@@ -194,6 +195,122 @@ class HomeController extends GetxController {
           booking.data!.statut == RideStatus.completed ||
           booking.data!.statut == RideStatus.rejected) {
         RideAlertService().stop();
+
+        // If a SCHEDULED ride assigned to this driver is cancelled, show an
+        // alert dialog so the driver is clearly aware before the card clears.
+        final wasScheduled = booking.data!.scheduledAt != null &&
+            booking.data!.scheduledAt!.isNotEmpty &&
+            booking.data!.scheduledAt != 'null';
+        final wasCancelled = booking.data!.statut == RideStatus.canceled ||
+            booking.data!.statut == RideStatus.rejected;
+        final myDriverId =
+            Preferences.getInt(Preferences.userId).toString();
+        final assignedId = booking.data!.assignedDriverId;
+        final isAssignedToMe = assignedId != null &&
+            assignedId.toString() != 'null' &&
+            assignedId.toString().isNotEmpty &&
+            assignedId.toString() == myDriverId;
+
+        // Show payment confirmation dialog when ride completes via online payment
+        // (e.g. WorldPay) — the Pusher 'completed' event fires as soon as the
+        // customer's payment succeeds, so the driver needs visual confirmation.
+        if (booking.data!.statut == RideStatus.completed) {
+          final bookingNum =
+              booking.data!.bookingNumber ?? booking.data!.id ?? '';
+          final amount = booking.data!.montant ?? '0';
+          final payMethod = booking.data!.paymentMethod ?? '';
+          Future.delayed(const Duration(milliseconds: 200), () {
+            if (Get.isDialogOpen != true) {
+              Get.dialog(
+                AlertDialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
+                  title: Row(
+                    children: [
+                      Icon(Icons.check_circle_outline,
+                          color: Colors.green, size: 24),
+                      const SizedBox(width: 8),
+                      const Expanded(
+                        child: Text(
+                          "Payment Received",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                  content: Text(
+                    "Ride #$bookingNum has been completed.\nPayment of ${Constant().amountShow(amount: amount)} received via $payMethod.",
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Get.back(),
+                      child: const Text(
+                        "Done",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15),
+                      ),
+                    ),
+                  ],
+                ),
+                barrierDismissible: false,
+              );
+            }
+          });
+        }
+
+        if (wasScheduled && wasCancelled && isAssignedToMe) {
+          final bookingNum =
+              booking.data!.bookingNumber ?? booking.data!.id ?? '';
+          // Delay slightly so the dialog doesn't race with any ongoing
+          // navigation triggered by the same Pusher event.
+          Future.delayed(const Duration(milliseconds: 300), () {
+            if (Get.isDialogOpen != true) {
+              Get.dialog(
+                AlertDialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
+                  title: Row(
+                    children: [
+                      Icon(Icons.cancel_outlined,
+                          color: Colors.red, size: 24),
+                      const SizedBox(width: 8),
+                      const Expanded(
+                        child: Text(
+                          "Scheduled Ride Cancelled",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                  content: Text(
+                    "Your scheduled ride #$bookingNum has been cancelled by the customer.",
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Get.back();
+                        // Refresh the upcoming list so the cancelled ride
+                        // appears in the recently cancelled section.
+                        getUpcomingRides();
+                      },
+                      child: const Text(
+                        "OK",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15),
+                      ),
+                    ),
+                  ],
+                ),
+                barrierDismissible: false,
+              );
+            }
+          });
+        }
+
         bookingModel.value = BookingModel();
         update();
       }
@@ -610,17 +727,96 @@ class HomeController extends GetxController {
       (value) async {
         if (value != null) {
           if (value['data'] != null && value['data'] is List) {
-            upcomingRidesList.value = (value['data'] as List)
+            final allRides = (value['data'] as List)
                 .map((e) => BookingData.fromJson(e))
                 .toList();
+
+            final now = DateTime.now().toUtc();
+            final cutoff24h = now.subtract(const Duration(hours: 24));
+
+            // Separate active/scheduled rides from recently cancelled ones.
+            // A ride is "recently cancelled" if it was cancelled/rejected AND
+            // its scheduled_at (or created_at via creer) falls within the last
+            // 24 hours, so the driver can still see what happened.
+            final List<BookingData> active = [];
+            final List<BookingData> cancelled = [];
+
+            for (final ride in allRides) {
+              final isCancelled = ride.statut == RideStatus.canceled ||
+                  ride.statut == RideStatus.rejected;
+              if (isCancelled) {
+                // Use scheduledAt to determine recency; fall back to creer.
+                DateTime? rideTime;
+                try {
+                  if (ride.scheduledAt != null &&
+                      ride.scheduledAt!.isNotEmpty &&
+                      ride.scheduledAt != 'null') {
+                    rideTime = DateTime.parse(ride.scheduledAt!).toUtc();
+                  } else if (ride.creer != null &&
+                      ride.creer!.isNotEmpty &&
+                      ride.creer != 'null') {
+                    rideTime = DateTime.parse(ride.creer!).toUtc();
+                  }
+                } catch (_) {}
+
+                if (rideTime != null && rideTime.isAfter(cutoff24h)) {
+                  cancelled.add(ride);
+                }
+              } else {
+                active.add(ride);
+              }
+            }
+
+            upcomingRidesList.value = active;
+            recentlyCancelledRides.value = cancelled;
           } else {
             upcomingRidesList.clear();
+            recentlyCancelledRides.clear();
           }
         } else {
           upcomingRidesList.clear();
+          recentlyCancelledRides.clear();
         }
       },
     );
+  }
+
+  /// Returns true when there is at least one upcoming scheduled ride within
+  /// the next [withinMinutes] minutes that is assigned to this driver.
+  bool hasUpcomingRideSoon({int withinMinutes = 120}) {
+    final myDriverId = Preferences.getInt(Preferences.userId).toString();
+    final now = DateTime.now().toUtc();
+    final horizon = now.add(Duration(minutes: withinMinutes));
+
+    for (final ride in upcomingRidesList) {
+      if (ride.statut == RideStatus.canceled ||
+          ride.statut == RideStatus.rejected) {
+        continue;
+      }
+
+      final assignedId = ride.assignedDriverId;
+      final isAssignedToMe = assignedId != null &&
+          assignedId.toString() != 'null' &&
+          assignedId.toString().isNotEmpty &&
+          assignedId.toString() == myDriverId;
+      if (!isAssignedToMe) {
+        continue;
+      }
+
+      try {
+        if (ride.scheduledAt != null &&
+            ride.scheduledAt!.isNotEmpty &&
+            ride.scheduledAt != 'null') {
+          final scheduledUtc =
+              DateTime.parse(ride.scheduledAt!).toUtc();
+          if (scheduledUtc.isAfter(now) &&
+              scheduledUtc.isBefore(horizon)) {
+            return true;
+          }
+        }
+      } catch (_) {}
+    }
+    return false;
   }
 
   Future<void> acceptUpcomingRide(String rideId) async {

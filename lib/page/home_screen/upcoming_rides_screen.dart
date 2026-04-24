@@ -21,7 +21,11 @@ class UpcomingRidesScreen extends StatelessWidget {
           child: Center(child: CircularProgressIndicator()),
         );
       }
-      if (controller.upcomingRidesList.isEmpty) {
+
+      final hasActive = controller.upcomingRidesList.isNotEmpty;
+      final hasCancelled = controller.recentlyCancelledRides.isNotEmpty;
+
+      if (!hasActive && !hasCancelled) {
         return Expanded(
           child: Center(
             child: Column(
@@ -49,16 +53,30 @@ class UpcomingRidesScreen extends StatelessWidget {
           ),
         );
       }
+
+      // Build a combined list: active rides first, then a "Recently Cancelled"
+      // header followed by cancelled rides (last 24 h).
+      final List<Widget> items = [];
+
+      if (hasActive) {
+        for (final ride in controller.upcomingRidesList) {
+          items.add(_UpcomingRideCard(ride: ride, isCancelled: false));
+        }
+      }
+
+      if (hasCancelled) {
+        items.add(_CancelledSectionHeader());
+        for (final ride in controller.recentlyCancelledRides) {
+          items.add(_UpcomingRideCard(ride: ride, isCancelled: true));
+        }
+      }
+
       return Expanded(
         child: RefreshIndicator(
           onRefresh: controller.getUpcomingRides,
-          child: ListView.builder(
+          child: ListView(
             padding: const EdgeInsets.all(16),
-            itemCount: controller.upcomingRidesList.length,
-            itemBuilder: (context, index) {
-              final ride = controller.upcomingRidesList[index];
-              return _UpcomingRideCard(ride: ride);
-            },
+            children: items,
           ),
         ),
       );
@@ -66,9 +84,49 @@ class UpcomingRidesScreen extends StatelessWidget {
   }
 }
 
+/// Section divider shown above the recently-cancelled group.
+class _CancelledSectionHeader extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8, bottom: 4),
+      child: Row(
+        children: [
+          Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+              color: AppThemeData.errorDefault.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                  color: AppThemeData.errorDefault.withValues(alpha: 0.4)),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.cancel_outlined,
+                    size: 14, color: AppThemeData.errorDefault),
+                const SizedBox(width: 5),
+                Text(
+                  "Recently Cancelled (last 24h)",
+                  style: AppThemeData.semiBoldTextStyle(
+                    fontSize: 12,
+                    color: AppThemeData.errorDefault,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _UpcomingRideCard extends StatelessWidget {
   final BookingData ride;
-  const _UpcomingRideCard({required this.ride});
+  final bool isCancelled;
+  const _UpcomingRideCard({required this.ride, required this.isCancelled});
 
   String _formatScheduledAt(String? scheduledAt) {
     if (scheduledAt == null) return '';
@@ -130,7 +188,17 @@ class _UpcomingRideCard extends StatelessWidget {
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: isCancelled
+            ? BorderSide(
+                color: AppThemeData.errorDefault.withValues(alpha: 0.6),
+                width: 1.5)
+            : BorderSide.none,
+      ),
+      color: isCancelled
+          ? AppThemeData.errorDefault.withValues(alpha: 0.05)
+          : null,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -346,25 +414,55 @@ class _UpcomingRideCard extends StatelessWidget {
                           ),
                         ),
                       ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 3),
-                      decoration: BoxDecoration(
-                        color:
-                            AppThemeData.warningDefault.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                            color: AppThemeData.warningDefault
-                                .withValues(alpha: 0.4)),
-                      ),
-                      child: Text(
-                        "Scheduled",
-                        style: AppThemeData.semiBoldTextStyle(
-                          fontSize: 11,
-                          color: AppThemeData.warningDefault,
+                    if (isCancelled)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: AppThemeData.errorDefault
+                              .withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                              color: AppThemeData.errorDefault
+                                  .withValues(alpha: 0.5)),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.cancel,
+                                size: 11,
+                                color: AppThemeData.errorDefault),
+                            const SizedBox(width: 4),
+                            Text(
+                              "CANCELLED",
+                              style: AppThemeData.semiBoldTextStyle(
+                                fontSize: 11,
+                                color: AppThemeData.errorDefault,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    else
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: AppThemeData.warningDefault
+                              .withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                              color: AppThemeData.warningDefault
+                                  .withValues(alpha: 0.4)),
+                        ),
+                        child: Text(
+                          "Scheduled",
+                          style: AppThemeData.semiBoldTextStyle(
+                            fontSize: 11,
+                            color: AppThemeData.warningDefault,
+                          ),
                         ),
                       ),
-                    ),
                   ],
                 ),
               ],
@@ -376,7 +474,34 @@ class _UpcomingRideCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                if (isAssignedToMe)
+                if (isCancelled)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: AppThemeData.errorDefault.withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                          color:
+                              AppThemeData.errorDefault.withValues(alpha: 0.4)),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.cancel_outlined,
+                            size: 14, color: AppThemeData.errorDefault),
+                        const SizedBox(width: 4),
+                        Text(
+                          "Cancelled",
+                          style: AppThemeData.semiBoldTextStyle(
+                            fontSize: 12,
+                            color: AppThemeData.errorDefault,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                else if (isAssignedToMe)
                   Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 12, vertical: 6),

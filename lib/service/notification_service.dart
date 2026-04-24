@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:uniqcars_driver/controller/home_controller.dart';
 import 'package:uniqcars_driver/firebase_options.dart';
@@ -162,10 +163,62 @@ class NotificationService {
       }
       if (tag == 'scheduled_ride_unassigned' ||
           tag == 'scheduled_ride' ||
-          tag == 'scheduled_ride_cancelled') {
+          tag == 'scheduled_ride_cancelled' ||
+          tag == 'scheduled_ride_reminder_24h' ||
+          tag == 'scheduled_ride_reminder_2h' ||
+          tag == 'scheduled_ride_reminder_30min') {
         try {
           Get.find<HomeController>().getUpcomingRides();
         } catch (_) {}
+      }
+      // When the driver is in the app and a scheduled ride assigned to them
+      // is cancelled via push, show a dialog immediately (the Pusher path
+      // handles the same dialog for real-time events; this covers FCM-only).
+      if (tag == 'ride_cancelled_driver') {
+        try {
+          Get.find<HomeController>().getUpcomingRides();
+        } catch (_) {}
+        final bookingNumber = message.data['booking_number'] ??
+            message.data['bookingNumber'] ??
+            '';
+        final body = message.notification?.body ??
+            (bookingNumber.isNotEmpty
+                ? 'Scheduled ride #$bookingNumber has been cancelled.'
+                : 'A scheduled ride assigned to you has been cancelled.');
+        if (Get.isDialogOpen != true) {
+          Get.dialog(
+            AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
+              title: Row(
+                children: [
+                  const Icon(Icons.cancel_outlined,
+                      color: Colors.red, size: 24),
+                  const SizedBox(width: 8),
+                  const Expanded(
+                    child: Text(
+                      "Scheduled Ride Cancelled",
+                      style: TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+              content: Text(body, style: const TextStyle(fontSize: 14)),
+              actions: [
+                TextButton(
+                  onPressed: () => Get.back(),
+                  child: const Text(
+                    "OK",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                ),
+              ],
+            ),
+            barrierDismissible: false,
+          );
+        }
       }
     });
 
@@ -187,6 +240,23 @@ class NotificationService {
       // Navigate to home/dashboard and refresh ride data
       try {
         Get.find<HomeController>().getBooking();
+      } catch (_) {}
+      Get.offAll(() => DashboardScreen());
+    } else if (tag == 'ride_cancelled_driver' ||
+        tag == 'scheduled_ride_cancelled' ||
+        tag == 'scheduled_ride_unassigned') {
+      // Refresh upcoming rides (cancelled ride will appear in recently
+      // cancelled section) and navigate to dashboard.
+      try {
+        Get.find<HomeController>().getUpcomingRides();
+      } catch (_) {}
+      Get.offAll(() => DashboardScreen());
+    } else if (tag == 'scheduled_ride_reminder_24h' ||
+        tag == 'scheduled_ride_reminder_2h' ||
+        tag == 'scheduled_ride_reminder_30min') {
+      // Reminder tapped — refresh upcoming rides list and go to dashboard.
+      try {
+        Get.find<HomeController>().getUpcomingRides();
       } catch (_) {}
       Get.offAll(() => DashboardScreen());
     } else if (message.data['status'] == "done") {
@@ -221,6 +291,8 @@ class NotificationService {
 
     // Skip notifications for the driver's own actions — the driver already
     // sees the result in-app via Pusher, no need for a redundant FCM alert.
+    // NOTE: 'ride_cancelled_driver' is intentionally NOT in this set so the
+    // driver always sees the cancellation alert.
     const driverOwnActionTags = {
       'ridearrived',
       'rideonride',
@@ -250,13 +322,27 @@ class NotificationService {
           asAlarm: false,
         );
       } else if (tag == 'scheduled_ride_unassigned' ||
-          tag == 'scheduled_ride_cancelled') {
+          tag == 'scheduled_ride_cancelled' ||
+          tag == 'ride_cancelled_driver') {
         // Removed from / cancelled upcoming ride
         FlutterRingtonePlayer().playNotification(
           looping: false,
           volume: 0.8,
           asAlarm: false,
         );
+      } else if (tag == 'scheduled_ride_reminder_24h' ||
+          tag == 'scheduled_ride_reminder_2h' ||
+          tag == 'scheduled_ride_reminder_30min') {
+        // Upcoming ride reminder — slightly louder to grab attention
+        FlutterRingtonePlayer().playNotification(
+          looping: false,
+          volume: 0.9,
+          asAlarm: false,
+        );
+        // Refresh upcoming rides list in the background
+        try {
+          Get.find<HomeController>().getUpcomingRides();
+        } catch (_) {}
       } else {
         FlutterRingtonePlayer().playNotification(
           looping: false,
@@ -274,7 +360,13 @@ class NotificationService {
     if (tag == 'ridenewrider' || tag == 'ridenewriderparcel') {
       channelId = _channelNewRide;
       channelName = 'New Ride Requests';
-    } else if (tag == 'scheduled_ride' || tag == 'scheduled_ride_unassigned') {
+    } else if (tag == 'scheduled_ride' ||
+        tag == 'scheduled_ride_unassigned' ||
+        tag == 'scheduled_ride_cancelled' ||
+        tag == 'ride_cancelled_driver' ||
+        tag == 'scheduled_ride_reminder_24h' ||
+        tag == 'scheduled_ride_reminder_2h' ||
+        tag == 'scheduled_ride_reminder_30min') {
       channelId = _channelUpcoming;
       channelName = 'Upcoming Rides';
     } else {
