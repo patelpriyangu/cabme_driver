@@ -73,6 +73,7 @@ class BookingData {
   String? scheduledAt;
   String? prepaidTransactionId;
   bool? isPrepaid;
+  String? seriesId;
 
   BookingData(
       {this.id,
@@ -118,7 +119,8 @@ class BookingData {
       this.waitingDuration,
       this.scheduledAt,
       this.prepaidTransactionId,
-      this.isPrepaid});
+      this.isPrepaid,
+      this.seriesId});
 
   BookingData.fromJson(Map<String, dynamic> json) {
     id = json['id'].toString();
@@ -181,6 +183,15 @@ class BookingData {
     scheduledAt = json['scheduled_at']?.toString();
     prepaidTransactionId = json['prepaid_transaction_id']?.toString();
     isPrepaid = json['is_prepaid'] == 1 || json['is_prepaid'] == true;
+    // series_id may arrive as int (DB) or null when not part of a recurring series
+    final dynamic rawSeriesId = json['series_id'];
+    if (rawSeriesId == null ||
+        rawSeriesId.toString().isEmpty ||
+        rawSeriesId.toString() == 'null') {
+      seriesId = null;
+    } else {
+      seriesId = rawSeriesId.toString();
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -244,6 +255,7 @@ class BookingData {
     data['scheduled_at'] = scheduledAt;
     data['prepaid_transaction_id'] = prepaidTransactionId;
     data['is_prepaid'] = isPrepaid;
+    data['series_id'] = seriesId;
     return data;
   }
 }

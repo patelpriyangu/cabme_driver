@@ -134,6 +134,11 @@ class API {
   static const driverUpcomingRides = "${baseUrl}driver-upcoming-rides/";
   static const acceptUpcomingRide = "${baseUrl}accept-upcoming-ride/";
 
+  // Waiting Timer
+  static const startWaiting = "${baseUrl}start-waiting";
+  static const stopWaiting = "${baseUrl}stop-waiting";
+  static const waitingStatus = "${baseUrl}waiting-status";
+
   // Agora Voice Calling
   static const agoraToken = "${baseUrl}agora/token";
   static const callInitiate = "${baseUrl}call/initiate";

@@ -19,6 +19,7 @@ import 'package:timelines_plus/timelines_plus.dart';
 import '../../themes/app_them_data.dart';
 import '../../themes/round_button_fill.dart';
 import '../../widget/map_view.dart';
+import '../../widget/waiting_timer_widget.dart';
 
 class BookingDetailsScreen extends StatelessWidget {
   const BookingDetailsScreen({super.key});
@@ -38,14 +39,25 @@ class BookingDetailsScreen extends StatelessWidget {
                 child: Icon(Icons.arrow_back),
               ),
               centerTitle: false,
-              title: Text(
-                controller.bookingModel.value.bookingNumber ??
-                    "#${controller.bookingModel.value.id}",
-                style: AppThemeData.semiBoldTextStyle(
-                    fontSize: 18,
-                    color: themeChange.getThem()
-                        ? AppThemeData.neutralDark900
-                        : AppThemeData.neutral900),
+              title: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    child: Text(
+                      controller.bookingModel.value.bookingNumber ??
+                          "#${controller.bookingModel.value.id}",
+                      style: AppThemeData.semiBoldTextStyle(
+                          fontSize: 18,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark900
+                              : AppThemeData.neutral900),
+                    ),
+                  ),
+                  if (controller.bookingModel.value.seriesId != null) ...[
+                    const SizedBox(width: 8),
+                    _RecurringBadge(),
+                  ],
+                ],
               ),
             ),
             body: controller.isLoading.value
@@ -536,6 +548,24 @@ class BookingDetailsScreen extends StatelessWidget {
                           SizedBox(
                             height: 20,
                           ),
+                          // Waiting meter — visible only when driver has
+                          // arrived (pre_ride) or while on-ride (mid_ride).
+                          if (controller.userModel.value.userData!.isOwner !=
+                                  "true" &&
+                              (controller.bookingModel.value.statut ==
+                                      RideStatus.arrived ||
+                                  controller.bookingModel.value.statut ==
+                                      RideStatus.onRide))
+                            WaitingTimerWidget(
+                              rideId:
+                                  controller.bookingModel.value.id.toString(),
+                              rideType: 'requete',
+                              waitingContext:
+                                  controller.bookingModel.value.statut ==
+                                          RideStatus.arrived
+                                      ? 'pre_ride'
+                                      : 'mid_ride',
+                            ),
                           Container(
                             width: Responsive.width(100, context),
                             decoration: BoxDecoration(
@@ -1336,6 +1366,34 @@ class BookingDetailsScreen extends StatelessWidget {
       barrierDismissible: true,
     );
   }
+  // ignore: non_constant_identifier_names
+  Widget _RecurringBadge() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: AppThemeData.infoDefault.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+            color: AppThemeData.infoDefault.withValues(alpha: 0.5)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.event_repeat,
+              size: 12, color: AppThemeData.infoDefault),
+          const SizedBox(width: 4),
+          Text(
+            "Recurring".tr,
+            style: AppThemeData.semiBoldTextStyle(
+              fontSize: 11,
+              color: AppThemeData.infoDefault,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   void confirmStopJourney(BuildContext context, DarkThemeProvider themeChange,
       BookingDetailsController controller) {
     Get.dialog(

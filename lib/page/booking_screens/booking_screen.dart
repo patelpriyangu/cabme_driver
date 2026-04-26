@@ -334,6 +334,12 @@ class BookingScreen extends StatelessWidget {
                                                                         : AppThemeData
                                                                             .neutral900),
                                                               ),
+                                                        if (bookingData
+                                                                .seriesId !=
+                                                            null) ...[
+                                                          SizedBox(height: 4),
+                                                          _buildRecurringBadge(),
+                                                        ],
                                                         SizedBox(
                                                           height: 5,
                                                         ),
@@ -1792,6 +1798,33 @@ class BookingScreen extends StatelessWidget {
         ),
       ),
       barrierDismissible: true,
+    );
+  }
+
+  Widget _buildRecurringBadge() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      decoration: BoxDecoration(
+        color: AppThemeData.infoDefault.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+            color: AppThemeData.infoDefault.withValues(alpha: 0.5)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.event_repeat,
+              size: 11, color: AppThemeData.infoDefault),
+          const SizedBox(width: 4),
+          Text(
+            "Recurring".tr,
+            style: AppThemeData.semiBoldTextStyle(
+              fontSize: 10,
+              color: AppThemeData.infoDefault,
+            ),
+          ),
+        ],
+      ),
     );
   }
 

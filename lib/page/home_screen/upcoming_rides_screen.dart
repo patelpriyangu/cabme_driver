@@ -394,6 +394,35 @@ class _UpcomingRideCard extends StatelessWidget {
                 ),
                 Row(
                   children: [
+                    if (ride.seriesId != null)
+                      Container(
+                        margin: const EdgeInsets.only(right: 6),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: AppThemeData.infoDefault.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                              color: AppThemeData.infoDefault
+                                  .withValues(alpha: 0.5)),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.event_repeat,
+                                size: 11,
+                                color: AppThemeData.infoDefault),
+                            const SizedBox(width: 4),
+                            Text(
+                              "Recurring",
+                              style: AppThemeData.semiBoldTextStyle(
+                                fontSize: 11,
+                                color: AppThemeData.infoDefault,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     if (ride.isPrepaid == true)
                       Container(
                         margin: const EdgeInsets.only(right: 6),
