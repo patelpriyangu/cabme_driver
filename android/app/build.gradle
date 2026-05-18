@@ -17,12 +17,30 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
-
+    signingConfigs {
+        create("release") {
+            storeFile = file(rootProject.file("uniqcarsdriver.jks"))
+            storePassword = "Admin@123"
+            keyAlias = "uniqcars"
+            keyPassword = "Admin@123"
+        }
+    }
     buildTypes {
-        release {
+        // release {
+        //     minifyEnabled false
+        //     shrinkResources false
+        //     signingConfig signingConfigs.releaseConfig // TODO: Replace with release config
+        // }
+        getByName("release") {
+            // isMinifyEnabled = true // <- Required
+            // isShrinkResources = false // <- Only works when minifyEnabled is true
+            // proguardFiles(
+            //     getDefaultProguardFile("proguard-android-optimize.txt"),
+            //     "proguard-rules.pro"
+            // )
             minifyEnabled false
             shrinkResources false
-            signingConfig signingConfigs.debug // TODO: Replace with release config
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 

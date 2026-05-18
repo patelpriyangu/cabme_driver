@@ -11,9 +11,9 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission
+    <!-- <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
-        tools:ignore="QueryAllPackagesPermission" />
+        tools:ignore="QueryAllPackagesPermission" /> -->
 
     <!-- Google Play policy: app uses one-time photo picking (profile pic, document upload).
          Remove broad media permissions injected by image_picker/file_picker so the system
