@@ -29,69 +29,79 @@ class BankDetailsAddController extends GetxController {
   }
 
   Future<void> getBankDetails() async {
-    userModel.value = Constant.getUserData();
-    Map<String, String> bodyParams = {
-      'id_driver': userModel.value.userData!.id.toString(),
-    };
-    await API
-        .handleApiRequest(
-            request: () => http.post(Uri.parse(API.bankDetails),
-                headers: API.headers, body: jsonEncode(bodyParams)),
-            showLoader: false)
-        .then(
-      (value) {
-        if (value != null) {
-          if (value['success'] == "success" || value['success'] == "Success") {
-            bankDetailsModel.value = BankDetailsModel.fromJson(value);
-            if (bankDetailsModel.value.data != null) {
-              bankNameController.value.text =
-                  bankDetailsModel.value.data!.bankName ?? '';
-              branchController.value.text =
-                  bankDetailsModel.value.data!.branchName ?? '';
-              holderNameController.value.text =
-                  bankDetailsModel.value.data!.holderName ?? '';
-              accountNumberController.value.text =
-                  bankDetailsModel.value.data!.accountNo ?? '';
-              informationController.value.text =
-                  bankDetailsModel.value.data!.otherInfo ?? '';
-              ifcsCodeController.value.text =
-                  bankDetailsModel.value.data!.ifscCode ?? '';
+    try {
+      userModel.value = Constant.getUserData();
+      Map<String, String> bodyParams = {
+        'id_driver': userModel.value.userData!.id.toString(),
+      };
+      await API
+          .handleApiRequest(
+              request: () => http.post(Uri.parse(API.bankDetails),
+                  headers: API.headers, body: jsonEncode(bodyParams)),
+              showLoader: false)
+          .then(
+        (value) {
+          if (value != null) {
+            if (value['success'] == "success" ||
+                value['success'] == "Success") {
+              bankDetailsModel.value = BankDetailsModel.fromJson(value);
+              if (bankDetailsModel.value.data != null) {
+                bankNameController.value.text =
+                    bankDetailsModel.value.data!.bankName ?? '';
+                branchController.value.text =
+                    bankDetailsModel.value.data!.branchName ?? '';
+                holderNameController.value.text =
+                    bankDetailsModel.value.data!.holderName ?? '';
+                accountNumberController.value.text =
+                    bankDetailsModel.value.data!.accountNo ?? '';
+                informationController.value.text =
+                    bankDetailsModel.value.data!.otherInfo ?? '';
+                ifcsCodeController.value.text =
+                    bankDetailsModel.value.data!.ifscCode ?? '';
+              }
             }
           }
-        }
-      },
-    );
+        },
+      );
+    } catch (e) {
+      ShowToastDialog.showToast("Unable to load bank details");
+    }
   }
 
   Future<void> submitBankDetails() async {
-    userModel.value = Constant.getUserData();
-    Map<String, String> bodyParams = {
-      'id_driver': userModel.value.userData!.id.toString(),
-      'bank_name': bankNameController.value.text,
-      'branch_name': branchController.value.text,
-      'holder_name': holderNameController.value.text,
-      'account_no': accountNumberController.value.text,
-      'information': informationController.value.text,
-      'ifsc_code': ifcsCodeController.value.text,
-    };
-    await API
-        .handleApiRequest(
-            request: () => http.post(Uri.parse(API.addBankDetails),
-                headers: API.headers, body: jsonEncode(bodyParams)),
-            showLoader: false)
-        .then(
-      (value) async {
-        if (value != null) {
-          if (value['success'] == "success" || value['success'] == "Success") {
-            await getBankDetails();
-            ShowToastDialog.showToast("Bank Details added successfully");
-            Get.back();
-          } else {
-            ShowToastDialog.showToast(
-                value['message'] ?? "Something went wrong");
+    try {
+      userModel.value = Constant.getUserData();
+      Map<String, String> bodyParams = {
+        'id_driver': userModel.value.userData!.id.toString(),
+        'bank_name': bankNameController.value.text,
+        'branch_name': branchController.value.text,
+        'holder_name': holderNameController.value.text,
+        'account_no': accountNumberController.value.text,
+        'information': informationController.value.text,
+        'ifsc_code': ifcsCodeController.value.text,
+      };
+      await API
+          .handleApiRequest(
+              request: () => http.post(Uri.parse(API.addBankDetails),
+                  headers: API.headers, body: jsonEncode(bodyParams)),
+              showLoader: false)
+          .then(
+        (value) async {
+          if (value != null) {
+            if (value['success'] == "success" ||
+                value['success'] == "Success") {
+              await getBankDetails();
+              ShowToastDialog.showToast("Bank Details added successfully");
+              Get.back();
+            } else {
+              ShowToastDialog.showToast(
+                  value['message'] ?? "Something went wrong");
+            }
           }
-        }
-      },
-    );
+        },
+      );
+    } catch (e) {
+      ShowToastDialog.showToast("Unable to save bank details");
+    }
   }
 }

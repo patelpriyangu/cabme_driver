@@ -70,7 +70,7 @@ class BankDetailsAdd extends StatelessWidget {
                       ],
                     ),
                   ),
-                /*  TextFieldWidget(
+                  TextFieldWidget(
                     controller: controller.bankNameController.value,
                     hintText: 'Enter Bank Name',
                     title: 'Bank Name',
@@ -79,7 +79,7 @@ class BankDetailsAdd extends StatelessWidget {
                     controller: controller.branchController.value,
                     hintText: 'Enter Branch Name',
                     title: 'Branch Name',
-                  ),*/
+                  ),
                   TextFieldWidget(
                     controller: controller.holderNameController.value,
                     hintText: 'Enter Bank Holder Name',
@@ -123,7 +123,8 @@ class BankDetailsAdd extends StatelessWidget {
                               "Please enter bank account number");
                         } else if (controller
                             .ifcsCodeController.value.text.isEmpty) {
-                          ShowToastDialog.showToast("Please enter bank short code");
+                          ShowToastDialog.showToast(
+                              "Please enter bank short code");
                         } else if (controller
                             .informationController.value.text.isEmpty) {
                           ShowToastDialog.showToast("Please enter information");

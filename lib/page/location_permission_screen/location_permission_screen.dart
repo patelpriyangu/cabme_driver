@@ -46,6 +46,33 @@ class LocationPermissionScreen extends StatelessWidget {
                             : AppThemeData.neutral500),
                   ),
                   SizedBox(height: 30),
+                  Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.only(bottom: 16),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: themeChange.getThem()
+                          ? AppThemeData.neutralDark100
+                          : AppThemeData.neutral100,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: themeChange.getThem()
+                            ? AppThemeData.neutralDark300
+                            : AppThemeData.neutral300,
+                      ),
+                    ),
+                    child: Text(
+                      "UniqCars Driver uses your location while you are using the app and when you choose to go online, so nearby bookings can be matched to you and customers can see accurate pickup progress. Your location is used for ride dispatch, navigation, and trip tracking."
+                          .tr,
+                      textAlign: TextAlign.center,
+                      style: AppThemeData.regularTextStyle(
+                        fontSize: 13,
+                        color: themeChange.getThem()
+                            ? AppThemeData.neutralDark700
+                            : AppThemeData.neutral700,
+                      ),
+                    ),
+                  ),
                   RoundedButtonFill(
                     title: 'Allow Location Access'.tr,
                     width: 50,
@@ -62,7 +89,9 @@ class LocationPermissionScreen extends StatelessWidget {
                       'Not Now'.tr,
                       style: AppThemeData.mediumTextStyle(
                         fontSize: 14,
-                        color: themeChange.getThem() ? AppThemeData.neutralDark500 : AppThemeData.neutral500,
+                        color: themeChange.getThem()
+                            ? AppThemeData.neutralDark500
+                            : AppThemeData.neutral500,
                       ),
                     ),
                   ),

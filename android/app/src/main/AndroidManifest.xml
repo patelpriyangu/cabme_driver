@@ -15,9 +15,13 @@
         android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" /> -->
 
-    <!-- Google Play policy: app uses one-time photo picking (profile pic, document upload).
-         Remove broad media permissions injected by image_picker/file_picker so the system
-         photo picker is used instead. -->
+    <!-- Google Play policy: app uses one-time file/photo picking (profile pic, chat, document upload).
+         Remove broad storage/media permissions injected by picker/compression plugins so
+         privacy-preserving system pickers/scoped access are used instead. -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        tools:node="remove" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:node="remove" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"
         tools:node="remove" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"
@@ -50,14 +54,6 @@
         android:icon="@mipmap/ic_launcher"
         android:label="UniqCars Driver"
         tools:replace="android:label">
-        <service
-            android:name=".MyService"
-            android:enabled="true"
-            android:exported="false"
-            android:foregroundServiceType="location"
-            android:stopWithTask="false"
-            />
-
         <activity
             android:name="com.uniqcars.driver.co.uk.driver.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
@@ -106,13 +102,6 @@
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@mipmap/ic_launcher" />
 
-        <service
-            android:name="com.uniqcars.driver.co.uk.driver.backgroundService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.uniqcars.driver.co.uk.driver.START_BACKGROUND" />
-            </intent-filter>
-        </service>
         <receiver
             android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver"
             android:exported="false" />

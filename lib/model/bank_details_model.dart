@@ -7,9 +7,9 @@ class BankDetailsModel {
   BankDetailsModel({this.success, this.error, this.message, this.data});
 
   BankDetailsModel.fromJson(Map<String, dynamic> json) {
-    success = json['success'].toString();
-    error = json['error'].toString();
-    message = json['message'].toString();
+    success = json['success']?.toString();
+    error = json['error']?.toString();
+    message = json['message']?.toString();
     data = json['data'] != null ? BankData.fromJson(json['data']) : null;
   }
 
@@ -43,12 +43,12 @@ class BankData {
   });
 
   BankData.fromJson(Map<String, dynamic> json) {
-    bankName = json['bank_name'].toString();
-    branchName = json['branch_name'].toString();
-    holderName = json['holder_name'].toString();
-    accountNo = json['account_no'].toString();
-    otherInfo = json['other_info'].toString();
-    ifscCode = json['ifsc_code'].toString();
+    bankName = json['bank_name']?.toString();
+    branchName = json['branch_name']?.toString();
+    holderName = json['holder_name']?.toString();
+    accountNo = json['account_no']?.toString();
+    otherInfo = json['other_info']?.toString();
+    ifscCode = json['ifsc_code']?.toString();
   }
 
   Map<String, dynamic> toJson() {
