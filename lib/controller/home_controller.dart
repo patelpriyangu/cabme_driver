@@ -14,10 +14,11 @@ import 'package:uniqcars_driver/service/api.dart';
 import 'package:uniqcars_driver/controller/call_controller.dart';
 import 'package:uniqcars_driver/service/pusher_service.dart';
 import 'package:uniqcars_driver/utils/Preferences.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:location/location.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:uniqcars_driver/service/ride_alert_service.dart';
 
 class HomeController extends GetxController {
@@ -583,34 +584,43 @@ class HomeController extends GetxController {
     );
   }
 
-  Location location = Location();
-  late StreamSubscription<LocationData> locationSubscription;
+  late StreamSubscription<Position> locationSubscription;
 
   Future<void> updateCurrentLocation() async {
-    PermissionStatus permissionStatus = await location.hasPermission();
-    if (permissionStatus == PermissionStatus.granted) {
-      location.changeSettings(
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+    }
+
+    if (permission == LocationPermission.whileInUse ||
+        permission == LocationPermission.always) {
+      LocationSettings locationSettings;
+
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        locationSettings = AndroidSettings(
           accuracy: LocationAccuracy.high,
           distanceFilter:
-              double.parse(Constant.driverLocationUpdateUnit.toString()));
-      locationSubscription = location.onLocationChanged.listen((locationData) {
-        LocationData currentLocation = locationData;
-        setDriverLocationUpdate(currentLocation.latitude.toString(),
-            currentLocation.longitude.toString());
-      });
-    } else {
-      location.requestPermission().then((permissionStatus) {
-        if (permissionStatus == PermissionStatus.granted) {
-          location.changeSettings(
-              accuracy: LocationAccuracy.high,
-              distanceFilter:
-                  double.parse(Constant.driverLocationUpdateUnit.toString()));
-          locationSubscription =
-              location.onLocationChanged.listen((locationData) {
-            LocationData currentLocation = locationData;
-            setDriverLocationUpdate(currentLocation.latitude.toString(),
-                currentLocation.longitude.toString());
-          });
+              int.tryParse(Constant.driverLocationUpdateUnit.toString()) ?? 10,
+          foregroundNotificationConfig: const ForegroundNotificationConfig(
+            notificationTitle: "UniqCars Driver Online",
+            notificationText: "Running in background to receive ride requests.",
+            enableWakeLock: true,
+          ),
+        );
+      } else {
+        locationSettings = LocationSettings(
+          accuracy: LocationAccuracy.high,
+          distanceFilter:
+              int.tryParse(Constant.driverLocationUpdateUnit.toString()) ?? 10,
+        );
+      }
+
+      locationSubscription =
+          Geolocator.getPositionStream(locationSettings: locationSettings)
+              .listen((Position? position) {
+        if (position != null) {
+          setDriverLocationUpdate(
+              position.latitude.toString(), position.longitude.toString());
         }
       });
     }
