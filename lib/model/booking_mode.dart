@@ -71,6 +71,8 @@ class BookingData {
   String? pobTime;
   String? waitingDuration;
   String? scheduledAt;
+  String? scheduledAtUtc;
+  String? scheduledAtLondon;
   String? prepaidTransactionId;
   bool? isPrepaid;
   String? seriesId;
@@ -118,6 +120,8 @@ class BookingData {
       this.pobTime,
       this.waitingDuration,
       this.scheduledAt,
+      this.scheduledAtUtc,
+      this.scheduledAtLondon,
       this.prepaidTransactionId,
       this.isPrepaid,
       this.seriesId});
@@ -181,6 +185,8 @@ class BookingData {
     pobTime = json['pob_time']?.toString();
     waitingDuration = json['waiting_duration']?.toString();
     scheduledAt = json['scheduled_at']?.toString();
+    scheduledAtUtc = json['scheduled_at_utc']?.toString();
+    scheduledAtLondon = json['scheduled_at_london']?.toString();
     prepaidTransactionId = json['prepaid_transaction_id']?.toString();
     isPrepaid = json['is_prepaid'] == 1 || json['is_prepaid'] == true;
     // series_id may arrive as int (DB) or null when not part of a recurring series
@@ -253,6 +259,8 @@ class BookingData {
     data['pob_time'] = pobTime;
     data['waiting_duration'] = waitingDuration;
     data['scheduled_at'] = scheduledAt;
+    data['scheduled_at_utc'] = scheduledAtUtc;
+    data['scheduled_at_london'] = scheduledAtLondon;
     data['prepaid_transaction_id'] = prepaidTransactionId;
     data['is_prepaid'] = isPrepaid;
     data['series_id'] = seriesId;

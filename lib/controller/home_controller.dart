@@ -761,7 +761,9 @@ class HomeController extends GetxController {
                   if (ride.scheduledAt != null &&
                       ride.scheduledAt!.isNotEmpty &&
                       ride.scheduledAt != 'null') {
-                    rideTime = DateTime.parse(ride.scheduledAt!).toUtc();
+                    rideTime =
+                        DateTime.parse(ride.scheduledAtUtc ?? ride.scheduledAt!)
+                            .toUtc();
                   } else if (ride.creer != null &&
                       ride.creer!.isNotEmpty &&
                       ride.creer != 'null') {
@@ -818,9 +820,8 @@ class HomeController extends GetxController {
             ride.scheduledAt!.isNotEmpty &&
             ride.scheduledAt != 'null') {
           final scheduledUtc =
-              DateTime.parse(ride.scheduledAt!).toUtc();
-          if (scheduledUtc.isAfter(now) &&
-              scheduledUtc.isBefore(horizon)) {
+              DateTime.parse(ride.scheduledAtUtc ?? ride.scheduledAt!).toUtc();
+          if (scheduledUtc.isAfter(now) && scheduledUtc.isBefore(horizon)) {
             return true;
           }
         }

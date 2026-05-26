@@ -93,8 +93,7 @@ class _CancelledSectionHeader extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
               color: AppThemeData.errorDefault.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(20),
@@ -129,23 +128,7 @@ class _UpcomingRideCard extends StatelessWidget {
   const _UpcomingRideCard({required this.ride, required this.isCancelled});
 
   String _formatScheduledAt(String? scheduledAt) {
-    if (scheduledAt == null) return '';
-    try {
-      final utc = DateTime.parse(scheduledAt).toUtc();
-      // Simple DST-aware London time: BST (UTC+1) runs April–October,
-      // GMT (UTC+0) runs November–March. This is a close approximation.
-      final month = utc.month;
-      final offset = (month >= 4 && month <= 10) ? 1 : 0;
-      final london = utc.add(Duration(hours: offset));
-      final suffix = offset == 1 ? 'BST' : 'GMT';
-      return "${london.day.toString().padLeft(2, '0')}/"
-          "${london.month.toString().padLeft(2, '0')}/"
-          "${london.year} "
-          "${london.hour.toString().padLeft(2, '0')}:"
-          "${london.minute.toString().padLeft(2, '0')} $suffix";
-    } catch (_) {
-      return scheduledAt;
-    }
+    return scheduledAt ?? '';
   }
 
   String _formatFare(String? montant) {
@@ -214,7 +197,8 @@ class _UpcomingRideCard extends StatelessWidget {
                         size: 16, color: AppThemeData.accentDefault),
                     const SizedBox(width: 6),
                     Text(
-                      _formatScheduledAt(ride.scheduledAt),
+                      _formatScheduledAt(
+                          ride.scheduledAtLondon ?? ride.scheduledAt),
                       style: AppThemeData.boldTextStyle(
                         fontSize: 14,
                         color: AppThemeData.accentDefault,
@@ -400,7 +384,8 @@ class _UpcomingRideCard extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(
-                          color: AppThemeData.infoDefault.withValues(alpha: 0.12),
+                          color:
+                              AppThemeData.infoDefault.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
                               color: AppThemeData.infoDefault
@@ -410,8 +395,7 @@ class _UpcomingRideCard extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(Icons.event_repeat,
-                                size: 11,
-                                color: AppThemeData.infoDefault),
+                                size: 11, color: AppThemeData.infoDefault),
                             const SizedBox(width: 4),
                             Text(
                               "Recurring",
@@ -429,11 +413,12 @@ class _UpcomingRideCard extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(
-                          color: AppThemeData.infoDefault.withValues(alpha: 0.1),
+                          color:
+                              AppThemeData.infoDefault.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
-                              color:
-                                  AppThemeData.infoDefault.withValues(alpha: 0.4)),
+                              color: AppThemeData.infoDefault
+                                  .withValues(alpha: 0.4)),
                         ),
                         child: Text(
                           "Prepaid",
@@ -448,8 +433,8 @@ class _UpcomingRideCard extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 3),
                         decoration: BoxDecoration(
-                          color: AppThemeData.errorDefault
-                              .withValues(alpha: 0.12),
+                          color:
+                              AppThemeData.errorDefault.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
                               color: AppThemeData.errorDefault
@@ -459,8 +444,7 @@ class _UpcomingRideCard extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(Icons.cancel,
-                                size: 11,
-                                color: AppThemeData.errorDefault),
+                                size: 11, color: AppThemeData.errorDefault),
                             const SizedBox(width: 4),
                             Text(
                               "CANCELLED",
@@ -505,8 +489,8 @@ class _UpcomingRideCard extends StatelessWidget {
               children: [
                 if (isCancelled)
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: AppThemeData.errorDefault.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(20),
@@ -532,11 +516,10 @@ class _UpcomingRideCard extends StatelessWidget {
                   )
                 else if (isAssignedToMe)
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color:
-                          AppThemeData.successDefault.withValues(alpha: 0.1),
+                      color: AppThemeData.successDefault.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
                           color: AppThemeData.successDefault
@@ -560,8 +543,8 @@ class _UpcomingRideCard extends StatelessWidget {
                   )
                 else if (isAssignedToOther)
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: isDark
                           ? AppThemeData.neutralDark100
