@@ -26,7 +26,7 @@ class API {
       HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
       HttpHeaders.acceptHeader: 'application/json',
       'apikey': apiKey,
-      'accesstoken': Preferences.getString(Preferences.accesstoken) ?? "",
+      'accesstoken': Preferences.getString(Preferences.accesstoken),
     };
   }
 
@@ -156,6 +156,7 @@ class API {
 
   static Future<dynamic> handleApiRequest(
       {required Future<http.Response> Function() request,
+      Map<String, dynamic>? debugPayload,
       bool showLoader = true}) async {
     try {
       if (showLoader) {
@@ -166,6 +167,9 @@ class API {
 
       showLog("DEBUG: API Request URL: ${response.request?.url}");
       showLog("DEBUG: API Request Headers: ${response.request?.headers}");
+      if (debugPayload != null) {
+        showLog("DEBUG: API Request Payload: ${jsonEncode(debugPayload)}");
+      }
       showLog("DEBUG: API Response Status: ${response.statusCode}");
       showLog("DEBUG: API Response Body: ${response.body}");
 
@@ -173,12 +177,12 @@ class API {
       const chunkSize = 800;
       final fullBody = response.body;
       for (var i = 0; i < fullBody.length; i += chunkSize) {
-        showLog("📥 BODY[${i ~/ chunkSize}]: ${fullBody.substring(i, i + chunkSize > fullBody.length ? fullBody.length : i + chunkSize)}");
+        showLog(
+            "📥 BODY[${i ~/ chunkSize}]: ${fullBody.substring(i, i + chunkSize > fullBody.length ? fullBody.length : i + chunkSize)}");
       }
 
       final decodedResponse = jsonDecode(response.body);
       showLog("✅ API :: Response Status :: ${response.statusCode}");
-
 
       if (showLoader) ShowToastDialog.closeLoader();
 

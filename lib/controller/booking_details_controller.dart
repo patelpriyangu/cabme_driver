@@ -147,7 +147,8 @@ class BookingDetailsController extends GetxController {
     if (bookingModel.value.arrivedTime != null &&
         bookingModel.value.pobTime != null) {
       try {
-        DateTime arrivedDateTime = DateTime.parse(bookingModel.value.arrivedTime!);
+        DateTime arrivedDateTime =
+            DateTime.parse(bookingModel.value.arrivedTime!);
         DateTime pobDateTime = DateTime.parse(bookingModel.value.pobTime!);
         Duration difference = pobDateTime.difference(arrivedDateTime);
 
@@ -294,6 +295,7 @@ class BookingDetailsController extends GetxController {
         .handleApiRequest(
             request: () => http.post(Uri.parse(API.completeRequest),
                 headers: API.headers, body: jsonEncode(requestBody)),
+            debugPayload: requestBody,
             showLoader: false)
         .then(
       (value) {
@@ -528,7 +530,8 @@ class BookingDetailsController extends GetxController {
         if (Constant.distanceUnit?.toLowerCase() == "km") {
           routeDistance.value = (distanceInMeters / 1000).toStringAsFixed(2);
         } else {
-          routeDistance.value = (distanceInMeters / 1609.344).toStringAsFixed(2);
+          routeDistance.value =
+              (distanceInMeters / 1609.344).toStringAsFixed(2);
         }
 
         final durationInMinutes = (durationInSeconds / 60).round();

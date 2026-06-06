@@ -14,11 +14,10 @@ import 'package:uniqcars_driver/service/api.dart';
 import 'package:uniqcars_driver/controller/call_controller.dart';
 import 'package:uniqcars_driver/service/pusher_service.dart';
 import 'package:uniqcars_driver/utils/Preferences.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:geolocator/geolocator.dart';
+import 'package:location/location.dart';
 import 'package:uniqcars_driver/service/ride_alert_service.dart';
 
 class HomeController extends GetxController {
@@ -50,6 +49,7 @@ class HomeController extends GetxController {
 
   @override
   void onClose() {
+    _stopDriverLocationTracking();
     RideAlertService().stop();
     super.onClose();
   }
@@ -101,12 +101,10 @@ class HomeController extends GetxController {
         .then((value) {
       if (value != null && value['success'] == 'success') {
         final model = DriverUploadModel.fromJson(value);
-        nearExpiryDocs.value = (model.data ?? [])
-            .where((doc) {
-              final days = doc.daysUntilExpiry;
-              return days != null && days >= 0 && days <= 30;
-            })
-            .toList();
+        nearExpiryDocs.value = (model.data ?? []).where((doc) {
+          final days = doc.daysUntilExpiry;
+          return days != null && days >= 0 && days <= 30;
+        }).toList();
       }
     });
   }
@@ -204,8 +202,7 @@ class HomeController extends GetxController {
             booking.data!.scheduledAt != 'null';
         final wasCancelled = booking.data!.statut == RideStatus.canceled ||
             booking.data!.statut == RideStatus.rejected;
-        final myDriverId =
-            Preferences.getInt(Preferences.userId).toString();
+        final myDriverId = Preferences.getInt(Preferences.userId).toString();
         final assignedId = booking.data!.assignedDriverId;
         final isAssignedToMe = assignedId != null &&
             assignedId.toString() != 'null' &&
@@ -215,7 +212,9 @@ class HomeController extends GetxController {
         // Show payment confirmation dialog when ride completes via online payment
         // (e.g. WorldPay) — the Pusher 'completed' event fires as soon as the
         // customer's payment succeeds, so the driver needs visual confirmation.
-        if (booking.data!.statut == RideStatus.completed) {
+        final isSchoolRun =
+            (booking.data!.rideType ?? '').toLowerCase() == 'school_run';
+        if (booking.data!.statut == RideStatus.completed && !isSchoolRun) {
           final bookingNum =
               booking.data!.bookingNumber ?? booking.data!.id ?? '';
           final amount = booking.data!.montant ?? '0';
@@ -274,8 +273,7 @@ class HomeController extends GetxController {
                       borderRadius: BorderRadius.circular(16)),
                   title: Row(
                     children: [
-                      Icon(Icons.cancel_outlined,
-                          color: Colors.red, size: 24),
+                      Icon(Icons.cancel_outlined, color: Colors.red, size: 24),
                       const SizedBox(width: 8),
                       const Expanded(
                         child: Text(
@@ -466,6 +464,7 @@ class HomeController extends GetxController {
         .handleApiRequest(
             request: () => http.post(Uri.parse(API.completeRequest),
                 headers: API.headers, body: jsonEncode(requestBody)),
+            debugPayload: requestBody,
             showLoader: true)
         .then(
       (value) async {
@@ -537,13 +536,23 @@ class HomeController extends GetxController {
             } else {
               ShowToastDialog.showToast(value['error']);
             }
+            if (previousStatus == "yes") {
+              updateCurrentLocation();
+            }
             return null;
           } else {
             success = true;
             await getData();
-            ShowToastDialog.showToast(
-                status.value == "yes" ? "You are online now" : status.value == "break" ? "You are on break" : "You are offline now");
-            updateCurrentLocation();
+            ShowToastDialog.showToast(status.value == "yes"
+                ? "You are online now"
+                : status.value == "break"
+                    ? "You are on break"
+                    : "You are offline now");
+            if (status.value == "yes") {
+              updateCurrentLocation();
+            } else {
+              _stopDriverLocationTracking();
+            }
           }
         }
       },
@@ -584,60 +593,123 @@ class HomeController extends GetxController {
     );
   }
 
-  late StreamSubscription<Position> locationSubscription;
+  Location location = Location();
+  StreamSubscription<LocationData>? locationSubscription;
+  Timer? _driverLocationHeartbeatTimer;
+  String? _lastDriverLatitude;
+  String? _lastDriverLongitude;
 
   Future<void> updateCurrentLocation() async {
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
+    if (status.value != "yes") {
+      _stopDriverLocationTracking();
+      return;
     }
 
-    if (permission == LocationPermission.whileInUse ||
-        permission == LocationPermission.always) {
-      LocationSettings locationSettings;
-
-      if (defaultTargetPlatform == TargetPlatform.android) {
-        locationSettings = AndroidSettings(
-          accuracy: LocationAccuracy.high,
-          distanceFilter:
-              int.tryParse(Constant.driverLocationUpdateUnit.toString()) ?? 10,
-          foregroundNotificationConfig: const ForegroundNotificationConfig(
-            notificationTitle: "UniqCars Driver Online",
-            notificationText: "Running in background to receive ride requests.",
-            enableWakeLock: true,
-          ),
-        );
-      } else {
-        locationSettings = LocationSettings(
-          accuracy: LocationAccuracy.high,
-          distanceFilter:
-              int.tryParse(Constant.driverLocationUpdateUnit.toString()) ?? 10,
-        );
+    try {
+      PermissionStatus permissionStatus = await location.hasPermission();
+      if (permissionStatus != PermissionStatus.granted) {
+        permissionStatus = await location.requestPermission();
+      }
+      if (permissionStatus != PermissionStatus.granted) {
+        return;
       }
 
-      locationSubscription =
-          Geolocator.getPositionStream(locationSettings: locationSettings)
-              .listen((Position? position) {
-        if (position != null) {
-          setDriverLocationUpdate(
-              position.latitude.toString(), position.longitude.toString());
-        }
-      });
+      await location.changeSettings(
+          accuracy: LocationAccuracy.high,
+          distanceFilter:
+              double.parse(Constant.driverLocationUpdateUnit.toString()));
+
+      await _sendCurrentOrLastKnownLocation();
+      _startDriverLocationStream();
+      _startDriverLocationHeartbeat();
+    } catch (e) {
+      log("Driver location tracking error: $e");
     }
+  }
+
+  void _startDriverLocationStream() {
+    if (locationSubscription != null) {
+      return;
+    }
+
+    locationSubscription = location.onLocationChanged.listen((locationData) {
+      _cacheDriverLocation(locationData);
+      _sendLastKnownDriverLocation();
+    }, onError: (error) {
+      log("Driver location stream error: $error");
+    });
+  }
+
+  void _startDriverLocationHeartbeat() {
+    if (_driverLocationHeartbeatTimer?.isActive == true) {
+      return;
+    }
+
+    _driverLocationHeartbeatTimer =
+        Timer.periodic(const Duration(seconds: 30), (_) {
+      if (status.value == "yes") {
+        _sendCurrentOrLastKnownLocation();
+      } else {
+        _stopDriverLocationTracking();
+      }
+    });
+  }
+
+  Future<void> _sendCurrentOrLastKnownLocation() async {
+    try {
+      final currentLocation = await location.getLocation();
+      _cacheDriverLocation(currentLocation);
+    } catch (e) {
+      log("Driver current location lookup error: $e");
+    }
+
+    await _sendLastKnownDriverLocation();
+  }
+
+  void _cacheDriverLocation(LocationData locationData) {
+    if (locationData.latitude != null && locationData.longitude != null) {
+      _lastDriverLatitude = locationData.latitude.toString();
+      _lastDriverLongitude = locationData.longitude.toString();
+    }
+  }
+
+  Future<void> _sendLastKnownDriverLocation() async {
+    final latitude = _lastDriverLatitude;
+    final longitude = _lastDriverLongitude;
+    if (latitude == null || longitude == null || status.value != "yes") {
+      return;
+    }
+
+    await setDriverLocationUpdate(latitude, longitude);
+  }
+
+  Future<void> _stopDriverLocationTracking() async {
+    _driverLocationHeartbeatTimer?.cancel();
+    _driverLocationHeartbeatTimer = null;
+    await locationSubscription?.cancel();
+    locationSubscription = null;
   }
 
   Future<void> setDriverLocationUpdate(
       String latitude, String longitude) async {
+    if (status.value != "yes") {
+      return;
+    }
+
     Map<String, dynamic> bodyParams = {
       'id_user': Preferences.getInt(Preferences.userId),
       'user_cat': userModel.value.userData!.userCat.toString(),
       'latitude': latitude,
       'longitude': longitude
     };
-    await API.handleApiRequest(
-        request: () => http.post(Uri.parse(API.updateLocation),
-            headers: API.headers, body: jsonEncode(bodyParams)),
-        showLoader: false);
+    try {
+      await API.handleApiRequest(
+          request: () => http.post(Uri.parse(API.updateLocation),
+              headers: API.headers, body: jsonEncode(bodyParams)),
+          showLoader: false);
+    } catch (e) {
+      log("Driver location update error: $e");
+    }
   }
 
   var selectedIndex = 0.obs;

@@ -1,5 +1,6 @@
 import 'package:uniqcars_driver/constant/constant.dart';
 import 'package:uniqcars_driver/constant/ride_satatus.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
 import 'package:uniqcars_driver/controller/rental_booking_search_controller.dart';
 import 'package:uniqcars_driver/model/rental_booking_model.dart';
 import 'package:uniqcars_driver/page/chats_screen/conversation_screen.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:timelines_plus/timelines_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../widget/round_button_fill.dart';
 
@@ -281,7 +283,10 @@ class RentalBookingSearchScreen extends StatelessWidget {
                                                 height: 5,
                                               ),
                                               DottedLine(
-                                                dashColor: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
+                                                dashColor: themeChange.getThem()
+                                                    ? AppThemeData
+                                                        .neutralDark300
+                                                    : AppThemeData.neutral300,
                                                 lineThickness: 1.0,
                                                 dashLength: 4.0,
                                                 dashGapLength: 3.0,
@@ -493,10 +498,23 @@ class RentalBookingSearchScreen extends StatelessWidget {
                                                   width: 10,
                                                 ),
                                                 InkWell(
-                                                  onTap: () {},
-                                                  child: SvgPicture.asset(
-                                                    "assets/icons/ic_livetracking.svg",
-                                                    width: 36,
+                                                  onTap: () {
+                                                    _openRentalPickupDirections(
+                                                        context,
+                                                        themeChange,
+                                                        rentalBookingData);
+                                                  },
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  child: SizedBox(
+                                                    width: 48,
+                                                    height: 48,
+                                                    child: Center(
+                                                      child: SvgPicture.asset(
+                                                        "assets/icons/ic_livetracking.svg",
+                                                        width: 40,
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
                                               ],
@@ -580,5 +598,102 @@ class RentalBookingSearchScreen extends StatelessWidget {
                   ),
           );
         });
+  }
+
+  void _openRentalPickupDirections(BuildContext context,
+      DarkThemeProvider themeChange, RentalBookingData rentalBookingData) {
+    final lat = rentalBookingData.latSource;
+    final lng = rentalBookingData.lngSource;
+    if (lat != null && lat.isNotEmpty && lng != null && lng.isNotEmpty) {
+      _showNavigationPicker(context, themeChange, lat, lng);
+    } else {
+      ShowToastDialog.showToast("Pickup location is not available".tr);
+    }
+  }
+
+  void _showNavigationPicker(BuildContext context,
+      DarkThemeProvider themeChange, String lat, String lng) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      backgroundColor:
+          themeChange.getThem() ? AppThemeData.neutralDark50 : Colors.white,
+      builder: (ctx) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  child: Text(
+                    "Open Directions In".tr,
+                    style: AppThemeData.boldTextStyle(
+                        fontSize: 18,
+                        color: themeChange.getThem()
+                            ? AppThemeData.neutralDark900
+                            : AppThemeData.neutral900),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                ListTile(
+                  leading: const Icon(Icons.map, color: Colors.green),
+                  title: Text("Google Maps",
+                      style: AppThemeData.mediumTextStyle(
+                          fontSize: 16,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark900
+                              : AppThemeData.neutral900)),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    launchUrl(
+                        Uri.parse(
+                            'https://www.google.com/maps/dir/?api=1&destination=$lat,$lng&travelmode=driving'),
+                        mode: LaunchMode.externalApplication);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.directions, color: Colors.blue),
+                  title: Text("Apple Maps",
+                      style: AppThemeData.mediumTextStyle(
+                          fontSize: 16,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark900
+                              : AppThemeData.neutral900)),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    launchUrl(
+                        Uri.parse(
+                            'https://maps.apple.com/?daddr=$lat,$lng&dirflg=d'),
+                        mode: LaunchMode.externalApplication);
+                  },
+                ),
+                ListTile(
+                  leading:
+                      const Icon(Icons.navigation, color: Colors.lightBlue),
+                  title: Text("Waze",
+                      style: AppThemeData.mediumTextStyle(
+                          fontSize: 16,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark900
+                              : AppThemeData.neutral900)),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    launchUrl(
+                        Uri.parse(
+                            'https://waze.com/ul?ll=$lat,$lng&navigate=yes'),
+                        mode: LaunchMode.externalApplication);
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }

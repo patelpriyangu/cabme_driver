@@ -33,275 +33,286 @@ class SignupScreen extends StatelessWidget {
                   },
                   child: Icon(Icons.arrow_back)),
             ),
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      'Let’s get you started'.tr,
-                      textAlign: TextAlign.center,
-                      style: AppThemeData.boldTextStyle(
-                          fontSize: 22,
-                          color: themeChange.getThem()
-                              ? AppThemeData.neutralDark900
-                              : AppThemeData.neutral900),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      'Start booking your rides in just a few taps.'.tr,
-                      textAlign: TextAlign.center,
-                      style: AppThemeData.mediumTextStyle(
-                          fontSize: 14,
-                          color: themeChange.getThem()
-                              ? AppThemeData.neutralDark500
-                              : AppThemeData.neutral500),
-                    ),
-                    Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          'Continue as a.'.tr,
-                          textAlign: TextAlign.center,
-                          style: AppThemeData.mediumTextStyle(
+            body: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        'Let’s get you started'.tr,
+                        textAlign: TextAlign.center,
+                        style: AppThemeData.boldTextStyle(
+                            fontSize: 22,
+                            color: themeChange.getThem()
+                                ? AppThemeData.neutralDark900
+                                : AppThemeData.neutral900),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        'Start booking your rides in just a few taps.'.tr,
+                        textAlign: TextAlign.center,
+                        style: AppThemeData.mediumTextStyle(
+                            fontSize: 14,
+                            color: themeChange.getThem()
+                                ? AppThemeData.neutralDark500
+                                : AppThemeData.neutral500),
+                      ),
+                      Column(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            'Continue as a.'.tr,
+                            textAlign: TextAlign.center,
+                            style: AppThemeData.mediumTextStyle(
+                                fontSize: 14,
+                                color: themeChange.getThem()
+                                    ? AppThemeData.neutralDark700
+                                    : AppThemeData.neutral700),
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: RadioListTile<String>(
+                                  title: Text('Individual'.tr),
+                                  value: 'Individual',
+                                  groupValue: controller.selectedValue.value,
+                                  onChanged: (value) {
+                                    controller.selectedValue.value = value!;
+                                  },
+                                ),
+                              ),
+                              Expanded(
+                                child: RadioListTile<String>(
+                                  title: Text('Company'.tr),
+                                  value: 'Company',
+                                  groupValue: controller.selectedValue.value,
+                                  onChanged: (value) {
+                                    controller.selectedValue.value = value!;
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            'Service Type',
+                            style: AppThemeData.semiBoldTextStyle(
                               fontSize: 14,
                               color: themeChange.getThem()
                                   ? AppThemeData.neutralDark700
-                                  : AppThemeData.neutral700),
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: RadioListTile<String>(
-                                title: Text('Individual'.tr),
-                                value: 'Individual',
-                                groupValue: controller.selectedValue.value,
-                                onChanged: (value) {
-                                  controller.selectedValue.value = value!;
-                                },
+                                  : AppThemeData.neutral700,
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 14),
+                            decoration: BoxDecoration(
+                              color: themeChange.getThem()
+                                  ? AppThemeData.neutralDark100
+                                  : AppThemeData.neutral100,
+                              borderRadius: BorderRadius.circular(40),
+                              border: Border.all(
+                                color: themeChange.getThem()
+                                    ? AppThemeData.neutralDark300
+                                    : AppThemeData.neutral300,
                               ),
                             ),
-                            Expanded(
-                              child: RadioListTile<String>(
-                                title: Text('Company'.tr),
-                                value: 'Company',
-                                groupValue: controller.selectedValue.value,
-                                onChanged: (value) {
-                                  controller.selectedValue.value = value!;
-                                },
+                            child: Text(
+                              'Ride',
+                              style: AppThemeData.mediumTextStyle(
+                                fontSize: 14,
+                                color: themeChange.getThem()
+                                    ? AppThemeData.neutralDark900
+                                    : AppThemeData.neutral900,
                               ),
                             ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          'Service Type',
-                          style: AppThemeData.semiBoldTextStyle(
-                            fontSize: 14,
-                            color: themeChange.getThem()
-                                ? AppThemeData.neutralDark700
-                                : AppThemeData.neutral700,
                           ),
-                        ),
-                        const SizedBox(height: 5),
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 14),
-                          decoration: BoxDecoration(
-                            color: themeChange.getThem()
-                                ? AppThemeData.neutralDark100
-                                : AppThemeData.neutral100,
-                            borderRadius: BorderRadius.circular(40),
-                            border: Border.all(
-                              color: themeChange.getThem()
-                                  ? AppThemeData.neutralDark300
-                                  : AppThemeData.neutral300,
-                            ),
-                          ),
-                          child: Text(
-                            'Ride',
-                            style: AppThemeData.mediumTextStyle(
-                              fontSize: 14,
-                              color: themeChange.getThem()
-                                  ? AppThemeData.neutralDark900
-                                  : AppThemeData.neutral900,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        TextFieldWidget(
-                          controller: controller.firstNameController.value,
-                          hintText: 'Enter First Name',
-                          title: 'First Name',
-                          prefix: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 18),
-                            child: SvgPicture.asset("assets/icons/ic_user.svg"),
-                          ),
-                        ),
-                        TextFieldWidget(
-                          controller: controller.lastNameController.value,
-                          hintText: 'Enter Last Name',
-                          title: 'Last Name',
-                          prefix: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 18),
-                            child: SvgPicture.asset("assets/icons/ic_user.svg"),
-                          ),
-                        ),
-                        TextFieldWidget(
-                          controller: controller.emailController.value,
-                          hintText: 'Enter Email Address',
-                          title: 'Email Address',
-                          enable: controller.loginType.value == "phoneNumber" ||
-                              controller.loginType.value == "email",
-                          prefix: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 18),
-                            child: SvgPicture.asset(
-                                "assets/icons/ic_email_login.svg"),
-                          ),
-                        ),
-                        TextFieldWidget(
-                          controller: controller.phoneNumber.value,
-                          hintText: 'Enter Mobile Number',
-                          title: 'Mobile Number',
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp('[0-9]')),
-                          ],
-                          enable: controller.loginType.value == "phoneNumber"
-                              ? false
-                              : true,
-                          prefix: CountryCodePicker(
-                            onChanged: (value) {
-                              controller.countryCodeController.value.text =
-                                  value.dialCode.toString();
-                            },
-                            dialogTextStyle: TextStyle(
-                              color: themeChange.getThem()
-                                  ? AppThemeData.neutralDark900
-                                  : AppThemeData.neutral900,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: AppThemeData.medium,
-                            ),
-                            dialogBackgroundColor: themeChange.getThem()
-                                ? AppThemeData.neutralDark50
-                                : AppThemeData.neutral50,
-                            initialSelection:
-                                controller.countryCodeController.value.text,
-                            comparator: (a, b) =>
-                                b.name!.compareTo(a.name.toString()),
-                            flagDecoration: const BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(2)),
-                            ),
-                            textStyle: TextStyle(
-                              color: themeChange.getThem()
-                                  ? AppThemeData.neutralDark900
-                                  : AppThemeData.neutral900,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: AppThemeData.medium,
-                            ),
-                            searchDecoration: InputDecoration(
-                              iconColor: themeChange.getThem()
-                                  ? AppThemeData.neutralDark900
-                                  : AppThemeData.neutral900,
-                            ),
-                            searchStyle: TextStyle(
-                              color: themeChange.getThem()
-                                  ? AppThemeData.neutralDark900
-                                  : AppThemeData.neutral900,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: AppThemeData.medium,
-                            ),
-                          ),
-                        ),
-                        TextFieldWidget(
-                          controller:
-                              controller.registrationNumberController.value,
-                          hintText: 'Enter Vehicle Registration Number',
-                          title: 'Registration Number',
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                                RegExp('[a-zA-Z0-9 ]')),
-                          ],
-                        ),
-                        if (controller.loginType.value != "google" &&
-                            controller.loginType.value != "apple") ...[
+                          SizedBox(height: 10),
                           TextFieldWidget(
-                            controller: controller.pinController.value,
-                            hintText: 'Enter PIN',
-                            title: 'PIN',
-                            obscureText: controller.isPinShow.value,
-                            textInputType: TextInputType.number,
+                            controller: controller.firstNameController.value,
+                            hintText: 'Enter First Name',
+                            title: 'First Name',
+                            prefix: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 18),
+                              child:
+                                  SvgPicture.asset("assets/icons/ic_user.svg"),
+                            ),
+                          ),
+                          TextFieldWidget(
+                            controller: controller.lastNameController.value,
+                            hintText: 'Enter Last Name',
+                            title: 'Last Name',
+                            prefix: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 18),
+                              child:
+                                  SvgPicture.asset("assets/icons/ic_user.svg"),
+                            ),
+                          ),
+                          TextFieldWidget(
+                            controller: controller.emailController.value,
+                            hintText: 'Enter Email Address',
+                            title: 'Email Address',
+                            enable:
+                                controller.loginType.value == "phoneNumber" ||
+                                    controller.loginType.value == "email",
                             prefix: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 18),
                               child: SvgPicture.asset(
-                                  "assets/icons/ic_lock_login.svg"),
+                                  "assets/icons/ic_email_login.svg"),
                             ),
-                            suffix: InkWell(
-                              onTap: () {
-                                controller.isPinShow.value =
-                                    !controller.isPinShow.value;
+                          ),
+                          TextFieldWidget(
+                            controller: controller.phoneNumber.value,
+                            hintText: 'Enter Mobile Number',
+                            title: 'Mobile Number',
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp('[0-9]')),
+                            ],
+                            enable: controller.loginType.value == "phoneNumber"
+                                ? false
+                                : true,
+                            prefix: CountryCodePicker(
+                              onChanged: (value) {
+                                controller.countryCodeController.value.text =
+                                    value.dialCode.toString();
                               },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 18),
-                                child: Obx(
-                                  () => controller.isPinShow.value
-                                      ? SvgPicture.asset(
-                                          "assets/icons/ic_hide.svg")
-                                      : SvgPicture.asset(
-                                          "assets/icons/ic_show.svg"),
-                                ),
+                              dialogTextStyle: TextStyle(
+                                color: themeChange.getThem()
+                                    ? AppThemeData.neutralDark900
+                                    : AppThemeData.neutral900,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: AppThemeData.medium,
+                              ),
+                              dialogBackgroundColor: themeChange.getThem()
+                                  ? AppThemeData.neutralDark50
+                                  : AppThemeData.neutral50,
+                              initialSelection:
+                                  controller.countryCodeController.value.text,
+                              comparator: (a, b) =>
+                                  b.name!.compareTo(a.name.toString()),
+                              flagDecoration: const BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(2)),
+                              ),
+                              textStyle: TextStyle(
+                                color: themeChange.getThem()
+                                    ? AppThemeData.neutralDark900
+                                    : AppThemeData.neutral900,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: AppThemeData.medium,
+                              ),
+                              searchDecoration: InputDecoration(
+                                iconColor: themeChange.getThem()
+                                    ? AppThemeData.neutralDark900
+                                    : AppThemeData.neutral900,
+                              ),
+                              searchStyle: TextStyle(
+                                color: themeChange.getThem()
+                                    ? AppThemeData.neutralDark900
+                                    : AppThemeData.neutral900,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: AppThemeData.medium,
                               ),
                             ),
                           ),
                           TextFieldWidget(
-                            controller: controller.confirmPinController.value,
-                            hintText: 'Confirm PIN',
-                            title: 'Confirm PIN',
-                            obscureText: controller.isConfirmPinShow.value,
-                            textInputType: TextInputType.number,
-                            prefix: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 18),
-                              child: SvgPicture.asset(
-                                  "assets/icons/ic_lock_login.svg"),
-                            ),
-                            suffix: InkWell(
-                              onTap: () {
-                                controller.isConfirmPinShow.value =
-                                    !controller.isConfirmPinShow.value;
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 18),
-                                child: Obx(
-                                  () => controller.isConfirmPinShow.value
-                                      ? SvgPicture.asset(
-                                          "assets/icons/ic_hide.svg")
-                                      : SvgPicture.asset(
-                                          "assets/icons/ic_show.svg"),
+                            controller:
+                                controller.registrationNumberController.value,
+                            hintText: 'Enter Vehicle Registration Number',
+                            title: 'Registration Number',
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp('[a-zA-Z0-9 ]')),
+                            ],
+                          ),
+                          if (controller.loginType.value != "google" &&
+                              controller.loginType.value != "apple") ...[
+                            TextFieldWidget(
+                              controller: controller.pinController.value,
+                              hintText: 'Enter PIN',
+                              title: 'PIN',
+                              obscureText: controller.isPinShow.value,
+                              textInputType: TextInputType.number,
+                              prefix: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 18),
+                                child: SvgPicture.asset(
+                                    "assets/icons/ic_lock_login.svg"),
+                              ),
+                              suffix: InkWell(
+                                onTap: () {
+                                  controller.isPinShow.value =
+                                      !controller.isPinShow.value;
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 18),
+                                  child: Obx(
+                                    () => controller.isPinShow.value
+                                        ? SvgPicture.asset(
+                                            "assets/icons/ic_hide.svg")
+                                        : SvgPicture.asset(
+                                            "assets/icons/ic_show.svg"),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
+                            TextFieldWidget(
+                              controller: controller.confirmPinController.value,
+                              hintText: 'Confirm PIN',
+                              title: 'Confirm PIN',
+                              obscureText: controller.isConfirmPinShow.value,
+                              textInputType: TextInputType.number,
+                              prefix: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 18),
+                                child: SvgPicture.asset(
+                                    "assets/icons/ic_lock_login.svg"),
+                              ),
+                              suffix: InkWell(
+                                onTap: () {
+                                  controller.isConfirmPinShow.value =
+                                      !controller.isConfirmPinShow.value;
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 18),
+                                  child: Obx(
+                                    () => controller.isConfirmPinShow.value
+                                        ? SvgPicture.asset(
+                                            "assets/icons/ic_hide.svg")
+                                        : SvgPicture.asset(
+                                            "assets/icons/ic_show.svg"),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ],
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -334,7 +345,8 @@ class SignupScreen extends StatelessWidget {
                       controller.loginType.value != "apple" &&
                       controller.pinController.value.text.trim() !=
                           controller.confirmPinController.value.text.trim()) {
-                    ShowToastDialog.showToast("PIN and confirm PIN do not match");
+                    ShowToastDialog.showToast(
+                        "PIN and confirm PIN do not match");
                   } else {
                     Map<String, String> bodyParams = {
                       'firstname': controller.firstNameController.value.text

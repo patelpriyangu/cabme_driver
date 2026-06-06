@@ -1,10 +1,10 @@
 import 'package:uniqcars_driver/constant/constant.dart';
 import 'package:uniqcars_driver/constant/ride_satatus.dart';
+import 'package:uniqcars_driver/constant/show_toast_dialog.dart';
 import 'package:uniqcars_driver/controller/booking_details_controller.dart';
 import 'package:uniqcars_driver/controller/call_controller.dart';
 import 'package:uniqcars_driver/model/tax_model.dart';
 import 'package:uniqcars_driver/page/chats_screen/conversation_screen.dart';
-import 'package:uniqcars_driver/page/live_tracking_screen/live_tracking_screen.dart';
 import 'package:uniqcars_driver/page/rating_screen/rating_screen.dart';
 import 'package:uniqcars_driver/themes/responsive.dart';
 import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
@@ -15,6 +15,7 @@ import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 import 'package:timelines_plus/timelines_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../themes/app_them_data.dart';
 import '../../themes/round_button_fill.dart';
@@ -430,13 +431,34 @@ class BookingDetailsScreen extends StatelessWidget {
                                                       children: [
                                                         InkWell(
                                                           onTap: () {
-                                                            final callCtrl = Get.find<CallController>();
-                                                            callCtrl.initiateCall(
-                                                              receiverId: int.parse(controller.bookingModel.value.user!.id.toString()),
-                                                              receiverType: 'customer',
-                                                              rideId: int.tryParse(controller.bookingModel.value.id.toString()),
-                                                              receiverName: "${controller.bookingModel.value.user!.prenom} ${controller.bookingModel.value.user!.nom}",
-                                                              receiverPhoto: controller.bookingModel.value.user!.image,
+                                                            final callCtrl =
+                                                                Get.find<
+                                                                    CallController>();
+                                                            callCtrl
+                                                                .initiateCall(
+                                                              receiverId: int
+                                                                  .parse(controller
+                                                                      .bookingModel
+                                                                      .value
+                                                                      .user!
+                                                                      .id
+                                                                      .toString()),
+                                                              receiverType:
+                                                                  'customer',
+                                                              rideId: int.tryParse(
+                                                                  controller
+                                                                      .bookingModel
+                                                                      .value
+                                                                      .id
+                                                                      .toString()),
+                                                              receiverName:
+                                                                  "${controller.bookingModel.value.user!.prenom} ${controller.bookingModel.value.user!.nom}",
+                                                              receiverPhoto:
+                                                                  controller
+                                                                      .bookingModel
+                                                                      .value
+                                                                      .user!
+                                                                      .image,
                                                             );
                                                           },
                                                           child:
@@ -642,12 +664,14 @@ class BookingDetailsScreen extends StatelessWidget {
                                               fontSize: 14,
                                               color: themeChange.getThem()
                                                   ? AppThemeData.primaryDefault
-                                                  : AppThemeData.primaryDefault),
+                                                  : AppThemeData
+                                                      .primaryDefault),
                                         ),
                                       ),
                                     ],
                                   ),
-                                  if (controller.routeDuration.value.isNotEmpty) ...[
+                                  if (controller
+                                      .routeDuration.value.isNotEmpty) ...[
                                     SizedBox(height: 10),
                                     Row(
                                       children: [
@@ -657,7 +681,8 @@ class BookingDetailsScreen extends StatelessWidget {
                                             style: AppThemeData.mediumTextStyle(
                                                 fontSize: 14,
                                                 color: themeChange.getThem()
-                                                    ? AppThemeData.neutralDark900
+                                                    ? AppThemeData
+                                                        .neutralDark900
                                                     : AppThemeData.neutral900),
                                           ),
                                         ),
@@ -668,8 +693,10 @@ class BookingDetailsScreen extends StatelessWidget {
                                             style: AppThemeData.boldTextStyle(
                                                 fontSize: 14,
                                                 color: themeChange.getThem()
-                                                    ? AppThemeData.primaryDefault
-                                                    : AppThemeData.primaryDefault),
+                                                    ? AppThemeData
+                                                        .primaryDefault
+                                                    : AppThemeData
+                                                        .primaryDefault),
                                           ),
                                         ),
                                       ],
@@ -687,11 +714,15 @@ class BookingDetailsScreen extends StatelessWidget {
                                             Expanded(
                                               child: Text(
                                                 "Waiting Time:".tr,
-                                                style: AppThemeData.mediumTextStyle(
-                                                    fontSize: 14,
-                                                    color: themeChange.getThem()
-                                                        ? AppThemeData.neutralDark900
-                                                        : AppThemeData.neutral900),
+                                                style: AppThemeData
+                                                    .mediumTextStyle(
+                                                        fontSize: 14,
+                                                        color: themeChange
+                                                                .getThem()
+                                                            ? AppThemeData
+                                                                .neutralDark900
+                                                            : AppThemeData
+                                                                .neutral900),
                                               ),
                                             ),
                                             SizedBox(
@@ -700,11 +731,15 @@ class BookingDetailsScreen extends StatelessWidget {
                                             Expanded(
                                               child: Text(
                                                 controller.getWaitingDuration(),
-                                                style: AppThemeData.boldTextStyle(
-                                                    fontSize: 14,
-                                                    color: themeChange.getThem()
-                                                        ? AppThemeData.primaryDefault
-                                                        : AppThemeData.primaryDefault),
+                                                style:
+                                                    AppThemeData.boldTextStyle(
+                                                        fontSize: 14,
+                                                        color: themeChange
+                                                                .getThem()
+                                                            ? AppThemeData
+                                                                .primaryDefault
+                                                            : AppThemeData
+                                                                .primaryDefault),
                                               ),
                                             ),
                                           ],
@@ -1092,14 +1127,21 @@ class BookingDetailsScreen extends StatelessWidget {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      Get.to(LiveTrackingScreen(), arguments: {
-                                        'orderModel':
-                                            controller.bookingModel.value
-                                      });
+                                      _openPickupDirections(
+                                          context,
+                                          themeChange,
+                                          controller.bookingModel.value);
                                     },
-                                    child: SvgPicture.asset(
-                                      "assets/icons/ic_livetracking.svg",
-                                      width: 42,
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: SizedBox(
+                                      width: 48,
+                                      height: 48,
+                                      child: Center(
+                                        child: SvgPicture.asset(
+                                          "assets/icons/ic_livetracking.svg",
+                                          width: 40,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -1119,8 +1161,8 @@ class BookingDetailsScreen extends StatelessWidget {
                                               ? AppThemeData.neutral50
                                               : AppThemeData.neutral50,
                                           onPress: () async {
-                                            showVerifyPassengerDialog(
-                                                context, themeChange, controller);
+                                            showVerifyPassengerDialog(context,
+                                                themeChange, controller);
                                           },
                                         ),
                                       ),
@@ -1129,88 +1171,107 @@ class BookingDetailsScreen extends StatelessWidget {
                                       ),
                                       InkWell(
                                         onTap: () {
-                                          Get.to(LiveTrackingScreen(), arguments: {
-                                            'orderModel':
-                                                controller.bookingModel.value
-                                          });
+                                          _openPickupDirections(
+                                              context,
+                                              themeChange,
+                                              controller.bookingModel.value);
                                         },
-                                        child: SvgPicture.asset(
-                                          "assets/icons/ic_livetracking.svg",
-                                          width: 42,
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: SizedBox(
+                                          width: 48,
+                                          height: 48,
+                                          child: Center(
+                                            child: SvgPicture.asset(
+                                              "assets/icons/ic_livetracking.svg",
+                                              width: 40,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ],
                                   )
                                 : controller.bookingModel.value.statut ==
-                                    RideStatus.onRide
-                                ? RoundedButtonFill(
-                                    title: controller.bookingModel.value
-                                                .paymentMethod ==
-                                            "Cash"
-                                        ? "Confirm Cash Payment".tr
-                                        : "Stop Journey".tr,
-                                    height: 5.5,
-                                    color: themeChange.getThem()
-                                        ? AppThemeData.errorDefault
-                                        : AppThemeData.errorDefault,
-                                    textColor: themeChange.getThem()
-                                        ? AppThemeData.neutral50
-                                        : AppThemeData.neutral50,
-                                    onPress: () async {
-                                      if (controller.bookingModel.value
-                                              .paymentMethod ==
-                                          "Cash") {
-                                        conformCashPayment(
-                                            context, themeChange, controller);
-                                      } else {
-                                        confirmStopJourney(
-                                            context, themeChange, controller);
-                                      }
-                                    },
-                                  )
-                                : controller.bookingModel.value.statut ==
-                                        RideStatus.newRide
-                                    ? Row(
-                                        children: [
-                                          Expanded(
-                                            child: RoundedButtonFill(
-                                              title: "Reject".tr,
-                                              height: 5.5,
-                                              color: themeChange.getThem()
-                                                  ? AppThemeData.neutralDark300
-                                                  : AppThemeData.neutral300,
-                                              textColor: themeChange.getThem()
-                                                  ? AppThemeData.neutralDark500
-                                                  : AppThemeData.neutral500,
-                                              onPress: () async {
-                                                controller.rejectBooking(
-                                                    controller
-                                                        .bookingModel.value.id
-                                                        .toString());
-                                              },
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 20,
-                                          ),
-                                          Expanded(
-                                            child: RoundedButtonFill(
-                                              title: "Accept".tr,
-                                              height: 5.5,
-                                              color:
-                                                  AppThemeData.successDefault,
-                                              textColor: AppThemeData.neutral50,
-                                              onPress: () async {
-                                                controller.acceptBooking(
-                                                    controller
-                                                        .bookingModel.value.id
-                                                        .toString());
-                                              },
-                                            ),
-                                          ),
-                                        ],
+                                        RideStatus.onRide
+                                    ? RoundedButtonFill(
+                                        title: controller.bookingModel.value
+                                                    .rideType ==
+                                                "school_run"
+                                            ? "Complete Ride".tr
+                                            : controller.bookingModel.value
+                                                        .paymentMethod ==
+                                                    "Cash"
+                                                ? "Confirm Cash Payment".tr
+                                                : "Stop Journey".tr,
+                                        height: 5.5,
+                                        color: themeChange.getThem()
+                                            ? AppThemeData.errorDefault
+                                            : AppThemeData.errorDefault,
+                                        textColor: themeChange.getThem()
+                                            ? AppThemeData.neutral50
+                                            : AppThemeData.neutral50,
+                                        onPress: () async {
+                                          if (controller.bookingModel.value
+                                                  .rideType ==
+                                              "school_run") {
+                                            controller.completeBooking();
+                                          } else if (controller.bookingModel
+                                                  .value.paymentMethod ==
+                                              "Cash") {
+                                            conformCashPayment(context,
+                                                themeChange, controller);
+                                          } else {
+                                            confirmStopJourney(context,
+                                                themeChange, controller);
+                                          }
+                                        },
                                       )
-                                    : SizedBox(),
+                                    : controller.bookingModel.value.statut ==
+                                            RideStatus.newRide
+                                        ? Row(
+                                            children: [
+                                              Expanded(
+                                                child: RoundedButtonFill(
+                                                  title: "Reject".tr,
+                                                  height: 5.5,
+                                                  color: themeChange.getThem()
+                                                      ? AppThemeData
+                                                          .neutralDark300
+                                                      : AppThemeData.neutral300,
+                                                  textColor: themeChange
+                                                          .getThem()
+                                                      ? AppThemeData
+                                                          .neutralDark500
+                                                      : AppThemeData.neutral500,
+                                                  onPress: () async {
+                                                    controller.rejectBooking(
+                                                        controller.bookingModel
+                                                            .value.id
+                                                            .toString());
+                                                  },
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 20,
+                                              ),
+                                              Expanded(
+                                                child: RoundedButtonFill(
+                                                  title: "Accept".tr,
+                                                  height: 5.5,
+                                                  color: AppThemeData
+                                                      .successDefault,
+                                                  textColor:
+                                                      AppThemeData.neutral50,
+                                                  onPress: () async {
+                                                    controller.acceptBooking(
+                                                        controller.bookingModel
+                                                            .value.id
+                                                            .toString());
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        : SizedBox(),
                   ),
           );
         });
@@ -1366,6 +1427,108 @@ class BookingDetailsScreen extends StatelessWidget {
       barrierDismissible: true,
     );
   }
+
+  void _openPickupDirections(BuildContext context,
+      DarkThemeProvider themeChange, dynamic bookingData) {
+    final lat = bookingData?.latitudeDepart;
+    final lng = bookingData?.longitudeDepart;
+    if (lat != null &&
+        lat.toString().isNotEmpty &&
+        lng != null &&
+        lng.toString().isNotEmpty) {
+      _showNavigationPicker(
+          context, themeChange, lat.toString(), lng.toString());
+    } else {
+      ShowToastDialog.showToast("Pickup location is not available".tr);
+    }
+  }
+
+  void _showNavigationPicker(BuildContext context,
+      DarkThemeProvider themeChange, String lat, String lng) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      backgroundColor:
+          themeChange.getThem() ? AppThemeData.neutralDark50 : Colors.white,
+      builder: (ctx) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  child: Text(
+                    "Open Directions In".tr,
+                    style: AppThemeData.boldTextStyle(
+                        fontSize: 18,
+                        color: themeChange.getThem()
+                            ? AppThemeData.neutralDark900
+                            : AppThemeData.neutral900),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                ListTile(
+                  leading: const Icon(Icons.map, color: Colors.green),
+                  title: Text("Google Maps",
+                      style: AppThemeData.mediumTextStyle(
+                          fontSize: 16,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark900
+                              : AppThemeData.neutral900)),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    launchUrl(
+                        Uri.parse(
+                            'https://www.google.com/maps/dir/?api=1&destination=$lat,$lng&travelmode=driving'),
+                        mode: LaunchMode.externalApplication);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.directions, color: Colors.blue),
+                  title: Text("Apple Maps",
+                      style: AppThemeData.mediumTextStyle(
+                          fontSize: 16,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark900
+                              : AppThemeData.neutral900)),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    launchUrl(
+                        Uri.parse(
+                            'https://maps.apple.com/?daddr=$lat,$lng&dirflg=d'),
+                        mode: LaunchMode.externalApplication);
+                  },
+                ),
+                ListTile(
+                  leading:
+                      const Icon(Icons.navigation, color: Colors.lightBlue),
+                  title: Text("Waze",
+                      style: AppThemeData.mediumTextStyle(
+                          fontSize: 16,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark900
+                              : AppThemeData.neutral900)),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    launchUrl(
+                        Uri.parse(
+                            'https://waze.com/ul?ll=$lat,$lng&navigate=yes'),
+                        mode: LaunchMode.externalApplication);
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   // ignore: non_constant_identifier_names
   Widget _RecurringBadge() {
     return Container(
@@ -1373,14 +1536,13 @@ class BookingDetailsScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppThemeData.infoDefault.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-            color: AppThemeData.infoDefault.withValues(alpha: 0.5)),
+        border:
+            Border.all(color: AppThemeData.infoDefault.withValues(alpha: 0.5)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.event_repeat,
-              size: 12, color: AppThemeData.infoDefault),
+          Icon(Icons.event_repeat, size: 12, color: AppThemeData.infoDefault),
           const SizedBox(width: 4),
           Text(
             "Recurring".tr,

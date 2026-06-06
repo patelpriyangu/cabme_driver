@@ -173,7 +173,7 @@ class BookingScreen extends StatelessWidget {
   Widget newBookingWidget(DarkThemeProvider themeChange,
       BookingController controller, List<BookingData> list) {
     return list.isEmpty
-        ? Constant.showEmptyView(message: "Booking not Found".tr)
+        ? _buildRideBookingEmptyState(themeChange)
         : RefreshIndicator(
             onRefresh: () => controller.getBookingList(),
             child: ListView.builder(
@@ -546,11 +546,15 @@ class BookingScreen extends StatelessWidget {
                                         : bookingData.statut ==
                                                 RideStatus.onRide
                                             ? RoundedButtonFill(
-                                                title: bookingData
-                                                            .paymentMethod ==
-                                                        "Cash"
-                                                    ? "Confirm Cash Payment".tr
-                                                    : "Payment Pending".tr,
+                                                title: bookingData.rideType ==
+                                                        "school_run"
+                                                    ? "Complete Ride".tr
+                                                    : bookingData
+                                                                .paymentMethod ==
+                                                            "Cash"
+                                                        ? "Confirm Cash Payment"
+                                                            .tr
+                                                        : "Payment Pending".tr,
                                                 height: 5.5,
                                                 color: themeChange.getThem()
                                                     ? AppThemeData.errorDefault
@@ -559,7 +563,11 @@ class BookingScreen extends StatelessWidget {
                                                     ? AppThemeData.neutral50
                                                     : AppThemeData.neutral50,
                                                 onPress: () async {
-                                                  if (bookingData
+                                                  if (bookingData.rideType ==
+                                                      "school_run") {
+                                                    controller.completeBooking(
+                                                        bookingData);
+                                                  } else if (bookingData
                                                           .paymentMethod ==
                                                       "Cash") {
                                                     conformCashPayment(
@@ -1151,7 +1159,9 @@ class BookingScreen extends StatelessWidget {
                                     height: 5,
                                   ),
                                   DottedLine(
-                                    dashColor: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
+                                    dashColor: themeChange.getThem()
+                                        ? AppThemeData.neutralDark300
+                                        : AppThemeData.neutral300,
                                     lineThickness: 1.0,
                                     dashLength: 4.0,
                                     dashGapLength: 3.0,
@@ -1807,14 +1817,13 @@ class BookingScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppThemeData.infoDefault.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-            color: AppThemeData.infoDefault.withValues(alpha: 0.5)),
+        border:
+            Border.all(color: AppThemeData.infoDefault.withValues(alpha: 0.5)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.event_repeat,
-              size: 11, color: AppThemeData.infoDefault),
+          Icon(Icons.event_repeat, size: 11, color: AppThemeData.infoDefault),
           const SizedBox(width: 4),
           Text(
             "Recurring".tr,
@@ -1828,7 +1837,8 @@ class BookingScreen extends StatelessWidget {
     );
   }
 
-  void showOverlay(BuildContext context, BookingController controller, DarkThemeProvider themeChange) {
+  void showOverlay(BuildContext context, BookingController controller,
+      DarkThemeProvider themeChange) {
     final OverlayState overlayState = Overlay.of(context);
     final RenderBox renderBox =
         controller.overlayKey.currentContext!.findRenderObject() as RenderBox;
@@ -1854,7 +1864,9 @@ class BookingScreen extends StatelessWidget {
                 width: 200,
                 padding: EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
-                  color: themeChange.getThem() ? AppThemeData.neutralDark100 : AppThemeData.neutral50,
+                  color: themeChange.getThem()
+                      ? AppThemeData.neutralDark100
+                      : AppThemeData.neutral50,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
@@ -1887,7 +1899,11 @@ class BookingScreen extends StatelessWidget {
                                     fontWeight: selected
                                         ? FontWeight.bold
                                         : FontWeight.normal,
-                                    color: selected ? AppThemeData.primaryDefault : (themeChange.getThem() ? AppThemeData.neutralDark900 : AppThemeData.neutral900),
+                                    color: selected
+                                        ? AppThemeData.primaryDefault
+                                        : (themeChange.getThem()
+                                            ? AppThemeData.neutralDark900
+                                            : AppThemeData.neutral900),
                                   ),
                                 ),
                               ),
@@ -1895,7 +1911,11 @@ class BookingScreen extends StatelessWidget {
                                 selected
                                     ? Icons.radio_button_checked
                                     : Icons.radio_button_off,
-                                color: selected ? AppThemeData.primaryDefault : (themeChange.getThem() ? AppThemeData.neutralDark500 : AppThemeData.neutral500),
+                                color: selected
+                                    ? AppThemeData.primaryDefault
+                                    : (themeChange.getThem()
+                                        ? AppThemeData.neutralDark500
+                                        : AppThemeData.neutral500),
                               ),
                             ],
                           ),
@@ -1912,5 +1932,56 @@ class BookingScreen extends StatelessWidget {
     );
 
     overlayState.insert(entry);
+  }
+
+  Widget _buildRideBookingEmptyState(DarkThemeProvider themeChange) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 92,
+              height: 92,
+              decoration: BoxDecoration(
+                color: themeChange.getThem()
+                    ? AppThemeData.neutralDark100
+                    : AppThemeData.neutral100,
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(
+                  color: themeChange.getThem()
+                      ? AppThemeData.neutralDark300
+                      : AppThemeData.neutral300,
+                ),
+              ),
+              child: Center(
+                child: SvgPicture.asset(
+                  "assets/icons/ic_car.svg",
+                  width: 46,
+                  colorFilter: ColorFilter.mode(
+                    themeChange.getThem()
+                        ? AppThemeData.primaryDark
+                        : AppThemeData.primaryDefault,
+                    BlendMode.srcIn,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 18),
+            Text(
+              "Booking not Found".tr,
+              textAlign: TextAlign.center,
+              style: AppThemeData.mediumTextStyle(
+                fontSize: 16,
+                color: themeChange.getThem()
+                    ? AppThemeData.neutralDark900
+                    : AppThemeData.neutral900,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

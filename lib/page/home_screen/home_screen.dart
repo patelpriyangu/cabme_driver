@@ -118,12 +118,13 @@ class HomeScreen extends StatelessWidget {
                               // verification status, to avoid stale cache issues.
                               await controller.getUserData();
                               if (!context.mounted) return;
-                              if (controller.userModel.value.userData?.ownerId !=
+                              if (controller
+                                          .userModel.value.userData?.ownerId !=
                                       null &&
                                   controller.userModel.value.userData!.ownerId!
                                       .isNotEmpty) {
-                                if (controller
-                                        .userModel.value.userData!.statutVehicule ==
+                                if (controller.userModel.value.userData!
+                                        .statutVehicule ==
                                     "no") {
                                   ShowToastDialog.showToast(
                                       "You don’t have any vehicle assigned. Please contact your owner to get one assigned.");
@@ -131,8 +132,8 @@ class HomeScreen extends StatelessWidget {
                                   controller.changeStatus(value);
                                 }
                               } else {
-                                if (controller
-                                        .userModel.value.userData!.statutVehicule ==
+                                if (controller.userModel.value.userData!
+                                        .statutVehicule ==
                                     "no") {
                                   showAlertDialog(themeChange, context,
                                       "vehicleInformation", controller);
@@ -431,7 +432,7 @@ class HomeScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SvgPicture.asset("assets/images/empty_parcel.svg"),
+                    _buildCabEmptyIllustration(themeChange),
                     SizedBox(
                       height: 20,
                     ),
@@ -726,12 +727,8 @@ class HomeScreen extends StatelessWidget {
                               Expanded(
                                 child: GestureDetector(
                                   onTap: () {
-                                    final data = controller.bookingModel.value.data!;
-                                    final destLat = data.latitudeDepart;
-                                    final destLng = data.longitudeDepart;
-                                    if (destLat != null && destLng != null) {
-                                      _showNavigationPicker(context, themeChange, destLat, destLng);
-                                    }
+                                    _openPickupDirections(context, themeChange,
+                                        controller.bookingModel.value.data);
                                   },
                                   child: Column(
                                     children: [
@@ -803,7 +800,9 @@ class HomeScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 16),
                           DottedLine(
-                            dashColor: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
+                            dashColor: themeChange.getThem()
+                                ? AppThemeData.neutralDark300
+                                : AppThemeData.neutral300,
                             lineThickness: 1.0,
                             dashLength: 4.0,
                             dashGapLength: 3.0,
@@ -834,15 +833,21 @@ class HomeScreen extends StatelessWidget {
                                     ),
                                     InkWell(
                                       onTap: () {
-                                        Get.to(LiveTrackingScreen(),
-                                            arguments: {
-                                              'orderModel': controller
-                                                  .bookingModel.value.data
-                                            });
+                                        _openPickupDirections(
+                                            context,
+                                            themeChange,
+                                            controller.bookingModel.value.data);
                                       },
-                                      child: SvgPicture.asset(
-                                        "assets/icons/ic_livetracking.svg",
-                                        width: 36,
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: SizedBox(
+                                        width: 48,
+                                        height: 48,
+                                        child: Center(
+                                          child: SvgPicture.asset(
+                                            "assets/icons/ic_livetracking.svg",
+                                            width: 40,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -870,109 +875,134 @@ class HomeScreen extends StatelessWidget {
                                         ),
                                         InkWell(
                                           onTap: () {
-                                            Get.to(LiveTrackingScreen(),
-                                                arguments: {
-                                                  'orderModel': controller
-                                                      .bookingModel.value.data
-                                                });
+                                            _openPickupDirections(
+                                                context,
+                                                themeChange,
+                                                controller
+                                                    .bookingModel.value.data);
                                           },
-                                          child: SvgPicture.asset(
-                                            "assets/icons/ic_livetracking.svg",
-                                            width: 36,
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          child: SizedBox(
+                                            width: 48,
+                                            height: 48,
+                                            child: Center(
+                                              child: SvgPicture.asset(
+                                                "assets/icons/ic_livetracking.svg",
+                                                width: 40,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ],
                                     )
-                              : controller.bookingModel.value.data!.statut ==
-                                      RideStatus.onRide
-                                  ? Row(
-                                      children: [
-                                        Expanded(
-                                          child: RoundedButtonFill(
-                                            title: controller.bookingModel.value
-                                                        .data!.paymentMethod ==
-                                                    "Cash"
-                                                ? "Confirm Cash Payment".tr
-                                                : "Payment Pending".tr,
-                                            height: 5.5,
-                                            color: themeChange.getThem()
-                                                ? AppThemeData.errorDefault
-                                                : AppThemeData.errorDefault,
-                                            textColor: Colors.white,
-                                            onPress: () async {
-                                              if (controller.bookingModel.value
-                                                      .data!.paymentMethod ==
-                                                  "Cash") {
-                                                conformCashPayment(context,
-                                                    themeChange, controller);
-                                              } else {
-                                                ShowToastDialog.showToast(
-                                                    "Payment is pending from customer");
-                                              }
-                                            },
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Expanded(
-                                          child: RoundedButtonFill(
-                                            title: "Live Tracking".tr,
-                                            height: 5.5,
-                                            color: themeChange.getThem()
-                                                ? AppThemeData.primaryDefault
-                                                : AppThemeData.primaryDefault,
-                                            textColor: Colors.white,
-                                            onPress: () async {
-                                              Get.to(LiveTrackingScreen(),
-                                                  arguments: {
-                                                    'orderModel': controller
-                                                        .bookingModel.value.data
-                                                  });
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  : Row(
-                                      children: [
-                                        Expanded(
-                                          child: RoundedButtonFill(
-                                            title: "Reject".tr,
-                                            height: 5.5,
-                                            color: themeChange.getThem()
-                                                ? AppThemeData.neutralDark300
-                                                : AppThemeData.neutral300,
-                                            textColor: themeChange.getThem()
-                                                ? AppThemeData.neutralDark500
-                                                : AppThemeData.neutral500,
-                                            onPress: () async {
-                                              controller.rejectBooking(
-                                                  controller.bookingModel.value
-                                                      .data!.id
-                                                      .toString());
-                                            },
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 20,
-                                        ),
-                                        Expanded(
-                                          child: RoundedButtonFill(
-                                            title: "Accept".tr,
-                                            height: 5.5,
-                                            color: AppThemeData.successDefault,
-                                            textColor: AppThemeData.neutral50,
-                                            onPress: () async {
-                                              controller.acceptBooking(
-                                                  controller.bookingModel.value
-                                                      .data!.id
-                                                      .toString());
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    )
+                                  : controller.bookingModel.value.data!
+                                              .statut ==
+                                          RideStatus.onRide
+                                      ? Row(
+                                          children: [
+                                            Expanded(
+                                              child: RoundedButtonFill(
+                                                title: controller
+                                                            .bookingModel
+                                                            .value
+                                                            .data!
+                                                            .paymentMethod ==
+                                                        "Cash"
+                                                    ? "Confirm Cash Payment".tr
+                                                    : "Payment Pending".tr,
+                                                height: 5.5,
+                                                color: themeChange.getThem()
+                                                    ? AppThemeData.errorDefault
+                                                    : AppThemeData.errorDefault,
+                                                textColor: Colors.white,
+                                                onPress: () async {
+                                                  if (controller
+                                                          .bookingModel
+                                                          .value
+                                                          .data!
+                                                          .paymentMethod ==
+                                                      "Cash") {
+                                                    conformCashPayment(
+                                                        context,
+                                                        themeChange,
+                                                        controller);
+                                                  } else {
+                                                    ShowToastDialog.showToast(
+                                                        "Payment is pending from customer");
+                                                  }
+                                                },
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Expanded(
+                                              child: RoundedButtonFill(
+                                                title: "Live Tracking".tr,
+                                                height: 5.5,
+                                                color: themeChange.getThem()
+                                                    ? AppThemeData
+                                                        .primaryDefault
+                                                    : AppThemeData
+                                                        .primaryDefault,
+                                                textColor: Colors.white,
+                                                onPress: () async {
+                                                  Get.to(LiveTrackingScreen(),
+                                                      arguments: {
+                                                        'orderModel': controller
+                                                            .bookingModel
+                                                            .value
+                                                            .data
+                                                      });
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : Row(
+                                          children: [
+                                            Expanded(
+                                              child: RoundedButtonFill(
+                                                title: "Reject".tr,
+                                                height: 5.5,
+                                                color: themeChange.getThem()
+                                                    ? AppThemeData
+                                                        .neutralDark300
+                                                    : AppThemeData.neutral300,
+                                                textColor: themeChange.getThem()
+                                                    ? AppThemeData
+                                                        .neutralDark500
+                                                    : AppThemeData.neutral500,
+                                                onPress: () async {
+                                                  controller.rejectBooking(
+                                                      controller.bookingModel
+                                                          .value.data!.id
+                                                          .toString());
+                                                },
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 20,
+                                            ),
+                                            Expanded(
+                                              child: RoundedButtonFill(
+                                                title: "Accept".tr,
+                                                height: 5.5,
+                                                color:
+                                                    AppThemeData.successDefault,
+                                                textColor:
+                                                    AppThemeData.neutral50,
+                                                onPress: () async {
+                                                  controller.acceptBooking(
+                                                      controller.bookingModel
+                                                          .value.data!.id
+                                                          .toString());
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        )
                         ],
                       ),
                     ),
@@ -1293,7 +1323,9 @@ class HomeScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 16),
                             DottedLine(
-                              dashColor: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
+                              dashColor: themeChange.getThem()
+                                  ? AppThemeData.neutralDark300
+                                  : AppThemeData.neutral300,
                               lineThickness: 1.0,
                               dashLength: 4.0,
                               dashGapLength: 3.0,
@@ -1633,7 +1665,9 @@ class HomeScreen extends StatelessWidget {
                                       height: 5,
                                     ),
                                     DottedLine(
-                                      dashColor: themeChange.getThem() ? AppThemeData.neutralDark300 : AppThemeData.neutral300,
+                                      dashColor: themeChange.getThem()
+                                          ? AppThemeData.neutralDark300
+                                          : AppThemeData.neutral300,
                                       lineThickness: 1.0,
                                       dashLength: 4.0,
                                       dashGapLength: 3.0,
@@ -2129,8 +2163,8 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  void _showNavigationPicker(BuildContext context, DarkThemeProvider themeChange,
-      String lat, String lng) {
+  void _showNavigationPicker(BuildContext context,
+      DarkThemeProvider themeChange, String lat, String lng) {
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -2191,7 +2225,8 @@ class HomeScreen extends StatelessWidget {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.navigation, color: Colors.lightBlue),
+                  leading:
+                      const Icon(Icons.navigation, color: Colors.lightBlue),
                   title: Text("Waze",
                       style: AppThemeData.mediumTextStyle(
                           fontSize: 16,
@@ -2211,6 +2246,48 @@ class HomeScreen extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  void _openPickupDirections(BuildContext context,
+      DarkThemeProvider themeChange, dynamic bookingData) {
+    final destLat = bookingData?.latitudeDepart;
+    final destLng = bookingData?.longitudeDepart;
+    if (destLat != null && destLng != null) {
+      _showNavigationPicker(
+          context, themeChange, destLat.toString(), destLng.toString());
+    } else {
+      ShowToastDialog.showToast("Pickup location is not available".tr);
+    }
+  }
+
+  Widget _buildCabEmptyIllustration(DarkThemeProvider themeChange) {
+    return Container(
+      width: 92,
+      height: 92,
+      decoration: BoxDecoration(
+        color: themeChange.getThem()
+            ? AppThemeData.neutralDark100
+            : AppThemeData.neutral100,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: themeChange.getThem()
+              ? AppThemeData.neutralDark300
+              : AppThemeData.neutral300,
+        ),
+      ),
+      child: Center(
+        child: SvgPicture.asset(
+          "assets/icons/ic_car.svg",
+          width: 46,
+          colorFilter: ColorFilter.mode(
+            themeChange.getThem()
+                ? AppThemeData.primaryDark
+                : AppThemeData.primaryDefault,
+            BlendMode.srcIn,
+          ),
+        ),
+      ),
     );
   }
 
@@ -2318,9 +2395,8 @@ class HomeScreen extends StatelessWidget {
                 left: dragPosition.value + 3,
                 child: GestureDetector(
                   onHorizontalDragUpdate: (details) {
-                    dragPosition.value =
-                        (dragPosition.value + details.delta.dx)
-                            .clamp(0.0, maxDrag);
+                    dragPosition.value = (dragPosition.value + details.delta.dx)
+                        .clamp(0.0, maxDrag);
                   },
                   onHorizontalDragEnd: (details) {
                     if (dragPosition.value >= maxDrag * 0.85) {
@@ -2456,13 +2532,15 @@ class HomeScreen extends StatelessWidget {
   Future<void> showAlertDialog(themeChange, BuildContext context, String type,
       HomeController controller) async {
     final bool isDocument = type == "document";
-    final String title = isDocument ? 'Documents Pending'.tr : 'Vehicle Info Required'.tr;
+    final String title =
+        isDocument ? 'Documents Pending'.tr : 'Vehicle Info Required'.tr;
     final String message = isDocument
         ? 'Your documents have been submitted and are pending admin verification. You will be able to go online once approved. Please contact support if this is taking too long.'
             .tr
         : 'To start accepting rides, please complete your vehicle information first.'
             .tr;
-    final String confirmLabel = isDocument ? 'View Documents'.tr : 'Add Vehicle Info'.tr;
+    final String confirmLabel =
+        isDocument ? 'View Documents'.tr : 'Add Vehicle Info'.tr;
 
     return showDialog(
       context: context,

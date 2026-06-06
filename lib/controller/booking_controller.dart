@@ -347,6 +347,7 @@ class BookingController extends GetxController {
         .handleApiRequest(
             request: () => http.post(Uri.parse(API.completeRequest),
                 headers: API.headers, body: jsonEncode(requestBody)),
+            debugPayload: requestBody,
             showLoader: false)
         .then(
       (value) async {
