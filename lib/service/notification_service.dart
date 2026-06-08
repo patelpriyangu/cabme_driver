@@ -19,11 +19,14 @@ Future<void> firebaseMessageBackgroundHandle(RemoteMessage message) async {
   // For data-only messages (no notification field), we manually show a local
   // notification so the driver still gets sound/vibration in background/killed state.
   if (message.notification == null && message.data.isNotEmpty) {
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-    final FlutterLocalNotificationsPlugin plugin = FlutterLocalNotificationsPlugin();
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
+    final FlutterLocalNotificationsPlugin plugin =
+        FlutterLocalNotificationsPlugin();
     const AndroidInitializationSettings initSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
-    await plugin.initialize(const InitializationSettings(android: initSettings));
+    await plugin
+        .initialize(const InitializationSettings(android: initSettings));
     await plugin.show(
       0,
       message.data['title'] ?? 'New Ride Request',
@@ -97,8 +100,8 @@ class NotificationService {
       });
 
       // Create notification channels
-      final androidPlugin = flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<
+      final androidPlugin =
+          flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
               AndroidFlutterLocalNotificationsPlugin>();
       if (androidPlugin != null) {
         await androidPlugin.createNotificationChannel(
@@ -156,13 +159,17 @@ class NotificationService {
 
       // Refresh ride data for ride-related notifications
       final tag = message.data['tag'] ?? '';
-      if (tag == 'ridenewrider' || tag == 'ridenewriderparcel') {
+      if (tag == 'ridenewrider' ||
+          tag == 'ridenewriderparcel' ||
+          tag == 'ride_route_updated') {
         try {
           Get.find<HomeController>().getBooking();
         } catch (_) {}
       }
       if (tag == 'scheduled_ride_unassigned' ||
           tag == 'scheduled_ride' ||
+          tag == 'scheduled_received' ||
+          tag == 'scheduled_leave_now' ||
           tag == 'scheduled_ride_cancelled' ||
           tag == 'scheduled_ride_reminder_24h' ||
           tag == 'scheduled_ride_reminder_2h' ||
@@ -198,8 +205,8 @@ class NotificationService {
                   const Expanded(
                     child: Text(
                       "Scheduled Ride Cancelled",
-                      style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
@@ -210,13 +217,38 @@ class NotificationService {
                   onPressed: () => Get.back(),
                   child: const Text(
                     "OK",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 15),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                   ),
                 ),
               ],
             ),
             barrierDismissible: false,
+          );
+        }
+      }
+      if (tag == 'scheduled_leave_now') {
+        try {
+          Get.find<HomeController>().getUpcomingRides();
+        } catch (_) {}
+        final body = message.notification?.body ??
+            'Please accept this scheduled job and head to pickup now.';
+        if (Get.isDialogOpen != true) {
+          Get.dialog(
+            AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
+              title: const Text(
+                'Accept and head to pickup',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              content: Text(body, style: const TextStyle(fontSize: 14)),
+              actions: [
+                TextButton(
+                  onPressed: () => Get.back(),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
           );
         }
       }
@@ -235,8 +267,12 @@ class NotificationService {
   void _handleNotificationTap(RemoteMessage message) {
     final tag = message.data['tag'] ?? '';
 
-    if (tag == 'ridenewrider' || tag == 'ridenewriderparcel' ||
-        tag == 'ridearrived' || tag == 'rideonride' || tag == 'ridecompleted') {
+    if (tag == 'ridenewrider' ||
+        tag == 'ridenewriderparcel' ||
+        tag == 'ridearrived' ||
+        tag == 'rideonride' ||
+        tag == 'ridecompleted' ||
+        tag == 'ride_route_updated') {
       // Navigate to home/dashboard and refresh ride data
       try {
         Get.find<HomeController>().getBooking();
@@ -244,7 +280,9 @@ class NotificationService {
       Get.offAll(() => DashboardScreen());
     } else if (tag == 'ride_cancelled_driver' ||
         tag == 'scheduled_ride_cancelled' ||
-        tag == 'scheduled_ride_unassigned') {
+        tag == 'scheduled_ride_unassigned' ||
+        tag == 'scheduled_received' ||
+        tag == 'scheduled_leave_now') {
       // Refresh upcoming rides (cancelled ride will appear in recently
       // cancelled section) and navigate to dashboard.
       try {
@@ -314,7 +352,9 @@ class NotificationService {
           volume: 1.0,
           asAlarm: true,
         );
-      } else if (tag == 'scheduled_ride') {
+      } else if (tag == 'scheduled_ride' ||
+          tag == 'scheduled_received' ||
+          tag == 'scheduled_leave_now') {
         // New upcoming ride assigned
         FlutterRingtonePlayer().playNotification(
           looping: false,
@@ -361,6 +401,8 @@ class NotificationService {
       channelId = _channelNewRide;
       channelName = 'New Ride Requests';
     } else if (tag == 'scheduled_ride' ||
+        tag == 'scheduled_received' ||
+        tag == 'scheduled_leave_now' ||
         tag == 'scheduled_ride_unassigned' ||
         tag == 'scheduled_ride_cancelled' ||
         tag == 'ride_cancelled_driver' ||
@@ -379,9 +421,8 @@ class NotificationService {
           AndroidNotificationDetails(
         channelId,
         channelName,
-        importance: channelId == _channelNewRide
-            ? Importance.max
-            : Importance.high,
+        importance:
+            channelId == _channelNewRide ? Importance.max : Importance.high,
         priority: channelId == _channelNewRide ? Priority.max : Priority.high,
         ticker: 'ticker',
         playSound: true,
