@@ -112,6 +112,7 @@ class API {
   static const setSubscription = "${baseUrl}set-subscription";
 
   static const completeRequest = "${baseUrl}complete-requete";
+  static const resendPaymentLink = "${baseUrl}payment-link/resend";
   static const submitReview = "${baseUrl}submit-review";
   static const getReview = "${baseUrl}get-review";
 

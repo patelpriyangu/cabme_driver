@@ -811,6 +811,28 @@ class BookingDetailsScreen extends StatelessWidget {
                                       ),
                                     ],
                                   ),
+                                  if (controller.bookingModel.value.statut ==
+                                          RideStatus.onRide &&
+                                      controller.bookingModel.value
+                                              .paymentMethod !=
+                                          "Cash" &&
+                                      controller.bookingModel.value.isPrepaid !=
+                                          true) ...[
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    RoundedButtonFill(
+                                      title: "Send Payment Link".tr,
+                                      height: 5.0,
+                                      color: themeChange.getThem()
+                                          ? AppThemeData.primaryDefault
+                                          : AppThemeData.primaryDefault,
+                                      textColor: Colors.white,
+                                      onPress: () async {
+                                        controller.resendPaymentLink();
+                                      },
+                                    ),
+                                  ],
                                   SizedBox(
                                     height: 10,
                                   ),

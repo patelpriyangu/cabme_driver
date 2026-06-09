@@ -910,7 +910,7 @@ class HomeScreen extends StatelessWidget {
                                                             .paymentMethod ==
                                                         "Cash"
                                                     ? "Confirm Cash Payment".tr
-                                                    : "Payment Pending".tr,
+                                                    : "Send Payment Link".tr,
                                                 height: 5.5,
                                                 color: themeChange.getThem()
                                                     ? AppThemeData.errorDefault
@@ -928,8 +928,8 @@ class HomeScreen extends StatelessWidget {
                                                         themeChange,
                                                         controller);
                                                   } else {
-                                                    ShowToastDialog.showToast(
-                                                        "Payment is pending from customer");
+                                                    controller
+                                                        .resendPaymentLink();
                                                   }
                                                 },
                                               ),

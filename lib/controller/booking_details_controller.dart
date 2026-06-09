@@ -313,6 +313,34 @@ class BookingDetailsController extends GetxController {
     );
   }
 
+  Future<void> resendPaymentLink() async {
+    final requestBody = {
+      "id_ride": bookingModel.value.id,
+      "id_driver": Preferences.getInt(Preferences.userId),
+      "channel": "both",
+    };
+
+    await API
+        .handleApiRequest(
+            request: () => http.post(Uri.parse(API.resendPaymentLink),
+                headers: API.headers, body: jsonEncode(requestBody)),
+            debugPayload: requestBody,
+            showLoader: true)
+        .then(
+      (value) {
+        if (value != null) {
+          if (value['success'] == "Failed" || value['success'] == "failed") {
+            ShowToastDialog.showToast(
+                value['error'] ?? "Payment link was not sent");
+            return;
+          }
+          ShowToastDialog.showToast(
+              value['message'] ?? "Payment link sent to customer");
+        }
+      },
+    );
+  }
+
   RxMap<gmaps.PolylineId, gmaps.Polyline> polyLines =
       <gmaps.PolylineId, gmaps.Polyline>{}.obs;
   PolylinePoints polylinePoints =

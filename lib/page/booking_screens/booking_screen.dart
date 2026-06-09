@@ -554,7 +554,8 @@ class BookingScreen extends StatelessWidget {
                                                             "Cash"
                                                         ? "Confirm Cash Payment"
                                                             .tr
-                                                        : "Payment Pending".tr,
+                                                        : "Send Payment Link"
+                                                            .tr,
                                                 height: 5.5,
                                                 color: themeChange.getThem()
                                                     ? AppThemeData.errorDefault
@@ -576,8 +577,9 @@ class BookingScreen extends StatelessWidget {
                                                         controller,
                                                         bookingData);
                                                   } else {
-                                                    ShowToastDialog.showToast(
-                                                        "Payment is pending from customer");
+                                                    controller
+                                                        .resendPaymentLink(
+                                                            bookingData);
                                                   }
                                                 },
                                               )
