@@ -76,6 +76,8 @@ class BookingData {
   String? prepaidTransactionId;
   bool? isPrepaid;
   String? seriesId;
+  String? cancelledBy;
+  String? cancellationReason;
 
   BookingData(
       {this.id,
@@ -124,7 +126,9 @@ class BookingData {
       this.scheduledAtLondon,
       this.prepaidTransactionId,
       this.isPrepaid,
-      this.seriesId});
+      this.seriesId,
+      this.cancelledBy,
+      this.cancellationReason});
 
   BookingData.fromJson(Map<String, dynamic> json) {
     id = json['id'].toString();
@@ -188,6 +192,8 @@ class BookingData {
     scheduledAtUtc = json['scheduled_at_utc']?.toString();
     scheduledAtLondon = json['scheduled_at_london']?.toString();
     prepaidTransactionId = json['prepaid_transaction_id']?.toString();
+    cancelledBy = json['cancelled_by']?.toString();
+    cancellationReason = json['cancellation_reason']?.toString();
     isPrepaid = json['is_prepaid'] == 1 || json['is_prepaid'] == true;
     // series_id may arrive as int (DB) or null when not part of a recurring series
     final dynamic rawSeriesId = json['series_id'];
@@ -264,6 +270,8 @@ class BookingData {
     data['prepaid_transaction_id'] = prepaidTransactionId;
     data['is_prepaid'] = isPrepaid;
     data['series_id'] = seriesId;
+    data['cancelled_by'] = cancelledBy;
+    data['cancellation_reason'] = cancellationReason;
     return data;
   }
 }

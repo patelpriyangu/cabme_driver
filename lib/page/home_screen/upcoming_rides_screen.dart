@@ -168,6 +168,11 @@ class _UpcomingRideCard extends StatelessWidget {
     final durationStr =
         (ride.duree != null && ride.duree != 'null') ? ride.duree : null;
     final passengers = int.tryParse(ride.numberPoeple ?? '1') ?? 1;
+    final cancelledBy = ride.cancelledBy != null &&
+            ride.cancelledBy != 'null' &&
+            ride.cancelledBy!.isNotEmpty
+        ? ride.cancelledBy!
+        : null;
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -360,6 +365,24 @@ class _UpcomingRideCard extends StatelessWidget {
                 ],
               ],
             ),
+
+            if (isCancelled && cancelledBy != null) ...[
+              const SizedBox(height: 6),
+              Row(
+                children: [
+                  Icon(Icons.cancel_outlined,
+                      size: 15, color: AppThemeData.errorDefault),
+                  const SizedBox(width: 6),
+                  Text(
+                    'Cancelled by $cancelledBy',
+                    style: AppThemeData.semiBoldTextStyle(
+                      fontSize: 12,
+                      color: AppThemeData.errorDefault,
+                    ),
+                  ),
+                ],
+              ),
+            ],
 
             const SizedBox(height: 12),
 

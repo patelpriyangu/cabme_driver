@@ -340,6 +340,29 @@ class BookingScreen extends StatelessWidget {
                                                           SizedBox(height: 4),
                                                           _buildRecurringBadge(),
                                                         ],
+                                                        if ((bookingData.statut ==
+                                                                    RideStatus
+                                                                        .canceled ||
+                                                                bookingData.statut ==
+                                                                    RideStatus
+                                                                        .rejected) &&
+                                                            bookingData
+                                                                    .cancelledBy !=
+                                                                null &&
+                                                            bookingData
+                                                                    .cancelledBy !=
+                                                                'null') ...[
+                                                          SizedBox(height: 4),
+                                                          Text(
+                                                            'Cancelled by ${bookingData.cancelledBy}',
+                                                            style: AppThemeData
+                                                                .semiBoldTextStyle(
+                                                              fontSize: 12,
+                                                              color: AppThemeData
+                                                                  .errorDefault,
+                                                            ),
+                                                          ),
+                                                        ],
                                                         SizedBox(
                                                           height: 5,
                                                         ),
