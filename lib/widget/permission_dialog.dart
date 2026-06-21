@@ -15,11 +15,11 @@ class LocationPermissionDisclosureDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              'UniqCars Driver needs your location to navigate to passenger pickup points and share your position with riders.',
+              'This app collects location data to enable ride dispatch, pickup and drop-off navigation, and customer ride tracking even when the app is closed or not in use.',
             ),
             SizedBox(height: 10),
             Text(
-              'Your location is only used to enable ride services and will not be shared with third parties.',
+              'Location sharing starts only when you go online or have an active trip, and stops when you go offline.',
             ),
           ],
         ),

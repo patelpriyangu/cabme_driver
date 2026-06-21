@@ -14,6 +14,7 @@ class Preferences {
   static const accesstoken = "accesstoken";
   static const paymentSetting = "paymentSetting";
   static const mapType = "mapType";
+  static const backgroundLocationConsent = "backgroundLocationConsent";
 
   static late SharedPreferences pref;
 

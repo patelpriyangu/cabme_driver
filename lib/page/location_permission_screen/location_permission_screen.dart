@@ -62,7 +62,7 @@ class LocationPermissionScreen extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      "UniqCars Driver uses your location while you are using the app and when you choose to go online, so nearby bookings can be matched to you and customers can see accurate pickup progress. Your location is used for ride dispatch, navigation, and trip tracking."
+                      "This app collects location data to enable ride dispatch, pickup and drop-off navigation, and customer ride tracking even when the app is closed or not in use. Location sharing starts only when you go online or have an active trip, and stops when you go offline."
                           .tr,
                       textAlign: TextAlign.center,
                       style: AppThemeData.regularTextStyle(

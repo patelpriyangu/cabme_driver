@@ -640,6 +640,16 @@ class HomeController extends GetxController {
     }
 
     try {
+      if (!Preferences.getBoolean(Preferences.backgroundLocationConsent)) {
+        final bool consentGranted = await _showBackgroundLocationDisclosure();
+        if (!consentGranted) {
+          status.value = "no";
+          return;
+        }
+        await Preferences.setBoolean(
+            Preferences.backgroundLocationConsent, true);
+      }
+
       PermissionStatus permissionStatus = await location.hasPermission();
       if (permissionStatus != PermissionStatus.granted) {
         permissionStatus = await location.requestPermission();
@@ -659,6 +669,32 @@ class HomeController extends GetxController {
     } catch (e) {
       log("Driver location tracking error: $e");
     }
+  }
+
+  Future<bool> _showBackgroundLocationDisclosure() async {
+    final result = await Get.dialog<bool>(
+      AlertDialog(
+        title: const Text("Background Location Access"),
+        content: const SingleChildScrollView(
+          child: Text(
+            "This app collects location data to enable ride dispatch, pickup and drop-off navigation, and customer ride tracking even when the app is closed or not in use. Location sharing starts only when you go online or have an active trip, and stops when you go offline.",
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(result: false),
+            child: const Text("Not Now"),
+          ),
+          TextButton(
+            onPressed: () => Get.back(result: true),
+            child: const Text("Agree"),
+          ),
+        ],
+      ),
+      barrierDismissible: false,
+    );
+
+    return result == true;
   }
 
   void _startDriverLocationStream() {

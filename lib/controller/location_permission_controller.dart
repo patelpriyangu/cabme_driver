@@ -6,6 +6,7 @@ import 'package:uniqcars_driver/page/owner_dashboard_screen.dart';
 import 'package:uniqcars_driver/page/subscription_plan_screen/subscription_plan_screen.dart';
 import 'package:uniqcars_driver/utils/Preferences.dart';
 import 'package:uniqcars_driver/utils/utils.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
@@ -25,9 +26,18 @@ class LocationPermissionController extends GetxController {
       _showEnableGPSDialog();
       return;
     } else {
+      ShowToastDialog.closeLoader();
+      final bool consentGranted = await _showBackgroundLocationDisclosure();
+      if (!consentGranted) {
+        proceedWithoutLocation();
+        return;
+      }
+      ShowToastDialog.showLoader("Please wait");
       LocationPermission permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.always ||
           permission == LocationPermission.whileInUse) {
+        await Preferences.setBoolean(
+            Preferences.backgroundLocationConsent, true);
         Constant.currentLocation = await Utils.getCurrentLocation();
         ShowToastDialog.closeLoader();
         if (Preferences.getString(Preferences.languageCodeKey)
@@ -107,11 +117,39 @@ class LocationPermissionController extends GetxController {
     }
   }
 
+  Future<bool> _showBackgroundLocationDisclosure() async {
+    if (Preferences.getBoolean(Preferences.backgroundLocationConsent)) {
+      return true;
+    }
+
+    final result = await Get.dialog<bool>(
+      AlertDialog(
+        title: const Text("Background Location Access"),
+        content: const SingleChildScrollView(
+          child: Text(
+            "This app collects location data to enable ride dispatch, pickup and drop-off navigation, and customer ride tracking even when the app is closed or not in use. Location sharing starts only when you go online or have an active trip, and stops when you go offline.",
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(result: false),
+            child: const Text("Not Now"),
+          ),
+          TextButton(
+            onPressed: () => Get.back(result: true),
+            child: const Text("Agree"),
+          ),
+        ],
+      ),
+      barrierDismissible: false,
+    );
+
+    return result == true;
+  }
+
   /// Navigate to the normal app flow without location
   void proceedWithoutLocation() {
-    if (Preferences.getString(Preferences.languageCodeKey)
-        .toString()
-        .isEmpty) {
+    if (Preferences.getString(Preferences.languageCodeKey).toString().isEmpty) {
       Get.offAll(LocalizationScreens(intentType: "main"));
     } else if (Preferences.getBoolean(Preferences.isFinishOnBoardingKey)) {
       if (Preferences.getBoolean(Preferences.isLogin) == false) {
