@@ -5,6 +5,7 @@ import 'package:uniqcars_driver/constant/constant.dart';
 import 'package:uniqcars_driver/themes/app_them_data.dart';
 import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
 import 'package:uniqcars_driver/utils/Preferences.dart';
+import 'package:uniqcars_driver/page/booking_details_screens/booking_details_screen.dart';
 import '../../controller/home_controller.dart';
 import '../../model/booking_mode.dart';
 
@@ -131,6 +132,13 @@ class _UpcomingRideCard extends StatelessWidget {
     return scheduledAt ?? '';
   }
 
+  String? _cleanValue(String? value) {
+    if (value == null || value.isEmpty || value == 'null') {
+      return null;
+    }
+    return value;
+  }
+
   String _formatFare(String? montant) {
     if (montant == null || montant.isEmpty || montant == 'null') return '';
     try {
@@ -187,57 +195,113 @@ class _UpcomingRideCard extends StatelessWidget {
       color: isCancelled
           ? AppThemeData.errorDefault.withValues(alpha: 0.05)
           : null,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // ── Scheduled time + fare ──────────────────────────────────
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.schedule,
-                        size: 16, color: AppThemeData.accentDefault),
-                    const SizedBox(width: 6),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: isCancelled
+            ? null
+            : () => Get.to(() => const BookingDetailsScreen(),
+                arguments: {"bookingModel": ride}),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // ── Scheduled time + fare ──────────────────────────────────
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.schedule,
+                          size: 16, color: AppThemeData.accentDefault),
+                      const SizedBox(width: 6),
+                      Text(
+                        _formatScheduledAt(
+                            ride.scheduledAtLondon ?? ride.scheduledAt),
+                        style: AppThemeData.boldTextStyle(
+                          fontSize: 14,
+                          color: AppThemeData.accentDefault,
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (fareStr.isNotEmpty)
                     Text(
-                      _formatScheduledAt(
-                          ride.scheduledAtLondon ?? ride.scheduledAt),
+                      fareStr,
                       style: AppThemeData.boldTextStyle(
-                        fontSize: 14,
-                        color: AppThemeData.accentDefault,
+                        fontSize: 18,
+                        color: isDark
+                            ? AppThemeData.neutralDark900
+                            : AppThemeData.neutral900,
                       ),
                     ),
+                ],
+              ),
+
+              // ── Distance + duration ────────────────────────────────────
+              if (distanceStr != null || durationStr != null) ...[
+                const SizedBox(height: 6),
+                Row(
+                  children: [
+                    if (distanceStr != null) ...[
+                      Icon(Icons.straighten,
+                          size: 14,
+                          color: isDark
+                              ? AppThemeData.neutralDark500
+                              : AppThemeData.neutral500),
+                      const SizedBox(width: 4),
+                      Text(
+                        distanceStr,
+                        style: AppThemeData.regularTextStyle(
+                          fontSize: 12,
+                          color: isDark
+                              ? AppThemeData.neutralDark500
+                              : AppThemeData.neutral500,
+                        ),
+                      ),
+                    ],
+                    if (distanceStr != null && durationStr != null)
+                      Text(
+                        '  ·  ',
+                        style: AppThemeData.regularTextStyle(
+                            fontSize: 12,
+                            color: isDark
+                                ? AppThemeData.neutralDark500
+                                : AppThemeData.neutral500),
+                      ),
+                    if (durationStr != null) ...[
+                      Icon(Icons.timer_outlined,
+                          size: 14,
+                          color: isDark
+                              ? AppThemeData.neutralDark500
+                              : AppThemeData.neutral500),
+                      const SizedBox(width: 4),
+                      Text(
+                        '~$durationStr min',
+                        style: AppThemeData.regularTextStyle(
+                          fontSize: 12,
+                          color: isDark
+                              ? AppThemeData.neutralDark500
+                              : AppThemeData.neutral500,
+                        ),
+                      ),
+                    ],
                   ],
                 ),
-                if (fareStr.isNotEmpty)
-                  Text(
-                    fareStr,
-                    style: AppThemeData.boldTextStyle(
-                      fontSize: 18,
-                      color: isDark
-                          ? AppThemeData.neutralDark900
-                          : AppThemeData.neutral900,
-                    ),
-                  ),
               ],
-            ),
 
-            // ── Distance + duration ────────────────────────────────────
-            if (distanceStr != null || durationStr != null) ...[
-              const SizedBox(height: 6),
-              Row(
-                children: [
-                  if (distanceStr != null) ...[
-                    Icon(Icons.straighten,
+              if (_cleanValue(ride.creer) != null) ...[
+                const SizedBox(height: 6),
+                Row(
+                  children: [
+                    Icon(Icons.add_task_outlined,
                         size: 14,
                         color: isDark
                             ? AppThemeData.neutralDark500
                             : AppThemeData.neutral500),
                     const SizedBox(width: 4),
                     Text(
-                      distanceStr,
+                      'Created: ${_cleanValue(ride.creer)!}',
                       style: AppThemeData.regularTextStyle(
                         fontSize: 12,
                         color: isDark
@@ -246,24 +310,88 @@ class _UpcomingRideCard extends StatelessWidget {
                       ),
                     ),
                   ],
-                  if (distanceStr != null && durationStr != null)
-                    Text(
-                      '  ·  ',
-                      style: AppThemeData.regularTextStyle(
-                          fontSize: 12,
-                          color: isDark
-                              ? AppThemeData.neutralDark500
-                              : AppThemeData.neutral500),
+                ),
+              ],
+
+              const Divider(height: 20),
+
+              // ── Pickup ─────────────────────────────────────────────────
+              Row(
+                children: [
+                  const Icon(Icons.radio_button_checked,
+                      color: AppThemeData.successDefault, size: 16),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      ride.departName ?? '',
+                      style: AppThemeData.mediumTextStyle(
+                        fontSize: 13,
+                        color: isDark
+                            ? AppThemeData.neutralDark900
+                            : AppThemeData.neutral900,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  if (durationStr != null) ...[
-                    Icon(Icons.timer_outlined,
-                        size: 14,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+
+              // ── Dropoff ────────────────────────────────────────────────
+              Row(
+                children: [
+                  const Icon(Icons.location_on,
+                      color: AppThemeData.errorDefault, size: 16),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      ride.destinationName ?? '',
+                      style: AppThemeData.mediumTextStyle(
+                        fontSize: 13,
+                        color: isDark
+                            ? AppThemeData.neutralDark900
+                            : AppThemeData.neutral900,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+
+              const Divider(height: 20),
+
+              // ── Customer + meta row ────────────────────────────────────
+              Row(
+                children: [
+                  Icon(Icons.person_outline,
+                      size: 15,
+                      color: isDark
+                          ? AppThemeData.neutralDark500
+                          : AppThemeData.neutral500),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      customerName.isNotEmpty ? customerName : 'Customer',
+                      style: AppThemeData.mediumTextStyle(
+                        fontSize: 13,
+                        color: isDark
+                            ? AppThemeData.neutralDark900
+                            : AppThemeData.neutral900,
+                      ),
+                    ),
+                  ),
+                  if (passengers > 1) ...[
+                    const SizedBox(width: 8),
+                    Icon(Icons.group_outlined,
+                        size: 15,
                         color: isDark
                             ? AppThemeData.neutralDark500
                             : AppThemeData.neutral500),
                     const SizedBox(width: 4),
                     Text(
-                      '~$durationStr min',
+                      '$passengers',
                       style: AppThemeData.regularTextStyle(
                         fontSize: 12,
                         color: isDark
@@ -274,87 +402,33 @@ class _UpcomingRideCard extends StatelessWidget {
                   ],
                 ],
               ),
-            ],
 
-            const Divider(height: 20),
-
-            // ── Pickup ─────────────────────────────────────────────────
-            Row(
-              children: [
-                const Icon(Icons.radio_button_checked,
-                    color: AppThemeData.successDefault, size: 16),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    ride.departName ?? '',
-                    style: AppThemeData.mediumTextStyle(
-                      fontSize: 13,
-                      color: isDark
-                          ? AppThemeData.neutralDark900
-                          : AppThemeData.neutral900,
+              if (isCancelled && cancelledBy != null) ...[
+                const SizedBox(height: 6),
+                Row(
+                  children: [
+                    Icon(Icons.cancel_outlined,
+                        size: 15, color: AppThemeData.errorDefault),
+                    const SizedBox(width: 6),
+                    Text(
+                      'Cancelled by $cancelledBy',
+                      style: AppThemeData.semiBoldTextStyle(
+                        fontSize: 12,
+                        color: AppThemeData.errorDefault,
+                      ),
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  ],
                 ),
               ],
-            ),
-            const SizedBox(height: 8),
 
-            // ── Dropoff ────────────────────────────────────────────────
-            Row(
-              children: [
-                const Icon(Icons.location_on,
-                    color: AppThemeData.errorDefault, size: 16),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    ride.destinationName ?? '',
-                    style: AppThemeData.mediumTextStyle(
-                      fontSize: 13,
-                      color: isDark
-                          ? AppThemeData.neutralDark900
-                          : AppThemeData.neutral900,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
+              const SizedBox(height: 12),
 
-            const Divider(height: 20),
-
-            // ── Customer + meta row ────────────────────────────────────
-            Row(
-              children: [
-                Icon(Icons.person_outline,
-                    size: 15,
-                    color: isDark
-                        ? AppThemeData.neutralDark500
-                        : AppThemeData.neutral500),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: Text(
-                    customerName.isNotEmpty ? customerName : 'Customer',
-                    style: AppThemeData.mediumTextStyle(
-                      fontSize: 13,
-                      color: isDark
-                          ? AppThemeData.neutralDark900
-                          : AppThemeData.neutral900,
-                    ),
-                  ),
-                ),
-                if (passengers > 1) ...[
-                  const SizedBox(width: 8),
-                  Icon(Icons.group_outlined,
-                      size: 15,
-                      color: isDark
-                          ? AppThemeData.neutralDark500
-                          : AppThemeData.neutral500),
-                  const SizedBox(width: 4),
+              // ── Booking # + badges ─────────────────────────────────────
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
                   Text(
-                    '$passengers',
+                    "Booking #${ride.bookingNumber ?? ride.id}",
                     style: AppThemeData.regularTextStyle(
                       fontSize: 12,
                       color: isDark
@@ -362,253 +436,219 @@ class _UpcomingRideCard extends StatelessWidget {
                           : AppThemeData.neutral500,
                     ),
                   ),
-                ],
-              ],
-            ),
-
-            if (isCancelled && cancelledBy != null) ...[
-              const SizedBox(height: 6),
-              Row(
-                children: [
-                  Icon(Icons.cancel_outlined,
-                      size: 15, color: AppThemeData.errorDefault),
-                  const SizedBox(width: 6),
-                  Text(
-                    'Cancelled by $cancelledBy',
-                    style: AppThemeData.semiBoldTextStyle(
-                      fontSize: 12,
-                      color: AppThemeData.errorDefault,
-                    ),
+                  Row(
+                    children: [
+                      if (ride.seriesId != null)
+                        Container(
+                          margin: const EdgeInsets.only(right: 6),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: AppThemeData.infoDefault
+                                .withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                                color: AppThemeData.infoDefault
+                                    .withValues(alpha: 0.5)),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.event_repeat,
+                                  size: 11, color: AppThemeData.infoDefault),
+                              const SizedBox(width: 4),
+                              Text(
+                                "Recurring",
+                                style: AppThemeData.semiBoldTextStyle(
+                                  fontSize: 11,
+                                  color: AppThemeData.infoDefault,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      if (ride.isPrepaid == true)
+                        Container(
+                          margin: const EdgeInsets.only(right: 6),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color:
+                                AppThemeData.infoDefault.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                                color: AppThemeData.infoDefault
+                                    .withValues(alpha: 0.4)),
+                          ),
+                          child: Text(
+                            "Prepaid",
+                            style: AppThemeData.semiBoldTextStyle(
+                              fontSize: 11,
+                              color: AppThemeData.infoDefault,
+                            ),
+                          ),
+                        ),
+                      if (isCancelled)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: AppThemeData.errorDefault
+                                .withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                                color: AppThemeData.errorDefault
+                                    .withValues(alpha: 0.5)),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.cancel,
+                                  size: 11, color: AppThemeData.errorDefault),
+                              const SizedBox(width: 4),
+                              Text(
+                                "CANCELLED",
+                                style: AppThemeData.semiBoldTextStyle(
+                                  fontSize: 11,
+                                  color: AppThemeData.errorDefault,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      else
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: AppThemeData.warningDefault
+                                .withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                                color: AppThemeData.warningDefault
+                                    .withValues(alpha: 0.4)),
+                          ),
+                          child: Text(
+                            "Scheduled",
+                            style: AppThemeData.semiBoldTextStyle(
+                              fontSize: 11,
+                              color: AppThemeData.warningDefault,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                 ],
               ),
-            ],
 
-            const SizedBox(height: 12),
+              const SizedBox(height: 12),
 
-            // ── Booking # + badges ─────────────────────────────────────
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Booking #${ride.bookingNumber ?? ride.id}",
-                  style: AppThemeData.regularTextStyle(
-                    fontSize: 12,
-                    color: isDark
-                        ? AppThemeData.neutralDark500
-                        : AppThemeData.neutral500,
-                  ),
-                ),
-                Row(
-                  children: [
-                    if (ride.seriesId != null)
-                      Container(
-                        margin: const EdgeInsets.only(right: 6),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 3),
-                        decoration: BoxDecoration(
-                          color:
-                              AppThemeData.infoDefault.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                              color: AppThemeData.infoDefault
-                                  .withValues(alpha: 0.5)),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.event_repeat,
-                                size: 11, color: AppThemeData.infoDefault),
-                            const SizedBox(width: 4),
-                            Text(
-                              "Recurring",
-                              style: AppThemeData.semiBoldTextStyle(
-                                fontSize: 11,
-                                color: AppThemeData.infoDefault,
-                              ),
+              // ── Action button ──────────────────────────────────────────
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  if (isCancelled)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color:
+                            AppThemeData.errorDefault.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                            color: AppThemeData.errorDefault
+                                .withValues(alpha: 0.4)),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.cancel_outlined,
+                              size: 14, color: AppThemeData.errorDefault),
+                          const SizedBox(width: 4),
+                          Text(
+                            "Cancelled",
+                            style: AppThemeData.semiBoldTextStyle(
+                              fontSize: 12,
+                              color: AppThemeData.errorDefault,
                             ),
-                          ],
-                        ),
-                      ),
-                    if (ride.isPrepaid == true)
-                      Container(
-                        margin: const EdgeInsets.only(right: 6),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 3),
-                        decoration: BoxDecoration(
-                          color:
-                              AppThemeData.infoDefault.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                              color: AppThemeData.infoDefault
-                                  .withValues(alpha: 0.4)),
-                        ),
-                        child: Text(
-                          "Prepaid",
-                          style: AppThemeData.semiBoldTextStyle(
-                            fontSize: 11,
-                            color: AppThemeData.infoDefault,
                           ),
-                        ),
+                        ],
                       ),
-                    if (isCancelled)
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 3),
-                        decoration: BoxDecoration(
-                          color:
-                              AppThemeData.errorDefault.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                              color: AppThemeData.errorDefault
-                                  .withValues(alpha: 0.5)),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.cancel,
-                                size: 11, color: AppThemeData.errorDefault),
-                            const SizedBox(width: 4),
-                            Text(
-                              "CANCELLED",
-                              style: AppThemeData.semiBoldTextStyle(
-                                fontSize: 11,
-                                color: AppThemeData.errorDefault,
-                              ),
+                    )
+                  else if (isAssignedToMe)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color:
+                            AppThemeData.successDefault.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                            color: AppThemeData.successDefault
+                                .withValues(alpha: 0.5)),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.check_circle,
+                              size: 14, color: AppThemeData.successDefault),
+                          const SizedBox(width: 4),
+                          Text(
+                            "You accepted",
+                            style: AppThemeData.semiBoldTextStyle(
+                              fontSize: 12,
+                              color: AppThemeData.successDefault,
                             ),
-                          ],
-                        ),
-                      )
-                    else
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 3),
-                        decoration: BoxDecoration(
-                          color: AppThemeData.warningDefault
-                              .withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                              color: AppThemeData.warningDefault
-                                  .withValues(alpha: 0.4)),
-                        ),
-                        child: Text(
-                          "Scheduled",
-                          style: AppThemeData.semiBoldTextStyle(
-                            fontSize: 11,
-                            color: AppThemeData.warningDefault,
                           ),
-                        ),
+                        ],
                       ),
-                  ],
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 12),
-
-            // ── Action button ──────────────────────────────────────────
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                if (isCancelled)
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: AppThemeData.errorDefault.withValues(alpha: 0.08),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                          color:
-                              AppThemeData.errorDefault.withValues(alpha: 0.4)),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.cancel_outlined,
-                            size: 14, color: AppThemeData.errorDefault),
-                        const SizedBox(width: 4),
-                        Text(
-                          "Cancelled",
-                          style: AppThemeData.semiBoldTextStyle(
-                            fontSize: 12,
-                            color: AppThemeData.errorDefault,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                else if (isAssignedToMe)
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: AppThemeData.successDefault.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                          color: AppThemeData.successDefault
-                              .withValues(alpha: 0.5)),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.check_circle,
-                            size: 14, color: AppThemeData.successDefault),
-                        const SizedBox(width: 4),
-                        Text(
-                          "You accepted",
-                          style: AppThemeData.semiBoldTextStyle(
-                            fontSize: 12,
-                            color: AppThemeData.successDefault,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                else if (isAssignedToOther)
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: isDark
-                          ? AppThemeData.neutralDark100
-                          : AppThemeData.neutral100,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
+                    )
+                  else if (isAssignedToOther)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? AppThemeData.neutralDark100
+                            : AppThemeData.neutral100,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                            color: isDark
+                                ? AppThemeData.neutralDark500
+                                : AppThemeData.neutral500),
+                      ),
+                      child: Text(
+                        "Taken",
+                        style: AppThemeData.semiBoldTextStyle(
+                          fontSize: 12,
                           color: isDark
                               ? AppThemeData.neutralDark500
-                              : AppThemeData.neutral500),
-                    ),
-                    child: Text(
-                      "Taken",
-                      style: AppThemeData.semiBoldTextStyle(
-                        fontSize: 12,
-                        color: isDark
-                            ? AppThemeData.neutralDark500
-                            : AppThemeData.neutral500,
+                              : AppThemeData.neutral500,
+                        ),
+                      ),
+                    )
+                  else
+                    ElevatedButton.icon(
+                      onPressed: () => Get.find<HomeController>()
+                          .acceptUpcomingRide(ride.id ?? ''),
+                      icon: const Icon(Icons.check, size: 16),
+                      label: Text(
+                        "Accept",
+                        style: AppThemeData.semiBoldTextStyle(fontSize: 14),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 8),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
                       ),
                     ),
-                  )
-                else
-                  ElevatedButton.icon(
-                    onPressed: () => Get.find<HomeController>()
-                        .acceptUpcomingRide(ride.id ?? ''),
-                    icon: const Icon(Icons.check, size: 16),
-                    label: Text(
-                      "Accept",
-                      style: AppThemeData.semiBoldTextStyle(fontSize: 14),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 8),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                    ),
-                  ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

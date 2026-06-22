@@ -25,6 +25,18 @@ import '../../widget/waiting_timer_widget.dart';
 class BookingDetailsScreen extends StatelessWidget {
   const BookingDetailsScreen({super.key});
 
+  String? _cleanValue(String? value) {
+    if (value == null || value.isEmpty || value == 'null') {
+      return null;
+    }
+    return value;
+  }
+
+  String? _scheduledPickupTime(BookingDetailsController controller) {
+    return _cleanValue(controller.bookingModel.value.scheduledAtLondon) ??
+        _cleanValue(controller.bookingModel.value.scheduledAt);
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeChange = Provider.of<DarkThemeProvider>(context);
@@ -615,11 +627,44 @@ class BookingDetailsScreen extends StatelessWidget {
                                       color: themeChange.getThem()
                                           ? AppThemeData.neutralDark300
                                           : AppThemeData.neutral300),
+                                  if (_scheduledPickupTime(controller) !=
+                                      null) ...[
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            "Scheduled Pickup Time:".tr,
+                                            style: AppThemeData.mediumTextStyle(
+                                                fontSize: 14,
+                                                color: themeChange.getThem()
+                                                    ? AppThemeData
+                                                        .neutralDark900
+                                                    : AppThemeData.neutral900),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            _scheduledPickupTime(controller)!,
+                                            style: AppThemeData.boldTextStyle(
+                                                fontSize: 14,
+                                                color: themeChange.getThem()
+                                                    ? AppThemeData
+                                                        .neutralDark900
+                                                    : AppThemeData.neutral900),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10),
+                                  ],
                                   Row(
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          "Booking Date and Time:".tr,
+                                          "Booking Created Time:".tr,
                                           style: AppThemeData.mediumTextStyle(
                                               fontSize: 14,
                                               color: themeChange.getThem()
