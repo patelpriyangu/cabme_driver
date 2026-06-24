@@ -17,14 +17,14 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
-    signingConfigs {
-        create("release") {
-            storeFile = file(rootProject.file("uniqcarsdriver.jks"))
-            storePassword = "Admin@123"
-            keyAlias = "uniqcars"
-            keyPassword = "Admin@123"
-        }
-    }
+//    signingConfigs {
+//        create("release") {
+//            storeFile = file(rootProject.file("uniqcarsdriver.jks"))
+//            storePassword = "Admin@123"
+//            keyAlias = "uniqcars"
+//            keyPassword = "Admin@123"
+//        }
+//    }
     buildTypes {
         // release {
         //     minifyEnabled false
@@ -40,7 +40,7 @@ android {
             // )
             minifyEnabled false
             shrinkResources false
-            signingConfig = signingConfigs.getByName("release")
+//            signingConfig = signingConfigs.getByName("release")
         }
     }
 

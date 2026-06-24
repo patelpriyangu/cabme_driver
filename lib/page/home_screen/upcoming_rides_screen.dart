@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:uniqcars_driver/constant/constant.dart';
@@ -6,6 +7,7 @@ import 'package:uniqcars_driver/themes/app_them_data.dart';
 import 'package:uniqcars_driver/utils/dark_theme_provider.dart';
 import 'package:uniqcars_driver/utils/Preferences.dart';
 import 'package:uniqcars_driver/page/booking_details_screens/booking_details_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../controller/home_controller.dart';
 import '../../model/booking_mode.dart';
 
@@ -315,47 +317,65 @@ class _UpcomingRideCard extends StatelessWidget {
 
               const Divider(height: 20),
 
-              // ── Pickup ─────────────────────────────────────────────────
               Row(
                 children: [
-                  const Icon(Icons.radio_button_checked,
-                      color: AppThemeData.successDefault, size: 16),
-                  const SizedBox(width: 8),
                   Expanded(
-                    child: Text(
-                      ride.departName ?? '',
-                      style: AppThemeData.mediumTextStyle(
-                        fontSize: 13,
-                        color: isDark
-                            ? AppThemeData.neutralDark900
-                            : AppThemeData.neutral900,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                    child: Column(
+                      children: [
+                        // ── Pickup ─────────────────────────────────────────────────
+
+                        Row(
+                          children: [
+                            const Icon(Icons.radio_button_checked,
+                                color: AppThemeData.successDefault, size: 16),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                ride.departName ?? '',
+                                style: AppThemeData.mediumTextStyle(
+                                  fontSize: 13,
+                                  color: isDark
+                                      ? AppThemeData.neutralDark900
+                                      : AppThemeData.neutral900,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+
+                        // ── Dropoff ────────────────────────────────────────────────
+                        Row(
+                          children: [
+                            const Icon(Icons.location_on,
+                                color: AppThemeData.errorDefault, size: 16),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                ride.destinationName ?? '',
+                                style: AppThemeData.mediumTextStyle(
+                                  fontSize: 13,
+                                  color: isDark
+                                      ? AppThemeData.neutralDark900
+                                      : AppThemeData.neutral900,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 8),
-
-              // ── Dropoff ────────────────────────────────────────────────
-              Row(
-                children: [
-                  const Icon(Icons.location_on,
-                      color: AppThemeData.errorDefault, size: 16),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      ride.destinationName ?? '',
-                      style: AppThemeData.mediumTextStyle(
-                        fontSize: 13,
-                        color: isDark
-                            ? AppThemeData.neutralDark900
-                            : AppThemeData.neutral900,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                  GestureDetector(
+                    onTap: () {
+                      _openPickupDirections(context, themeChange);
+                    },
+                    child: SvgPicture.asset(
+                        "assets/icons/ic_distance.svg"),
                   ),
                 ],
               ),
@@ -651,6 +671,93 @@ class _UpcomingRideCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+  void _openPickupDirections(BuildContext context, DarkThemeProvider themeChange) {
+    final destLat = ride.latitudeDepart;
+    final destLng = ride.longitudeDepart;
+    if (destLat != null && destLng != null) {
+      _showNavigationPicker(context, themeChange, destLat.toString(), destLng.toString());
+    } else {
+      // ShowToastDialog.showToast("Pickup location is not available");
+    }
+  }
+
+  void _showNavigationPicker(BuildContext context, DarkThemeProvider themeChange, String lat, String lng) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      backgroundColor: themeChange.getThem() ? AppThemeData.neutralDark50 : Colors.white,
+      builder: (ctx) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  child: Text(
+                    "Open Directions In",
+                    style: AppThemeData.boldTextStyle(
+                        fontSize: 18,
+                        color: themeChange.getThem()
+                            ? AppThemeData.neutralDark900
+                            : AppThemeData.neutral900),
+                  ),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.map, color: Colors.green),
+                  title: Text("Google Maps",
+                      style: AppThemeData.mediumTextStyle(
+                          fontSize: 16,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark900
+                              : AppThemeData.neutral900)),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    launchUrl(
+                        Uri.parse('https://www.google.com/maps/dir/?api=1&destination=$lat,$lng&travelmode=driving'),
+                        mode: LaunchMode.externalApplication);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.directions, color: Colors.blue),
+                  title: Text("Apple Maps",
+                      style: AppThemeData.mediumTextStyle(
+                          fontSize: 16,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark900
+                              : AppThemeData.neutral900)),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    launchUrl(
+                        Uri.parse('https://maps.apple.com/?daddr=$lat,$lng&dirflg=d'),
+                        mode: LaunchMode.externalApplication);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.navigation, color: Colors.lightBlue),
+                  title: Text("Waze",
+                      style: AppThemeData.mediumTextStyle(
+                          fontSize: 16,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark900
+                              : AppThemeData.neutral900)),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    launchUrl(
+                        Uri.parse('https://waze.com/ul?ll=$lat,$lng&navigate=yes'),
+                        mode: LaunchMode.externalApplication);
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

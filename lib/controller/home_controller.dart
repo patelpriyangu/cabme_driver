@@ -73,6 +73,7 @@ class HomeController extends GetxController {
     }
   }
 
+
   Future<void> getData() async {
     userModel.value = Constant.getUserData();
     await getUserData();

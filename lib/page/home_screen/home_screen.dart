@@ -231,8 +231,10 @@ class HomeScreen extends StatelessWidget {
                 )
               ],
             ),
-            body: controller.isLoading.value
-                ? Constant.loader(context)
+            body:  controller.isLoading.value
+                ? Constant.loader(context, loadingcolor: themeChange.getThem()
+                ? Colors.white
+                : AppThemeData.primaryDefault)
                 : Column(
                     children: [
                       shouldShowWalletError(
@@ -732,6 +734,7 @@ class HomeScreen extends StatelessWidget {
                                   },
                                   child: Column(
                                     children: [
+                                      //here
                                       SvgPicture.asset(
                                           "assets/icons/ic_distance.svg"),
                                       SizedBox(
