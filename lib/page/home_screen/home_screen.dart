@@ -56,9 +56,12 @@ class HomeScreen extends StatelessWidget {
           controller.setAvailableTabs(availableTabs);
 
           return Scaffold(
+            // backgroundColor: themeChange.getThem()
+            //     ? AppThemeData.neutralDark50
+            //     : AppThemeData.neutral50,
             backgroundColor: themeChange.getThem()
-                ? AppThemeData.neutralDark50
-                : AppThemeData.neutral50,
+                ? AppThemeData.neutralDark100
+                : AppThemeData.neutral200,
             appBar: AppBar(
               backgroundColor: themeChange.getThem()
                   ? AppThemeData.neutralDark50
@@ -428,30 +431,31 @@ class HomeScreen extends StatelessWidget {
     return Obx(
       () => controller.bookingModel.value.data == null
           ? Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: RefreshIndicator(
+          onRefresh: () async {
+            await controller.getBooking();
+          },
+          child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            children: [
+              SizedBox(
+                height: Responsive.height(70, context),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     _buildCabEmptyIllustration(themeChange),
-                    SizedBox(
-                      height: 20,
-                    ),
+                    const SizedBox(height: 20),
                     Text(
                       'No Booking requests available in your area.'.tr,
                       textAlign: TextAlign.center,
-                      style: AppThemeData.mediumTextStyle(
-                        fontSize: 18,
-                        color: themeChange.getThem()
-                            ? AppThemeData.neutralDark900
-                            : AppThemeData.neutral900,
-                      ),
                     ),
                   ],
                 ),
               ),
-            )
+            ],
+          ),
+        ),
+      )
           : RefreshIndicator(
               onRefresh: () async {
                 await controller
@@ -2165,16 +2169,20 @@ class HomeScreen extends StatelessWidget {
       barrierDismissible: true,
     );
   }
-
-  void _showNavigationPicker(BuildContext context,
-      DarkThemeProvider themeChange, String lat, String lng) {
+  void _showNavigationPicker(
+      BuildContext context,
+      DarkThemeProvider themeChange,
+      String fromLat,
+      String fromLng,
+      String toLat,
+      String toLng,
+      ) {
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      backgroundColor:
-          themeChange.getThem() ? AppThemeData.neutralDark50 : Colors.white,
+      backgroundColor: themeChange.getThem() ? AppThemeData.neutralDark50 : Colors.white,
       builder: (ctx) {
         return SafeArea(
           child: Padding(
@@ -2183,8 +2191,7 @@ class HomeScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                   child: Text(
                     "Open Directions In".tr,
                     style: AppThemeData.boldTextStyle(
@@ -2206,9 +2213,14 @@ class HomeScreen extends StatelessWidget {
                   onTap: () {
                     Navigator.pop(ctx);
                     launchUrl(
-                        Uri.parse(
-                            'https://www.google.com/maps/dir/?api=1&destination=$lat,$lng&travelmode=driving'),
-                        mode: LaunchMode.externalApplication);
+                      Uri.parse(
+                        'https://www.google.com/maps/dir/?api=1'
+                            '&origin=$fromLat,$fromLng'
+                            '&destination=$toLat,$toLng'
+                            '&travelmode=driving',
+                      ),
+                      mode: LaunchMode.externalApplication,
+                    );
                   },
                 ),
                 ListTile(
@@ -2222,14 +2234,18 @@ class HomeScreen extends StatelessWidget {
                   onTap: () {
                     Navigator.pop(ctx);
                     launchUrl(
-                        Uri.parse(
-                            'https://maps.apple.com/?daddr=$lat,$lng&dirflg=d'),
-                        mode: LaunchMode.externalApplication);
+                      Uri.parse(
+                        'https://maps.apple.com/'
+                            '?saddr=$fromLat,$fromLng'
+                            '&daddr=$toLat,$toLng'
+                            '&dirflg=d',
+                      ),
+                      mode: LaunchMode.externalApplication,
+                    );
                   },
                 ),
                 ListTile(
-                  leading:
-                      const Icon(Icons.navigation, color: Colors.lightBlue),
+                  leading: const Icon(Icons.navigation, color: Colors.lightBlue),
                   title: Text("Waze",
                       style: AppThemeData.mediumTextStyle(
                           fontSize: 16,
@@ -2238,10 +2254,11 @@ class HomeScreen extends StatelessWidget {
                               : AppThemeData.neutral900)),
                   onTap: () {
                     Navigator.pop(ctx);
+                    // ⚠️ Waze has no custom origin support — destination only
                     launchUrl(
-                        Uri.parse(
-                            'https://waze.com/ul?ll=$lat,$lng&navigate=yes'),
-                        mode: LaunchMode.externalApplication);
+                      Uri.parse('https://waze.com/ul?ll=$toLat,$toLng&navigate=yes'),
+                      mode: LaunchMode.externalApplication,
+                    );
                   },
                 ),
               ],
@@ -2254,15 +2271,121 @@ class HomeScreen extends StatelessWidget {
 
   void _openPickupDirections(BuildContext context,
       DarkThemeProvider themeChange, dynamic bookingData) {
-    final destLat = bookingData?.latitudeDepart;
-    final destLng = bookingData?.longitudeDepart;
-    if (destLat != null && destLng != null) {
+    final fromLat = bookingData?.latitudeDepart;
+    final fromLng = bookingData?.longitudeDepart;
+    final toLat = bookingData?.latitudeArrivee;
+    final toLng = bookingData?.longitudeArrivee;
+
+    if (fromLat != null && fromLng != null && toLat != null && toLng != null) {
       _showNavigationPicker(
-          context, themeChange, destLat.toString(), destLng.toString());
+        context,
+        themeChange,
+        fromLat.toString(),
+        fromLng.toString(),
+        toLat.toString(),
+        toLng.toString(),
+      );
     } else {
       ShowToastDialog.showToast("Pickup location is not available".tr);
     }
   }
+  // void _showNavigationPicker(BuildContext context,
+  //     DarkThemeProvider themeChange, String lat, String lng) {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+  //     ),
+  //     backgroundColor:
+  //         themeChange.getThem() ? AppThemeData.neutralDark50 : Colors.white,
+  //     builder: (ctx) {
+  //       return SafeArea(
+  //         child: Padding(
+  //           padding: const EdgeInsets.symmetric(vertical: 16),
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               Padding(
+  //                 padding:
+  //                     const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+  //                 child: Text(
+  //                   "Open Directions In".tr,
+  //                   style: AppThemeData.boldTextStyle(
+  //                       fontSize: 18,
+  //                       color: themeChange.getThem()
+  //                           ? AppThemeData.neutralDark900
+  //                           : AppThemeData.neutral900),
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 8),
+  //               ListTile(
+  //                 leading: const Icon(Icons.map, color: Colors.green),
+  //                 title: Text("Google Maps",
+  //                     style: AppThemeData.mediumTextStyle(
+  //                         fontSize: 16,
+  //                         color: themeChange.getThem()
+  //                             ? AppThemeData.neutralDark900
+  //                             : AppThemeData.neutral900)),
+  //                 onTap: () {
+  //                   Navigator.pop(ctx);
+  //                   launchUrl(
+  //                       Uri.parse(
+  //                           'https://www.google.com/maps/dir/?api=1&destination=$lat,$lng&travelmode=driving'),
+  //                       mode: LaunchMode.externalApplication);
+  //                 },
+  //               ),
+  //               ListTile(
+  //                 leading: const Icon(Icons.directions, color: Colors.blue),
+  //                 title: Text("Apple Maps",
+  //                     style: AppThemeData.mediumTextStyle(
+  //                         fontSize: 16,
+  //                         color: themeChange.getThem()
+  //                             ? AppThemeData.neutralDark900
+  //                             : AppThemeData.neutral900)),
+  //                 onTap: () {
+  //                   Navigator.pop(ctx);
+  //                   launchUrl(
+  //                       Uri.parse(
+  //                           'https://maps.apple.com/?daddr=$lat,$lng&dirflg=d'),
+  //                       mode: LaunchMode.externalApplication);
+  //                 },
+  //               ),
+  //               ListTile(
+  //                 leading:
+  //                     const Icon(Icons.navigation, color: Colors.lightBlue),
+  //                 title: Text("Waze",
+  //                     style: AppThemeData.mediumTextStyle(
+  //                         fontSize: 16,
+  //                         color: themeChange.getThem()
+  //                             ? AppThemeData.neutralDark900
+  //                             : AppThemeData.neutral900)),
+  //                 onTap: () {
+  //                   Navigator.pop(ctx);
+  //                   launchUrl(
+  //                       Uri.parse(
+  //                           'https://waze.com/ul?ll=$lat,$lng&navigate=yes'),
+  //                       mode: LaunchMode.externalApplication);
+  //                 },
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+  //
+  // void _openPickupDirections(BuildContext context,
+  //     DarkThemeProvider themeChange, dynamic bookingData) {
+  //   final destLat = bookingData?.latitudeDepart;
+  //   final destLng = bookingData?.longitudeDepart;
+  //   if (destLat != null && destLng != null) {
+  //     _showNavigationPicker(
+  //         context, themeChange, destLat.toString(), destLng.toString());
+  //   } else {
+  //     ShowToastDialog.showToast("Pickup location is not available".tr);
+  //   }
+  // }
 
   Widget _buildCabEmptyIllustration(DarkThemeProvider themeChange) {
     return Container(

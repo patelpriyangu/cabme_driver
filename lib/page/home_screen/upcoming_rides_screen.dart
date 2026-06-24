@@ -29,26 +29,37 @@ class UpcomingRidesScreen extends StatelessWidget {
       final hasCancelled = controller.recentlyCancelledRides.isNotEmpty;
 
       if (!hasActive && !hasCancelled) {
-        return Expanded(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+        return  Expanded(
+          child: RefreshIndicator(
+            onRefresh: controller.getUpcomingRides,
+            child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
               children: [
-                Icon(
-                  Icons.event_available,
-                  size: 64,
-                  color: themeChange.getThem()
-                      ? AppThemeData.neutralDark500
-                      : AppThemeData.neutral500,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  "No upcoming scheduled rides",
-                  style: AppThemeData.mediumTextStyle(
-                    fontSize: 16,
-                    color: themeChange.getThem()
-                        ? AppThemeData.neutralDark500
-                        : AppThemeData.neutral500,
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.7,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.event_available,
+                          size: 64,
+                          color: themeChange.getThem()
+                              ? AppThemeData.neutralDark500
+                              : AppThemeData.neutral500,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          "No upcoming scheduled rides",
+                          style: AppThemeData.mediumTextStyle(
+                            fontSize: 16,
+                            color: themeChange.getThem()
+                                ? AppThemeData.neutralDark500
+                                : AppThemeData.neutral500,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -196,7 +207,10 @@ class _UpcomingRideCard extends StatelessWidget {
       ),
       color: isCancelled
           ? AppThemeData.errorDefault.withValues(alpha: 0.05)
-          : null,
+          // : null,
+          : themeChange.getThem()
+          ? AppThemeData.neutralDark50
+          : AppThemeData.neutral50,
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: isCancelled
@@ -541,18 +555,19 @@ class _UpcomingRideCard extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 3),
                           decoration: BoxDecoration(
-                            color: AppThemeData.warningDefault
+                            color: AppThemeData.warningDarkLight
                                 .withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                                color: AppThemeData.warningDefault
-                                    .withValues(alpha: 0.4)),
+                                color: AppThemeData.warningDarkLight
+                                     .withValues(alpha: 0.4)
+                            ),
                           ),
                           child: Text(
                             "Scheduled",
                             style: AppThemeData.semiBoldTextStyle(
-                              fontSize: 11,
-                              color: AppThemeData.warningDefault,
+                              fontSize: 12,
+                              color: AppThemeData.warningDarkLight .withValues(alpha: 0.8),
                             ),
                           ),
                         ),
@@ -651,7 +666,7 @@ class _UpcomingRideCard extends StatelessWidget {
                     ElevatedButton.icon(
                       onPressed: () => Get.find<HomeController>()
                           .acceptUpcomingRide(ride.id ?? ''),
-                      icon: const Icon(Icons.check, size: 16),
+                      icon: const Icon(Icons.check, size: 16,color: AppThemeData.neutral900,),
                       label: Text(
                         "Accept",
                         style: AppThemeData.semiBoldTextStyle(fontSize: 14),
@@ -673,17 +688,26 @@ class _UpcomingRideCard extends StatelessWidget {
       ),
     );
   }
+
   void _openPickupDirections(BuildContext context, DarkThemeProvider themeChange) {
-    final destLat = ride.latitudeDepart;
-    final destLng = ride.longitudeDepart;
-    if (destLat != null && destLng != null) {
-      _showNavigationPicker(context, themeChange, destLat.toString(), destLng.toString());
-    } else {
-      // ShowToastDialog.showToast("Pickup location is not available");
+    final fromLat = ride.latitudeDepart;
+    final fromLng = ride.longitudeDepart;
+    final toLat = ride.latitudeArrivee;
+    final toLng = ride.longitudeArrivee;
+
+    if (fromLat != null && fromLng != null && toLat != null && toLng != null) {
+      _showNavigationPicker(context, themeChange, fromLat, fromLng, toLat, toLng);
     }
   }
 
-  void _showNavigationPicker(BuildContext context, DarkThemeProvider themeChange, String lat, String lng) {
+  void _showNavigationPicker(
+      BuildContext context,
+      DarkThemeProvider themeChange,
+      String fromLat,
+      String fromLng,
+      String toLat,
+      String toLng,
+      ) {
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -702,12 +726,15 @@ class _UpcomingRideCard extends StatelessWidget {
                   child: Text(
                     "Open Directions In",
                     style: AppThemeData.boldTextStyle(
-                        fontSize: 18,
-                        color: themeChange.getThem()
-                            ? AppThemeData.neutralDark900
-                            : AppThemeData.neutral900),
+                      fontSize: 18,
+                      color: themeChange.getThem()
+                          ? AppThemeData.neutralDark900
+                          : AppThemeData.neutral900,
+                    ),
                   ),
                 ),
+
+                // ✅ Google Maps — origin= is pickup, destination= is dropoff
                 ListTile(
                   leading: const Icon(Icons.map, color: Colors.green),
                   title: Text("Google Maps",
@@ -719,10 +746,18 @@ class _UpcomingRideCard extends StatelessWidget {
                   onTap: () {
                     Navigator.pop(ctx);
                     launchUrl(
-                        Uri.parse('https://www.google.com/maps/dir/?api=1&destination=$lat,$lng&travelmode=driving'),
-                        mode: LaunchMode.externalApplication);
+                      Uri.parse(
+                        'https://www.google.com/maps/dir/?api=1'
+                            '&origin=$fromLat,$fromLng'
+                            '&destination=$toLat,$toLng'
+                            '&travelmode=driving',
+                      ),
+                      mode: LaunchMode.externalApplication,
+                    );
                   },
                 ),
+
+                // ✅ Apple Maps — saddr= is pickup, daddr= is dropoff
                 ListTile(
                   leading: const Icon(Icons.directions, color: Colors.blue),
                   title: Text("Apple Maps",
@@ -734,10 +769,19 @@ class _UpcomingRideCard extends StatelessWidget {
                   onTap: () {
                     Navigator.pop(ctx);
                     launchUrl(
-                        Uri.parse('https://maps.apple.com/?daddr=$lat,$lng&dirflg=d'),
-                        mode: LaunchMode.externalApplication);
+                      Uri.parse(
+                        'https://maps.apple.com/'
+                            '?saddr=$fromLat,$fromLng'
+                            '&daddr=$toLat,$toLng'
+                            '&dirflg=d',
+                      ),
+                      mode: LaunchMode.externalApplication,
+                    );
                   },
                 ),
+
+                // ⚠️ Waze — does NOT support custom origin, always uses GPS
+                // Navigates to dropoff only as workaround
                 ListTile(
                   leading: const Icon(Icons.navigation, color: Colors.lightBlue),
                   title: Text("Waze",
@@ -749,8 +793,9 @@ class _UpcomingRideCard extends StatelessWidget {
                   onTap: () {
                     Navigator.pop(ctx);
                     launchUrl(
-                        Uri.parse('https://waze.com/ul?ll=$lat,$lng&navigate=yes'),
-                        mode: LaunchMode.externalApplication);
+                      Uri.parse('https://waze.com/ul?ll=$toLat,$toLng&navigate=yes'),
+                      mode: LaunchMode.externalApplication,
+                    );
                   },
                 ),
               ],
@@ -760,4 +805,94 @@ class _UpcomingRideCard extends StatelessWidget {
       },
     );
   }
+  // void _openPickupDirections(BuildContext context, DarkThemeProvider themeChange) {
+  //   final destLat = ride.latitudeDepart;
+  //   final destLng = ride.longitudeDepart;
+  //   if (destLat != null && destLng != null) {
+  //     _showNavigationPicker(context, themeChange, destLat.toString(), destLng.toString());
+  //   } else {
+  //     // ShowToastDialog.showToast("Pickup location is not available");
+  //   }
+  // }
+  //
+  // void _showNavigationPicker(BuildContext context, DarkThemeProvider themeChange, String lat, String lng) {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+  //     ),
+  //     backgroundColor: themeChange.getThem() ? AppThemeData.neutralDark50 : Colors.white,
+  //     builder: (ctx) {
+  //       return SafeArea(
+  //         child: Padding(
+  //           padding: const EdgeInsets.symmetric(vertical: 16),
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               Padding(
+  //                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+  //                 child: Text(
+  //                   "Open Directions In",
+  //                   style: AppThemeData.boldTextStyle(
+  //                       fontSize: 18,
+  //                       color: themeChange.getThem()
+  //                           ? AppThemeData.neutralDark900
+  //                           : AppThemeData.neutral900),
+  //                 ),
+  //               ),
+  //               ListTile(
+  //                 leading: const Icon(Icons.map, color: Colors.green),
+  //                 title: Text("Google Maps",
+  //                     style: AppThemeData.mediumTextStyle(
+  //                         fontSize: 16,
+  //                         color: themeChange.getThem()
+  //                             ? AppThemeData.neutralDark900
+  //                             : AppThemeData.neutral900)),
+  //                 onTap: () {
+  //                   Navigator.pop(ctx);
+  //                   launchUrl(
+  //                       Uri.parse('https://www.google.com/maps/dir/?api=1&destination=$lat,$lng&travelmode=driving'),
+  //                       mode: LaunchMode.externalApplication);
+  //                 },
+  //               ),
+  //               ListTile(
+  //                 leading: const Icon(Icons.directions, color: Colors.blue),
+  //                 title: Text("Apple Maps",
+  //                     style: AppThemeData.mediumTextStyle(
+  //                         fontSize: 16,
+  //                         color: themeChange.getThem()
+  //                             ? AppThemeData.neutralDark900
+  //                             : AppThemeData.neutral900)),
+  //                 onTap: () {
+  //                   Navigator.pop(ctx);
+  //                   launchUrl(
+  //                       Uri.parse('https://maps.apple.com/?daddr=$lat,$lng&dirflg=d'),
+  //                       mode: LaunchMode.externalApplication);
+  //                 },
+  //               ),
+  //               ListTile(
+  //                 leading: const Icon(Icons.navigation, color: Colors.lightBlue),
+  //                 title: Text("Waze",
+  //                     style: AppThemeData.mediumTextStyle(
+  //                         fontSize: 16,
+  //                         color: themeChange.getThem()
+  //                             ? AppThemeData.neutralDark900
+  //                             : AppThemeData.neutral900)),
+  //                 onTap: () {
+  //                   Navigator.pop(ctx);
+  //                   launchUrl(
+  //                       Uri.parse('https://waze.com/ul?ll=$lat,$lng&navigate=yes'),
+  //                       mode: LaunchMode.externalApplication);
+  //                 },
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+  //
+
+
 }

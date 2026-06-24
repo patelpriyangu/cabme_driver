@@ -708,7 +708,7 @@ class BookingDetailsScreen extends StatelessWidget {
                                           style: AppThemeData.boldTextStyle(
                                               fontSize: 14,
                                               color: themeChange.getThem()
-                                                  ? AppThemeData.primaryDefault
+                                                  ? AppThemeData.accentDark
                                                   : AppThemeData
                                                       .primaryDefault),
                                         ),
@@ -739,7 +739,7 @@ class BookingDetailsScreen extends StatelessWidget {
                                                 fontSize: 14,
                                                 color: themeChange.getThem()
                                                     ? AppThemeData
-                                                        .primaryDefault
+                                                        .accentDark
                                                     : AppThemeData
                                                         .primaryDefault),
                                           ),
@@ -782,7 +782,7 @@ class BookingDetailsScreen extends StatelessWidget {
                                                         color: themeChange
                                                                 .getThem()
                                                             ? AppThemeData
-                                                                .primaryDefault
+                                                                .accentDark
                                                             : AppThemeData
                                                                 .primaryDefault),
                                               ),

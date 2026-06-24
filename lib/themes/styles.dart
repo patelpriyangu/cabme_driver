@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class Styles {
   static ThemeData themeData(bool isDarkTheme, BuildContext context) {
     return ThemeData(
+      fontFamily: AppThemeData.regular,
       appBarTheme: AppBarTheme(
         backgroundColor:
             isDarkTheme ? AppThemeData.neutralDark50 : AppThemeData.neutral50,
