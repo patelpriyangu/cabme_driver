@@ -738,8 +738,7 @@ class BookingDetailsScreen extends StatelessWidget {
                                             style: AppThemeData.boldTextStyle(
                                                 fontSize: 14,
                                                 color: themeChange.getThem()
-                                                    ? AppThemeData
-                                                        .accentDark
+                                                    ? AppThemeData.accentDark
                                                     : AppThemeData
                                                         .primaryDefault),
                                           ),
@@ -1059,6 +1058,9 @@ class BookingDetailsScreen extends StatelessWidget {
                                           controller
                                                   .bookingModel.value.statut ==
                                               RideStatus.newRide
+                                      ||
+                                      controller.bookingModel.value.adminCommissionType == null
+
                                       ? SizedBox()
                                       : Row(
                                           children: [
