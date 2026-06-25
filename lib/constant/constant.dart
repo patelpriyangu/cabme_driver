@@ -188,7 +188,30 @@ class Constant {
       return "${Constant.currency.toString()}${double.parse(amountdata.toString()).toStringAsFixed(int.parse(Constant.decimal!))}";
     }
   }
+  String formatAmount(String? rawAmount) {
+    final double value = double.tryParse(rawAmount ?? '0') ?? 0.0;
+    final double rounded = roundToNearestHalf(value);
+    final String formatted = rounded.toStringAsFixed(2); // always 2 decimals → 89.00, 88.00
 
+    if (Constant.symbolAtRight == true) {
+      return "$formatted${Constant.currency ?? ''}";
+    } else {
+      return "${Constant.currency ?? ''}$formatted";
+    }
+  }
+
+  double roundToNearestHalf(double amount) {
+    final floor = amount.floorToDouble();
+    final decimal = amount - floor;
+
+    if (decimal < 0.25) {
+      return floor;           // e.g. 22.10 → 22.00
+    } else if (decimal < 0.75) {
+      return floor + 0.50;   // e.g. 22.40 → 22.50
+    } else {
+      return (floor + 1.0);  // e.g. 22.80 → 23.00
+    }
+  }
   static Widget loader(context, {Color? loadingcolor, Color? bgColor}) {
     final themeChange = Provider.of<DarkThemeProvider>(context);
 

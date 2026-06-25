@@ -74,7 +74,7 @@ class BookingDetailsScreen extends StatelessWidget {
               ),
             ),
             body: controller.isLoading.value
-                ? Constant.loader(context)
+                ? Constant.loader(context, loadingcolor:themeChange.getThem()?AppThemeData.neutral50:AppThemeData.primaryDefault )
                 : Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 10),
@@ -998,9 +998,13 @@ class BookingDetailsScreen extends StatelessWidget {
                                       ),
                                       Expanded(
                                         child: Text(
-                                          Constant().amountShow(
-                                              amount:
-                                                  controller.totalAmount.value),
+                                          Constant().formatAmount(controller.totalAmount.value
+                                              .toString()),
+                                          // Constant().amountShow(
+                                          //     amount:
+                                          //         controller.totalAmount.value
+
+
                                           textAlign: TextAlign.end,
                                           style: AppThemeData.boldTextStyle(
                                               fontSize: 16,

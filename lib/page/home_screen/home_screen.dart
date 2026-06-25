@@ -42,6 +42,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeChange = Provider.of<DarkThemeProvider>(context);
     return GetX(
+        autoRemove: false,
         init: Get.isRegistered<HomeController>()
             ? Get.find<HomeController>()
             : HomeController(),
@@ -119,7 +120,11 @@ class HomeScreen extends StatelessWidget {
                             if (value == "yes") {
                               // Refresh user data from server before checking
                               // verification status, to avoid stale cache issues.
-                              await controller.getUserData();
+                               await controller.getUserData();
+                               await controller.getUpcomingRides();
+                               await controller.getBooking();
+
+
                               if (!context.mounted) return;
                               if (controller
                                           .userModel.value.userData?.ownerId !=

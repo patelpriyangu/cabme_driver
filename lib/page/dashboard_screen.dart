@@ -20,10 +20,8 @@ class DashboardScreen extends StatelessWidget {
           return Scaffold(
             body: controller.isLoading.value
                 ? Constant.loader(context)
-                : IndexedStack(
-                    index: controller.selectedIndex.value,
-                    children: controller.pageList.cast<Widget>(),
-                  ),
+                : controller.pageList[controller.selectedIndex.value]
+                    as Widget,
             bottomNavigationBar: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
               showUnselectedLabels: true,

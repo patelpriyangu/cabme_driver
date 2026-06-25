@@ -26,9 +26,11 @@ class DashBoardScreenController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     userModel.value = Constant.getUserData();
-    // Register HomeController early so it's available for all tabs
+    // Register HomeController early so it's available for all tabs.
+    // Keep it permanent while the dashboard is alive because it manages
+    // background location tracking, Pusher subscriptions and ride alerts.
     if (!Get.isRegistered<HomeController>()) {
-      Get.put(HomeController());
+      Get.put(HomeController(), permanent: true);
     }
     pageList.value = [
       const HomeScreen(),
@@ -41,6 +43,16 @@ class DashBoardScreenController extends GetxController {
     ];
     getSettings();
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    // Clean up the permanent HomeController when the dashboard is disposed
+    // (e.g. on logout) so the next login starts with a fresh controller.
+    if (Get.isRegistered<HomeController>()) {
+      Get.delete<HomeController>(force: true);
+    }
+    super.onClose();
   }
 
   Future<void> getSettings() async {

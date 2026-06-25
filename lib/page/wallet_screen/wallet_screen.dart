@@ -73,12 +73,16 @@ class WalletScreen extends StatelessWidget {
                                     ),
                                     SizedBox(height: 5),
                                     Text(
-                                      Constant()
-                                          .amountShow(
-                                              amount: controller
-                                                  .walletAmount.value
-                                                  .toString())
-                                          .tr,
+                                      Constant().formatAmount(controller
+                                          .walletAmount.value
+                                          .toString()
+                                          .toString()),
+                                      // Constant()
+                                      //     .amountShow(
+                                      //         amount: controller
+                                      //             .walletAmount.value
+                                      //             .toString())
+                                      //     .tr,
                                       textAlign: TextAlign.center,
                                       style: AppThemeData.boldTextStyle(
                                           fontSize: 36,
@@ -139,9 +143,15 @@ class WalletScreen extends StatelessWidget {
                           ),
                         ),
                         TabBar(
-                          labelColor: themeChange.getThem() ?AppThemeData.neutral50 : AppThemeData.primaryDefault,
-                          unselectedLabelColor: themeChange.getThem() ? AppThemeData.neutralDark500 : AppThemeData.neutral500,
-                          indicatorColor: themeChange.getThem() ?AppThemeData.neutral50 : AppThemeData.primaryDefault,
+                          labelColor: themeChange.getThem()
+                              ? AppThemeData.neutral50
+                              : AppThemeData.primaryDefault,
+                          unselectedLabelColor: themeChange.getThem()
+                              ? AppThemeData.neutralDark500
+                              : AppThemeData.neutral500,
+                          indicatorColor: themeChange.getThem()
+                              ? AppThemeData.neutral50
+                              : AppThemeData.primaryDefault,
                           tabs: [
                             Tab(text: 'Transaction History'.tr),
                             Tab(text: 'Withdrawal History'.tr),
@@ -296,11 +306,17 @@ class WalletScreen extends StatelessWidget {
                                                               ),
                                                             ),
                                                             Text(
-                                                              Constant()
-                                                                  .amountShow(
-                                                                      amount: transactionData
-                                                                          .amount)
-                                                                  .tr,
+
+                                                              Constant().formatAmount(transactionData
+                                                                  .amount
+                                                                  .toString()),
+
+
+                                                              // Constant()
+                                                              //     .amountShow(
+                                                              //         amount: transactionData
+                                                              //             .amount)
+                                                              //     .tr,
                                                               textAlign:
                                                                   TextAlign
                                                                       .center,
@@ -855,9 +871,12 @@ class WalletScreen extends StatelessWidget {
                                   amount: controller.amountController.value.text
                                       .toString(),
                                   context: context);
-                            } else if (controller.paymentSettingModel.value.worldpay != null &&
+                            } else if (controller
+                                        .paymentSettingModel.value.worldpay !=
+                                    null &&
                                 controller.selectedPaymentMethod.value ==
-                                    controller.paymentSettingModel.value.worldpay!.libelle) {
+                                    controller.paymentSettingModel.value
+                                        .worldpay!.libelle) {
                               controller.worldpayPayment(
                                   amount: controller.amountController.value.text
                                       .toString(),

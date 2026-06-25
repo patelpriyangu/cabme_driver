@@ -77,6 +77,7 @@ class HomeController extends GetxController {
     userModel.value = Constant.getUserData();
     await getUserData();
     await getBookingData();
+    userModel.value = Constant.getUserData();
     status.value = userModel.value.userData?.online ?? "no";
     if (status.value == "yes") {
       await updateCurrentLocation();
