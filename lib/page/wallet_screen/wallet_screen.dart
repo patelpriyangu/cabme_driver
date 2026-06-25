@@ -30,7 +30,7 @@ class WalletScreen extends StatelessWidget {
             length: 2, // Number of tabs
             child: Scaffold(
               body: controller.isLoading.value
-                  ? Constant.loader(context)
+                  ? Constant.loader(context, loadingcolor: themeChange.getThem()?Colors.white:  AppThemeData.primaryDefault)
                   : Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,

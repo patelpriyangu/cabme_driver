@@ -243,7 +243,8 @@ class _UpcomingRideCard extends StatelessWidget {
                   ),
                   if (fareStr.isNotEmpty)
                     Text(
-                      fareStr,
+                      // fareStr,
+                      Constant().formatAmount(fareStr),
                       style: AppThemeData.boldTextStyle(
                         fontSize: 18,
                         color: isDark
