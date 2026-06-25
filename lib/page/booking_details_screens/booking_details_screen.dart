@@ -645,14 +645,25 @@ class BookingDetailsScreen extends StatelessWidget {
                                         SizedBox(
                                           width: 10,
                                         ),
+                                        // Expanded(
+                                        //   child: Text(
+                                        //     _scheduledPickupTime(controller)!,
+                                        //     style: AppThemeData.boldTextStyle(
+                                        //         fontSize: 14,
+                                        //         color: themeChange.getThem()
+                                        //             ? AppThemeData
+                                        //                 .neutralDark900
+                                        //             : AppThemeData.neutral900),
+                                        //   ),
+                                        // ),
+
                                         Expanded(
                                           child: Text(
-                                            _scheduledPickupTime(controller)!,
+                                            _formatScheduledTime(_scheduledPickupTime(controller)),
                                             style: AppThemeData.boldTextStyle(
                                                 fontSize: 14,
                                                 color: themeChange.getThem()
-                                                    ? AppThemeData
-                                                        .neutralDark900
+                                                    ? AppThemeData.neutralDark900
                                                     : AppThemeData.neutral900),
                                           ),
                                         ),
@@ -675,10 +686,21 @@ class BookingDetailsScreen extends StatelessWidget {
                                       SizedBox(
                                         width: 10,
                                       ),
+                                      // Expanded(
+                                      //   child: Text(
+                                      //     controller.bookingModel.value.creer
+                                      //         .toString(),
+                                      //     style: AppThemeData.boldTextStyle(
+                                      //         fontSize: 14,
+                                      //         color: themeChange.getThem()
+                                      //             ? AppThemeData.neutralDark900
+                                      //             : AppThemeData.neutral900),
+                                      //   ),
+                                      // ),
+
                                       Expanded(
                                         child: Text(
-                                          controller.bookingModel.value.creer
-                                              .toString(),
+                                          _formatDateTime(controller.bookingModel.value.creer.toString()),
                                           style: AppThemeData.boldTextStyle(
                                               fontSize: 14,
                                               color: themeChange.getThem()
@@ -1685,5 +1707,44 @@ class BookingDetailsScreen extends StatelessWidget {
       ),
       barrierDismissible: true,
     );
+  }
+
+  String _formatDateTime(String? raw) {
+    if (raw == null || raw.isEmpty || raw == 'null') return '-';
+    try {
+      final dt = DateTime.parse(raw);
+      final hour = dt.hour % 12 == 0 ? 12 : dt.hour % 12;
+      final minute = dt.minute.toString().padLeft(2, '0');
+      final period = dt.hour >= 12 ? 'PM' : 'AM';
+      return '${dt.day}/${dt.month.toString().padLeft(2, '0')}/${dt.year}  $hour:$minute $period';
+    } catch (_) {
+      return raw ?? '-';
+    }
+  }
+
+  String _formatScheduledTime(String? raw) {
+    if (raw == null || raw.isEmpty || raw == 'null') return '-';
+    try {
+      // "25/06/2026 19:30 UK/London" → already dd/MM/yyyy format
+      final parts = raw.split(' ');
+      if (parts.length >= 2) {
+        final datePart = parts[0]; // "25/06/2026"
+        final timePart = parts[1]; // "19:30"
+        final timeParts = timePart.split(':');
+        final hour = int.parse(timeParts[0]);
+        final minute = int.parse(timeParts[1]);
+        final period = hour >= 12 ? 'PM' : 'AM';
+        final displayHour = hour % 12 == 0 ? 12 : hour % 12;
+        return '$datePart  $displayHour:${minute.toString().padLeft(2, '0')} $period (${'UK'.tr})';
+      }
+      // fallback: ISO parse (scheduledAt)
+      final dt = DateTime.parse(raw).toLocal();
+      final h = dt.hour % 12 == 0 ? 12 : dt.hour % 12;
+      final m = dt.minute.toString().padLeft(2, '0');
+      final p = dt.hour >= 12 ? 'PM' : 'AM';
+      return '${dt.day}/${dt.month.toString().padLeft(2, '0')}/${dt.year}  $h:$m $p';
+    } catch (_) {
+      return raw ?? '-';
+    }
   }
 }
