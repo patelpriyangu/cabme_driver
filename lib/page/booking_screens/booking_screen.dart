@@ -1890,7 +1890,8 @@ class BookingScreen extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
                   color: themeChange.getThem()
-                      ? AppThemeData.neutralDark100
+                      // ? AppThemeData.neutralDark100
+                      ? AppThemeData.neutralDark50
                       : AppThemeData.neutral50,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
@@ -1925,7 +1926,7 @@ class BookingScreen extends StatelessWidget {
                                         ? FontWeight.bold
                                         : FontWeight.normal,
                                     color: selected
-                                        ? AppThemeData.primaryDefault
+                                        ? (themeChange.getThem()?AppThemeData.neutral50:AppThemeData.primaryDefault)
                                         : (themeChange.getThem()
                                             ? AppThemeData.neutralDark900
                                             : AppThemeData.neutral900),
@@ -1937,7 +1938,7 @@ class BookingScreen extends StatelessWidget {
                                     ? Icons.radio_button_checked
                                     : Icons.radio_button_off,
                                 color: selected
-                                    ? AppThemeData.primaryDefault
+                                    ?(themeChange.getThem()?AppThemeData.neutral50:AppThemeData.primaryDefault)
                                     : (themeChange.getThem()
                                         ? AppThemeData.neutralDark500
                                         : AppThemeData.neutral500),

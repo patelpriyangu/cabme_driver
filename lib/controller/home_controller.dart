@@ -80,11 +80,11 @@ class HomeController extends GetxController {
     status.value = userModel.value.userData?.online ?? "no";
     if (status.value == "yes") {
       await updateCurrentLocation();
-      // await getBooking();
+      await getBooking();
       await getParcelList();
       await getRentalSearchBooking();
     }
-    await getBooking();
+    // await getBooking();
     await getUpcomingRides();
     await checkNearExpiryDocs();
 
