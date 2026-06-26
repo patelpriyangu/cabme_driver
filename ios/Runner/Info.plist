@@ -2,15 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>MinimumOSVersion</key>
-    <string>15.0</string>
-    <key>NSAppTransportSecurity</key>
-    <dict>
-        <key>NSAllowsArbitraryLoads</key>
-        <true/>
-    </dict>
-    <key>ITSAppUsesNonExemptEncryption</key>
-    <false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -28,22 +19,28 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(MARKETING_VERSION)</string>
+	<string>2.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
-	<key>FirebaseAppDelegateProxyEnabled</key>
-        <false/>
-   <key>CFBundleURLTypes</key>
-   <array>
-     <dict>
-       <key>CFBundleURLSchemes</key>
-       <array>
-         <string>com.googleusercontent.apps.527452785533-q2lo3auir6juaei1dq5far9kp2f8ogus</string>
-       </array>
-     </dict>
-   </array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.587441137020-avnf7n3lgg97ki1sdnug6m4neq5b6e2d</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<string>1</string>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
+	<key>GIDClientID</key>
+	<string>587441137020-avnf7n3lgg97ki1sdnug6m4neq5b6e2d.apps.googleusercontent.com</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>itms-beta</string>
@@ -53,8 +50,13 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSUserTrackingUsageDescription</key>
-	<string>UniqCars Driver uses this identifier to provide you with a personalised experience and to improve our services.</string>
+	<key>MinimumOSVersion</key>
+	<string>15.0</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>UniqCars Driver uses your camera to let you upload a profile photo and capture images related to a ride or parcel delivery.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
@@ -69,9 +71,13 @@
 	<string>UniqCars Driver saves delivery confirmation photos to your photo library.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>UniqCars Driver accesses your photo library to let you select a profile photo or attach delivery confirmation images.</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>UniqCars Driver uses this identifier to provide you with a personalised experience and to improve our services.</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
-	    <string>fetch</string>
+		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
@@ -93,20 +99,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
-	<key>GIDClientID</key>
-	<string>587441137020-avnf7n3lgg97ki1sdnug6m4neq5b6e2d.apps.googleusercontent.com</string>
-	<key>CFBundleURLTypes</key>
-	<array>
-	<dict>
-		<key>CFBundleTypeRole</key>
-		<string>Editor</string>
-		<key>CFBundleURLSchemes</key>
-		<array>
-		<string>com.googleusercontent.apps.587441137020-avnf7n3lgg97ki1sdnug6m4neq5b6e2d</string>
-		</array>
-	</dict>
-	</array>
 </dict>
 </plist>
